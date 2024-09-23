@@ -1,4 +1,4 @@
-package org.example.homesharingwebsite.model;
+package com.homesharing.model;
 
 public class Role {
     private int id;

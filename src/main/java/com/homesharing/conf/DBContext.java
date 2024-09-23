@@ -1,4 +1,4 @@
-package org.example.homesharingwebsite.conf;
+package com.homesharing.conf;
 
 import java.io.IOException;
 import java.io.InputStream;

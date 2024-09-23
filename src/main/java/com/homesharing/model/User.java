@@ -1,4 +1,4 @@
-package org.example.homesharingwebsite.model;
+package com.homesharing.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
