@@ -15,6 +15,11 @@ import java.util.Properties;
  */
 public class DBContext {
 
+    // Private constructor to prevent instantiation
+    private DBContext(){
+        throw new AssertionError();
+    }
+
     // Static connection object that holds the single connection to the database
     private static Connection connection = null;
 

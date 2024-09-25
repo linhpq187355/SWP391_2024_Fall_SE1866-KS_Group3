@@ -19,8 +19,6 @@ public class User {
     private String status;
     private boolean isVerified;
     private LocalDateTime lastModified;
-    private int wardsId;
-    private String verificationCode;
     private LocalDateTime createdAt;
     // Constructors
     public User() {}
@@ -73,14 +71,6 @@ public class User {
 
     public void setVerified(boolean verified) {
         isVerified = verified;
-    }
-
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
     }
 
     public String getUsername() {
@@ -167,19 +157,34 @@ public class User {
         this.lastModified = lastModified;
     }
 
-    public int getWardsId() {
-        return wardsId;
-    }
-
-    public void setWardsId(int wardsId) {
-        this.wardsId = wardsId;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", rolesId=" + rolesId +
+                ", email='" + email + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", dob=" + dob +
+                ", address='" + address + '\'' +
+                ", gender='" + gender + '\'' +
+                ", citizenNumber='" + citizenNumber + '\'' +
+                ", status='" + status + '\'' +
+                ", isVerified=" + isVerified +
+                ", lastModified=" + lastModified +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
