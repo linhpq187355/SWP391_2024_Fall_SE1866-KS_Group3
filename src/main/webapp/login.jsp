@@ -19,7 +19,7 @@
             <div class="col-12">
                 <div class="mb-5">
                     <h2 class="display-5 fw-bold text-center">Đăng nhập</h2>
-                    <p class="text-center m-0">Chưa có tài khoản? <a href="signUp.jsp">Đăng ký</a></p>
+                    <p class="text-center m-0">Chưa có tài khoản? <a href="sign-up.jsp">Đăng ký</a></p>
                 </div>
             </div>
         </div>
