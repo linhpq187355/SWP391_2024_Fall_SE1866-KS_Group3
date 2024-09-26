@@ -5,6 +5,12 @@ html, body {
 
 @font-face {
     font-family: '#9Slide03 Quicksand';
+    src: url('../fonts/9Slide03QuicksandMedium.eot');
+    src: url('../fonts/9Slide03QuicksandMedium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/9Slide03QuicksandMedium.woff2') format('woff2'),
+    url('../fonts/9Slide03QuicksandMedium.woff') format('woff'),
+    url('../fonts/9Slide03QuicksandMedium.ttf') format('truetype'),
+    url('../fonts/9Slide03QuicksandMedium.svg##9Slide03QuicksandMedium') format('svg');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
