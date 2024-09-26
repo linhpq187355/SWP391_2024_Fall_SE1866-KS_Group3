@@ -2,6 +2,7 @@ package com.homesharing.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Home {
@@ -13,7 +14,7 @@ public class Home {
     private String orientation;
     private BigDecimal area;
     private int leaseDuration;
-    private LocalDate moveInDate;
+    private LocalDateTime moveInDate;
     private int numOfBedroom;
     private int numOfBath;
     private LocalDate createdDate;
@@ -21,7 +22,7 @@ public class Home {
     private String homeDescription;
     private String tenantDescription;
     private int wardId;
-    private HomeType homeType; // One-to-one relationship with HomeType
+    private int homeType; // One-to-one relationship with HomeType
     private int createdBy;
 
     public int getId() {
@@ -88,11 +89,11 @@ public class Home {
         this.leaseDuration = leaseDuration;
     }
 
-    public LocalDate getMoveInDate() {
+    public LocalDateTime getMoveInDate() {
         return moveInDate;
     }
 
-    public void setMoveInDate(LocalDate moveInDate) {
+    public void setMoveInDate(LocalDateTime moveInDate) {
         this.moveInDate = moveInDate;
     }
 
@@ -152,11 +153,11 @@ public class Home {
         this.wardId = wardId;
     }
 
-    public HomeType getHomeType() {
+    public int getHomeType() {
         return homeType;
     }
 
-    public void setHomeType(HomeType homeType) {
+    public void setHomeType(int homeType) {
         this.homeType = homeType;
     }
 
