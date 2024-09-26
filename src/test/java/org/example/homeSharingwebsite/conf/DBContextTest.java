@@ -1,6 +1,6 @@
 package org.example.homeSharingwebsite.conf;
 
-import org.example.homesharingwebsite.conf.DBContext;
+import com.homesharing.conf.DBContext;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
