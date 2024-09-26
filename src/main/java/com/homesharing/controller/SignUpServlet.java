@@ -42,7 +42,7 @@ public class SignUpServlet extends HttpServlet {
      * @param resp The HttpServletResponse used to send a response to the client.
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
             // Redirect to sign-up page
             req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
