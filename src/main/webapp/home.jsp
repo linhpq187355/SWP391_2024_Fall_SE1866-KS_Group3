@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
@@ -37,6 +38,7 @@
     <link rel="stylesheet" href="assets/css/owl.transitions.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -89,114 +91,113 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse yamm" id="navigation">
+
             <c:if test="${1==1}">
-                <div class="button navbar-right">
-                    <button class="navbar-btn nav-button wow bounceInRight login" onclick=" window.open('register.html')" data-wow-delay="0.4s">Login</button>
-                    <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.open('submit-property.html')" data-wow-delay="0.5s">Submit</button>
+                <div class="button navbar-right" style="padding-top: 1.5em; display: flex; justify-content: space-around; width: 15em">
+                    <div class="dropdown ymm-sw">
+                        <i data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="fa-regular fa-heart dropdown-toggle" style="font-size: 2em"></i>
+                        <div class="dropdown-menu navbar-nav" style="right: 20em; width: 27em; padding: 1rem 2rem">
+                            <div class="dropdown-cart-products">
+                                <div class="product">
+                                    <div class="product-cart-details">
+                                        <h4 class="product-title">
+                                                                <a href="product.html">ok</a>
+                                        </h4>
+                                        <span class="cart-product-info">
+                                              <span class="cart-product-qty">12</span>
+                                                okok
+                                        </span>
+                                    </div><!-- End .product-cart-details -->
+
+                                    <figure class="product-image-container">
+                                                    <a href="product.html" class="product-image">
+                                                        <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png" alt="product">
+                                                    </a>
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="dropdown-cart-action">
+                                <a href="showcart" class="btn btn-primary">Xem wishlist</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown ymm-sw" style="position: relative">
+                        <div style="border-radius: 5px;width: 10px;height: 10px;position: absolute;background-color: #FDC600;left: 20px;bottom: 22px;"></div>
+                        <i data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="fa-regular fa-message dropdown-toggle" style="font-size: 2em"></i>
+                        <div class="dropdown-menu navbar-nav" style="top: 4.4em; right: -3em; width: 23em">
+                                <div class="chat-list">
+                                    <figure class="chat-image-container">
+                                        <a href="product.html" class="product-image">
+                                            <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png" alt="product">
+                                        </a>
+                                    </figure>
+                                    <div class="chat-info">
+                                        <h4 class="user-name">
+                                            <a href="product.html">Pham Quang Linh</a>
+                                        </h4>
+                                        <span class="recent-chat">
+                                             qua la ok la
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                                <div class="chat-list">
+                                    <figure class="chat-image-container">
+                                        <a href="product.html" class="product-image">
+                                            <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png" alt="product">
+                                        </a>
+                                    </figure>
+                                    <div class="chat-info">
+                                        <h4 class="user-name">
+                                            <a href="product.html">Pham Quang Linh</a>
+                                        </h4>
+                                        <span class="recent-chat">
+                                             qua la ok la
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                        </div>
+                    </div>
+                    <div class="dropdown ymm-sw" style="position: relative">
+                        <div style="border-radius: 5px;width: 10px;height: 10px;position: absolute;background-color: #FDC600;left: 20px;bottom: 22px;"></div>
+                        <i data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="fa-regular fa-bell dropdown-toggle" style="font-size: 2em"></i>
+                        <ul class="dropdown-menu navbar-nav" style="top: 4.4em; right: -1.5em; width: 27em; padding-bottom: 1em">
+                            <li>
+                                <a href="index-2.html" class="li-no">Thông tin nhà của bạn đã được xác thực</a>
+                            </li>
+                            <li>
+                                <a href="index-3.html" class="li-no">ABC đã bình luận trên bài viết của bạn shcakshka</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown ymm-sw">
+                        <i data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="fa-regular fa-user dropdown-toggle" style="font-size: 2em"></i>
+                        <ul class="dropdown-menu navbar-nav" style="right: 12em">
+                            <li>
+                                <a href="index-2.html" class="li-acc-op">Thông tin cá nhân</a>
+                            </li>
+                            <li>
+                                <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+
                 </div>
             </c:if>
 
             <ul class="main-nav nav navbar-nav navbar-right">
                 <li class="dropdown ymm-sw " data-wow-delay="0.1s">
-                    <a href="index.html" class="dropdown-toggle active" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Home <b class="caret"></b></a>
-                    <ul class="dropdown-menu navbar-nav">
-                        <li>
-                            <a href="index-2.html">Home Style 2</a>
-                        </li>
-                        <li>
-                            <a href="index-3.html">Home Style 3</a>
-                        </li>
-                        <li>
-                            <a href="index-4.html">Home Style 4</a>
-                        </li>
-                        <li>
-                            <a href="index-5.html">Home Style 5</a>
-                        </li>
+                    <a href="home.jsp">Trang chủ</a>
 
-                    </ul>
                 </li>
 
-                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Properties</a></li>
-                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="property.html">Property</a></li>
-                <li class="dropdown yamm-fw" data-wow-delay="0.1s">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Template <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <div class="yamm-content">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h5>Home pages</h5>
-                                        <ul>
-                                            <li>
-                                                <a href="index.html">Home Style 1</a>
-                                            </li>
-                                            <li>
-                                                <a href="index-2.html">Home Style 2</a>
-                                            </li>
-                                            <li>
-                                                <a href="index-3.html">Home Style 3</a>
-                                            </li>
-                                            <li>
-                                                <a href="index-4.html">Home Style 4</a>
-                                            </li>
-                                            <li>
-                                                <a href="index-5.html">Home Style 5</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <h5>Pages and blog</h5>
-                                        <ul>
-                                            <li><a href="blog.html">Blog listing</a>  </li>
-                                            <li><a href="single.html">Blog Post (full)</a>  </li>
-                                            <li><a href="single-right.html">Blog Post (Right)</a>  </li>
-                                            <li><a href="single-left.html">Blog Post (left)</a>  </li>
-                                            <li><a href="contact.html">Contact style (1)</a> </li>
-                                            <li><a href="contact-3.html">Contact style (2)</a> </li>
-                                            <li><a href="contact_3.html">Contact style (3)</a> </li>
-                                            <li><a href="faq.html">FAQ page</a> </li>
-                                            <li><a href="404.html">404 page</a>  </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <h5>Property</h5>
-                                        <ul>
-                                            <li><a href="property-1.html">Property pages style (1)</a> </li>
-                                            <li><a href="property-2.html">Property pages style (2)</a> </li>
-                                            <li><a href="property-3.html">Property pages style (3)</a> </li>
-                                        </ul>
+                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Tất cả nhà</a></li>
 
-                                        <h5>Properties list</h5>
-                                        <ul>
-                                            <li><a href="properties.html">Properties list style (1)</a> </li>
-                                            <li><a href="properties-2.html">Properties list style (2)</a> </li>
-                                            <li><a href="properties-3.html">Properties list style (3)</a> </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <h5>Property process</h5>
-                                        <ul>
-                                            <li><a href="submit-property.html">Submit - step 1</a> </li>
-                                            <li><a href="submit-property.html">Submit - step 2</a> </li>
-                                            <li><a href="submit-property.html">Submit - step 3</a> </li>
-                                        </ul>
-                                        <h5>User account</h5>
-                                        <ul>
-                                            <li><a href="register.html">Register / login</a>   </li>
-                                            <li><a href="user-properties.html">Your properties</a>  </li>
-                                            <li><a href="submit-property.html">Submit property</a>  </li>
-                                            <li><a href="change-password.html">Change password</a> </li>
-                                            <li><a href="user-profile.html">Your profile</a>  </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.yamm-content -->
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="wow fadeInDown" data-wow-delay="0.4s"><a href="contact.html">Contact</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -229,156 +230,8 @@
             <div class="search-form wow pulse">
                 <form action="" class=" form-inline">
                     <div class="col-md-12">
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="Key word">
-                        </div>
-                        <div class="col-md-4">
-                            <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select your city">
-                                <option>New york, CA</option>
-                                <option>Paris</option>
-                                <option>Casablanca</option>
-                                <option>Tokyo</option>
-                                <option>Marraekch</option>
-                                <option>kyoto , shibua</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <select id="basic" class="selectpicker show-tick form-control">
-                                <option> -Status- </option>
-                                <option>Rent </option>
-                                <option>Boy</option>
-                                <option>used</option>
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12 ">
-                        <div class="search-row">
-
-                            <div class="col-sm-3">
-                                <label for="price-range">Price range ($):</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="600" data-slider-step="5"
-                                       data-slider-value="[0,450]" id="price-range" ><br />
-                                <b class="pull-left color">2000$</b>
-                                <b class="pull-right color">100000$</b>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <label for="property-geo">Property geo (m2) :</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="600" data-slider-step="5"
-                                       data-slider-value="[50,450]" id="property-geo" ><br />
-                                <b class="pull-left color">40m</b>
-                                <b class="pull-right color">12000m</b>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <label for="price-range">Min baths :</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="600" data-slider-step="5"
-                                       data-slider-value="[250,450]" id="min-baths" ><br />
-                                <b class="pull-left color">1</b>
-                                <b class="pull-right color">120</b>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <label for="property-geo">Min bed :</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="600" data-slider-step="5"
-                                       data-slider-value="[250,450]" id="min-bed" ><br />
-                                <b class="pull-left color">1</b>
-                                <b class="pull-right color">120</b>
-                            </div>
-                            <!-- End of  -->
-
-                        </div>
-
-                        <div class="search-row">
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Fire Place(3100)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Dual Sinks(500)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Hurricane Shutters(99)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Swimming Pool(1190)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> 2 Stories(4600)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Emergency Exit(200)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Laundry Room(10073)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Jog Path(1503)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> 26' Ceilings(1200)
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- End of  -->
+                        <div>
+                            <input type="text" class="form-control" placeholder="Nhập thông tin bạn cần tìm kiếm...">
                         </div>
                     </div>
                     <div class="center">
