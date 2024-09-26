@@ -40,7 +40,7 @@ public class HomeDAOImpl implements HomeDAO {
             preparedStatement.setString(13, home.getHomeDescription());
             preparedStatement.setString(14, home.getTenantDescription());
             preparedStatement.setInt(15, home.getWardId());
-            preparedStatement.setInt(16, home.getHomeTypeId());
+            preparedStatement.setInt(16, home.getHomeType());
             preparedStatement.setInt(17, home.getCreatedBy());
 
             // Execute the insert statement and capture affected rows
