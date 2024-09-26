@@ -5,6 +5,12 @@ html, body {
 
 @font-face {
     font-family: '#9Slide03 Quicksand';
+    src: url('../fonts/9Slide03QuicksandMedium.eot');
+    src: url('../fonts/9Slide03QuicksandMedium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/9Slide03QuicksandMedium.woff2') format('woff2'),
+    url('../fonts/9Slide03QuicksandMedium.woff') format('woff'),
+    url('../fonts/9Slide03QuicksandMedium.ttf') format('truetype'),
+    url('../fonts/9Slide03QuicksandMedium.svg##9Slide03QuicksandMedium') format('svg');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -3022,6 +3028,95 @@ padding: 10px;
 .bottom-menu ul li a:hover{
     color: #FFC600;
 }
+
+.product{
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding: 1.6rem 2.4rem 1.6rem 0;
+    box-shadow: none;
+    margin: 0 !important;
+    border: none;
+    border-bottom: 1px solid #ebebeb;
+    box-shadow: none !important;
+}
+
+.product-cart-details{
+    font-weight: 400;
+    max-width: 150px;
+    font-size: 1.3rem;
+    color: #999;
+    text-align: left;
+}
+
+.product-title{
+    font-weight: 400;
+    font-size: 1.3rem;
+    line-height: 1.3;
+    color: #666;
+    text-align: left;
+    margin-bottom: .4rem;
+}
+
+.product-image-container{
+    position: relative;
+    max-width: 60px;
+    margin: 0;
+    margin-left: auto;
+}
+
+.product-image{
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.dropdown-cart-action{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0 .5rem;
+}
+
+.dropdown-cart-action .btn{
+    font-size: 1.3rem;
+    min-width: 110px;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+.li-acc-op:hover{
+    color:#FDC600 !important;
+}
+
+.li-no{
+    white-space: normal !important;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.chat-list{
+    display: flex;
+    padding: 1em;
+}
+
+.chat-image-container{
+    max-width: 5em;
+}
+
+.chat-image-container img{
+    border-radius: 3em;
+}
+
+.chat-info{
+    padding-left: 1em;
+}
+
+.chat-list:hover{
+    background-color: #9C9C9C;
+}
+
+
 /* Preloader */
 
 #preloader {
