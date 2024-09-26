@@ -1,25 +1,33 @@
 <%--
   Created by IntelliJ IDEA.
   User: LNV
-  Date: 22/09/2024
-  Time: 22:42
+  Date: 25/09/2024
+  Time: 10:18
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html lang="vi">
+<html  lang="vi">
 <head>
-    <title>Đăng nhập</title>
+    <title>Xác thực email</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+        }
+    </style>
 </head>
 <body>
-<!-- Login 11 - Bootstrap Brain Component -->
 <section class="py-3 py-md-5 py-xl-8">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="mb-5">
-                    <h2 class="display-5 fw-bold text-center">Đăng nhập</h2>
-                    <p class="text-center m-0">Chưa có tài khoản? <a href="sign-up.jsp">Đăng ký</a></p>
+                    <h2 class="display-5 fw-bold text-center">Xác thực</h2>
+                    <p class="text-center m-0">Thay đổi email? <a href="signUp.jsp">Thay đổi</a></p>
                 </div>
             </div>
         </div>
@@ -27,40 +35,17 @@
             <div class="col-12 col-lg-10 col-xl-8">
                 <div class="row gy-5 justify-content-center">
                     <div class="col-12 col-lg-5">
-                        <form action="#!">
+                        <form action="verifyEmail" method="post">
                             <div class="row gy-3 overflow-hidden">
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input type="email" class="form-control border-0 border-bottom rounded-0" name="email" id="email" placeholder="ten@example.com" required>
-                                        <label for="email" class="form-label">Email</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="password" class="form-control border-0 border-bottom rounded-0" name="password" id="password" value="" placeholder="Mật khẩu" required>
-                                        <label for="password" class="form-label">Mật khẩu</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="row justify-content-between">
-                                        <div class="col-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" name="remember_me" id="remember_me">
-                                                <label class="form-check-label text-secondary" for="remember_me">
-                                                    Ghi nhớ đăng nhập
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="text-end">
-                                                <a href="#!" class="link-secondary text-decoration-none">Quên mật khẩu?</a>
-                                            </div>
-                                        </div>
+                                        <input type="text" class="form-control border-0 border-bottom rounded-0" name="code" id="code" placeholder="code" required>
+                                        <label for="code" class="form-label">Code</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="d-grid">
-                                        <button class="btn btn-primary btn-lg" type="submit">Đăng nhập</button>
+                                        <button class="btn btn-primary btn-lg" type="submit">Xác nhận</button>
                                     </div>
                                 </div>
                             </div>

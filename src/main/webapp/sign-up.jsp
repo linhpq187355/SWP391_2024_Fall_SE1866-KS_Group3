@@ -6,14 +6,22 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html  lang="vi">
 <head>
-    <title>Sign Up</title>
+    <title>Đăng ký</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/registrations/registration-10/assets/css/registration-10.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+        }
+    </style>
 </head>
 <body>
-<!-- Registration 10 - Bootstrap Brain Component -->
 <section class="bg-light py-3 py-md-5 py-xl-8">
     <div class="container">
         <div class="row justify-content-center">
@@ -112,10 +120,11 @@
             return false;
         }
 
-        // Check if firstName and lastName only contain letters and spaces
-        let nameRegex = /^[A-Za-z\s]+$/;
+        // Check if firstName and lastName only contain letters and spaces (supports Vietnamese characters)
+        let nameRegex = /^[\p{L}\s]+$/u;
+
         if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-            alert("Họ và tên chỉ được chứa chữ cái và khoảng trắng.");
+            alert("Names can only contain letters and spaces.");
             return false;
         }
 

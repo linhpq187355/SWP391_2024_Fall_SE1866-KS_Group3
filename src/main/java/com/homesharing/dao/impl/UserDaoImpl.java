@@ -3,6 +3,7 @@ package com.homesharing.dao.impl;
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDao;
 import com.homesharing.model.User;
+import com.homesharing.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
