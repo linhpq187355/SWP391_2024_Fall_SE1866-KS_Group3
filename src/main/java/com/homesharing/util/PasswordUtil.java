@@ -1,9 +1,17 @@
 package com.homesharing.util;
 
+import com.homesharing.exception.GeneralException;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class PasswordUtil {
+
+    // Private constructor to prevent instantiation
+    private PasswordUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -17,7 +25,7 @@ public class PasswordUtil {
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new GeneralException("Error while hashing password", e);
         }
     }
 }

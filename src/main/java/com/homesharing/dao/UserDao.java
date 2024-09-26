@@ -1,6 +1,5 @@
 package com.homesharing.dao;
 
-import com.homesharing.model.Token;
 import com.homesharing.model.User;
 
 /**
@@ -24,4 +23,5 @@ public interface UserDao {
      * @return True if the email exists, false otherwise.
      */
     boolean emailExists(String email);
+
 }

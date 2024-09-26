@@ -2,6 +2,7 @@ package com.homesharing.service.impl;
 
 import com.homesharing.dao.TokenDao;
 import com.homesharing.dao.UserDao;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
 import com.homesharing.service.UserService;
@@ -10,22 +11,13 @@ import com.homesharing.util.SecureRandomCode;
 import com.homesharing.util.SendingEmail;
 import jakarta.mail.MessagingException;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implementation of UserService interface, handling user-related business logic.
  * This class manages user registration and input validation.
  */
 public class UserServiceImpl implements UserService {
-
-    // Logger for logging test execution
-    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
-
 
     private final UserDao userDao;
     private final TokenDao tokenDao;
@@ -96,7 +88,7 @@ public class UserServiceImpl implements UserService {
                     + "&userId=" + userId;
             SendingEmail.sendMail(email, subject, content);
             return "success";
-        } catch (RuntimeException | MessagingException e) {
+        } catch (GeneralException | MessagingException e) {
             // Handle runtime exceptions thrown by the UserDao
             return "Error during registration: " + e.getMessage();
         }

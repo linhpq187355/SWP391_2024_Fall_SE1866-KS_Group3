@@ -1,12 +1,16 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.TokenDao;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EmailServiceImpl implements EmailService {
 
     private final TokenDao tokenDao;
+    private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     public EmailServiceImpl(TokenDao tokenDao) {
         this.tokenDao = tokenDao;
@@ -33,10 +37,14 @@ public class EmailServiceImpl implements EmailService {
             } else {
                 return false; // Token code does not match
             }
-
+        } catch (GeneralException e) {
+            // Log the exception with contextual information
+            logger.error("Error while checking token for userId {}: {}", userID, e.getMessage());
+            return false; // Return false when an error occurs
         } catch (RuntimeException e) {
-            // Handle any errors from methods in tokenDao
-            throw new RuntimeException("Error while checking token for userId: " + userID + ": " +  e.getMessage());
+            // Log unexpected exceptions
+            logger.error("Unexpected error occurred for userId {}: {}", userID, e.getMessage());
+            return false; // Return false when an error occurs
         }
     }
 }
