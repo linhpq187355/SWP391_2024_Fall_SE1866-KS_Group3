@@ -2,6 +2,7 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.TokenDao;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 
 import java.io.IOException;
@@ -34,8 +35,7 @@ public class TokenDaoImpl implements TokenDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            // Rethrow the exception as a runtime exception to be handled by the service layer
-            throw new RuntimeException("Error inserting token into the database", e);
+            throw new GeneralException("Error inserting token into the database", e);
         }
     }
 
@@ -66,8 +66,7 @@ public class TokenDaoImpl implements TokenDao {
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            // Rethrow the exception as a runtime exception to be handled by the service layer
-            throw new RuntimeException("Error finding token in the database", e);
+            throw new GeneralException("Error finding token in the database", e);
         }
     }
 
@@ -88,12 +87,11 @@ public class TokenDaoImpl implements TokenDao {
 
             // Optional: Check if the update was successful
             if (rowsAffected == 0) {
-                throw new RuntimeException("No token found to update for userId: " + userId);
+                throw new GeneralException("No token found to update for userId: " + userId);
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            // Rethrow the exception as a runtime exception to be handled by the service layer
-            throw new RuntimeException("Error updating token verification in the database: " +   e.getMessage());
+            throw new GeneralException("Error updating token verification in the database", e);
         }
     }
 

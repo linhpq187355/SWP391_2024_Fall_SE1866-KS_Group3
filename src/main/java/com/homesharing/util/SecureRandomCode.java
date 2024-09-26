@@ -4,6 +4,11 @@ import java.security.SecureRandom;
 
 public class SecureRandomCode {
 
+    // Private constructor to prevent instantiation
+    private SecureRandomCode() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
     // Valid characters for generating the code
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int CODE_LENGTH = 6; // Length of the verification code
