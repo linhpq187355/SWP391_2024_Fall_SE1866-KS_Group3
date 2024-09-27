@@ -1,5 +1,8 @@
 package com.homesharing.service;
 
-public interface EmailService {
+public interface TokenService {
     boolean checkToken(String token, int userId);
+
+    boolean sendToken(String email, int userId);
+
 }

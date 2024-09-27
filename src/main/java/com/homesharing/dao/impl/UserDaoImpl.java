@@ -91,4 +91,34 @@ public class UserDaoImpl implements UserDao {
 
         return false;
     }
+
+    @Override
+    public User findUserByEmail(String email) {
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_User] WHERE [email] = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setRolesId(resultSet.getInt("Rolesid"));
+                user.setStatus(resultSet.getString("status"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+                return user;
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error finding user by email in the database: " + e.getMessage(), e);
+        }
+
+        return null; // Return null if no user is found
+    }
 }
