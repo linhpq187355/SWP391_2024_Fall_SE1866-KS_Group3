@@ -1,5 +1,7 @@
 package com.homesharing.service;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 /**
  * UserService interface defines methods for user registration and validation.
  * It contains methods to register a user and validate user input data.
@@ -33,5 +35,7 @@ public interface UserService {
      * @return True if all inputs are valid, false otherwise.
      */
     boolean validateUserInput(String firstName, String lastName, String email, String password, String confirmPassword, String role);
+
+    String login(String email, String password, boolean rememberMe, HttpServletResponse response);
 
 }

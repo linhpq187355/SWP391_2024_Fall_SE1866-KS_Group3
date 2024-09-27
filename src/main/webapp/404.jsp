@@ -5,8 +5,10 @@
   Time: 20:27
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html lang="vi" xml:lang="vi">
 <head>
     <title>Error</title>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -30,7 +32,7 @@
                     <c:if test="${not empty requestScope.error}">
                         <div class="alert alert-danger">${requestScope.error}</div>
                     </c:if>
-                    <a class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" href="#!" role="button">Back to Home</a>
+                    <button class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" onclick="location.href='/home.jsp'">Back to Home</button>
                 </div>
             </div>
         </div>

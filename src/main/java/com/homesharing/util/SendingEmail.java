@@ -17,7 +17,6 @@ public class SendingEmail {
     }
 
     public static void sendMail(String to, String subject, String content) throws MessagingException {
-
         Properties configProps = new Properties();
         try (InputStream input = SendingEmail.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {

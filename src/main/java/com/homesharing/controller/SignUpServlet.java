@@ -4,7 +4,9 @@ import com.homesharing.dao.TokenDao;
 import com.homesharing.dao.UserDao;
 import com.homesharing.dao.impl.TokenDaoImpl;
 import com.homesharing.dao.impl.UserDaoImpl;
+import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
+import com.homesharing.service.impl.TokenServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
@@ -31,8 +33,9 @@ public class SignUpServlet extends HttpServlet {
         // Create instances of UserDao and TokenDao
         UserDao userDao = new UserDaoImpl();
         TokenDao tokenDao = new TokenDaoImpl();
+        TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
-        userService = new UserServiceImpl(userDao, tokenDao);
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService);
     }
 
     /**
