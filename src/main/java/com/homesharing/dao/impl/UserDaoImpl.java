@@ -140,9 +140,4 @@ public class UserDaoImpl implements UserDao {
         return null;
     }
 
-    @Override
-    public User finUserByEmail(String email){
-
-    }
-
 }

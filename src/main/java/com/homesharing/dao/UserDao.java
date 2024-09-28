@@ -29,6 +29,5 @@ public interface UserDao {
 
     User getUser(int userId);
 
-    User findUserByEmail(String email);
 
 }
