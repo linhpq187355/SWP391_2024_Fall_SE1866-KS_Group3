@@ -70,7 +70,7 @@ public class User {
     public boolean isVerified() {
         return isVerified;
     }
-
+    
     public void setVerified(boolean verified) {
         isVerified = verified;
     }
