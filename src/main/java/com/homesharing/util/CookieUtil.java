@@ -15,12 +15,12 @@ public class CookieUtil {
 
     private CookieUtil() {}
 
-    public static void addCookie(HttpServletResponse response, String name, String value) {
+    public static void addCookie(HttpServletResponse response, String name, String value,int cookieAge) {
         try {
             String encodedValue = URLEncoder.encode(value, StandardCharsets.UTF_8);
             Cookie cookie = new Cookie(name, encodedValue);
             cookie.setPath("/");
-            cookie.setMaxAge(24 * 60 * 60*30);
+            cookie.setMaxAge(cookieAge);
             response.addCookie(cookie);
         } catch (Exception e) {
             logger.error("Error for add cookie: {}", e.getMessage(), e);

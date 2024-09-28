@@ -38,4 +38,6 @@ public interface UserService {
 
     String login(String email, String password, boolean rememberMe, HttpServletResponse response);
 
+    String logout(HttpServletResponse response);
+
 }
