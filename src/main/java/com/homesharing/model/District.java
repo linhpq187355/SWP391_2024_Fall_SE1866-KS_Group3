@@ -6,6 +6,8 @@ public class District {
     private String status;
     private int provinceId;
 
+    public District() {
+    }
     public District(int id, String name, String status, int provinceId) {
         this.id = id;
         this.name = name;
