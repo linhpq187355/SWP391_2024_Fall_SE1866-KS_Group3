@@ -4,7 +4,9 @@ import com.homesharing.dao.TokenDao;
 import com.homesharing.dao.UserDao;
 import com.homesharing.dao.impl.TokenDaoImpl;
 import com.homesharing.dao.impl.UserDaoImpl;
+import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
+import com.homesharing.service.impl.TokenServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
@@ -31,8 +33,26 @@ public class SignUpServlet extends HttpServlet {
         // Create instances of UserDao and TokenDao
         UserDao userDao = new UserDaoImpl();
         TokenDao tokenDao = new TokenDaoImpl();
+        TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
-        userService = new UserServiceImpl(userDao, tokenDao);
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService);
+    }
+
+    /**
+     * Handles GET requests to display the sign-up page.
+     *
+     * @param req  The HttpServletRequest containing the user's input.
+     * @param resp The HttpServletResponse used to send a response to the client.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            // Redirect to sign-up page
+            req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
+        } catch (ServletException | IOException e) {
+            logger.error("Error forwarding to sign-up page: {}", e.getMessage(), e);
+            ServletUtils.handleError(resp, "Error while processing your request.");
+        }
     }
 
     /**

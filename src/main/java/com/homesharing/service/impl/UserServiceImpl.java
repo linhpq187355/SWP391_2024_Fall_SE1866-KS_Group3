@@ -2,20 +2,14 @@ package com.homesharing.service.impl;
 
 import com.homesharing.dao.TokenDao;
 import com.homesharing.dao.UserDao;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
+import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
+import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
-import com.homesharing.util.SecureRandomCode;
-import com.homesharing.util.SendingEmail;
-import jakarta.mail.MessagingException;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Implementation of UserService interface, handling user-related business logic.
@@ -23,21 +17,19 @@ import java.util.logging.Logger;
  */
 public class UserServiceImpl implements UserService {
 
-    // Logger for logging test execution
-    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
-
-
     private final UserDao userDao;
     private final TokenDao tokenDao;
+    private final TokenService tokenService;
 
     /**
      * Constructor for UserServiceImpl, initializing the UserDao instance.
      *
      * @param userDao The UserDao instance for database operations.
      */
-    public UserServiceImpl(UserDao userDao, TokenDao tokenDao) {
+    public UserServiceImpl(UserDao userDao, TokenDao tokenDao, TokenService tokenService) {
         this.userDao = userDao;
         this.tokenDao = tokenDao;
+        this.tokenService = tokenService;
     }
 
     /**
@@ -85,18 +77,9 @@ public class UserServiceImpl implements UserService {
             user.setRolesId(roleValue);
             // Insert new user into the database
             int userId = userDao.saveUser(user);
-            String tokenCode = SecureRandomCode.generateCode();
-            LocalDateTime requestedTime = LocalDateTime.now();
-            Token token = new Token(userId, tokenCode, requestedTime, false);
-            tokenDao.insertToken(token);
-
-            String subject = "Xác nhận email";
-            String content = "Click vào link sau để xác thực email: "
-                    + "http://localhost:9999/homeSharing/verify?code=" + tokenCode
-                    + "&userId=" + userId;
-            SendingEmail.sendMail(email, subject, content);
+            tokenService.sendToken(email, userId);
             return "success";
-        } catch (RuntimeException | MessagingException e) {
+        } catch (GeneralException e) {
             // Handle runtime exceptions thrown by the UserDao
             return "Error during registration: " + e.getMessage();
         }
@@ -133,5 +116,54 @@ public class UserServiceImpl implements UserService {
 
         // Validate the role
         return role != null && (role.equals("findRoommate") || role.equals("postRoom"));
+    }
+
+
+    @Override
+    public String login(String email, String password, boolean rememberMe, HttpServletResponse response) {
+        // Attempt to find the user by their email address
+        User user = userDao.findUserByEmail(email);
+
+        // If the user does not exist, return false
+        if (user == null) {
+            // User does not exist
+            return "Email hoặc mật khẩu không đúng";
+        }
+
+        // Check if the provided password matches the user's hashed password
+        if (!user.getHashedPassword().equals(PasswordUtil.hashPassword(password))) {
+            // Password is incorrect
+            return "Email hoặc mật khẩu không đúng";
+        }
+
+        // Check if the user's status is active
+        if (!user.getStatus().equals("active")) {
+            // User's status is not active
+            return "Tài khoản này đã bị khóa";
+        }
+
+        // Find token for user
+        Token token = tokenDao.findToken(user.getId());
+
+        // If the token does not exist, create a new one
+        if (token == null || !token.isVerified()) {
+            tokenService.sendToken(email, user.getId());
+            return "Tài khoản này chưa được xác thực,  hãy click vào đường link trong email để xác thực tài khoản.";
+        }
+
+        // Save user's information to cookies
+        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()));
+        CookieUtil.addCookie(response, "firstName", user.getFirstName());
+        CookieUtil.addCookie(response, "lastName", user.getLastName());
+        CookieUtil.addCookie(response, "email", user.getEmail());
+
+        // If the login is successful and the user wants to remember their login,
+        if (rememberMe) {
+            // Save token to cookies
+            CookieUtil.addCookie(response, "token", token.getToken());
+        }
+
+        // Return true to indicate a successful login
+        return "success";
     }
 }

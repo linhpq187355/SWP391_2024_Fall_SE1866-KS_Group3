@@ -5,7 +5,9 @@
   Time: 22:42
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="vi">
 <head>
     <title>Đăng nhập</title>
@@ -27,8 +29,15 @@
             <div class="col-12 col-lg-10 col-xl-8">
                 <div class="row gy-5 justify-content-center">
                     <div class="col-12 col-lg-5">
-                        <form action="#!">
+                        <form action="login" method="post" onsubmit="return validateForm()">
                             <div class="row gy-3 overflow-hidden">
+                                <c:if test="${requestScope.error != null}">
+                                    <div class="col-12">
+                                        <div class="alert alert-danger" role="alert">
+                                                ${requestScope.error}
+                                        </div>
+                                    </div>
+                                </c:if>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
                                         <input type="email" class="form-control border-0 border-bottom rounded-0" name="email" id="email" placeholder="ten@example.com" required>
@@ -88,5 +97,32 @@
         </div>
     </div>
 </section>
+<script>
+    function validateForm() {
+        let email = document.getElementById("email").value.trim();
+        let password = document.getElementById("password").value;
+
+        // Check for required fields and ensure they're not just spaces
+        if (email === "" || password === "") {
+            alert("Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.");
+            return false;
+        }
+
+        // Validate email
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Vui lòng nhập một địa chỉ email hợp lệ!");
+            return false;
+        }
+
+        // Check password length
+        if (password.length < 8) {
+            alert("Mật khẩu phải có ít nhất 8 ký tự!");
+            return false;
+        }
+
+        return true;
+    }
+</script>
 </body>
 </html>

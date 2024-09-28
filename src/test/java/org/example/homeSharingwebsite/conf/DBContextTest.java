@@ -38,7 +38,7 @@ public class DBContextTest {
      * Checks if the connection is not null and is open.
      */
     @Test
-    public void testConnection() {
+    void testConnection() {
         // Check that the connection is not null
         assertNotNull(connection, "Kết nối không được null");
 
