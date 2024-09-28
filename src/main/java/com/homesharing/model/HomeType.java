@@ -7,10 +7,12 @@ public class HomeType {
     private String status;
     private String icon;
 
+    public HomeType() {
+    }
+
     public HomeType(int id, String name, String description, String status, String icon) {
         this.id = id;
-        this.name = name;
-        this.description = description;
+        this.name = name;        this.description = description;
         this.status = status;
         this.icon = icon;
     }
