@@ -1,9 +1,7 @@
 package com.homesharing.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Home {
     private int id;
@@ -17,8 +15,8 @@ public class Home {
     private LocalDateTime moveInDate;
     private int numOfBedroom;
     private int numOfBath;
-    private LocalDate createdDate;
-    private LocalDate modifiedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private String homeDescription;
     private String tenantDescription;
     private int wardId;
@@ -113,19 +111,19 @@ public class Home {
         this.numOfBath = numOfBath;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public LocalDate getModifiedDate() {
+    public LocalDateTime getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(LocalDate modifiedDate) {
+    public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
