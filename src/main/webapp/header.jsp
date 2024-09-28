@@ -87,7 +87,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse yamm" id="navigation">
 
-      <c:if test="${1==1}">
+      <c:if test="${not empty cookie.id}">
         <div class="button navbar-right" style="padding-top: 1.5em; display: flex; justify-content: space-around; width: 15em">
           <div class="dropdown ymm-sw">
             <i data-toggle="dropdown" data-hover="dropdown" data-delay="200" class="fa-regular fa-heart dropdown-toggle" style="font-size: 2em"></i>

@@ -2,6 +2,7 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDao;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.impl.UserServiceImpl;
@@ -36,7 +37,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public int saveUser(User user) {
-        String sql = "INSERT INTO [HSS_User] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
@@ -84,7 +85,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public boolean emailExists(String email) {
-        String sql = "SELECT COUNT(*) FROM [HSS_User] WHERE [email] = ?";
+        String sql = "SELECT COUNT(*) FROM [HSS_Users] WHERE [email] = ?";
 
         // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
@@ -111,7 +112,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUser(int id){
         String sql = "select u.id, u.email, u.phoneNumber, u.firstName, u.lastName, u.avatar, u.dob\n" +
-                "\tfrom [HSS Users] u where u.id = ?";
+                "\tfrom [HSS_Users] u where u.id = ?";
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -138,6 +139,36 @@ public class UserDaoImpl implements UserDao {
             throw new RuntimeException("Error checking email existence in the database", e);
         }
         return null;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_Users] WHERE [email] = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setRolesId(resultSet.getInt("Rolesid"));
+                user.setStatus(resultSet.getString("status"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+                return user;
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error finding user by email in the database: " + e.getMessage(), e);
+        }
+
+        return null; // Return null if no user is found
     }
 
 }
