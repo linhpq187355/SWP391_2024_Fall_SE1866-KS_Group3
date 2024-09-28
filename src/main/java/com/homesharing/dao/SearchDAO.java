@@ -5,6 +5,5 @@ import com.homesharing.model.Home;
 import java.util.List;
 
 public interface SearchDAO {
-    // Method to search homes by name
-    List<Home> searchHomesByName(String name);
+    List<Home> searchHomes(String name, String location, Integer minPrice, Integer maxPrice);
 }
