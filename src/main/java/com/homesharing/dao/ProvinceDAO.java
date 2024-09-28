@@ -4,5 +4,5 @@ import com.homesharing.model.Province;
 import java.util.List;
 
 public interface ProvinceDAO {
-    List<Province> getProvinceList();
+    List<Province> getAllProvinces();
 }

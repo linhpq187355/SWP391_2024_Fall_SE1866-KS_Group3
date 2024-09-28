@@ -226,7 +226,7 @@ public class UserDaoImpl implements UserDao {
                 user.setStatus(resultSet.getString("status"));
                 user.setVerified(resultSet.getBoolean("isVerified"));
                 user.setLastModified(resultSet.getTimestamp("lastModified").toLocalDateTime());
-                user.set
+                user.setWardsId(resultSet.getString("wardsId"));
                 user.setRolesId(resultSet.getInt("Rolesid"));
 
                 userList.add(user);

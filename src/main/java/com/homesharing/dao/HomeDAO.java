@@ -24,4 +24,10 @@ public interface HomeDAO {
 
     List<Home> getNewHomes();
 
+    /**
+     * Get home object via id
+     * @param id
+     * @return the home that need to be found
+     */
+    Home getHomeById(int id);
 }

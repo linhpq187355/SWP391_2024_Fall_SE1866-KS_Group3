@@ -10,13 +10,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
 public class HomeDAOImpl implements HomeDAO {
-    private List<Home> homes = new ArrayList<Home>();
+    private List<Home> homes = new ArrayList<>();
 
     @Override
     public List<Home> getAllHomes() {
@@ -78,6 +77,44 @@ public class HomeDAOImpl implements HomeDAO {
     }
 
     @Override
+    public Home getHomeById(int id) {
+        String sql = "SELECT [id], [name], [status] FROM [dbo].[Provinces] WHERE [id]=?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Home home = new Home();
+                    home.setId(resultSet.getInt("id"));
+                    home.setName(resultSet.getString("name"));
+                    home.setAddress(resultSet.getString("address"));
+                    home.setLongitude(resultSet.getBigDecimal("longitude"));
+                    home.setLatitude(resultSet.getBigDecimal("latitude"));
+                    home.setOrientation(resultSet.getString("orientation"));
+                    home.setArea(resultSet.getBigDecimal("area"));
+                    home.setLeaseDuration(resultSet.getInt("leaseDuration"));
+                    home.setMoveInDate(resultSet.getTimestamp("moveInDate").toLocalDateTime());
+                    home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
+                    home.setNumOfBath(resultSet.getInt("numOfBath"));
+                    home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                    home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
+                    home.setHomeDescription(resultSet.getString("homeDescription"));
+                    home.setTenantDescription(resultSet.getString("tenantDescription"));
+                    home.setWardId(resultSet.getInt("wardId"));
+                    home.setHomeTypeId(resultSet.getInt("homeTypeId"));
+                    home.setCreatedBy(resultSet.getInt("createdBy"));
+                    return home;
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            throw new IllegalArgumentException("Error saving home to the database: " + e.getMessage(), e);
+        }
+        return null;
+    }
+
+    @Override
     public int saveHome(Home home) {
         String sql = "INSERT INTO Homes (name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardId, homeTypeId, createdBy) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -85,7 +122,7 @@ public class HomeDAOImpl implements HomeDAO {
         // Using try-with-resources to manage the database connection and resources
         try (Connection connection = DBContext.getConnection();
              // PreparedStatement with RETURN_GENERATED_KEYS to capture the inserted Home ID
-             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             // Setting parameters for the PreparedStatement using the Home object
             preparedStatement.setString(1, home.getName());
@@ -124,7 +161,7 @@ public class HomeDAOImpl implements HomeDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw as runtime exception to be handled by the service layer
-            throw new RuntimeException("Error saving home to the database: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Error saving home to the database: " + e.getMessage(), e);
         }
     }
 
