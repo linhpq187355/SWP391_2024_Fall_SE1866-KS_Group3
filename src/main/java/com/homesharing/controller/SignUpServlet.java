@@ -56,23 +56,6 @@ public class SignUpServlet extends HttpServlet {
     }
 
     /**
-     * Handles GET requests to display the sign-up page.
-     *
-     * @param req  The HttpServletRequest containing the user's input.
-     * @param resp The HttpServletResponse used to send a response to the client.
-     */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            // Redirect to sign-up page
-            req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
-        } catch (ServletException | IOException e) {
-            logger.error("Error forwarding to sign-up page: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");
-        }
-    }
-
-    /**
      * Handles POST requests for user registration.
      * Validates input, registers the user, and handles potential errors.
      *

@@ -109,7 +109,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-
     public User getUser(int id){
         String sql = "select u.id, u.email, u.phoneNumber, u.firstName, u.lastName, u.avatar, u.dob\n" +
                 "\tfrom [HSS Users] u where u.id = ?";
@@ -139,6 +138,11 @@ public class UserDaoImpl implements UserDao {
             throw new RuntimeException("Error checking email existence in the database", e);
         }
         return null;
+    }
+
+    @Override
+    public User finUserByEmail(String email){
+
     }
 
 }
