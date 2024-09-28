@@ -187,6 +187,12 @@
 
         </div>
       </c:if>
+      <c:if test="${empty cookie.id}">
+        <div class="button navbar-right">
+          <button class="navbar-btn nav-button wow bounceInRight login" onclick=" window.open('register.html')" data-wow-delay="0.4s">Đăng nhập</button>
+          <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.open('submit-property.html')" data-wow-delay="0.5s">Đăng kí</button>
+        </div>
+      </c:if>
 
       <ul class="main-nav nav navbar-nav navbar-right">
         <li class="dropdown ymm-sw " data-wow-delay="0.1s">
