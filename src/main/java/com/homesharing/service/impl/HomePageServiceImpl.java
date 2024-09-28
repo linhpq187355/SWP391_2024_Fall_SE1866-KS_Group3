@@ -20,7 +20,7 @@ public class HomePageServiceImpl implements HomePageService {
 
     @Override
     public List<Home> getHomes() {
-        return homeDAO.getNewHomes();
+        return homeDAO.getAllHomes();
     }
 
     @Override

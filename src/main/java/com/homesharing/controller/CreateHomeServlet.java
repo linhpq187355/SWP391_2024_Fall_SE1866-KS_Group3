@@ -24,4 +24,9 @@ public class CreateHomeServlet extends HttpServlet {
             ServletUtils.handleError(resp, "Error while processing your request.");
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
 }

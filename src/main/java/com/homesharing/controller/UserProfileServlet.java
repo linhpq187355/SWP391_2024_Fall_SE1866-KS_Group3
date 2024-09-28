@@ -7,6 +7,7 @@ import com.homesharing.model.Preference;
 import com.homesharing.model.User;
 import com.homesharing.service.UserProfileService;
 import com.homesharing.service.impl.UserProfileServiceImpl;
+import com.homesharing.util.CookieUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 @WebServlet("/user-profile")
 public class UserProfileServlet extends HttpServlet {
@@ -27,7 +29,8 @@ public class UserProfileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = userProfileService.getUser(1);
+
+        User user = userProfileService.getUser(Integer.parseInt(Objects.requireNonNull(CookieUtil.getCookie(req, "id"))));
         Preference preference = userProfileService.getPreference(1);
 
         req.setAttribute("user", user);

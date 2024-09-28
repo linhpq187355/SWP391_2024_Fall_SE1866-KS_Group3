@@ -1,14 +1,19 @@
 package com.homesharing.dao;
 
-import com.homesharing.model.Home;
-
 import java.util.List;
+import com.homesharing.model.Home;
 
 public interface HomeDAO {
     /**
+     *
+     * @return the list of homes
+     */
+    List<Home> getAllHomes();
+
+    /**
      * Save home's info to the database
      * @param home Home object that need to be saved
-     * @return homeId
+     * @return home id
      */
     int saveHome(Home home);
 

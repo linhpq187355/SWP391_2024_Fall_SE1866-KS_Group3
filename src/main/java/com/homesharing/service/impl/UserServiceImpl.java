@@ -158,6 +158,7 @@ public class UserServiceImpl implements UserService {
         CookieUtil.addCookie(response, "firstName", user.getFirstName(),cookieAge);
         CookieUtil.addCookie(response, "lastName", user.getLastName(),cookieAge);
         CookieUtil.addCookie(response, "email", user.getEmail(),cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()),cookieAge);
 
         // Return true to indicate a successful login
         return "success";

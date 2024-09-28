@@ -72,9 +72,7 @@
                                 <div class="picture-container">
                                     <div class="picture">
                                         <img src="assets/img/user-default-avatar.png" class="picture-src" id="wizardPicturePreview" title=""/>
-                                        <input type="file" id="wizard-picture">
                                     </div>
-                                    <h6>Chọn ảnh khác</h6>
                                 </div>
                             </div>
 
@@ -90,13 +88,23 @@
                                 </div>
                                 <div class="form-group">
                                     <label>SĐT</label>
-                                    <p>${requestScope.user.phoneNumber}</p>
+                                    <c:if test="${not empty requestScope.user.phoneNumber}">
+                                        <p>${requestScope.user.phoneNumber}</p>
+                                    </c:if>
+                                    <c:if test="${empty requestScope.user.phoneNumber}">
+                                        <p>Chưa cập nhật</p>
+                                    </c:if>
                                 </div>
                             </div>
                             <div class="col-sm-3 padding-top-25">
                                 <div class="form-group">
                                     <label>Ngày sinh</label>
-                                    <p>${requestScope.user.dob}</p>
+                                    <c:if test="${not empty requestScope.user.dob}">
+                                        <p>${requestScope.user.dob}</p>
+                                    </c:if>
+                                    <c:if test="${empty requestScope.user.dob}">
+                                        <p>Chưa cập nhật</p>
+                                    </c:if>
                                 </div>
                                 <div class="form-group">
                                     <label>Xác thực</label>
