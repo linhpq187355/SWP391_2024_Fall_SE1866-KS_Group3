@@ -31,4 +31,6 @@ public interface UserDao {
 
     User findUserByEmail(String email);
 
+    List<User> getAllUsers();
+
 }
