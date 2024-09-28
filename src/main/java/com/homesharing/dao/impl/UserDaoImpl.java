@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public int saveUser(User user) {
-        String sql = "INSERT INTO [HSS_User] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
@@ -73,7 +73,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public boolean emailExists(String email) {
-        String sql = "SELECT COUNT(*) FROM [HSS_User] WHERE [email] = ?";
+        String sql = "SELECT COUNT(*) FROM [HSS_Users] WHERE [email] = ?";
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -94,7 +94,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findUserByEmail(String email) {
-        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_User] WHERE [email] = ?";
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_Users] WHERE [email] = ?";
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
