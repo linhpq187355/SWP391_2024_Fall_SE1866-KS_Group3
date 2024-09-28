@@ -2,25 +2,27 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDao;
 import com.homesharing.dao.impl.TokenDaoImpl;
-import com.homesharing.service.EmailService;
-import com.homesharing.service.impl.EmailServiceImpl;
+import com.homesharing.service.TokenService;
+import com.homesharing.service.impl.TokenServiceImpl;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 @WebServlet("/verify")
 public class VerifyEmailServlet extends HttpServlet {
-    private transient EmailService emailService;
-
+    private transient TokenService tokenService;
+    private static final Logger logger = LoggerFactory.getLogger(VerifyEmailServlet.class); // Logger instance
     @Override
     public void init(){
         TokenDao tokenDao = new TokenDaoImpl();
-        emailService = new EmailServiceImpl(tokenDao);
+        tokenService = new TokenServiceImpl(tokenDao);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class VerifyEmailServlet extends HttpServlet {
 
         // 3. Check the token using the email service
         try {
-            boolean check = emailService.checkToken(verificationCode, userId);
+            boolean check = tokenService.checkToken(verificationCode, userId);
             if (check) {
                 forwardWithMessage(request, response, "Xác thực thành công.");
             } else {
@@ -58,7 +60,7 @@ public class VerifyEmailServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/announce.jsp");
             dispatcher.forward(request, response);
         } catch (IOException | ServletException e) {
-            e.printStackTrace(); // Log the exception for debugging
+            logger.error("Error forwarding to announce page: {}", e.getMessage(), e); // Log the exception for debugging
         }
     }
 }

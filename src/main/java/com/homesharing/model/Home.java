@@ -22,6 +22,7 @@ public class Home {
     private int wardId;
     private int homeType; // One-to-one relationship with HomeType
     private int createdBy;
+    private int priceId;
 
     public int getId() {
         return id;
@@ -166,4 +167,8 @@ public class Home {
     public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
+
+    public void setPriceId(int priceId) { this.priceId = priceId; }
+
+    public int getPriceId() { return priceId; }
 }

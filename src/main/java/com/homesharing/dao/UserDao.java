@@ -1,6 +1,9 @@
 package com.homesharing.dao;
 
+import com.homesharing.model.Token;
 import com.homesharing.model.User;
+
+import java.util.List;
 
 /**
  * UserDao interface defines the data access methods for user-related operations.
@@ -23,5 +26,9 @@ public interface UserDao {
      * @return True if the email exists, false otherwise.
      */
     boolean emailExists(String email);
+
+    User getUser(int userId);
+
+    User findUserByEmail(String email);
 
 }
