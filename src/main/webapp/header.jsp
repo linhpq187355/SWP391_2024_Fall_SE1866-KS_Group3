@@ -178,7 +178,7 @@
                 <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
               </li>
               <li>
-                <a href="index-3.html" class="li-acc-op">Đăng xuất</a>
+                <a href="/logout" class="li-acc-op">Đăng xuất</a>
               </li>
 
             </ul>
