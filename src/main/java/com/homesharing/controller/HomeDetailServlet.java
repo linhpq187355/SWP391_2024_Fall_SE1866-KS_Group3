@@ -1,8 +1,9 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.HomeDetailDAO;
-import com.homesharing.dao.impl.HomeDetailDAOImpl;
 import com.homesharing.model.Home;
+import com.homesharing.model.Price;
+import com.homesharing.service.HomeDetailService;
+import com.homesharing.service.impl.HomeDetailServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,38 +11,35 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet("/home-detail")
+@WebServlet("/homeDetail")
 public class HomeDetailServlet extends HttpServlet {
-
-    private final HomeDetailDAO homeDetailDAO = new HomeDetailDAOImpl();
+    private HomeDetailService homeDetailService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get homeId from the request
+    public void init() {
+        homeDetailService = new HomeDetailServiceImpl();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String homeIdParam = request.getParameter("id");
-        if (homeIdParam != null) {
-            try {
-                int homeId = Integer.parseInt(homeIdParam);
 
-                // Fetch the home details
-                Home home = homeDetailDAO.getHomeById(homeId);
+        if (homeIdParam != null && !homeIdParam.isEmpty()) {
+            int homeId = Integer.parseInt(homeIdParam);
+            Home home = homeDetailService.getHomeById(homeId);
+            List<Price> prices = homeDetailService.getHomePrice(List.of(home)); // Get prices for the specific home
 
-                if (home != null) {
-                    // Set the home object as a request attribute
-                    request.setAttribute("home", home);
+            request.setAttribute("home", home);
+            request.setAttribute("prices", prices);
 
-                    // Forward the request to the JSP page for rendering
-                    request.getRequestDispatcher("/Hometst.jsp").forward(request, response);
-                } else {
-                    // If no home found, redirect or show an error
-                    response.sendRedirect("/error.jsp");
-                }
-            } catch (NumberFormatException e) {
-                response.sendRedirect("/error.jsp");  // Invalid homeId
-            }
+            // Forward to JSP
+            request.getRequestDispatcher("/WEB-INF/views/homeDetail.jsp").forward(request, response);
         } else {
-            response.sendRedirect("/error.jsp");  // No homeId provided
+            // Handle error case
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Home ID is required");
         }
     }
 }

@@ -23,4 +23,5 @@ public interface HomeDAO {
      */
 
     List<Home> getNewHomes();
+
 }
