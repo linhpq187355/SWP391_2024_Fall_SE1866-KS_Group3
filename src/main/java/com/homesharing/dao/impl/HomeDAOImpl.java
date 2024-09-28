@@ -2,11 +2,15 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.HomeDAO;
-import com.homesharing.exception.GeneralException;
+                                                                                                                                        import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -123,4 +127,43 @@ public class HomeDAOImpl implements HomeDAO {
             throw new RuntimeException("Error saving home to the database: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public List<Home> getNewHomes() {
+        String sql = """
+                select top 12 h.id, h.address, h.area, h.createdDate, tb1.id [priceId]
+                \t   from Homes h
+                \t   left join (
+                \t   select Homesid, price, createdDate, id
+                \t   from Prices\s
+                \t   where createdDate in (
+                \t\t\tselect max(p.createdDate) createdDate
+                \t\t\tfrom Prices p
+                \t\t\tgroup by p.Homesid
+                \t   )) tb1 on tb1.Homesid = h.id
+                \t   order by h.createdDate desc""";
+        List<Home> homes = new ArrayList<>();
+        // Use try-with-resources to manage database resources (Connection, PreparedStatement, and ResultSet)
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setAddress(resultSet.getString("address"));
+                home.setArea(resultSet.getBigDecimal("area"));
+                home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                home.setPriceId(resultSet.getInt("priceId"));
+
+                homes.add(home);
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Ném ngoại lệ dưới dạng runtime exception để xử lý tại tầng service
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        }
+
+        return homes;
+    }
+
+
 }
