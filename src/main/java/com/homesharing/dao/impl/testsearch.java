@@ -8,13 +8,13 @@ public class testsearch {
         SearchDAOimpl searchDAO = new SearchDAOimpl();
 
         // Set your test search parameters here
-        String name = "cozy";  // Test for homes with 'cozy' in the name
+        String name = "c";  // Test for homes with 'cozy' in the name
         String location = null; // You can also set this to a specific location or keep it null
         Integer minPrice = null; // You can set a minimum price or keep it null
         Integer maxPrice = null; // You can set a maximum price or keep it null
 
         // Call the search method
-        List<Home> homes = searchDAO.searchHomes(name, location, minPrice, maxPrice);
+        List<Home> homes = searchDAO.searchHomesByName(name);
 
         // Print the results
         if (homes.isEmpty()) {
