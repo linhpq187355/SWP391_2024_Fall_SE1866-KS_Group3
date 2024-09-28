@@ -54,12 +54,14 @@ public class LoginServlet extends HttpServlet {
             String password = req.getParameter("password");
             boolean rememberMe = req.getParameter("remember_me") != null;
 
+            // Log the email for debugging (make sure to not log sensitive information)
+            logger.debug("Login attempt for email: {}", email);
             // Pass information to service
             String result = userService.login(email, password, rememberMe, resp);
 
             if (result.equals("success")) {
                 // Login successful, redirect to home page
-                resp.sendRedirect("home.jsp");
+                resp.sendRedirect("home-page");
             } else {
                 // Login failed, display error message
                 req.setAttribute("error", result);

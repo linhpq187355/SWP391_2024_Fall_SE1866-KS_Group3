@@ -168,4 +168,8 @@ public class Home {
     public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
+
+    public void setPriceId(int priceId) { this.priceId = priceId; }
+
+    public int getPriceId() { return priceId; }
 }
