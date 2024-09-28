@@ -8,7 +8,7 @@ public class User {
     private String email;
     private String hashedPassword;
     private String phoneNumber;
-    private String username;
+    private String userName;
     private String firstName;
     private String lastName;
     private String avatar;
@@ -20,6 +20,7 @@ public class User {
     private boolean isVerified;
     private LocalDateTime lastModified;
     private LocalDateTime createdAt;
+
     // Constructors
     public User() {}
 
@@ -73,8 +74,12 @@ public class User {
         isVerified = verified;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPhoneNumber() {
@@ -173,7 +178,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", hashedPassword='" + hashedPassword + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", username='" + username + '\'' +
+                ", username='" + userName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", avatar='" + avatar + '\'' +
