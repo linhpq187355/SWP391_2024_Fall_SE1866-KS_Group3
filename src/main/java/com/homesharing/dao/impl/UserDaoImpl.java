@@ -129,7 +129,11 @@ public class UserDaoImpl implements UserDao {
                     user.setFirstName(resultSet.getString("firstName"));
                     user.setLastName(resultSet.getString("lastName"));
                     user.setAvatar(resultSet.getString("avatar"));
-                    user.setDob(resultSet.getDate("dob").toLocalDate());
+                    if(resultSet.getDate("dob") != null){
+                        user.setDob(resultSet.getDate("dob").toLocalDate());
+                    } else {
+                        user.setDob(null);
+                    }
                     return user;
                 }
             }
@@ -170,5 +174,7 @@ public class UserDaoImpl implements UserDao {
 
         return null; // Return null if no user is found
     }
+
+
 
 }

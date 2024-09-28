@@ -151,19 +151,27 @@ public class UserServiceImpl implements UserService {
             return "Tài khoản này chưa được xác thực,  hãy click vào đường link trong email để xác thực tài khoản.";
         }
 
+        // identity max age
+        int cookieAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 1 week or 1 month
         // Save user's information to cookies
-        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()));
-        CookieUtil.addCookie(response, "firstName", user.getFirstName());
-        CookieUtil.addCookie(response, "lastName", user.getLastName());
-        CookieUtil.addCookie(response, "email", user.getEmail());
-
-        // If the login is successful and the user wants to remember their login,
-        if (rememberMe) {
-            // Save token to cookies
-            CookieUtil.addCookie(response, "token", token.getToken());
-        }
+        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()),cookieAge);
+        CookieUtil.addCookie(response, "firstName", user.getFirstName(),cookieAge);
+        CookieUtil.addCookie(response, "lastName", user.getLastName(),cookieAge);
+        CookieUtil.addCookie(response, "email", user.getEmail(),cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()),cookieAge);
 
         // Return true to indicate a successful login
         return "success";
+    }
+
+    @Override
+    public String logout(HttpServletResponse response) {
+        //delete all cookie
+        CookieUtil.removeCookie(response, "id");
+        CookieUtil.removeCookie(response, "firstName");
+        CookieUtil.removeCookie(response, "lastName");
+        CookieUtil.removeCookie(response, "email");
+        CookieUtil.removeCookie(response, "token");
+        return "logout success";
     }
 }
