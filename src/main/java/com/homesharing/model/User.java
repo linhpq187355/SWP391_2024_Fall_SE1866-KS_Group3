@@ -20,6 +20,7 @@ public class User {
     private boolean isVerified;
     private LocalDateTime lastModified;
     private LocalDateTime createdAt;
+    private String wardsId;
 
     // Constructors
     public User() {}
@@ -168,6 +169,14 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getWardsId() {
+        return wardsId;
+    }
+
+    public void setWardsId(String wardsId) {
+        this.wardsId = wardsId;
     }
 
     @Override
