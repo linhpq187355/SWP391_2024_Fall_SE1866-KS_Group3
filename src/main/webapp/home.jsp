@@ -52,7 +52,7 @@
 
 <div class="slider-area">
     <div class="slider">
-        <div id="bg-slider" cla ss="owl-carousel owl-theme">
+        <div id="bg-slider" class="owl-carousel owl-theme">
 
             <div class="item"><img src="assets/img/banner-01.png" alt="The Last of us"></div>
             <div class="item"><img src="assets/img/banner-02.jpg" alt="GTA V"></div>
