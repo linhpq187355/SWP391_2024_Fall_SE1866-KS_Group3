@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class Price {
     private int id;
     private int price;
+    private int homesId;
     private LocalDateTime createdDate;
 
     public Price() {
@@ -13,6 +14,15 @@ public class Price {
     public Price(int id, int price, LocalDateTime createdDate) {
         this.id = id; this.price = price; this.createdDate = createdDate;
     }
+
+    public int getHomesId() {
+        return homesId;
+    }
+
+    public void setHomesId(int homesId) {
+        this.homesId = homesId;
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getPrice() { return price; }

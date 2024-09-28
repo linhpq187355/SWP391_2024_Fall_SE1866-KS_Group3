@@ -7,6 +7,8 @@ import com.homesharing.dao.impl.UserDaoImpl;
 import com.homesharing.model.Preference;
 import com.homesharing.model.User;
 import com.homesharing.service.UserProfileService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class UserProfileServiceImpl implements UserProfileService {
     private PreferenceDAO preferenceDAO;

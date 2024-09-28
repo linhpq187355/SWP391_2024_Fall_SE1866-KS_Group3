@@ -16,4 +16,11 @@ public interface HomeDAO {
      * @return home id
      */
     int saveHome(Home home);
+
+    /**
+     * Retrieve new homes' info from the database.
+     * @return List of Home objects.
+     */
+
+    List<Home> getNewHomes();
 }
