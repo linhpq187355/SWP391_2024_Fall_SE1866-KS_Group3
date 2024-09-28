@@ -13,19 +13,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implementation of UserDao interface, handling database operations related to the User entity.
  * This class interacts with the database to save a user and check if an email already exists.
  */
 public class UserDaoImpl implements UserDao {
-
-    // Logger for logging test execution
-    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
-
-
 
     /**
      * Saves a user to the database by executing an INSERT SQL query.
@@ -70,7 +63,7 @@ public class UserDaoImpl implements UserDao {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
-            throw new RuntimeException("Error saving user to the database: " + e.getMessage(), e);
+            throw new GeneralException("Error saving user to the database: " + e.getMessage(), e);
         }
     }
 
@@ -136,7 +129,7 @@ public class UserDaoImpl implements UserDao {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
-            throw new RuntimeException("Error checking email existence in the database", e);
+            throw new GeneralException("Error checking email existence in the database", e);
         }
         return null;
     }
