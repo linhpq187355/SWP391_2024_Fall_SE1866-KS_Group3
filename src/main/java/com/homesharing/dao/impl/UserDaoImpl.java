@@ -2,6 +2,7 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDao;
+import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.impl.UserServiceImpl;
 
@@ -106,4 +107,38 @@ public class UserDaoImpl implements UserDao {
         // Return false if no email match is found
         return false;
     }
+
+    @Override
+
+    public User getUser(int id){
+        String sql = "select u.id, u.email, u.phoneNumber, u.firstName, u.lastName, u.avatar, u.dob\n" +
+                "\tfrom [HSS Users] u where u.id = ?";
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Set the email parameter for the prepared statement
+            preparedStatement.setInt(1, id);
+
+            // Execute the query to check for email existence
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    User user = new User();
+                    user.setId(resultSet.getInt("id"));
+                    user.setEmail(resultSet.getString("email"));
+                    user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                    user.setFirstName(resultSet.getString("firstName"));
+                    user.setLastName(resultSet.getString("lastName"));
+                    user.setAvatar(resultSet.getString("avatar"));
+                    user.setDob(resultSet.getDate("dob").toLocalDate());
+                    return user;
+                }
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw exceptions as runtime to be handled by the service layer
+            throw new RuntimeException("Error checking email existence in the database", e);
+        }
+        return null;
+    }
+
 }

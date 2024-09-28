@@ -6,6 +6,7 @@ import com.homesharing.dao.impl.TokenDaoImpl;
 import com.homesharing.dao.impl.UserDaoImpl;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.UserServiceImpl;
+import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,9 +26,6 @@ public class SignUpServlet extends HttpServlet {
     private transient  UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(SignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
-    private static final String ERROR_PAGE = "/404.jsp"; // Define constant for error page path
-    private static final String FORWARD_ERROR_MESSAGE = "Forwarding to error page failed."; // Define constant for forward error message
-    private static final String REDIRECT_ERROR_MESSAGE = "Redirecting to home page failed."; // Define constant for redirect error message
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
@@ -35,6 +33,23 @@ public class SignUpServlet extends HttpServlet {
         TokenDao tokenDao = new TokenDaoImpl();
         // Inject UserDao into UserServiceImpl
         userService = new UserServiceImpl(userDao, tokenDao);
+    }
+
+    /**
+     * Handles GET requests to display the sign-up page.
+     *
+     * @param req  The HttpServletRequest containing the user's input.
+     * @param resp The HttpServletResponse used to send a response to the client.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            // Redirect to sign-up page
+            req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
+        } catch (ServletException | IOException e) {
+            logger.error("Error forwarding to sign-up page: {}", e.getMessage(), e);
+            ServletUtils.handleError(resp, "Error while processing your request.");
+        }
     }
 
     /**
@@ -63,63 +78,21 @@ public class SignUpServlet extends HttpServlet {
                 String result = userService.registerUser(firstName, lastName, email, password, role);
                 if ("success".equals(result)) {
                     /// Redirect to home page on success
-                    redirectToHomePage(req, resp);
+                    ServletUtils.redirectToHomePage(req, resp);
                 } else {
                     // Set error message if registration fails
                     req.setAttribute(ERROR_ATTRIBUTE, result);
-                    forwardToErrorPage(req, resp);
+                    ServletUtils.forwardToErrorPage(req, resp);
                 }
             } catch (RuntimeException e) {
                 // Handle any runtime exceptions thrown by the service
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
-                forwardToErrorPage(req, resp);
+                ServletUtils.forwardToErrorPage(req, resp);
             }
         } else {
             // Set error message for invalid input
             req.setAttribute(ERROR_ATTRIBUTE, "Invalid data provided.");
-            forwardToErrorPage(req, resp);
-        }
-    }
-
-    /**
-     * Redirects the user to the home page and handles exceptions.
-     *
-     * @param req  The HttpServletRequest containing the user's input.
-     * @param resp The HttpServletResponse used to send a response to the client.
-     */
-    private void redirectToHomePage(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            resp.sendRedirect(req.getContextPath() + "/index.jsp");
-        } catch (IOException e) {
-            handleError(resp, REDIRECT_ERROR_MESSAGE);
-        }
-    }
-
-    /**
-     * Forwards the request to the error page and handles exceptions.
-     *
-     * @param req  The HttpServletRequest containing the user's input.
-     * @param resp The HttpServletResponse used to send a response to the client.
-     */
-    private void forwardToErrorPage(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            req.getRequestDispatcher(ERROR_PAGE).forward(req, resp);
-        } catch (ServletException | IOException e) {
-            handleError(resp, FORWARD_ERROR_MESSAGE);
-        }
-    }
-
-    /**
-     * Handles errors by sending an error response with a given message.
-     *
-     * @param resp    The HttpServletResponse used to send a response to the client.
-     * @param message The error message to send.
-     */
-    private void handleError(HttpServletResponse resp, String message) {
-        try {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
-        } catch (IOException e) {
-            logger.error("An error occurred while sending error response: {}", e.getMessage(), e);
+            ServletUtils.forwardToErrorPage(req, resp);
         }
     }
 }

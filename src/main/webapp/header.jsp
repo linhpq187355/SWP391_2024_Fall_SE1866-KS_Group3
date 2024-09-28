@@ -39,6 +39,7 @@
   <link rel="stylesheet" href="assets/css/wizard.css">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
+  <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="header-connect">
@@ -79,7 +80,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html"><img src="assets/img/logo.png" alt=""></a>
+      <a class="navbar-brand" href="index.html" style=" display: contents"><img src="assets/img/logo-web.jpg" alt="" style="max-width: 4em;"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -175,6 +176,9 @@
               <li>
                 <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
               </li>
+              <li>
+                <a href="index-3.html" class="li-acc-op">Đăng xuất</a>
+              </li>
 
             </ul>
           </div>
@@ -186,10 +190,11 @@
       <ul class="main-nav nav navbar-nav navbar-right">
         <li class="dropdown ymm-sw " data-wow-delay="0.1s">
           <a href="home.jsp">Trang chủ</a>
-
         </li>
 
         <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Tất cả nhà</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Trợ giúp</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Về chúng tôi</a></li>
 
       </ul>
     </div><!-- /.navbar-collapse -->
