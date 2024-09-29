@@ -33,7 +33,7 @@
                     "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
-                urls: ["../assets/css/fonts.min.css"],
+                urls: ["./assets/css/fonts.min.css"],
             },
             active: function () {
                 sessionStorage.fonts = true;
@@ -383,7 +383,9 @@
                                     aria-expanded="false"
                                     aria-haspopup="true"
                             >
-                                <i class="fa fa-search"></i>
+                                <i class="fa fa-search">
+
+                                </i>
                             </a>
                             <ul class="dropdown-menu dropdown-search animated fadeIn">
                                 <form class="navbar-left navbar-form nav-search">
@@ -749,6 +751,7 @@
 <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
+                                            <th>Quản lí</th>
                                         </tr>
                                         </thead>
                                         <tfoot>
@@ -759,6 +762,7 @@
 <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
+                                            <th>Quản lí</th>
                                         </tr>
                                         </tfoot>
                                         <tbody>
@@ -768,8 +772,13 @@
                                                 <td>${user.email}</td>
                                                 <td>${user.createdAt}</td>
 <%--                                                <td>${user.verify}</td>--%>
-                                                <td>${user.rolesId}</td>
+                                                <c:forEach items="${requestScope.roleList}" var="role">
+                                                    <c:if test="${role.id == user.rolesId}">
+                                                        <td>${role.name}</td>
+                                                    </c:if>
+                                                </c:forEach>
                                                 <td>${user.status}</td>
+                                                <td></td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
