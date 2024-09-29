@@ -7,11 +7,11 @@ import com.homesharing.service.impl.UserManagementServiceImpl;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "ListUserServlet", value = "/accountmanage")
+@WebServlet(name = "ListUserServlet", value = "/account-manage")
 public class ListUserServlet extends HttpServlet {
     private UserManagementService userManagementServie;
 
@@ -22,21 +22,14 @@ public class ListUserServlet extends HttpServlet {
     public void init() throws ServletException {
         userManagementServie = new UserManagementServiceImpl();
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> userList = userManagementServie.getAllUsers();
         List<Role> roleList = userManagementServie.getAllRoles();
-//        PrintWriter out = response.getWriter();
-//        for (Role role : roleList) {
-//            out.println(role.getName());
-//        }
         request.setAttribute("userList", userList);
         request.setAttribute("roleList", roleList);
         request.getRequestDispatcher("account-list.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }

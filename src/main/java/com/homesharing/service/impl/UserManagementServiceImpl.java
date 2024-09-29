@@ -29,4 +29,14 @@ public class UserManagementServiceImpl implements UserManagementService {
     public List<Role> getAllRoles() {
         return roleDao.getAllRoles();
     }
+
+    @Override
+    public void updateUserStatus(int userId, String status) {
+        this.userDao.updateUserStatus(userId, status);
+    }
+
+    @Override
+    public User getUserById(int userId) {
+        return userDao.getUserById(userId);
+    }
 }
