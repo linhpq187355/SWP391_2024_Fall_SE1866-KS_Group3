@@ -31,4 +31,7 @@ public interface UserDao {
 
     User findUserByEmail(String email);
 
+    int updateUserProfile(User user);
+
+    String getUserAvatar(int id);
 }

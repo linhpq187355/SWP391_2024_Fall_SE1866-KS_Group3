@@ -39,6 +39,12 @@
     <link rel="stylesheet" href="assets/css/wizard.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+
+    <style>
+        label{
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <jsp:include page="header.jsp"/>
@@ -59,7 +65,7 @@
             <div class="row">
                 <div class="col-sm-10 col-sm-offset-1 profiel-container">
 
-                    <form action="" method="">
+
                         <div class="profiel-header">
                             <h3>
                                 <b>Thông tin của bạn</b>
@@ -71,7 +77,12 @@
                             <div class="col-sm-3 col-sm-offset-1">
                                 <div class="picture-container">
                                     <div class="picture">
-                                        <img src="assets/img/user-default-avatar.png" class="picture-src" id="wizardPicturePreview" title=""/>
+                                        <c:if test="${empty requestScope.user.avatar}">
+                                            <img src="assets/img/user-default-avatar.png" class="picture-src" id="wizardPicturePreview" title=""/>
+                                        </c:if>
+                                        <c:if test="${not empty requestScope.user.avatar}">
+                                            <img src="${requestScope.user.avatar}" class="picture-src" id="wizardPicturePreview" title=""/>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -127,19 +138,34 @@
                                 <div class="form-group">
                                     <label>Sạch sẽ</label>
                                     <div class="slider-container">
-                                        <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cleanliness};">
+                                        <c:if test="${empty requestScope.preference.cleanliness}">
+                                            <p>Chưa cập nhật</p>
+                                        </c:if>
+                                        <c:if test="${not empty requestScope.preference.cleanliness}">
+                                            <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cleanliness};">
+                                        </c:if>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Hút thuốc</label>
                                     <div class="slider-container">
-                                        <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.smoking};">
+                                        <c:if test="${empty requestScope.preference.smoking}">
+                                            <p>Chưa cập nhật</p>
+                                        </c:if>
+                                        <c:if test="${not empty requestScope.preference.smoking}">
+                                            <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.smoking};">
+                                        </c:if>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Uống rượu/bia</label>
                                     <div class="slider-container">
-                                        <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.drinking};">
+                                        <c:if test="${empty requestScope.preference.drinking}">
+                                            <p>Chưa cập nhật</p>
+                                        </c:if>
+                                        <c:if test="${not empty requestScope.preference.drinking}">
+                                            <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.drinking};">
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -147,19 +173,34 @@
                                 <div class="form-group">
                                     <label>Hướng ngoại</label>
                                     <div class="slider-container">
-                                        <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.interaction};">
+                                        <c:if test="${empty requestScope.preference.interaction}">
+                                            <p>Chưa cập nhật</p>
+                                        </c:if>
+                                        <c:if test="${not empty requestScope.preference.interaction}">
+                                            <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.interaction};">
+                                        </c:if>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Nấu ăn</label>
                                     <div class="slider-container">
-                                        <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cooking};">
+                                        <c:if test="${empty requestScope.preference.cooking}">
+                                            <p>Chưa cập nhật</p>
+                                        </c:if>
+                                        <c:if test="${not empty requestScope.preference.cooking}">
+                                            <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cooking};">
+                                        </c:if>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Thú cưng</label>
                                     <div class="slider-container">
-                                        <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.pet}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.pet};">
+                                        <c:if test="${empty requestScope.preference.pet}">
+                                            <p>Chưa cập nhật</p>
+                                        </c:if>
+                                        <c:if test="${not empty requestScope.preference.pet}">
+                                            <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.pet}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.pet};">
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -168,10 +209,10 @@
 
                         <div class="col-sm-5 col-sm-offset-1">
                             <br>
-                            <input type='button' class='btn btn-finish btn-primary' name='Chỉnh sửa thông tin' value='Chỉnh sửa thông tin' />
+                            <button onclick="window.location.href='user-update-profile'" class='btn btn-finish btn-primary'>Chỉnh sửa thông tin</button>
                         </div>
                         <br>
-                    </form>
+
 
                 </div>
             </div><!-- end row -->

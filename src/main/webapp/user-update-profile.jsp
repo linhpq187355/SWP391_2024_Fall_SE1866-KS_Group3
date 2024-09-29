@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -38,6 +39,7 @@
     <link rel="stylesheet" href="assets/css/wizard.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+
 </head>
 <body>
 <jsp:include page="header.jsp"/>
@@ -58,7 +60,7 @@
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1 profiel-container">
 
-                <form action="" method="">
+                <form action="user-update-profile" method="post" enctype="multipart/form-data">
                     <div class="profiel-header">
                         <h3>
                             <b>Thông tin của bạn</b>
@@ -70,8 +72,13 @@
                         <div class="col-sm-3 col-sm-offset-1">
                             <div class="picture-container">
                                 <div class="picture">
-                                    <img src="assets/img/user-default-avatar.png" class="picture-src" id="wizardPicturePreview" title=""/>
-                                    <input type="file" id="wizard-picture">
+                                    <c:if test="${empty requestScope.user.avatar}">
+                                        <img src="assets/img/user-default-avatar.png" class="picture-src" id="wizardPicturePreview" title=""/>
+                                    </c:if>
+                                    <c:if test="${not empty requestScope.user.avatar}">
+                                        <img src="${requestScope.user.avatar}" class="picture-src" id="wizardPicturePreview" title=""/>
+                                    </c:if>
+                                    <input type="file" id="wizard-picture" name="avatar" accept="image/*">
                                 </div>
                                 <h6>Chọn ảnh khác</h6>
                             </div>
@@ -95,6 +102,7 @@
                                 <label>Email</label>
                                 <input name="email" type="email" class="form-control" value="${requestScope.user.email}">
                             </div>
+
                             <div class="form-group">
                                 <label>SĐT</label>
                                 <input name="phone" type="tel" class="form-control" value="${requestScope.user.phoneNumber}">
@@ -102,16 +110,8 @@
                         </div>
                         <div class="col-sm-3 padding-top-25">
                             <div class="form-group">
-                                <input name="dob" type="date" class="form-control" value="${requestScope.user.phoneNumber}">
-                            </div>
-                            <div class="form-group">
-                                <label>Xác thực</label>
-                                <c:if test="${requestScope.user.isVerified() == false}">
-                                    <p>Chưa xác thực</p>
-                                </c:if>
-                                <c:if test="${requestScope.user.isVerified() == true}">
-                                    <p>Đã xác thực <i class="fa-solid fa-circle-check"></i></p>
-                                </c:if>
+                                <label>Ngày sinh</label>
+                                <input name="dob" type="date" class="form-control" value="${requestScope.user.dob}">
                             </div>
                         </div>
 
@@ -125,19 +125,19 @@
                             <div class="form-group">
                                 <label>Sạch sẽ</label>
                                 <div class="slider-container">
-                                    <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cleanliness};">
+                                    <input name="cleanliness" type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cleanliness};">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Hút thuốc</label>
                                 <div class="slider-container">
-                                    <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.smoking};">
+                                    <input name="smoking" type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.smoking};">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Uống rượu/bia</label>
                                 <div class="slider-container">
-                                    <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.drinking};">
+                                    <input name="drinking" type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.drinking};">
                                 </div>
                             </div>
                         </div>
@@ -145,28 +145,35 @@
                             <div class="form-group">
                                 <label>Hướng ngoại</label>
                                 <div class="slider-container">
-                                    <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.interaction};">
+                                    <input name="interaction" type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.interaction};">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Nấu ăn</label>
                                 <div class="slider-container">
-                                    <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cooking};">
+                                    <input name="cooking"d type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cooking};">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Thú cưng</label>
                                 <div class="slider-container">
-                                    <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.pet}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.pet};">
+                                    <input name="pet" type="range" min="1" max="5" step="1" value="${requestScope.preference.pet}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.pet};">
                                 </div>
                             </div>
+
+                            <c:if test="${empty requestScope.preference}">
+                                <input type="text" name="preference" value="false" hidden="hidden"/>
+                            </c:if>
+                            <c:if test="${not empty requestScope.preference}">
+                                <input type="text" name="preference" value="true" hidden="hidden"/>
+                            </c:if>
                         </div>
 
                     </div>
 
                     <div class="col-sm-5 col-sm-offset-1">
                         <br>
-                        <input type='button' class='btn btn-finish btn-primary' name='Chỉnh sửa thông tin' value='Chỉnh sửa thông tin' />
+                        <button type='submit' class='btn btn-finish btn-primary'>Cập nhật</button>
                     </div>
                     <br>
                 </form>
@@ -177,5 +184,21 @@
     </div>
 </div>
 <jsp:include page="footer.jsp"/>
+<script>
+    document.getElementById("wizard-picture").addEventListener("change", function(event) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                // Set the src of the image to the file uploaded
+                document.getElementById('wizardPicturePreview').src = e.target.result;
+            };
+
+            // Read the image file as a data URL.
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+</script>
 </body>
 </html>

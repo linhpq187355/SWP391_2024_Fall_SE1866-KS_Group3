@@ -175,6 +175,60 @@ public class UserDaoImpl implements UserDao {
         return null; // Return null if no user is found
     }
 
+    @Override
+    public int updateUserProfile(User user) {
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [email] = ?\n" +
+                "      ,[phoneNumber] = ?\n" +
+                "      ,[firstName] = ?\n" +
+                "      ,[lastName] = ?\n" +
+                "      ,[avatar] = ?\n" +
+                "      ,[dob] = ?\n" +
+                "      ,[lastModified] = GETDATE()\n" +
+                " WHERE id = ?";
 
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPhoneNumber());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setString(5, user.getAvatar());
+            statement.setDate(6, java.sql.Date.valueOf(user.getDob()));
+            statement.setInt(7, user.getId());
+
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error update user profile: " + e.getMessage(), e);
+        }
+        return rowsUpdated;
+    }
+
+    @Override
+    public String getUserAvatar(int id) {
+        String sql = "select u.avatar\n" +
+                "\tfrom [HSS_Users] u where u.id = ?";
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Set the email parameter for the prepared statement
+            preparedStatement.setInt(1, id);
+
+            // Execute the query to check for email existence
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    return resultSet.getString("avatar");
+                }
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw exceptions as runtime to be handled by the service layer
+            throw new RuntimeException("Error checking email existence in the database", e);
+        }
+        return null;
+    }
 
 }
