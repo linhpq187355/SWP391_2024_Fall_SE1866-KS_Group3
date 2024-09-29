@@ -54,7 +54,7 @@
         <div class="sidebar-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="../index.html" class="logo">
+                <a href="./index.html" class="logo">
                     <img
                             src="./assets/img/kaiadmin/logo_light.svg"
                             alt="navbar brand"
@@ -331,9 +331,9 @@
             <div class="main-header-logo">
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
-                    <a href="../index.html" class="logo">
+                    <a href="./index.html" class="logo">
                         <img
-                                src="../assets/img/kaiadmin/logo_light.svg"
+                                src="./assets/img/kaiadmin/logo_light.svg"
                                 alt="navbar brand"
                                 class="navbar-brand"
                                 height="20"
@@ -354,13 +354,9 @@
                 <!-- End Logo Header -->
             </div>
             <!-- Navbar Header -->
-            <nav
-                    class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
-            >
+            <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                 <div class="container-fluid">
-                    <nav
-                            class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
-                    >
+                    <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <button type="submit" class="btn btn-search pe-1">
@@ -431,7 +427,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/jm_denis.jpg"
+                                                            src="./assets/img/jm_denis.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -444,7 +440,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/chadengle.jpg"
+                                                            src="./assets/img/chadengle.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -457,7 +453,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/mlane.jpg"
+                                                            src="./assets/img/mlane.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -472,7 +468,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/talha.jpg"
+                                                            src="./assets/img/talha.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -540,7 +536,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/profile2.jpg"
+                                                            src="./assets/img/profile2.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -658,14 +654,14 @@
                             >
                                 <div class="avatar-sm">
                                     <img
-                                            src="../assets/img/profile.jpg"
+                                            src="./assets/img/profile.jpg"
                                             alt="..."
                                             class="avatar-img rounded-circle"
                                     />
                                 </div>
                                 <span class="profile-username">
                       <span class="op-7">Hi,</span>
-                      <span class="fw-bold">Hizrian</span>
+                      <span class="fw-bold">Admin</span>
                     </span>
                             </a>
                             <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -674,13 +670,13 @@
                                         <div class="user-box">
                                             <div class="avatar-lg">
                                                 <img
-                                                        src="../assets/img/profile.jpg"
+                                                        src="./assets/img/profile.jpg"
                                                         alt="image profile"
                                                         class="avatar-img rounded"
                                                 />
                                             </div>
                                             <div class="u-text">
-                                                <h4>Hizrian</h4>
+                                                <h4>Admin</h4>
                                                 <p class="text-muted">hello@example.com</p>
                                                 <a
                                                         href="profile.html"
@@ -750,7 +746,7 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-                                            <th>Xác minh</th>
+<%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
                                         </tr>
@@ -760,7 +756,7 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-                                            <th>Xác minh</th>
+<%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
                                         </tr>
@@ -771,12 +767,7 @@
                                                 <td>${user.id}</td>
                                                 <td>${user.email}</td>
                                                 <td>${user.createdAt}</td>
-                                                <c:if test="${user.isVerified}">
-                                                    <td>Verified</td>
-                                                </c:if>
-                                                <c:if test="${user.isVerified=='false'}">
-                                                    <td>Unverified</td>
-                                                </c:if>
+<%--                                                <td>${user.verify}</td>--%>
                                                 <td>${user.rolesId}</td>
                                                 <td>${user.status}</td>
                                                 </tr>
