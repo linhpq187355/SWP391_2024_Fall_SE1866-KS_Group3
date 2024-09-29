@@ -230,7 +230,7 @@ public class UserDaoImpl implements UserDao {
 
                 userList.add(user);
             }
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         return userList;
