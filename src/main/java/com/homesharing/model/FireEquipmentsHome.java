@@ -7,15 +7,12 @@ public class FireEquipmentsHome {
     public int getFireEquipmentsId() {
         return fireEquipmentsId;
     }
-
     public void setFireEquipmentsId(int fireEquipmentsId) {
         this.fireEquipmentsId = fireEquipmentsId;
     }
-
     public int getHomesId() {
         return homesId;
     }
-
     public void setHomesId(int homesId) {
         this.homesId = homesId;
     }

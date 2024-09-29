@@ -1,9 +1,6 @@
 package com.homesharing.service;
 
-import com.homesharing.model.District;
-import com.homesharing.model.HomeType;
-import com.homesharing.model.Province;
-import com.homesharing.model.Ward;
+import com.homesharing.model.*;
 
 import java.util.List;
 
@@ -12,4 +9,6 @@ public interface SubmissionFormService {
     List<District> getDistricts();
     List<Ward> getWards();
     List<HomeType> getHomeTypes();
+    List<Amentity> getAmentities();
+    List<FireEquipment> getFireEquipments();
 }
