@@ -202,10 +202,10 @@
 
       <ul class="main-nav nav navbar-nav navbar-right">
         <li class="dropdown ymm-sw " data-wow-delay="0.1s">
-          <a href="home.jsp">Trang chủ</a>
+          <a href="home-page">Trang chủ</a>
         </li>
 
-        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home.jsp">Tất cả nhà</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-page">Tất cả nhà</a></li>
         <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
         <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
 

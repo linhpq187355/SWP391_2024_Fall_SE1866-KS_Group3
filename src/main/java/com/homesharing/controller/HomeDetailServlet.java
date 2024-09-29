@@ -6,17 +6,16 @@ import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.HomeDetailService;
 import com.homesharing.service.impl.HomeDetailServiceImpl;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet( "/home-detail")
+@WebServlet("/home-detail")
 public class HomeDetailServlet extends HttpServlet {
 
     private HomeDetailService homeDetailService;
