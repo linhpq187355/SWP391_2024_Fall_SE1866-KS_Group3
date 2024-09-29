@@ -49,8 +49,8 @@
       <div class="col-md-5 col-sm-8  col-xs-12">
         <div class="header-half header-call">
           <p>
-            <span><i class="pe-7s-call"></i> +1 234 567 7890</span>
-            <span><i class="pe-7s-mail"></i> your@company.com</span>
+            <span><i class="pe-7s-call"></i> 0989843097 </span>
+            <span><i class="pe-7s-mail"></i> rommifyy@gmail.com</span>
           </p>
         </div>
       </div>
@@ -202,12 +202,12 @@
 
       <ul class="main-nav nav navbar-nav navbar-right">
         <li class="dropdown ymm-sw " data-wow-delay="0.1s">
-          <a href="home.jsp">Trang chủ</a>
+          <a href="home-page">Trang chủ</a>
         </li>
 
-        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Tất cả nhà</a></li>
-        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Trợ giúp</a></li>
-        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Về chúng tôi</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-page">Tất cả nhà</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
 
       </ul>
     </div><!-- /.navbar-collapse -->

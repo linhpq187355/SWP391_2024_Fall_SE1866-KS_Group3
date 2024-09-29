@@ -1,91 +1,150 @@
 package com.homesharing.dao.impl;
+
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.HomeDetailDAO;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
-import  com.homesharing.model.Price;
+import com.homesharing.model.HomeType;
+import com.homesharing.model.Price;
+import com.homesharing.model.User;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.List;
 public class HomeDetailDAOImpl implements HomeDetailDAO {
 
-    @Override
-    public Home getHomeById(int homeId) {
-        // SQL query to fetch home details by ID
-        String sql = "SELECT \n" +
-                "    h.id AS homeId, \n" +
-                "    h.name AS homeName, \n" +
-                "    h.address, \n" +
-                "    h.longitude, \n" +
-                "    h.latitude, \n" +
-                "    h.orientation, \n" +
-                "    h.area, \n" +
-                "    h.leaseDuration, \n" +
-                "    h.moveInDate, \n" +
-                "    h.numOfBedroom, \n" +
-                "    h.numOfBath, \n" +
-                "    h.homeDescription, \n" +
-                "    h.tenantDescription, \n" +
-                "    ht.name AS homeTypeName, \n" +
-                "    u.firstName AS ownerFirstName, \n" +
-                "    u.lastName AS ownerLastName, \n" +
-                "    u.phoneNumber AS ownerPhone, \n" +
-                "    u.email AS ownerEmail,\n" +
-                "    pr.price, \n" +
-                "    hi.imgUrl, \n" +
-                "    r.star AS reviewStar, \n" +
-                "    r.comments AS reviewComments,\n" +
-                "    a.name AS amenityName,\n" +
-                "    f.name AS fireEquipmentName\n" +
-                "FROM Homes h\n" +
-                "JOIN HomeTypes ht ON h.homeTypeId = ht.id\n" +
-                "JOIN [HSS Users] u ON h.createdBy = u.id\n" +
-                "LEFT JOIN Prices pr ON h.id = pr.Homesid\n" +
-                "LEFT JOIN HomeImages hi ON h.id = hi.Homesid\n" +
-                "LEFT JOIN Reviews r ON h.id = r.homeId\n" +
-                "LEFT JOIN Amenities_Homes ah ON h.id = ah.homesId\n" +
-                "LEFT JOIN Amenities a ON ah.amenitiesId = a.id\n" +
-                "LEFT JOIN FireEquipments_Homes fh ON h.id = fh.homesId\n" +
-                "LEFT JOIN FireEquipments f ON fh.fireEquipmentsId = f.id\n" +
-                "WHERE h.id = ?;";
+@Override
+public Home getHomeById(int id) {
+    String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], " +
+            "[area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], " +
+            "[createdDate], [modifiedDate], [homeDescription], [tenantDescription], " +
+            "[wardId], [homeTypeId], [createdBy] FROM [dbo].[Homes] WHERE [id] = ?";
 
-        Home home = null;
+    Home home = null;
+
+    try (Connection connection = DBContext.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            home = new Home();
+            home.setId(resultSet.getInt("id"));
+            home.setName(resultSet.getString("name"));
+            home.setAddress(resultSet.getString("address"));
+            home.setLongitude(resultSet.getBigDecimal("longitude"));
+            home.setLatitude(resultSet.getBigDecimal("latitude"));
+            home.setOrientation(resultSet.getString("orientation"));
+            home.setArea(resultSet.getBigDecimal("area"));
+            home.setLeaseDuration(resultSet.getInt("leaseDuration"));
+            home.setMoveInDate(resultSet.getTimestamp("moveInDate").toLocalDateTime());
+            home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
+            home.setNumOfBath(resultSet.getInt("numOfBath"));
+            home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+            home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null
+                    ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
+            home.setHomeDescription(resultSet.getString("homeDescription"));
+            home.setTenantDescription(resultSet.getString("tenantDescription"));
+            home.setWardId(resultSet.getInt("wardId"));
+            home.setHomeTypeId(resultSet.getInt("homeTypeId"));
+            home.setCreatedBy(resultSet.getInt("createdBy"));
+        }
+
+    } catch (SQLException | IOException | ClassNotFoundException e) {
+        throw new GeneralException("Error retrieving home by ID from the database: " + e.getMessage(), e);
+    }
+
+    return home;
+}
+
+@Override
+public List<Price> getHomePricesByHomeId(int homeId) {
+    String sql = "SELECT [id], [price], [createdDate] FROM [Prices] WHERE [Homesid] = ?";
+    List<Price> prices = new ArrayList<>();
+
+    try (Connection connection = DBContext.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+        preparedStatement.setInt(1, homeId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            Price price = new Price();
+            price.setId(resultSet.getInt("id"));
+            price.setPrice(resultSet.getInt("price"));
+            price.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+            prices.add(price);
+        }
+
+    } catch (SQLException | IOException | ClassNotFoundException e) {
+        throw new GeneralException("Error retrieving home prices from the database: " + e.getMessage(), e);
+    }
+
+    return prices;
+}
+
+@Override
+public User getCreatorByHomeId(int homeId) {
+    String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
+            "FROM [HSS Users] u " +
+            "JOIN Homes h ON u.id = h.createdBy " +
+            "WHERE h.id = ?";
+    User user = null;
+
+    try (Connection connection = DBContext.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+        preparedStatement.setInt(1, homeId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            user = new User();
+            user.setId(resultSet.getInt("id"));
+            user.setFirstName(resultSet.getString("firstName"));
+            user.setLastName(resultSet.getString("lastName"));
+            user.setEmail(resultSet.getString("email"));
+            user.setPhoneNumber(resultSet.getString("phoneNumber"));
+        }
+
+    } catch (SQLException | IOException | ClassNotFoundException e) {
+        throw new GeneralException("Error retrieving creator information from the database: " + e.getMessage(), e);
+    }
+
+    return user;
+}
+    @Override
+    public List<HomeType> getHomeTypesByHomeId(int homeId) {
+        String sql = "SELECT ht.id, ht.name, ht.description, ht.status " +
+                "FROM HomeTypes ht " +
+                "JOIN Homes h ON ht.id = h.homeTypeId " +
+                "WHERE h.id = ?";
+        List<HomeType> homeTypes = new ArrayList<>();
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            // Set the ID parameter in the query
             preparedStatement.setInt(1, homeId);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Execute the query
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    // Create a new Home object and populate it with data from the ResultSet
-                    home = new Home();
-                    home.setId(resultSet.getInt("homeId"));
-                    home.setName(resultSet.getString("homeName"));
-                    home.setAddress(resultSet.getString("address"));
-                    home.setLongitude(resultSet.getBigDecimal("longitude"));
-                    home.setLatitude(resultSet.getBigDecimal("latitude"));
-                    home.setOrientation(resultSet.getString("orientation"));
-                    home.setArea(resultSet.getBigDecimal("area"));
-                    home.setLeaseDuration(resultSet.getInt("leaseDuration"));
-                    home.setMoveInDate(resultSet.getTimestamp("moveInDate").toLocalDateTime());
-                    home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
-                    home.setNumOfBath(resultSet.getInt("numOfBath"));
-                    home.setHomeDescription(resultSet.getString("homeDescription"));
-                    home.setTenantDescription(resultSet.getString("tenantDescription"));
-                }
+            while (resultSet.next()) {
+                HomeType homeType = new HomeType();
+                homeType.setId(resultSet.getInt("id"));
+                homeType.setName(resultSet.getString("name"));
+                homeType.setDescription(resultSet.getString("description"));
+                homeType.setStatus(resultSet.getString("status"));
+                homeTypes.add(homeType);
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            // Handle any exceptions that occur during database access
-            throw new RuntimeException("Error retrieving home details: " + e.getMessage(), e);
+            throw new GeneralException("Error retrieving home types from the database: " + e.getMessage(), e);
         }
 
-        // Return the Home object, or null if no home was found
-        return home;
+        return homeTypes;
     }
+
 }

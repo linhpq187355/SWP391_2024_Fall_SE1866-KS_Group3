@@ -55,9 +55,9 @@
             <img src="assets/img/footer-logo.png" alt="" class="wow pulse" data-wow-delay="1s">
             <p>Lorem ipsum dolor cum necessitatibus su quisquam molestias. Vel unde, blanditiis.</p>
             <ul class="footer-adress">
-              <li><i class="pe-7s-map-marker strong"> </i> 9089 your adress her</li>
-              <li><i class="pe-7s-mail strong"> </i> email@yourcompany.com</li>
-              <li><i class="pe-7s-call strong"> </i> +1 908 967 5906</li>
+              <li><i class="pe-7s-map-marker strong"> </i> FPT university</li>
+              <li><i class="pe-7s-mail strong"> </i> rommifyy@gmail.com </li>
+              <li><i class="pe-7s-call strong"> </i> 0989843097 </li>
             </ul>
           </div>
         </div>
@@ -70,8 +70,8 @@
               <li><a href="#">Services</a>  </li>
               <li><a href="submit-property.html">Submit property </a></li>
               <li><a href="contact.html">Contact us</a></li>
-              <li><a href="faq.html">fqa</a>  </li>
-              <li><a href="faq.html">Terms </a>  </li>
+              <li><a href="about-us.jsp">About Us</a>  </li>
+              <li><a href="terms.jsp">Terms </a>  </li>
             </ul>
           </div>
         </div>

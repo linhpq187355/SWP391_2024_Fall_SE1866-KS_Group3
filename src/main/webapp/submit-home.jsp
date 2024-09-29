@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -46,6 +47,9 @@
       width: 100%;
       height: 60%;
     }
+    label {
+      color: darkgrey;
+    }
   </style>
 </head>
 <body>
@@ -74,13 +78,6 @@
 
         <div class="wizard-card ct-wizard-orange" id="wizardProperty">
           <form action="submit-home" method="post">
-            <!-- <div class="wizard-header">
-              <h3>
-                ĐĂNG TIN Ở GHÉP <br>
-                <small>Vui lòng điền các thông tin về nơi bạn đang thuê ở biểu mẫu dưới đây.</small>
-              </h3>
-            </div> -->
-
             <ul>
               <li><a href="#step1" data-toggle="tab">Bước 1 </a></li>
               <li><a href="#step2" data-toggle="tab">Bước 2 </a></li>
@@ -96,62 +93,39 @@
                   <div class="col-sm-12">
                     <div class="form-group">
                       <label>Loại hình nhà ở <small>(required)</small></label><br>
-                      <select name="home-type" id="home-type" class="form-control" aria-label="VD nhà nguyên căn">
-                        <option value="volvo">Studio</option>
-                        <option value="saab">Dorm</option>
-                        <option value="mercedes">Home</option>
+                      <select name="home-type" id="home-type" class="form-control" aria-label="VD nhà nguyên căn" required>
+                        <c:forEach var="hometype" items="${homeTypes}">
+                          <option value="${hometype.id}">${hometype.name}</option>
+                        </c:forEach>
                       </select>
                     </div>
                   </div>
+                  <div style="margin-left: 15px;">
+                    <select class="form-select form-select-sm mb-3" id="city" aria-label=".form-select-sm">
+                      <option value="" selected>Chọn tỉnh thành</option>
+                    </select>
 
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label>Tỉnh/thành phố <small>(required)</small></label><br>
-                      <select id="province" class="selectpicker" data-live-search="true"
-                              data-live-search-style="begins" title="Chọn tỉnh/thành phố">
-                        <option value="hn">Hà Nội</option>
-                        <option value="tphcm">HCM</option>
-                        <option value="hue">Huế</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label>Quận/huyện <small>(required)</small></label><br>
-                      <select id="district" name="district" class="selectpicker" data-live-search="true"
-                              data-live-search-style="begins" title="Chọn quận/huyện">
-                        <option value="hn">Thành phố TQ</option>
-                        <option value="tphcm">HCM</option>
-                        <option value="hue">Huế</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label>Xã/phường <small>(required)</small></label><br>
-                      <select name="ward" id="ward" class="selectpicker" data-live-search="true"
-                              data-live-search-style="begins" title="Chọn xã/phường">
-                        <option value="hn">Phường Ỷ La</option>
-                        <option value="tphcm">HCM</option>
-                        <option value="hue">Huế</option>
-                      </select>
-                    </div>
-                  </div>
+                    <select class="form-select form-select-sm mb-3" id="district" aria-label=".form-select-sm">
+                      <option value="" selected>Chọn quận huyện</option>
+                    </select>
 
+                    <select class="form-select form-select-sm" id="ward" aria-label=".form-select-sm">
+                      <option value="" selected>Chọn phường xã</option>
+                    </select>
+                  </div>
                   <div class="col-sm-12">
                     <div class="form-group">
-                      <label>Địa chỉ trên tin đăng <small>(required)</small></label>
-                      <input name="address-detail" type="text" class="form-control"
-                             placeholder="Phường Ỷ La, thành phố TQ, tỉnh TQ">
+                      <label>Địa chỉ cụ thể <small>(required)</small></label>
+                      <input name="address-detail" type="text" class="form-control" required>
                     </div>
                   </div>
 
-                  <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Vị trí trên bản đồ <small>(required)</small></label>
-                      <div id="map"></div>
-                    </div>
-                  </div>
+<%--                  <div class="col-sm-12">--%>
+<%--                    <div class="form-group">--%>
+<%--                      <label>Vị trí trên bản đồ <small>(required)</small></label>--%>
+<%--                      <div id="map"></div>--%>
+<%--                    </div>--%>
+<%--                  </div>--%>
 
                 </div>
               </div>
@@ -164,11 +138,11 @@
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label>Mô tả về nơi ở của bạn:</label>
-                        <textarea name="discrition" class="form-control"></textarea>
+                        <textarea name="discrition" class="form-control" required></textarea>
                       </div>
                       <div class="form-group">
                         <label>Mô tả về người bạn muốn ở ghép:</label>
-                        <textarea name="discrition" class="form-control"></textarea>
+                        <textarea name="discrition" class="form-control" required></textarea>
                       </div>
                     </div>
                   </div>
@@ -184,7 +158,7 @@
                       <div class="form-group">
                         <label>Hướng nhà :</label>
                         <select id="lunchBegins" class="selectpicker" data-live-search="true"
-                                data-live-search-style="begins" title="Chọn hướng nhà">
+                                data-live-search-style="begins" title="Chọn hướng nhà" required>
                           <option>Hướng Đông</option>
                           <option>Hướng Tây</option>
                           <option>Hướng Nam</option>
@@ -198,8 +172,8 @@
                     </div>
                     <div class="col-sm-3">
                       <div class="form-group">
-                        <label>Thời gian cho ở ghép (theo tháng) :</label>
-                        <input type="number" class="form-control" id="leaseDuration" name="leaseDuration" min="1" max="12" required>
+                        <label>Thời gian cho ở ghép :</label>
+                        <input type="number" class="form-control" id="leaseDuration" name="leaseDuration" placeholder="Vui lòng chọn thời gian thuê theo tháng" min="1" max="12" required>
                       </div>
                     </div>
                     <div class="col-sm-3">
@@ -232,83 +206,34 @@
                     </div>
                   </div>
                   <div class="col-sm-12 padding-top-15">
-                    <h5>Tiện ích nơi ở: </h5>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> Swimming Pool
-                          </label>
+                    <h5 style="padding-left: 15px;">Tiện ích nơi ở: </h5>
+                    <c:forEach var="amentity" items="${amentities}">
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" name="amentityIds" value="${amentity.id}"> ${amentity.name}
+                            </label>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> 2 Stories
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> Emergency Exit
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> Fire Place
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 padding-bottom-15">
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> Laundry Room
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> Jog Path
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> Ceilings
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox"> Dual Sinks
-                          </label>
-                        </div>
-                      </div>
-                    </div>
+                    </c:forEach>
                   </div>
                   <br>
+                  <div class="col-sm-12 padding-top-15">
+                    <h5 style="padding-left: 15px;">Phòng cháy chữa cháy: </h5>
+                    <c:forEach var="fireEquip" items="${fireEquipments}">
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" name="fireEquipIds" value="${fireEquip.id}"> ${fireEquip.name}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </c:forEach>
+                  </div>
                 </div>
               </div>
               <!-- End step 2 -->
@@ -317,14 +242,9 @@
                 <h4 class="info-text">HÌNH ẢNH</h4>
                 <div class="row">
                   <div class="col-sm-12">
-                    <div class="upload__box">
-                      <div class="upload__btn-box">
-                        <label class="upload__btn">
-                          <p>Chọn ảnh: </p>
-                          <input type="file" multiple="" data-max_length="20" class="upload__inputfile">
-                          <p>Đăng tối thiểu 3 ảnh, tối đa 24 ảnh với tất cả các loại tin</p>
-                        </label>
-                      </div>
+                    <div class="form-group">
+                      <label for="imageUpload">Chọn hình ảnh <small>(có thể chọn nhiều hình ảnh)</small></label>
+                      <input type="file" id="imageUpload" name="images" class="form-control" multiple accept="image/*">
                     </div>
                   </div>
                 </div>
@@ -348,7 +268,6 @@
                           <input type="checkbox" /> <strong>Tôi đồng ý các điều khoản và điều kiện.</strong>
                         </label>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -359,12 +278,12 @@
 
             <div class="wizard-footer">
               <div class="pull-right">
-                <input type='button' class='btn btn-next btn-primary' name='next' value='Next' />
-                <input type='button' class='btn btn-finish btn-primary ' name='finish' value='Finish' />
+                <input type='button' class='btn btn-next btn-primary' name='next' value='Tiếp' />
+                <input type='submit' class='btn btn-finish btn-primary' name='finish' value='Đăng tin' />
               </div>
 
               <div class="pull-left">
-                <input type='button' class='btn btn-previous btn-default' name='previous' value='Previous' />
+                <input type='button' class='btn btn-previous btn-default' name='previous' value='Quay về' />
               </div>
               <div class="clearfix"></div>
             </div>
@@ -377,6 +296,7 @@
 </div>
 
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="assets/js//jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/bootstrap-select.min.js"></script>
@@ -417,5 +337,8 @@
   });
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script src="assets/js/administrative-territory.js"></script>
+<script src="assets/js/submisson-form-validation.js"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Datatables - Kaiadmin Bootstrap 5 Admin Dashboard</title>
     <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
@@ -25,7 +25,7 @@
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
         WebFont.load({
-            google: { families: ["Public Sans:300,400,500,600,700"] },
+            google: {families: ["Public Sans:300,400,500,600,700"]},
             custom: {
                 families: [
                     "Font Awesome 5 Solid",
@@ -33,19 +33,21 @@
                     "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
-                urls: ["../assets/css/fonts.min.css"],
+                urls: ["./assets/css/fonts.min.css"],
             },
             active: function () {
                 sessionStorage.fonts = true;
             },
         });
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="./assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
+    <link rel="stylesheet" href="./assets/css/kaiadmin.min.css"/>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
 </head>
 <body>
 <div class="wrapper">
@@ -54,7 +56,7 @@
         <div class="sidebar-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="../index.html" class="logo">
+                <a href="./index.html" class="logo">
                     <img
                             src="./assets/img/kaiadmin/logo_light.svg"
                             alt="navbar brand"
@@ -331,9 +333,9 @@
             <div class="main-header-logo">
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
-                    <a href="../index.html" class="logo">
+                    <a href="./index.html" class="logo">
                         <img
-                                src="../assets/img/kaiadmin/logo_light.svg"
+                                src="./assets/img/kaiadmin/logo_light.svg"
                                 alt="navbar brand"
                                 class="navbar-brand"
                                 height="20"
@@ -354,13 +356,9 @@
                 <!-- End Logo Header -->
             </div>
             <!-- Navbar Header -->
-            <nav
-                    class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
-            >
+            <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                 <div class="container-fluid">
-                    <nav
-                            class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
-                    >
+                    <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <button type="submit" class="btn btn-search pe-1">
@@ -387,7 +385,9 @@
                                     aria-expanded="false"
                                     aria-haspopup="true"
                             >
-                                <i class="fa fa-search"></i>
+                                <i class="fa fa-search">
+
+                                </i>
                             </a>
                             <ul class="dropdown-menu dropdown-search animated fadeIn">
                                 <form class="navbar-left navbar-form nav-search">
@@ -431,7 +431,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/jm_denis.jpg"
+                                                            src="./assets/img/jm_denis.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -444,7 +444,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/chadengle.jpg"
+                                                            src="./assets/img/chadengle.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -457,7 +457,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/mlane.jpg"
+                                                            src="./assets/img/mlane.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -472,7 +472,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/talha.jpg"
+                                                            src="./assets/img/talha.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -540,7 +540,7 @@
                                             <a href="#">
                                                 <div class="notif-img">
                                                     <img
-                                                            src="../assets/img/profile2.jpg"
+                                                            src="./assets/img/profile2.jpg"
                                                             alt="Img Profile"
                                                     />
                                                 </div>
@@ -658,14 +658,14 @@
                             >
                                 <div class="avatar-sm">
                                     <img
-                                            src="../assets/img/profile.jpg"
+                                            src="./assets/img/profile.jpg"
                                             alt="..."
                                             class="avatar-img rounded-circle"
                                     />
                                 </div>
                                 <span class="profile-username">
                       <span class="op-7">Hi,</span>
-                      <span class="fw-bold">Hizrian</span>
+                      <span class="fw-bold">Admin</span>
                     </span>
                             </a>
                             <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -674,13 +674,13 @@
                                         <div class="user-box">
                                             <div class="avatar-lg">
                                                 <img
-                                                        src="../assets/img/profile.jpg"
+                                                        src="./assets/img/profile.jpg"
                                                         alt="image profile"
                                                         class="avatar-img rounded"
                                                 />
                                             </div>
                                             <div class="u-text">
-                                                <h4>Hizrian</h4>
+                                                <h4>Admin</h4>
                                                 <p class="text-muted">hello@example.com</p>
                                                 <a
                                                         href="profile.html"
@@ -750,9 +750,10 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-                                            <th>Xác minh</th>
+                                            <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
+                                            <th>Quản lí</th>
                                         </tr>
                                         </thead>
                                         <tfoot>
@@ -760,27 +761,46 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-                                            <th>Xác minh</th>
+                                            <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
+                                            <th>Quản lí</th>
                                         </tr>
                                         </tfoot>
                                         <tbody>
-                                            <c:forEach items="${requestScope.userList}" var="user">
-                                                <tr>
+                                        <c:forEach items="${requestScope.userList}" var="user">
+                                            <tr>
                                                 <td>${user.id}</td>
                                                 <td>${user.email}</td>
                                                 <td>${user.createdAt}</td>
-                                                <c:if test="${user.isVerified}">
-                                                    <td>Verified</td>
+                                                    <%--                                                <td>${user.verify}</td>--%>
+                                                <c:forEach items="${requestScope.roleList}" var="role">
+                                                    <c:if test="${role.id == user.rolesId}">
+                                                        <td>${role.name}</td>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${user.status=='active'}">
+                                                    <td class="text-center text-success capitalize">${user.status}</td>
                                                 </c:if>
-                                                <c:if test="${user.isVerified=='false'}">
-                                                    <td>Unverified</td>
+                                                <c:if test="${user.status!='active'}">
+                                                    <td class="text-center text-danger capitalize">Inactive</td>
                                                 </c:if>
-                                                <td>${user.rolesId}</td>
-                                                <td>${user.status}</td>
-                                                </tr>
-                                            </c:forEach>
+                                                <td class="space-y-4">
+                                                    <a href="ban?userId=${user.id}">
+                                                        <button class="bg-red-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-red-600">
+                                                            <i class="fas fa-ban"></i>
+                                                            <span>Ban</span>
+                                                        </button>
+                                                    </a>
+                                                    <a href="activate?userId=${user.id}">
+                                                        <button class="bg-green-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-green-600">
+                                                            <i class="fas fa-check"></i>
+                                                            <span>Activate</span>
+                                                        </button>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1765,7 +1785,7 @@
                                 class="changeLogoHeaderColor"
                                 data-color="white"
                         ></button>
-                        <br />
+                        <br/>
                         <button
                                 type="button"
                                 class="changeLogoHeaderColor"
@@ -1846,7 +1866,7 @@
                                 class="changeTopBarColor"
                                 data-color="white"
                         ></button>
-                        <br />
+                        <br/>
                         <button
                                 type="button"
                                 class="changeTopBarColor"

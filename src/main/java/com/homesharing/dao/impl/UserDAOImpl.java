@@ -4,7 +4,6 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
-import com.homesharing.util.PasswordUtil;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,7 +23,6 @@ public class UserDAOImpl implements UserDAO {
 
     // Logger for logging test execution
     private static final Logger LOGGER = Logger.getLogger(UserDAOImpl.class.getName());
-    private static final List<User> userList = new ArrayList<>();
 
 
     /**
@@ -110,7 +108,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUser(int id){
+    public User getUser(int id) {
         String sql = "select u.id, u.email, u.phoneNumber, u.firstName, u.lastName, u.avatar, u.dob\n" +
                 "\tfrom [HSS_Users] u where u.id = ?";
         try (Connection connection = DBContext.getConnection();
@@ -129,7 +127,7 @@ public class UserDAOImpl implements UserDAO {
                     user.setFirstName(resultSet.getString("firstName"));
                     user.setLastName(resultSet.getString("lastName"));
                     user.setAvatar(resultSet.getString("avatar"));
-                    if(resultSet.getDate("dob") != null){
+                    if (resultSet.getDate("dob") != null) {
                         user.setDob(resultSet.getDate("dob").toLocalDate());
                     } else {
                         user.setDob(null);
@@ -177,6 +175,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<>();
         String sql = "SELECT [id]\n" +
                 "      ,[email]\n" +
                 "      ,[hashedPassword]\n" +
@@ -229,14 +228,9 @@ public class UserDAOImpl implements UserDAO {
 
                 userList.add(user);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (IOException | ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
-
         return userList;
     }
 
@@ -254,7 +248,7 @@ public class UserDAOImpl implements UserDAO {
                 " WHERE id = ?";
 
         try (Connection connection = DBContext.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
 
             statement.setString(1, user.getEmail());
@@ -297,24 +291,50 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public int resetPassword(String password, int id) {
-        int rowsUpdated = 0;
-        String sql = "UPDATE [dbo].[HSS_Users]\n" +
-                "   SET [hashedPassword] = ?\n"+
-                " WHERE id = ?";
+    public void updateUserStatus(int id, String status) {
+        String sql = "UPDATE [dbo].[HSS Users]\n" +
+                "   SET [status] = ?\n" +
+                " WHERE [id] = ?";
+
+        try (
+                Connection connection = DBContext.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error update user status: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public User getUserById(int id) {
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
 
         try (Connection connection = DBContext.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
+            preparedStatement.setInt(1, id);
 
-            statement.setString(1, PasswordUtil.hashPassword(password));
-            statement.setInt(2, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setRolesId(resultSet.getInt("Rolesid"));
+                user.setStatus(resultSet.getString("status"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+                return user;
+            }
 
-            rowsUpdated = statement.executeUpdate();
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error update user profile: " + e.getMessage(), e);
+            throw new GeneralException("Error finding user by id in the database: " + e.getMessage(), e);
         }
-        return rowsUpdated;
+
+        return null; // Return null if no user is found
     }
 
 }

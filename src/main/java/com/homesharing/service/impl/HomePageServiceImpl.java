@@ -16,13 +16,10 @@ public class HomePageServiceImpl implements HomePageService {
         this.priceDAO = new PriceDAOImpl();
     }
 
-
-
     @Override
     public List<Home> getHomes() {
         return homeDAO.getAllHomes();
     }
-
 
     @Override
     public List<Home> getNewHomes() {

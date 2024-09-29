@@ -1,10 +1,7 @@
 package com.homesharing.controller;
 
 import com.google.gson.Gson;
-import com.homesharing.model.District;
-import com.homesharing.model.HomeType;
-import com.homesharing.model.Province;
-import com.homesharing.model.Ward;
+import com.homesharing.model.*;
 import com.homesharing.service.HomePageService;
 import com.homesharing.service.impl.HomePageServiceImpl;
 import com.homesharing.service.impl.SubmissonFormServiceImpl;
@@ -33,7 +30,12 @@ public class CreateHomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             List<HomeType> homeTypes = submissonFormService.getHomeTypes();
+            List<Amentity> amentities = submissonFormService.getAmentities();
+            List<FireEquipment> fireEquipments = submissonFormService.getFireEquipments();
+
             req.setAttribute("homeTypes", homeTypes);
+            req.setAttribute("amentities", amentities);
+            req.setAttribute("fireEquipments", fireEquipments);
             req.getRequestDispatcher("submit-home.jsp").forward(req,resp);
     }
 

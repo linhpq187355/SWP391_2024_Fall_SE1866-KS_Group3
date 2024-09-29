@@ -36,5 +36,7 @@ public interface UserDAO {
 
     String getUserAvatar(int id);
 
-    int resetPassword(String password, int id);
+    void updateUserStatus(int id, String status);
+
+    User getUserById(int id);
 }

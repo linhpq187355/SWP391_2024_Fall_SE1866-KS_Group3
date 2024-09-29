@@ -50,4 +50,5 @@ public class PriceDAOImpl implements PriceDAO {
 
         return prices;
     }
+
 }

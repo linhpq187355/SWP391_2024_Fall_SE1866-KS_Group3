@@ -25,9 +25,10 @@ import java.io.IOException;
  */
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
-    private transient  UserService userService;// Mark userService as transient
+    private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(SignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
+
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao

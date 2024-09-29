@@ -2300,10 +2300,6 @@ Welcom
     z-index: 1000;
 }
 .welcome_text .page-title h2 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 0.1px;
     color: #9B9B9B;
     text-transform: uppercase;
     background-color: #FFF;
@@ -2584,9 +2580,10 @@ padding-bottom: 15px;
 .home-lager-shearch .large-search {
     padding: 25px 25px 10px;
 }
-
+.btn .btn-default .btn-lg-sheach{
+    bottom: 0px;
+}
 .home-lager-shearch .large-search .btn-lg-sheach {
-    bottom: -46px;
     border-radius: 50%;
     width: 60px;
     border: 2px solid #FFF;
