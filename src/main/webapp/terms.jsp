@@ -231,7 +231,7 @@
 
                                 <img src="assets/img/footer-logo.png" alt="" class="wow pulse" data-wow-delay="1s">
                                 <ul class="footer-adress">
-                                    <li><i class="pe-7s-mail strong"> </i> romtify@gmail.com</li>
+                                    <li><i class="pe-7s-mail strong"> </i> romtifyy@gmail.com</li>
                                     <li><i class="pe-7s-call strong"> </i> 0989843097 </li>
                                 </ul>
                             </div>

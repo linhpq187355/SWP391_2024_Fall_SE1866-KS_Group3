@@ -132,6 +132,7 @@
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-yellow-500 mb-2">Contact</h2>
+                    <p>Gmail: rommifyy@gmail.com
                     <p>Phone: 0989843097</p>
                     <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
@@ -155,7 +156,7 @@
 
                                 <img src="assets/img/footer-logo.png" alt="" class="wow pulse" data-wow-delay="1s">
                                 <ul class="footer-adress">
-                                    <li><i class="pe-7s-mail strong"> </i> romtify@gmail.com</li>
+                                    <li><i class="pe-7s-mail strong"> </i> romtifyy@gmail.com</li>
                                     <li><i class="pe-7s-call strong"> </i> 0989843097 </li>
                                 </ul>
                             </div>
