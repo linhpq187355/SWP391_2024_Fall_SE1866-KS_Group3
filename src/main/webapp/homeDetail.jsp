@@ -260,7 +260,7 @@
                                             </div>
                                             <div class="col-xs-8 col-sm-8 ">
                                                 <h3 class="dealer-name">
-                                                    <a href="">${owner.firstName} ${owner.lastName}</a>
+                                                    <a href="">${creator.firstName} ${creator.lastName}</a>
                                                 </h3>
                                                 <div class="dealer-social-media">
                                                     <a class="twitter" target="_blank" href="">

@@ -1,10 +1,11 @@
-package com.homesharing.servlet;
+package com.homesharing.controller;
 
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.HomeDetailService;
 import com.homesharing.service.impl.HomeDetailServiceImpl;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "HomeDetailServlet", urlPatterns = {"/home-detail"})
+@WebServlet(name = "HomeDetailServlet", urlPatterns = {"/homeDetail"})
 public class HomeDetailServlet extends HttpServlet {
 
     private HomeDetailService homeDetailService;
@@ -58,6 +59,6 @@ public class HomeDetailServlet extends HttpServlet {
         req.setAttribute("creator", creator);
 
         // Forward the request to the JSP
-        req.getRequestDispatcher("/WEB-INF/views/home-detail.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/homeDetail.jsp").forward(req, resp);
     }
 }
