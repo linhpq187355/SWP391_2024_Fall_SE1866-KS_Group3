@@ -1,7 +1,7 @@
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
 
@@ -10,18 +10,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS; // Static import for RETURN_GENERATED_KEYS
-
-    // Logger for logging test execution
-    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
-    private static final List<User> userList = new ArrayList<>();
-
-/**
- * Implementation of the UserDAO interface, handling database operations for the User entity.
- */
 public class UserDAOImpl implements UserDAO {
 
     /**
@@ -185,6 +175,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<>();
         String sql = "SELECT [id]\n" +
                 "      ,[email]\n" +
                 "      ,[hashedPassword]\n" +
@@ -237,12 +228,10 @@ public class UserDAOImpl implements UserDAO {
 
                 userList.add(user);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error: ",e);
+        }  catch (SQLException e) {
+            throw new GeneralException("Error from SQL: ",e);
         }
 
         return userList;
@@ -299,7 +288,7 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
-            throw new RuntimeException("Error checking email existence in the database", e);
+            throw new GeneralException("Error checking email existence in the database", e);
         }
         return null;
     }
