@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +26,7 @@ public class UserDaoImpl implements UserDao {
 
     // Logger for logging test execution
     private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
-
+    private static final List<User> userList = new ArrayList<>();
 
 
     /**
@@ -173,6 +175,71 @@ public class UserDaoImpl implements UserDao {
         }
 
         return null; // Return null if no user is found
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        String sql = "SELECT [id]\n" +
+                "      ,[email]\n" +
+                "      ,[hashedPassword]\n" +
+                "      ,[phoneNumber]\n" +
+                "      ,[username]\n" +
+                "      ,[firstName]\n" +
+                "      ,[lastName]\n" +
+                "      ,[avatar]\n" +
+                "      ,[dob]\n" +
+                "      ,[address]\n" +
+                "      ,[gender]\n" +
+                "      ,[citizenNumber]\n" +
+                "      ,[createdAt]\n" +
+                "      ,[status]\n" +
+                "      ,[isVerified]\n" +
+                "      ,[lastModified]\n" +
+                "      ,[wardsId]\n" +
+                "      ,[rolesid]\n" +
+                "  FROM [dbo].[HSS Users]";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setEmail(resultSet.getString("email"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                user.setUserName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAvatar(resultSet.getString("avatar"));
+                if (resultSet.getDate("dob") != null) {
+                    user.setDob(resultSet.getDate("dob").toLocalDate());
+                }
+                user.setAddress(resultSet.getString("address"));
+                user.setGender(resultSet.getString("gender"));
+                user.setCitizenNumber(resultSet.getString("citizenNumber"));
+                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+                user.setStatus(resultSet.getString("status"));
+                user.setVerified(resultSet.getBoolean("isVerified"));
+                user.setLastModified(resultSet.getTimestamp("lastModified").toLocalDateTime());
+                user.setWardsId(resultSet.getString("wardsId"));
+                user.setRolesId(resultSet.getInt("Rolesid"));
+
+                userList.add(user);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return userList;
     }
 
     @Override

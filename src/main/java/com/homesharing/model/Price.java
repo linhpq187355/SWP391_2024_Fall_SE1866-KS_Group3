@@ -7,13 +7,13 @@ public class Price {
     private int price;
     private int homesId;
     private LocalDateTime createdDate;
+    private int homeId;
 
     public Price() {
     }
 
-    public Price(int id, int price, LocalDateTime createdDate) {
-        this.id = id; this.price = price; this.createdDate = createdDate;
-    }
+    public Price(int id, int price, LocalDateTime createdDate, int homeId) {}
+
 
     public int getHomesId() {
         return homesId;

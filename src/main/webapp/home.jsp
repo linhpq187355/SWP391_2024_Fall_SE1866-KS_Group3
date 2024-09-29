@@ -73,15 +73,14 @@
     <div class="container">
         <div class="col-md-12 large-search">
             <div class="search-form wow pulse">
-                <form action="" class=" form-inline">
+                <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline">
                     <div class="col-md-12">
                         <div>
-                            <input type="text" class="form-control" placeholder="Nhập thông tin bạn cần tìm kiếm...">
+                            <input type="text" name="name" class="form-control" placeholder="Nhập thông tin bạn cần tìm kiếm..." value="${param.name}">
                         </div>
-                    </div>
-                    <div class="center">
-                        <input type="submit" value="" class="btn btn-default btn-lg-sheach">
-                    </div>
+                        <div class="center">
+                            <button type="submit" class="btn btn-default btn-lg-sheach">Search</button>
+                        </div>
                 </form>
             </div>
         </div>
