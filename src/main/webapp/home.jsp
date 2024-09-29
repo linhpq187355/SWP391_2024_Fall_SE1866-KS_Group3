@@ -78,11 +78,16 @@
                         <div>
                             <input type="text" name="name" class="form-control" placeholder="Nhập thông tin bạn cần tìm kiếm..." value="${param.name}">
                         </div>
+                        <div>
+                            <input type="number" name="minPrice" class="form-control" placeholder="Giá tối thiểu" value="${param.minPrice}">
+                            <input type="number" name="maxPrice" class="form-control" placeholder="Giá tối đa" value="${param.maxPrice}">
+                        </div>
                         <div class="center">
                             <button type="submit" class="btn btn-default btn-lg-sheach">Search</button>
                         </div>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -107,10 +112,10 @@
                         <div class="box-two proerty-item">
                             <div class="item-thumb">
                                 <!-- Update the href to point to home detail page with home ID -->
-                                <a href="homeDetail?id=${homes.id}"><img src="assets/img/demo/property-1.jpg"></a>
+                                <a href="home-detail?id=${homes.id}"><img src="assets/img/demo/property-1.jpg"></a>
                             </div>
                             <div class="item-entry overflow">
-                                <h5><a href="homeDetail?id=${homes.id}">${homes.address}</a></h5>
+                                <h5><a href="home-detail?id=${homes.id}">${homes.address}</a></h5>
                                 <div class="dot-hr"></div>
                                 <span class="pull-left"><b>Area :</b> ${homes.area}</span>
                                 <c:forEach items="${requestScope.prices}" var="prices">

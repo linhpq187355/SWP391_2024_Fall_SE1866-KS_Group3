@@ -14,20 +14,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "HomeDetailServlet", urlPatterns = {"/homeDetail"})
+@WebServlet( "/home-detail")
 public class HomeDetailServlet extends HttpServlet {
 
     private HomeDetailService homeDetailService;
 
     @Override
     public void init() throws ServletException {
-        super.init();
         this.homeDetailService = new HomeDetailServiceImpl();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String homeIdParam = req.getParameter("homeId");
+        String homeIdParam = req.getParameter("id");
 
         if (homeIdParam == null || homeIdParam.isEmpty()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Home ID is required");
@@ -59,6 +58,6 @@ public class HomeDetailServlet extends HttpServlet {
         req.setAttribute("creator", creator);
 
         // Forward the request to the JSP
-        req.getRequestDispatcher("/WEB-INF/views/homeDetail.jsp").forward(req, resp);
+        req.getRequestDispatcher("home-detail.jsp").forward(req, resp);
     }
 }
