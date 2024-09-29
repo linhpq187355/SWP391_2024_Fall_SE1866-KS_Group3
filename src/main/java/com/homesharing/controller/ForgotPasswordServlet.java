@@ -1,15 +1,11 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.UserDao;
-import com.homesharing.dao.impl.TokenDaoImpl;
-import com.homesharing.dao.impl.UserDaoImpl;
-import com.homesharing.model.User;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.TokenDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.service.ForgotPasswordService;
-import com.homesharing.service.TokenService;
 import com.homesharing.service.impl.ForgotPasswordServiceImpl;
-import com.homesharing.service.impl.TokenServiceImpl;
-import com.homesharing.service.impl.UserProfileServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,8 +20,8 @@ public class ForgotPasswordServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        UserDao userDao = new UserDaoImpl();  // Khởi tạo UserDao
-        TokenDao tokenDao = new TokenDaoImpl();  // Khởi tạo TokenDao
+        UserDAO userDao = new UserDAOImpl();  // Khởi tạo UserDao
+        TokenDAO tokenDao = new TokenDAOImpl();  // Khởi tạo TokenDao
         forgotPasswordService = new ForgotPasswordServiceImpl(userDao, tokenDao); // Sử dụng lớp triển khai
     }
 

@@ -1,7 +1,7 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.impl.TokenDaoImpl;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.service.ResetPasswordService;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.impl.ResetPasswordServiceImpl;
@@ -21,7 +21,7 @@ public class ResetPasswordServlet extends HttpServlet {
     private transient ResetPasswordService resetPasswordService;
 
     public void init(){
-        TokenDao tokenDao = new TokenDaoImpl();
+        TokenDAO tokenDao = new TokenDAOImpl();
         tokenService = new TokenServiceImpl(tokenDao);
         resetPasswordService = new ResetPasswordServiceImpl();
     }

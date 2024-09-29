@@ -1,8 +1,8 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.conf.Config;
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
@@ -11,10 +11,10 @@ import com.homesharing.util.SendingEmail;
 import jakarta.mail.MessagingException;
 
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
-    private UserDao userDao;
-    private TokenDao tokenDao;
+    private UserDAO userDao;
+    private TokenDAO tokenDao;
 
-    public ForgotPasswordServiceImpl(UserDao userDao, TokenDao tokenDao) {
+    public ForgotPasswordServiceImpl(UserDAO userDao, TokenDAO tokenDao) {
         this.userDao = userDao;
         this.tokenDao = tokenDao;
     }

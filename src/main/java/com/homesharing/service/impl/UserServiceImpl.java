@@ -1,7 +1,7 @@
 package com.homesharing.service.impl;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
-    private final TokenDao tokenDao;
+    private final UserDAO userDao;
+    private final TokenDAO tokenDao;
     private final TokenService tokenService;
 
     /**
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param userDao The UserDao instance for database operations.
      */
-    public UserServiceImpl(UserDao userDao, TokenDao tokenDao, TokenService tokenService) {
+    public UserServiceImpl(UserDAO userDao, TokenDAO tokenDao, TokenService tokenService) {
         this.userDao = userDao;
         this.tokenDao = tokenDao;
         this.tokenService = tokenService;

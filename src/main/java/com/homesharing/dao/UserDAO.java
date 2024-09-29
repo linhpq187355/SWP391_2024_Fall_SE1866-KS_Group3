@@ -1,6 +1,5 @@
 package com.homesharing.dao;
 
-import com.homesharing.model.Token;
 import com.homesharing.model.User;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
  * UserDao interface defines the data access methods for user-related operations.
  * It includes saving a user to the database and checking if an email already exists.
  */
-public interface UserDao {
+public interface UserDAO {
 
     /**
      * Saves the user to the database.

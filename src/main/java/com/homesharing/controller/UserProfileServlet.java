@@ -1,8 +1,5 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.UserDao;
-import com.homesharing.dao.impl.PreferenceDAOImpl;
-import com.homesharing.dao.impl.UserDaoImpl;
 import com.homesharing.model.Preference;
 import com.homesharing.model.User;
 import com.homesharing.service.UserProfileService;
@@ -15,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Objects;
 
 @WebServlet("/user-profile")
