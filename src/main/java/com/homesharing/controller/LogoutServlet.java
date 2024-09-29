@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 @WebServlet("/logout")
-public class LogoutServiet extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
     private transient UserService userService;// Mark userService as transient
-    private static final Logger logger = LoggerFactory.getLogger(LogoutServiet.class); // Logger instance
+    private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class); // Logger instance
 
     @Override
     public void init() {
