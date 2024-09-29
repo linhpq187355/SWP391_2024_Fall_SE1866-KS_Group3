@@ -22,6 +22,7 @@ public class TokenServiceImpl implements TokenService {
         this.tokenDao = tokenDao;
     }
 
+
     @Override
     public boolean checkToken(String tokenCode, int userID) {
         try {
@@ -99,4 +100,6 @@ public class TokenServiceImpl implements TokenService {
         }
         return true;
     }
+
+
 }

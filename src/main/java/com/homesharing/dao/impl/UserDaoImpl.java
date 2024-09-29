@@ -6,6 +6,7 @@ import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.impl.UserServiceImpl;
+import com.homesharing.util.PasswordUtil;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -296,6 +297,27 @@ public class UserDaoImpl implements UserDao {
             throw new RuntimeException("Error checking email existence in the database", e);
         }
         return null;
+    }
+
+    @Override
+    public int resetPassword(String password, int id) {
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [hashedPassword] = ?\n"+
+                " WHERE id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+
+            statement.setString(1, PasswordUtil.hashPassword(password));
+            statement.setInt(2, id);
+
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error update user profile: " + e.getMessage(), e);
+        }
+        return rowsUpdated;
     }
 
 }

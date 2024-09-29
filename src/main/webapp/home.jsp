@@ -79,7 +79,7 @@
                             <input type="text" name="name" class="form-control" placeholder="Nhập thông tin bạn cần tìm kiếm..." value="${param.name}">
                         </div>
                         <div class="center">
-                            <button type="submit" class="btn btn-default btn-lg-sheach">Search</button>
+                            <button type="submit" class="btn btn-default btn-lg-sheach"></button>
                         </div>
                 </form>
             </div>
@@ -95,7 +95,7 @@
             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
                 <!-- /.feature title -->
                 <h2>Bài đăng mới nhất</h2>
-                <p>Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium. Nullam sed arcu ultricies . </p>
+                <p>Đừng bỏ lỡ cơ hội tìm nhà và roommate lý tưởng với những bài đăng mới nhất. Hãy bắt đầu hành trình tìm kiếm ngôi nhà hoàn hảo của bạn ngay bây giờ! </p>
             </div>
         </div>
 
@@ -237,7 +237,7 @@
                         <div class="row">
                             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
                                 <!-- /.feature title -->
-                                <h2>GARO ESTATE </h2>
+                                <h2>Roomify </h2>
                             </div>
                         </div>
                     </div>
@@ -292,63 +292,6 @@
     </div>
 </div>
 
-<!--TESTIMONIALS -->
-<div class="testimonial-area recent-property" style="background-color: #FCFCFC; padding-bottom: 15px;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
-                <!-- /.feature title -->
-                <h2>Our Customers Said  </h2>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row testimonial">
-                <div class="col-md-12">
-                    <div id="testimonial-slider">
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face wow fadeInRight" data-wow-delay=".9s">
-                                <img src="assets/img/client-face1.png" alt="">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face">
-                                <img src="assets/img/client-face2.png" alt="">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face">
-                                <img src="assets/img/client-face1.png" alt="">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face">
-                                <img src="assets/img/client-face2.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 <!-- Count area -->
 <div class="count-area">
@@ -356,57 +299,46 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
                 <!-- /.feature title -->
-                <h2>You can trust Us </h2>
+                <h2>Những con số ấn tượng </h2>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 col-xs-12 percent-blocks m-main" data-waypoint-scroll="true">
                 <div class="row">
-                    <div class="col-sm-3 col-xs-6">
+                    <div class="col-sm-4 col-xs-6">
                         <div class="count-item">
                             <div class="count-item-circle">
                                 <span class="pe-7s-users"></span>
                             </div>
                             <div class="chart" data-percent="5000">
                                 <h2 class="percent" id="counter">0</h2>
-                                <h5>HAPPY CUSTOMER </h5>
+                                <h5>Người dùng </h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-xs-6">
+                    <div class="col-sm-4 col-xs-6">
                         <div class="count-item">
                             <div class="count-item-circle">
                                 <span class="pe-7s-home"></span>
                             </div>
                             <div class="chart" data-percent="12000">
                                 <h2 class="percent" id="counter1">0</h2>
-                                <h5>Properties in stock</h5>
+                                <h5>Bài đăng</h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-xs-6">
+                    <div class="col-sm-4 col-xs-6">
                         <div class="count-item">
                             <div class="count-item-circle">
                                 <span class="pe-7s-flag"></span>
                             </div>
                             <div class="chart" data-percent="120">
                                 <h2 class="percent" id="counter2">0</h2>
-                                <h5>City registered </h5>
+                                <h5>Tỉnh thành </h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-xs-6">
-                        <div class="count-item">
-                            <div class="count-item-circle">
-                                <span class="pe-7s-graph2"></span>
-                            </div>
-                            <div class="chart" data-percent="5000">
-                                <h2 class="percent"  id="counter3">5000</h2>
-                                <h5>DEALER BRANCHES</h5>
-                            </div>
-                        </div>
 
-                    </div>
                 </div>
             </div>
         </div>
