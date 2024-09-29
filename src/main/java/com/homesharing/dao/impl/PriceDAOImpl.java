@@ -30,7 +30,6 @@ public class PriceDAOImpl implements PriceDAO {
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 
-            // Đặt giá trị cho các homeId
             for (int i = 0; i < homes.size(); i++) {
                 preparedStatement.setInt(i + 1, homes.get(i).getPriceId());
             }

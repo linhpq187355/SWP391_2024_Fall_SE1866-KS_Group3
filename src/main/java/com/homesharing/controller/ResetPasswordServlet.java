@@ -41,7 +41,6 @@ public class ResetPasswordServlet extends HttpServlet {
                 req.getRequestDispatcher("forgot-password.jsp").forward(req, resp);
             }
         } catch (RuntimeException e) {
-            // Handle any errors that occur during token verification
 
         }
     }

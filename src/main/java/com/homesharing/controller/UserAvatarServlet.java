@@ -17,7 +17,7 @@ public class UserAvatarServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String avatarFileName = req.getPathInfo().substring(1); // Lấy tên file từ URL
+        String avatarFileName = req.getPathInfo().substring(1);
         File avatarFile = new File(AVATAR_DIR, avatarFileName);
 
         if (avatarFile.exists()) {

@@ -20,9 +20,9 @@ public class ForgotPasswordServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        UserDAO userDao = new UserDAOImpl();  // Khởi tạo UserDao
-        TokenDAO tokenDao = new TokenDAOImpl();  // Khởi tạo TokenDao
-        forgotPasswordService = new ForgotPasswordServiceImpl(userDao, tokenDao); // Sử dụng lớp triển khai
+        UserDAO userDao = new UserDAOImpl();
+        TokenDAO tokenDao = new TokenDAOImpl();
+        forgotPasswordService = new ForgotPasswordServiceImpl(userDao, tokenDao);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         String email = request.getParameter("email");
 
         try {
-            // Gọi hàm sendResetPasswordToken từ ForgotPasswordService
+
             boolean emailSent = forgotPasswordService.sendResetPasswordToken(email);
 
             if (emailSent) {
@@ -43,7 +43,7 @@ public class ForgotPasswordServlet extends HttpServlet {
             request.setAttribute("error", "Đã xảy ra lỗi trong quá trình xử lý.");
         }
 
-        // Forward về trang JSP quên mật khẩu
+
         request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
     }
 }
