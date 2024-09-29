@@ -27,7 +27,7 @@ public class UserProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         User user = userProfileService.getUser(Integer.parseInt(Objects.requireNonNull(CookieUtil.getCookie(req, "id"))));
-        Preference preference = userProfileService.getPreference(1);
+        Preference preference = userProfileService.getPreference(Integer.parseInt(Objects.requireNonNull(CookieUtil.getCookie(req, "id"))));
 
         req.setAttribute("user", user);
         req.setAttribute("preference", preference);

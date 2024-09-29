@@ -81,7 +81,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html" style=" display: contents"><img src="assets/img/logo-web.jpg" alt="" style="max-width: 4em;"></a>
+      <a class="navbar-brand" href="home-page" style=" display: contents"><img src="assets/img/logo-web.jpg" alt="" style="max-width: 4em;"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->

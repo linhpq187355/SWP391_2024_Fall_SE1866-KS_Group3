@@ -1,16 +1,23 @@
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
-import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.UserDao;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS; // Static import for RETURN_GENERATED_KEYS
 
+    // Logger for logging test execution
+    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
+    private static final List<User> userList = new ArrayList<>();
 
 /**
  * Implementation of the UserDAO interface, handling database operations for the User entity.
@@ -175,4 +182,126 @@ public class UserDAOImpl implements UserDAO {
 
         return null; // Return null if no user is found
     }
+
+    @Override
+    public List<User> getAllUsers() {
+        String sql = "SELECT [id]\n" +
+                "      ,[email]\n" +
+                "      ,[hashedPassword]\n" +
+                "      ,[phoneNumber]\n" +
+                "      ,[username]\n" +
+                "      ,[firstName]\n" +
+                "      ,[lastName]\n" +
+                "      ,[avatar]\n" +
+                "      ,[dob]\n" +
+                "      ,[address]\n" +
+                "      ,[gender]\n" +
+                "      ,[citizenNumber]\n" +
+                "      ,[createdAt]\n" +
+                "      ,[status]\n" +
+                "      ,[isVerified]\n" +
+                "      ,[lastModified]\n" +
+                "      ,[wardsId]\n" +
+                "      ,[rolesid]\n" +
+                "  FROM [dbo].[HSS Users]";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setEmail(resultSet.getString("email"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                user.setUserName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAvatar(resultSet.getString("avatar"));
+                if (resultSet.getDate("dob") != null) {
+                    user.setDob(resultSet.getDate("dob").toLocalDate());
+                }
+                user.setAddress(resultSet.getString("address"));
+                user.setGender(resultSet.getString("gender"));
+                user.setCitizenNumber(resultSet.getString("citizenNumber"));
+                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+                user.setStatus(resultSet.getString("status"));
+                user.setVerified(resultSet.getBoolean("isVerified"));
+                user.setLastModified(resultSet.getTimestamp("lastModified").toLocalDateTime());
+                user.setWardsId(resultSet.getString("wardsId"));
+                user.setRolesId(resultSet.getInt("Rolesid"));
+
+                userList.add(user);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return userList;
+    }
+
+    @Override
+    public int updateUserProfile(User user) {
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [email] = ?\n" +
+                "      ,[phoneNumber] = ?\n" +
+                "      ,[firstName] = ?\n" +
+                "      ,[lastName] = ?\n" +
+                "      ,[avatar] = ?\n" +
+                "      ,[dob] = ?\n" +
+                "      ,[lastModified] = GETDATE()\n" +
+                " WHERE id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPhoneNumber());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setString(5, user.getAvatar());
+            statement.setDate(6, java.sql.Date.valueOf(user.getDob()));
+            statement.setInt(7, user.getId());
+
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error update user profile: " + e.getMessage(), e);
+        }
+        return rowsUpdated;
+    }
+
+    @Override
+    public String getUserAvatar(int id) {
+        String sql = "select u.avatar\n" +
+                "\tfrom [HSS_Users] u where u.id = ?";
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Set the email parameter for the prepared statement
+            preparedStatement.setInt(1, id);
+
+            // Execute the query to check for email existence
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    return resultSet.getString("avatar");
+                }
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw exceptions as runtime to be handled by the service layer
+            throw new RuntimeException("Error checking email existence in the database", e);
+        }
+        return null;
+    }
+
 }
