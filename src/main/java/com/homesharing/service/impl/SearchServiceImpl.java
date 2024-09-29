@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class SearchServiceImpl implements SearchSevice {
-    private final SearchDAO searchDAO; .
+    private final SearchDAO searchDAO;
 
     // Constructor that initializes the SearchDAO implementation.
     public SearchServiceImpl() {
