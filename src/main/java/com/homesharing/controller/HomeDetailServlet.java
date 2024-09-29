@@ -1,6 +1,7 @@
 package com.homesharing.controller;
 
 import com.homesharing.model.Home;
+import com.homesharing.model.HomeType;
 import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.HomeDetailService;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet( "/home-detail")
@@ -51,8 +53,8 @@ public class HomeDetailServlet extends HttpServlet {
         // Fetch prices and creator details
         List<Price> prices = homeDetailService.getHomePricesByHomeId(homeId);
         User creator = homeDetailService.getCreatorByHomeId(homeId);
-
-        // Set attributes to request to forward them to the JSP
+        List<HomeType> hometypes = homeDetailService.getHomeTypesByHomeId(homeId);
+        req.setAttribute("hometypes", hometypes);
         req.setAttribute("home", home);
         req.setAttribute("prices", prices);
         req.setAttribute("creator", creator);

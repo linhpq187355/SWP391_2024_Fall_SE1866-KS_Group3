@@ -56,15 +56,13 @@ public class SearchServlet extends HttpServlet {
             if (name != null && !name.trim().isEmpty()) {
                 homes = searchService.searchHomesByName(name);
             } else {
-                // Nếu không nhập tên, chỉ tìm kiếm theo khoảng giá
                 homes = searchService.searchByPriceRange(minPrice, maxPrice);
             }
         } catch (NumberFormatException e) {
-            // Xử lý nếu giá trị nhập vào không phải số
-            req.setAttribute("error", "Giá trị không hợp lệ cho khoảng giá. Vui lòng nhập số.");
-            homes = HomePageService.getHomes(); // Hoặc có thể lấy danh sách nhà mặc định
+            req.setAttribute("error","error");
+            homes = HomePageService.getHomes();
         } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException("Lỗi trong quá trình tìm kiếm: " + e.getMessage(), e);
+            throw new RuntimeException("error: " + e.getMessage(), e);
         }
 
         req.setAttribute("homes", homes);

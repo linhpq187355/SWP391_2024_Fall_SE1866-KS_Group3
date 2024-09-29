@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.homesharing.service.HomePageService;
+
+import java.io.PrintWriter;
 import java.util.List;
 
 import java.io.IOException;
@@ -26,7 +28,7 @@ public class HomePageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Home> homes = homePageService.getHomes();
+        List<Home> homes = homePageService.getNewHomes();
         List<Price> prices = homePageService.getHomePrice(homes);
 
         req.setAttribute("homes", homes);

@@ -172,7 +172,7 @@ public class HomeDAOImpl implements HomeDAO {
                 \t   from Homes h
                 \t   left join (
                 \t   select Homesid, price, createdDate, id
-                \t   from Prices\s
+                \t   from Prices
                 \t   where createdDate in (
                 \t\t\tselect max(p.createdDate) createdDate
                 \t\t\tfrom Prices p

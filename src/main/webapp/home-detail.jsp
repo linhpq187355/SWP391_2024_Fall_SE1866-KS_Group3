@@ -112,7 +112,7 @@
                             </span>
                                     <span class="property-info-entry">
                                 <span class="property-info-label">Trạng thái</span>
-                                <span class="property-info-value">${home.homeTypeId}</span>
+                                <span class="property-info-value"></span>
                             </span>
                                 </div>
 
@@ -145,6 +145,7 @@
                                 <span class="property-info-value">${home.numOfBath}</span>
                             </span>
                                 </div>
+
 
                             </div>
                             <!-- .property-meta -->

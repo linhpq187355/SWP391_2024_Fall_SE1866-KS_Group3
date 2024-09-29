@@ -4,6 +4,7 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.HomeDetailDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
+import com.homesharing.model.HomeType;
 import com.homesharing.model.Price;
 import com.homesharing.model.User;
 
@@ -116,4 +117,34 @@ public User getCreatorByHomeId(int homeId) {
 
     return user;
 }
+    @Override
+    public List<HomeType> getHomeTypesByHomeId(int homeId) {
+        String sql = "SELECT ht.id, ht.name, ht.description, ht.status " +
+                "FROM HomeTypes ht " +
+                "JOIN Homes h ON ht.id = h.homeTypeId " +
+                "WHERE h.id = ?";
+        List<HomeType> homeTypes = new ArrayList<>();
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, homeId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                HomeType homeType = new HomeType();
+                homeType.setId(resultSet.getInt("id"));
+                homeType.setName(resultSet.getString("name"));
+                homeType.setDescription(resultSet.getString("description"));
+                homeType.setStatus(resultSet.getString("status"));
+                homeTypes.add(homeType);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error retrieving home types from the database: " + e.getMessage(), e);
+        }
+
+        return homeTypes;
+    }
+
 }
