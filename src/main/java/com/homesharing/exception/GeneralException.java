@@ -1,7 +1,7 @@
 package com.homesharing.exception;
 
 /**
- * Custom exception for UserDao operations.
+ * Custom exception for UserDAO operations.
  */
 public class GeneralException extends RuntimeException {
 

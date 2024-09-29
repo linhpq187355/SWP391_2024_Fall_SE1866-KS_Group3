@@ -1,7 +1,7 @@
 package com.homesharing.service.impl;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
@@ -12,36 +12,38 @@ import com.homesharing.util.PasswordUtil;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Implementation of UserService interface, handling user-related business logic.
- * This class manages user registration and input validation.
+ * Implementation of UserService, handling user-related business logic
+ * including registration, login, and logout functionalities.
  */
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
-    private final TokenDao tokenDao;
+    private final UserDAO userDao;
+    private final TokenDAO tokenDao;
     private final TokenService tokenService;
 
     /**
-     * Constructor for UserServiceImpl, initializing the UserDao instance.
+     * Constructs a UserServiceImpl with the necessary DAOs and services.
      *
-     * @param userDao The UserDao instance for database operations.
+     * @param userDao The UserDAO instance for handling user-related database operations.
+     * @param tokenDao The TokenDAO instance for managing tokens.
+     * @param tokenService The TokenService instance for token-related logic.
      */
-    public UserServiceImpl(UserDao userDao, TokenDao tokenDao, TokenService tokenService) {
+    public UserServiceImpl(UserDAO userDao, TokenDAO tokenDao, TokenService tokenService) {
         this.userDao = userDao;
         this.tokenDao = tokenDao;
         this.tokenService = tokenService;
     }
 
     /**
-     * Registers a new user by validating input, checking if the email already exists,
-     * hashing the password, and saving the user to the database.
+     * Registers a new user by validating the input data, hashing the password,
+     * and saving the user in the database. If the email is already used, returns an error message.
      *
      * @param firstName The first name of the user.
      * @param lastName The last name of the user.
      * @param email The email address of the user.
-     * @param password The password of the user.
-     * @param role The role of the user (findRoommate or postRoom).
-     * @return A success message or an error message.
+     * @param password The user's password.
+     * @param role The role of the user, either "findRoommate" or "postRoom".
+     * @return A string indicating success or an error message.
      */
     @Override
     public String registerUser(String firstName, String lastName, String email, String password, String role) {
@@ -80,20 +82,21 @@ public class UserServiceImpl implements UserService {
             tokenService.sendToken(email, userId);
             return "success";
         } catch (GeneralException e) {
-            // Handle runtime exceptions thrown by the UserDao
+            // Handle runtime exceptions thrown by the UserDAO
             return "Error during registration: " + e.getMessage();
         }
     }
 
     /**
-     * Validates user input for registration.
+     * Validates user input for registration, checking if the names are valid,
+     * the email is correctly formatted, and the password is confirmed correctly.
      *
      * @param firstName The first name of the user.
      * @param lastName The last name of the user.
      * @param email The email address of the user.
-     * @param password The password of the user.
-     * @param confirmPassword The confirmation password.
-     * @param role The role of the user.
+     * @param password The user's password.
+     * @param confirmPassword The confirmation of the user's password.
+     * @param role The role of the user, either "findRoommate" or "postRoom".
      * @return True if all input is valid, false otherwise.
      */
     @Override
@@ -118,7 +121,16 @@ public class UserServiceImpl implements UserService {
         return role != null && (role.equals("findRoommate") || role.equals("postRoom"));
     }
 
-
+    /**
+     * Authenticates the user by checking their email and password. If the user is successfully authenticated,
+     * cookies are created to manage their session. If the user's email is not verified, a token is sent for verification.
+     *
+     * @param email The email of the user trying to log in.
+     * @param password The password of the user.
+     * @param rememberMe A flag indicating whether to remember the user.
+     * @param response The HttpServletResponse to which cookies will be added.
+     * @return A string indicating success or an error message.
+     */
     @Override
     public String login(String email, String password, boolean rememberMe, HttpServletResponse response) {
         // Attempt to find the user by their email address
@@ -164,6 +176,12 @@ public class UserServiceImpl implements UserService {
         return "success";
     }
 
+    /**
+     * Logs out the user by removing all related cookies.
+     *
+     * @param response The HttpServletResponse from which cookies will be removed.
+     * @return A string indicating the success of the logout process.
+     */
     @Override
     public String logout(HttpServletResponse response) {
         //delete all cookie
@@ -171,7 +189,7 @@ public class UserServiceImpl implements UserService {
         CookieUtil.removeCookie(response, "firstName");
         CookieUtil.removeCookie(response, "lastName");
         CookieUtil.removeCookie(response, "email");
-        CookieUtil.removeCookie(response, "token");
+        CookieUtil.removeCookie(response, "roleId");
         return "logout success";
     }
 }

@@ -1,30 +1,36 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.impl.TokenDaoImpl;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.impl.TokenServiceImpl;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
+import com.homesharing.util.ServletUtils;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
+/**
+ * The VerifyEmailServlet handles email verification requests.
+ * It checks the verification code against a stored token for the user.
+ */
 @WebServlet("/verify")
 public class VerifyEmailServlet extends HttpServlet {
-    private transient TokenService tokenService;
-    private static final Logger logger = LoggerFactory.getLogger(VerifyEmailServlet.class); // Logger instance
+    private transient TokenService tokenService; // Service for token operations
+
     @Override
     public void init(){
-        TokenDao tokenDao = new TokenDaoImpl();
+        // Initialize the TokenService with the TokenDAO implementation
+        TokenDAO tokenDao = new TokenDAOImpl();
         tokenService = new TokenServiceImpl(tokenDao);
     }
 
+    /**
+     * Handles the HTTP GET request for email verification.
+     *
+     * @param request  the HttpServletRequest object that contains the request
+     * @param response the HttpServletResponse object that contains the response
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         // 1. Get verification code and user ID from the URL parameters
@@ -37,7 +43,7 @@ public class VerifyEmailServlet extends HttpServlet {
             userId = Integer.parseInt(userIDString);
         } catch (NumberFormatException e) {
             // Handle invalid user ID format
-            forwardWithMessage(request, response, "Invalid user ID.");
+            ServletUtils.forwardWithMessage(request, response, "Invalid user ID.");
             return; // Exit the method if the user ID is invalid
         }
 
@@ -45,22 +51,13 @@ public class VerifyEmailServlet extends HttpServlet {
         try {
             boolean check = tokenService.checkToken(verificationCode, userId);
             if (check) {
-                forwardWithMessage(request, response, "Xác thực thành công.");
+                ServletUtils.forwardWithMessage(request, response, "Xác thực thành công.");
             } else {
-                forwardWithMessage(request, response, "Xác thực không thành công.");
+                ServletUtils.forwardWithMessage(request, response, "Xác thực không thành công.");
             }
         } catch (RuntimeException e) {
             // Handle any errors that occur during token verification
-            forwardWithMessage(request, response, "Lỗi khi xác thực email: " + e.getMessage());
-        }
-    }
-    private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response, String message) {
-        request.setAttribute("notificationMessage", message);
-        try {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/announce.jsp");
-            dispatcher.forward(request, response);
-        } catch (IOException | ServletException e) {
-            logger.error("Error forwarding to announce page: {}", e.getMessage(), e); // Log the exception for debugging
+            ServletUtils.forwardWithMessage(request, response, "Lỗi khi xác thực email: " + e.getMessage());
         }
     }
 }

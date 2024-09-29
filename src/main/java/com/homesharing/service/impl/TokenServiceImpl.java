@@ -1,7 +1,7 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.conf.Config;
-import com.homesharing.dao.TokenDao;
+import com.homesharing.dao.TokenDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.service.TokenService;
@@ -13,15 +13,32 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
+/**
+ * Implementation of the TokenService interface, handling token-related operations.
+ * This service manages the generation, validation, and sending of verification tokens via email.
+ */
 public class TokenServiceImpl implements TokenService {
 
-    private final TokenDao tokenDao;
+    private final TokenDAO tokenDao;
     private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
-    public TokenServiceImpl(TokenDao tokenDao) {
+    /**
+     * Constructor to initialize TokenServiceImpl with a TokenDAO instance.
+     *
+     * @param tokenDao The TokenDAO instance used for database operations related to tokens.
+     */
+    public TokenServiceImpl(TokenDAO tokenDao) {
         this.tokenDao = tokenDao;
     }
 
+    /**
+     * Checks whether the provided token matches the token associated with the given user ID.
+     * If the token is valid and not yet verified, it updates the verification status in the database.
+     *
+     * @param tokenCode The token code to verify.
+     * @param userID    The ID of the user associated with the token.
+     * @return True if the token is valid and matches; false otherwise.
+     */
     @Override
     public boolean checkToken(String tokenCode, int userID) {
         try {
@@ -54,6 +71,15 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
+    /**
+     * Sends a verification token to the user's email address. If the user already has a verified token,
+     * it sends a notification that the email has been verified. Otherwise, it sends a new token or
+     * resends an existing one if it's still valid.
+     *
+     * @param email  The user's email address.
+     * @param userId The ID of the user to whom the token is being sent.
+     * @return True if a new token was sent, false if the email was already verified.
+     */
     @Override
     public boolean sendToken(String email, int userId) {
         Token oldToken = tokenDao.findToken(userId);
@@ -61,7 +87,7 @@ public class TokenServiceImpl implements TokenService {
         LocalDateTime requestedTime;
 
         if (oldToken != null) {
-
+            // Check if the token has already been verified
             if (oldToken.isVerified()) {
                 logger.info("Email {} đã được xác thực.", email);
                 // Notify the user that the email is already verified and provide a link to the login page

@@ -4,7 +4,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * UserService interface defines methods for user registration and validation.
- * It contains methods to register a user and validate user input data.
+ * It contains methods to register a user, validate user input data,
+ * and manage user authentication.
  */
 public interface UserService {
 
@@ -36,8 +37,23 @@ public interface UserService {
      */
     boolean validateUserInput(String firstName, String lastName, String email, String password, String confirmPassword, String role);
 
+    /**
+     * Authenticates a user with the provided email and password.
+     *
+     * @param email      The user's email address.
+     * @param password   The user's password.
+     * @param rememberMe If true, the session will be remembered across browser sessions.
+     * @param response   The HttpServletResponse object to manipulate the response.
+     * @return A string indicating the result of the login attempt (e.g., success message, error).
+     */
     String login(String email, String password, boolean rememberMe, HttpServletResponse response);
 
+    /**
+     * Logs out the current user.
+     *
+     * @param response The HttpServletResponse object to manipulate the response.
+     * @return A string indicating the result of the logout attempt (e.g., success message).
+     */
     String logout(HttpServletResponse response);
 
 }

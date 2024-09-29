@@ -1,9 +1,9 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.UserDao;
-import com.homesharing.dao.impl.TokenDaoImpl;
-import com.homesharing.dao.impl.UserDaoImpl;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.TokenDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.TokenServiceImpl;
@@ -25,16 +25,16 @@ import java.io.IOException;
  */
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
-    private transient  UserService userService;// Mark userService as transient
+    private transient  UserService userService;// Service for user-related operations
     private static final Logger logger = LoggerFactory.getLogger(SignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
     @Override
     public void init() {
-        // Create instances of UserDao and TokenDao
-        UserDao userDao = new UserDaoImpl();
-        TokenDao tokenDao = new TokenDaoImpl();
+        // Create instances of UserDAO and TokenDAO
+        UserDAO userDao = new UserDAOImpl(); // Create instance of UserDAO
+        TokenDAO tokenDao = new TokenDAOImpl(); // Create instance of TokenDAO
         TokenService tokenService = new TokenServiceImpl(tokenDao);
-        // Inject UserDao into UserServiceImpl
+        // Inject UserDAO and TokenDAO into UserServiceImpl
         userService = new UserServiceImpl(userDao, tokenDao, tokenService);
     }
 
@@ -80,8 +80,9 @@ public class SignUpServlet extends HttpServlet {
                 // Attempt to register the user
                 String result = userService.registerUser(firstName, lastName, email, password, role);
                 if ("success".equals(result)) {
-                    /// Redirect to home page on success
-                    ServletUtils.redirectToHomePage(req, resp);
+                    //Navigate to announce page
+                    String message = "Đăng kí thành công, hãy xác thực email bằng cách click vào đường link được gửi trong email.";
+                    ServletUtils.forwardWithMessage(req, resp, message);
                 } else {
                     // Set error message if registration fails
                     req.setAttribute(ERROR_ATTRIBUTE, result);

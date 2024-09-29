@@ -32,8 +32,9 @@
                     <c:if test="${not empty requestScope.error}">
                         <div class="alert alert-danger">${requestScope.error}</div>
                     </c:if>
-                    <button class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" onclick="location.href='/home.jsp'">Back to Home</button>
-                </div>
+                    <form action="login" method="get">
+                        <button type="submit" class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0">Back to Login</button>
+                    </form>                </div>
             </div>
         </div>
     </div>

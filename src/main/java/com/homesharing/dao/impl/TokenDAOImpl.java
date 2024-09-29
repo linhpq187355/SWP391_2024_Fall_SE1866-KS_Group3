@@ -1,7 +1,7 @@
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
-import com.homesharing.dao.TokenDao;
+import com.homesharing.dao.TokenDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 
@@ -12,16 +12,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class TokenDaoImpl implements TokenDao {
+/**
+ * Implementation of the TokenDAO interface.
+ * This class handles database operations related to tokens.
+ */
+public class TokenDAOImpl implements TokenDAO {
 
+    /**
+     * Inserts a new token into the database.
+     *
+     * @param token The token object containing the token data to be inserted.
+     * @throws GeneralException If there is an error inserting the token into the database.
+     */
     @Override
-    // Method to insert a token into the database
     public void insertToken(Token token) {
         String sql = "INSERT INTO [dbo].[Token] " +
                 "([userId], [otp], [requestedTime], [isVerified]) " +
                 "VALUES (?, ?, ?, ?)";
 
-        // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -39,11 +47,17 @@ public class TokenDaoImpl implements TokenDao {
         }
     }
 
+    /**
+     * Retrieves a token for a specified user from the database.
+     *
+     * @param userId The ID of the user whose token is being retrieved.
+     * @return The Token object if found, or null if no token is found for the specified user.
+     * @throws GeneralException If there is an error finding the token in the database.
+     */
     @Override
     public Token findToken(int userId) {
         String sql = "SELECT [otp], [requestedTime], [isVerified] FROM [dbo].[Token] WHERE [userId] = ?";
 
-        // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -59,7 +73,7 @@ public class TokenDaoImpl implements TokenDao {
                 LocalDateTime requestedTime = resultSet.getTimestamp("requestedTime").toLocalDateTime();
                 boolean isVerified = resultSet.getBoolean("isVerified");
 
-                // Create and return the Token object
+                // Return the Token object
                 return new Token(userId, otp, requestedTime, isVerified);
             } else {
                 return null; // No token found for the given userId
@@ -70,11 +84,16 @@ public class TokenDaoImpl implements TokenDao {
         }
     }
 
+    /**
+     * Updates the verification status of a token for a specific user in the database.
+     *
+     * @param userId The ID of the user whose token's verification status is being updated.
+     * @throws GeneralException If there is an error updating the token verification in the database or no token is found for the user.
+     */
     @Override
     public void updateTokenVerification(int userId) {
         String sql = "UPDATE [dbo].[Token] SET [isVerified] = ? WHERE [userId] = ?";
 
-        // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -85,7 +104,6 @@ public class TokenDaoImpl implements TokenDao {
             // Execute the update to change the isVerified status
             int rowsAffected = preparedStatement.executeUpdate();
 
-            // Optional: Check if the update was successful
             if (rowsAffected == 0) {
                 throw new GeneralException("No token found to update for userId: " + userId);
             }
