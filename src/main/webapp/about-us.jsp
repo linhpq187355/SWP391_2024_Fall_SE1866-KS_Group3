@@ -122,8 +122,8 @@
                     <i class="fas fa-book text-3xl text-yellow-500"></i>
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-yellow-500 mb-2">Lưu Ý/h2>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <h2 class="text-xl font-bold text-yellow-500 mb-2">Lưu Ý/ </h2>
+                    <p> Để tránh các tình trạng lừa đảo cũng như vi phạm điều khoản của chúng tôi thì bạn vui lòng ghé qua mục chinh sach mat của chúng tôi</p>
                 </div>
             </div>
             <div class="flex items-start">
@@ -132,10 +132,8 @@
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-yellow-500 mb-2">Contact</h2>
-                    <p>Gmail: rommifyy@gmail.com
+                    <p>Gmail: rommifyy@gmail.com</p>
                     <p>Phone: 0989843097</p>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
                 </div>
             </div>
         </div>
@@ -170,8 +168,8 @@
                                     <li><a href="#">Services</a>  </li> 
                                     <li><a href="submit-property.html">Submit property </a></li> 
                                     <li><a href="contact.html">Contact us</a></li> 
-                                    <li><a href="faq.html">fqa</a>  </li> 
-                                    <li><a href="faq.html">Terms </a>  </li> 
+                                    <li><a href="about-us.jsp">fqa</a>  </li>
+                                    <li><a href="terms.jsp">Terms </a>  </li>
                                 </ul>
                             </div>
                         </div>

@@ -40,6 +40,113 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
 </head>
+<style>
+
+
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .search-bar input {
+        border: none;
+        outline: none;
+        flex: 1;
+        padding: 10px;
+        margin-left: 10px;
+    }
+
+    .search-bar button {
+        background-color: #f1c40f;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .filters {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .filter {
+        background-color: #d4ac0d;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .filter .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1c40f;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .filter .dropdown-content a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+    .filter .dropdown-content a:hover {
+        background-color: #d4ac0d;
+    }
+
+    .filter:hover .dropdown-content {
+        display: block;
+    }
+
+    .toggle-switch {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    .toggle-switch input {
+        display: none;
+    }
+
+    .toggle-switch label {
+        background-color: #ccc;
+        border-radius: 15px;
+        cursor: pointer;
+        display: inline-block;
+        height: 20px;
+        position: relative;
+        width: 40px;
+    }
+
+    .toggle-switch label::after {
+        background-color: white;
+        border-radius: 50%;
+        content: '';
+        height: 16px;
+        left: 2px;
+        position: absolute;
+        top: 2px;
+        transition: 0.3s;
+        width: 16px;
+    }
+
+    .toggle-switch input:checked + label {
+        background-color: #2ecc71;
+    }
+
+    .toggle-switch input:checked + label::after {
+        transform: translateX(20px);
+    }
+</style>
 <body>
 
 <div id="preloader">
@@ -68,26 +175,39 @@
         </div>
     </div>
 </div>
-
 <div class="home-lager-shearch" style="background-color: rgb(252, 252, 252); padding-top: 25px; margin-top: -125px;">
     <div class="container">
         <div class="col-md-12 large-search">
             <div class="search-form wow pulse">
                 <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline">
                     <div class="col-md-12">
-                        <div>
-                            <input type="text" name="name" class="form-control" placeholder="Nhập thông tin bạn cần tìm kiếm..." value="${param.name}">
-                        </div>
-                        <div>
-                            <input type="number" name="minPrice" class="form-control" placeholder="Giá tối thiểu" value="${param.minPrice}">
-                            <input type="number" name="maxPrice" class="form-control" placeholder="Giá tối đa" value="${param.maxPrice}">
-                        </div>
-                        <div class="center">
-                            <button type="submit" class="btn btn-default btn-lg-sheach">Search</button>
+                        <!-- Search bar for location -->
+                        <div class="search-bar">
+                            <div class="dropdown">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Hà Nội</span>
+                                <i class="fas fa-chevron-down"></i>
+                                <div class="dropdown-content">
+                                    <a href="#">Hà Nội</a>
+                                    <a href="#">Hồ Chí Minh</a>
+                                    <a href="#">Đà Nẵng</a>
+                                    <a href="#">Hải Phòng</a>
+                                </div>
+                            </div>
+                            <input type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label">Giá:</label>
+                                <div class="col-md-5">
+                                    <input type="number" name="minPrice" class="form-control" placeholder="min" value="${param.minPrice}">
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="number" name="maxPrice" class="form-control" placeholder="max" value="${param.maxPrice}">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-default btn-lg-sheach"></button>
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -99,9 +219,15 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
-                <!-- /.feature title -->
-                <h2>Bài đăng mới nhất</h2>
-                <p>Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium. Nullam sed arcu ultricies . </p>
+                <c:choose>
+                    <c:when test="${!empty param.name || !empty param.minPrice || !empty param.maxPrice}">
+                        <h2>Kết quả tìm kiếm của bạn</h2>
+                    </c:when>
+                    <c:otherwise>
+                        <h2>Bài đăng mới nhất</h2>
+                    </c:otherwise>
+                </c:choose>
+
             </div>
         </div>
 
@@ -130,9 +256,6 @@
             </div>
         </div>
 
-
-
-
                 <div class="col-sm-6 col-md-3 p0">
                     <div class="box-tree more-proerty text-center">
                         <div class="item-tree-icon">
@@ -145,11 +268,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
-</div>
+
 
 <!--Welcome area -->
 <div class="Welcome-area">

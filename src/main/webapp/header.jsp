@@ -205,9 +205,9 @@
           <a href="home.jsp">Trang chủ</a>
         </li>
 
-        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Tất cả nhà</a></li>
-        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Trợ giúp</a></li>
-        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="properties.html">Về chúng tôi</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home.jsp">Tất cả nhà</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
+        <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
 
       </ul>
     </div><!-- /.navbar-collapse -->

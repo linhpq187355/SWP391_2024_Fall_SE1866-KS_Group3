@@ -101,7 +101,7 @@
                         <div class="single-property-wrapper">
                             <div class="single-property-header">
                                 <h1 class="property-title pull-left">${home.name}</h1>
-                                <span class="property-price pull-right">${prices[0].price}</span>
+                                <span class="property-price pull-right"> Giá Thuê:  ${prices[0].price}$ </span>
                             </div>
 
                             <div class="property-meta entry-meta clearfix">

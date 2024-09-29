@@ -70,7 +70,7 @@
               <li><a href="#">Services</a>  </li>
               <li><a href="submit-property.html">Submit property </a></li>
               <li><a href="contact.html">Contact us</a></li>
-              <li><a href="aboutUs.jsp">About Us</a>  </li>
+              <li><a href="about-us.jsp">About Us</a>  </li>
               <li><a href="terms.jsp">Terms </a>  </li>
             </ul>
           </div>
