@@ -786,13 +786,13 @@
                                                     <td class="text-center text-danger capitalize">Inactive</td>
                                                 </c:if>
                                                 <td class="space-y-4">
-                                                    <a href="update-status?userId=${user.id}">
+                                                    <a href="ban?userId=${user.id}">
                                                         <button class="bg-red-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-red-600">
                                                             <i class="fas fa-ban"></i>
                                                             <span>Ban</span>
                                                         </button>
                                                     </a>
-                                                    <a href="update-status?userId=${user.id}">
+                                                    <a href="activate?userId=${user.id}">
                                                         <button class="bg-green-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-green-600">
                                                             <i class="fas fa-check"></i>
                                                             <span>Activate</span>

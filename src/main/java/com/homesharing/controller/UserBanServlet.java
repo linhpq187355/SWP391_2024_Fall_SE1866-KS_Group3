@@ -8,8 +8,8 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "UserUpdateStatusServlet", value = "/update-status")
-public class UserUpdateStatusServlet extends HttpServlet {
+@WebServlet(name = "UserUpdateStatusServlet", value = "/ban")
+public class UserBanServlet extends HttpServlet {
     private static UserManagementService userManagementService;
 
     @Override
@@ -22,16 +22,8 @@ public class UserUpdateStatusServlet extends HttpServlet {
         String userId = request.getParameter("userId");
         try {
             int uid = Integer.parseInt(userId);
-            String status = userManagementService.getUserById(uid).getStatus();
-            if (status.equalsIgnoreCase("active")) {
-                status = "inactive";
-                userManagementService.updateUserStatus(uid, status);
-                response.sendRedirect("account-manage");
-            } else {
-                status = "active";
-                userManagementService.updateUserStatus(uid, status);
-                response.sendRedirect("account-manage");
-            }
+            userManagementService.updateUserStatus(uid, "inactive");
+            response.sendRedirect("account-manage");
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
