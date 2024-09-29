@@ -1,7 +1,8 @@
-package com.homesharing.controller;
+package com.homesharing.servlet;
 
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
+import com.homesharing.model.User;
 import com.homesharing.service.HomeDetailService;
 import com.homesharing.service.impl.HomeDetailServiceImpl;
 import jakarta.servlet.ServletException;
@@ -9,37 +10,54 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/homeDetail")
+@WebServlet(name = "HomeDetailServlet", urlPatterns = {"/home-detail"})
 public class HomeDetailServlet extends HttpServlet {
+
     private HomeDetailService homeDetailService;
 
     @Override
-    public void init() {
-        homeDetailService = new HomeDetailServiceImpl();
+    public void init() throws ServletException {
+        super.init();
+        this.homeDetailService = new HomeDetailServiceImpl();
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String homeIdParam = request.getParameter("id");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String homeIdParam = req.getParameter("homeId");
 
-        if (homeIdParam != null && !homeIdParam.isEmpty()) {
-            int homeId = Integer.parseInt(homeIdParam);
-            Home home = homeDetailService.getHomeById(homeId);
-            List<Price> prices = homeDetailService.getHomePrice(List.of(home)); // Get prices for the specific home
-
-            request.setAttribute("home", home);
-            request.setAttribute("prices", prices);
-
-            // Forward to JSP
-            request.getRequestDispatcher("/WEB-INF/views/homeDetail.jsp").forward(request, response);
-        } else {
-            // Handle error case
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Home ID is required");
+        if (homeIdParam == null || homeIdParam.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Home ID is required");
+            return;
         }
+
+        int homeId;
+        try {
+            homeId = Integer.parseInt(homeIdParam);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Home ID format");
+            return;
+        }
+
+        // Fetch home details
+        Home home = homeDetailService.getHomeById(homeId);
+        if (home == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Home not found");
+            return;
+        }
+
+        // Fetch prices and creator details
+        List<Price> prices = homeDetailService.getHomePricesByHomeId(homeId);
+        User creator = homeDetailService.getCreatorByHomeId(homeId);
+
+        // Set attributes to request to forward them to the JSP
+        req.setAttribute("home", home);
+        req.setAttribute("prices", prices);
+        req.setAttribute("creator", creator);
+
+        // Forward the request to the JSP
+        req.getRequestDispatcher("/WEB-INF/views/home-detail.jsp").forward(req, resp);
     }
 }
