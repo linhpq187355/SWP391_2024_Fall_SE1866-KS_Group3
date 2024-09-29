@@ -12,6 +12,7 @@
 <head>
     <title>Đăng nhập</title>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
 <!-- Login 11 - Bootstrap Brain Component -->
@@ -122,6 +123,22 @@
         }
 
         return true;
+    }
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const type = field.getAttribute('type');
+        field.setAttribute('type', type === 'password' ? 'text' : 'password');
+        const button = field.parentElement.querySelector('button');
+        const icon = button.querySelector('i');
+        if (type === "password") {
+            field.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+        } else {
+            field.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+        }
     }
 </script>
 </body>
