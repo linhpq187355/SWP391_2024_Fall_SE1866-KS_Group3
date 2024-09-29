@@ -52,34 +52,4 @@ public class PriceDAOImpl implements PriceDAO {
         return prices;
     }
 
-    public List<Price> getPriced() {
-        String sql = "SELECT * FROM prices  ";
-
-        List<Price> prices = new ArrayList<>();
-
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Price price = new Price();
-                    price.setHomesId(resultSet.getInt("Homesid"));
-                    price.setId(resultSet.getInt("id"));
-                    price.setPrice(resultSet.getInt("price"));
-                    prices.add(price);
-                }
-            }
-
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Error retrieving prices from the database: " + e.getMessage(), e);
-        }
-
-        return prices;
-    }
-
-    public static void main(String[] args) {
-        PriceDAOImpl price = new PriceDAOImpl();
-        System.out.println(price.getPriced().size());
-
-    }
 }

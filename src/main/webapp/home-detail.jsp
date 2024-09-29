@@ -112,7 +112,16 @@
                             </span>
                                     <span class="property-info-entry">
                                 <span class="property-info-label">Trạng thái</span>
-                                <span class="property-info-value"></span>
+                                <span class="property-info-value">${hometypes[0].status}</span>
+                            </span>
+                                </div>
+                                <div class="col-xs-6 col-sm-3 col-md-3 p-b-15">
+                            <span class="property-info icon-area">
+                                <img src="assets/img/icon/room-orange.png">
+                            </span>
+                                    <span class="property-info-entry">
+                                <span class="property-info-label"> Thể loại </span>
+                                <span class="property-info-value">${hometypes[0].name}</span>
                             </span>
                                 </div>
 
@@ -154,6 +163,12 @@
                                 <h4 class="s-property-title">Giới Thiệu</h4>
                                 <div class="s-property-content">
                                     <p>${home.homeDescription != null ? home.homeDescription : "No description available."}</p>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <h4 class="s-property-title">Địa Chỉ Cụ Thể</h4>
+                                <div class="s-property-content">
+                                    <p>${home.address}</p>
                                 </div>
                             </div>
                             <!-- End description area -->

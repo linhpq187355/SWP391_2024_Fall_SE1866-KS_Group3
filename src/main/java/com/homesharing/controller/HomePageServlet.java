@@ -30,7 +30,6 @@ public class HomePageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Home> homes = homePageService.getNewHomes();
         List<Price> prices = homePageService.getHomePrice(homes);
-
         req.setAttribute("homes", homes);
         req.setAttribute("prices", prices);
 

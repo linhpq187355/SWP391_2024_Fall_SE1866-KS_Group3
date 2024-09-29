@@ -122,8 +122,9 @@
                     <i class="fas fa-book text-3xl text-yellow-500"></i>
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-yellow-500 mb-2">Lưu Ý/ </h2>
-                    <p> Để tránh các tình trạng lừa đảo cũng như vi phạm điều khoản của chúng tôi thì bạn vui lòng ghé qua mục chinh sach mat của chúng tôi</p>
+                    <h2 class="text-xl font-bold text-yellow-500 mb-2">Lưu Ý </h2>
+                    <p> Để tránh các tình trạng lừa đảo cũng như vi phạm điều khoản của chúng tôi thì bạn vui lòng ghé qua mục :</p> <a href="terms.jsp" class="privacy-policy-link">Chính sách bảo mật</a>
+
                 </div>
             </div>
             <div class="flex items-start">
