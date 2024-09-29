@@ -33,4 +33,7 @@ public interface UserDao {
 
     List<User> getAllUsers();
 
+    int updateUserProfile(User user);
+
+    String getUserAvatar(int id);
 }

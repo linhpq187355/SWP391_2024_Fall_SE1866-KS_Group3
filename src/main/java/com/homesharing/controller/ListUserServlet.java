@@ -1,5 +1,6 @@
 package com.homesharing.controller;
 
+import com.homesharing.model.Role;
 import com.homesharing.model.User;
 import com.homesharing.service.UserManagementService;
 import com.homesharing.service.impl.UserManagementServiceImpl;
@@ -24,11 +25,13 @@ public class ListUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> userList = userManagementServie.getAllUsers();
+        List<Role> roleList = userManagementServie.getAllRoles();
 //        PrintWriter out = response.getWriter();
-//        for (User user : userList) {
-//            out.println(user);
+//        for (Role role : roleList) {
+//            out.println(role.getName());
 //        }
         request.setAttribute("userList", userList);
+        request.setAttribute("roleList", roleList);
         request.getRequestDispatcher("account-list.jsp").forward(request, response);
     }
 

@@ -70,7 +70,10 @@ public class User {
     public boolean isVerified() {
         return isVerified;
     }
-    
+
+    public String getVerify(){
+        return isVerified?"Verified":"Not Verified";
+    }
     public void setVerified(boolean verified) {
         isVerified = verified;
     }
