@@ -1,7 +1,7 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.conf.Config;
-import com.homesharing.dao.TokenDao;
+import com.homesharing.dao.TokenDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.service.TokenService;
@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 
 public class TokenServiceImpl implements TokenService {
 
-    private final TokenDao tokenDao;
+    private final TokenDAO tokenDao;
     private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
-    public TokenServiceImpl(TokenDao tokenDao) {
+    public TokenServiceImpl(TokenDAO tokenDao) {
         this.tokenDao = tokenDao;
     }
 

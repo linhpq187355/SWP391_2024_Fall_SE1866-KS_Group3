@@ -1,7 +1,7 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.impl.TokenDaoImpl;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.impl.TokenServiceImpl;
 import jakarta.servlet.RequestDispatcher;
@@ -19,9 +19,10 @@ import java.io.IOException;
 public class VerifyEmailServlet extends HttpServlet {
     private transient TokenService tokenService;
     private static final Logger logger = LoggerFactory.getLogger(VerifyEmailServlet.class); // Logger instance
+
     @Override
-    public void init(){
-        TokenDao tokenDao = new TokenDaoImpl();
+    public void init() {
+        TokenDAO tokenDao = new TokenDAOImpl();
         tokenService = new TokenServiceImpl(tokenDao);
     }
 
@@ -54,6 +55,7 @@ public class VerifyEmailServlet extends HttpServlet {
             forwardWithMessage(request, response, "Lỗi khi xác thực email: " + e.getMessage());
         }
     }
+
     private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response, String message) {
         request.setAttribute("notificationMessage", message);
         try {

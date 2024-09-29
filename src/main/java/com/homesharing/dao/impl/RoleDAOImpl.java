@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoleDAOImpl implements RoleDAO {
-    private static final List<Role> roles = new ArrayList<Role>();
+
     @Override
     public List<Role> getAllRoles() {
+        List<Role> roles = new ArrayList<Role>();
         String sql = "SELECT [id]\n" +
                 "      ,[name]\n" +
                 "  FROM [dbo].[Roles]";

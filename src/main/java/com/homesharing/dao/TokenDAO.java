@@ -2,7 +2,7 @@ package com.homesharing.dao;
 
 import com.homesharing.model.Token;
 
-public interface TokenDao {
+public interface TokenDAO {
 
     void insertToken(Token token);
 

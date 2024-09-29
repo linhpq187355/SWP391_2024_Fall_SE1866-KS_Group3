@@ -1,7 +1,7 @@
 package com.homesharing.service.impl;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
-    private final TokenDao tokenDao;
+    private final UserDAO userDao;
+    private final TokenDAO tokenDao;
     private final TokenService tokenService;
 
     /**
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param userDao The UserDao instance for database operations.
      */
-    public UserServiceImpl(UserDao userDao, TokenDao tokenDao, TokenService tokenService) {
+    public UserServiceImpl(UserDAO userDao, TokenDAO tokenDao, TokenService tokenService) {
         this.userDao = userDao;
         this.tokenDao = tokenDao;
         this.tokenService = tokenService;
@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
      * hashing the password, and saving the user to the database.
      *
      * @param firstName The first name of the user.
-     * @param lastName The last name of the user.
-     * @param email The email address of the user.
-     * @param password The password of the user.
-     * @param role The role of the user (findRoommate or postRoom).
+     * @param lastName  The last name of the user.
+     * @param email     The email address of the user.
+     * @param password  The password of the user.
+     * @param role      The role of the user (findRoommate or postRoom).
      * @return A success message or an error message.
      */
     @Override
@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService {
     /**
      * Validates user input for registration.
      *
-     * @param firstName The first name of the user.
-     * @param lastName The last name of the user.
-     * @param email The email address of the user.
-     * @param password The password of the user.
+     * @param firstName       The first name of the user.
+     * @param lastName        The last name of the user.
+     * @param email           The email address of the user.
+     * @param password        The password of the user.
      * @param confirmPassword The confirmation password.
-     * @param role The role of the user.
+     * @param role            The role of the user.
      * @return True if all input is valid, false otherwise.
      */
     @Override
@@ -154,11 +154,11 @@ public class UserServiceImpl implements UserService {
         // identity max age
         int cookieAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 1 week or 1 month
         // Save user's information to cookies
-        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()),cookieAge);
-        CookieUtil.addCookie(response, "firstName", user.getFirstName(),cookieAge);
-        CookieUtil.addCookie(response, "lastName", user.getLastName(),cookieAge);
-        CookieUtil.addCookie(response, "email", user.getEmail(),cookieAge);
-        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()),cookieAge);
+        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
+        CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
+        CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
+        CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
 
         // Return true to indicate a successful login
         return "success";

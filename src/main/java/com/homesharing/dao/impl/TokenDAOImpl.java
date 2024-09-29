@@ -1,7 +1,7 @@
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
-import com.homesharing.dao.TokenDao;
+import com.homesharing.dao.TokenDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 
@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class TokenDaoImpl implements TokenDao {
+public class TokenDAOImpl implements TokenDAO {
 
     @Override
     // Method to insert a token into the database
