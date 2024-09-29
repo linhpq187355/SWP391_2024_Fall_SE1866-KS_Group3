@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Datatables - Kaiadmin Bootstrap 5 Admin Dashboard</title>
     <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
@@ -25,7 +25,7 @@
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
         WebFont.load({
-            google: { families: ["Public Sans:300,400,500,600,700"] },
+            google: {families: ["Public Sans:300,400,500,600,700"]},
             custom: {
                 families: [
                     "Font Awesome 5 Solid",
@@ -40,12 +40,14 @@
             },
         });
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="./assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
+    <link rel="stylesheet" href="./assets/css/kaiadmin.min.css"/>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
 </head>
 <body>
 <div class="wrapper">
@@ -748,7 +750,7 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-<%--                                            <th>Xác minh</th>--%>
+                                            <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
                                             <th>Quản lí</th>
@@ -759,28 +761,46 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-<%--                                            <th>Xác minh</th>--%>
+                                            <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
                                             <th>Quản lí</th>
                                         </tr>
                                         </tfoot>
                                         <tbody>
-                                            <c:forEach items="${requestScope.userList}" var="user">
-                                                <tr>
+                                        <c:forEach items="${requestScope.userList}" var="user">
+                                            <tr>
                                                 <td>${user.id}</td>
                                                 <td>${user.email}</td>
                                                 <td>${user.createdAt}</td>
-<%--                                                <td>${user.verify}</td>--%>
+                                                    <%--                                                <td>${user.verify}</td>--%>
                                                 <c:forEach items="${requestScope.roleList}" var="role">
                                                     <c:if test="${role.id == user.rolesId}">
                                                         <td>${role.name}</td>
                                                     </c:if>
                                                 </c:forEach>
-                                                <td>${user.status}</td>
-                                                <td></td>
-                                                </tr>
-                                            </c:forEach>
+                                                <c:if test="${user.status=='active'}">
+                                                    <td class="text-center text-success capitalize">${user.status}</td>
+                                                </c:if>
+                                                <c:if test="${user.status!='active'}">
+                                                    <td class="text-center text-danger capitalize">Inactive</td>
+                                                </c:if>
+                                                <td class="space-y-4">
+                                                    <a href="update-status?userId=${user.id}">
+                                                        <button class="bg-red-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-red-600">
+                                                            <i class="fas fa-ban"></i>
+                                                            <span>Ban</span>
+                                                        </button>
+                                                    </a>
+                                                    <a href="update-status?userId=${user.id}">
+                                                        <button class="bg-green-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-green-600">
+                                                            <i class="fas fa-check"></i>
+                                                            <span>Activate</span>
+                                                        </button>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1765,7 +1785,7 @@
                                 class="changeLogoHeaderColor"
                                 data-color="white"
                         ></button>
-                        <br />
+                        <br/>
                         <button
                                 type="button"
                                 class="changeLogoHeaderColor"
@@ -1846,7 +1866,7 @@
                                 class="changeTopBarColor"
                                 data-color="white"
                         ></button>
-                        <br />
+                        <br/>
                         <button
                                 type="button"
                                 class="changeTopBarColor"

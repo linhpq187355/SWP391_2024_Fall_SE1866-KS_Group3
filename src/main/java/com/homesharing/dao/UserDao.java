@@ -36,4 +36,8 @@ public interface UserDao {
     int updateUserProfile(User user);
 
     String getUserAvatar(int id);
+
+    void updateUserStatus(int id, String status);
+
+    User getUserById(int id);
 }

@@ -3,7 +3,6 @@ package com.homesharing.dao.impl;
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDao;
 import com.homesharing.exception.GeneralException;
-import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.impl.UserServiceImpl;
 
@@ -112,7 +111,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUser(int id){
+    public User getUser(int id) {
         String sql = "select u.id, u.email, u.phoneNumber, u.firstName, u.lastName, u.avatar, u.dob\n" +
                 "\tfrom [HSS_Users] u where u.id = ?";
         try (Connection connection = DBContext.getConnection();
@@ -131,7 +130,7 @@ public class UserDaoImpl implements UserDao {
                     user.setFirstName(resultSet.getString("firstName"));
                     user.setLastName(resultSet.getString("lastName"));
                     user.setAvatar(resultSet.getString("avatar"));
-                    if(resultSet.getDate("dob") != null){
+                    if (resultSet.getDate("dob") != null) {
                         user.setDob(resultSet.getDate("dob").toLocalDate());
                     } else {
                         user.setDob(null);
@@ -231,14 +230,9 @@ public class UserDaoImpl implements UserDao {
 
                 userList.add(user);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
         return userList;
     }
 
@@ -256,7 +250,7 @@ public class UserDaoImpl implements UserDao {
                 " WHERE id = ?";
 
         try (Connection connection = DBContext.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
 
             statement.setString(1, user.getEmail());
@@ -296,6 +290,53 @@ public class UserDaoImpl implements UserDao {
             throw new RuntimeException("Error checking email existence in the database", e);
         }
         return null;
+    }
+
+    @Override
+    public void updateUserStatus(int id, String status) {
+        String sql = "UPDATE [dbo].[HSS Users]\n" +
+                "   SET [status] = ?\n" +
+                " WHERE [id] = ?";
+
+        try (
+                Connection connection = DBContext.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error update user status: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public User getUserById(int id) {
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setRolesId(resultSet.getInt("Rolesid"));
+                user.setStatus(resultSet.getString("status"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+                return user;
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error finding user by id in the database: " + e.getMessage(), e);
+        }
+
+        return null; // Return null if no user is found
     }
 
 }
