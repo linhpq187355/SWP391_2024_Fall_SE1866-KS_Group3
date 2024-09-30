@@ -257,7 +257,11 @@ public class UserDAOImpl implements UserDAO {
             statement.setString(3, user.getFirstName());
             statement.setString(4, user.getLastName());
             statement.setString(5, user.getAvatar());
-            statement.setDate(6, java.sql.Date.valueOf(user.getDob()));
+            if (user.getDob() != null) {
+                statement.setDate(6, java.sql.Date.valueOf(user.getDob()));
+            } else {
+                statement.setNull(6, java.sql.Types.DATE);
+            }
             statement.setInt(7, user.getId());
 
             rowsUpdated = statement.executeUpdate();
@@ -358,5 +362,7 @@ public class UserDAOImpl implements UserDAO {
         }
         return rowsUpdated;
     }
+
+
 
 }

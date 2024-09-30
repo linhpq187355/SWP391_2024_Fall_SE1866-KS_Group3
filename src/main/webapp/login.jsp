@@ -39,6 +39,13 @@
                                         </div>
                                     </div>
                                 </c:if>
+                                <c:if test="${requestScope.message != null}">
+                                    <div class="col-12">
+                                        <div class="alert alert-success" role="alert">
+                                                ${requestScope.message}
+                                        </div>
+                                    </div>
+                                </c:if>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
                                         <input type="email" class="form-control border-0 border-bottom rounded-0" name="email" id="email" placeholder="ten@example.com" required>
@@ -63,7 +70,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="text-end">
-                                                <a href="#!" class="link-secondary text-decoration-none">Quên mật khẩu?</a>
+                                                <a href="forgot-password.jsp" class="link-secondary text-decoration-none">Quên mật khẩu?</a>
                                             </div>
                                         </div>
                                     </div>
