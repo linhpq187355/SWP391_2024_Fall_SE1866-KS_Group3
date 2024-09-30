@@ -15,9 +15,9 @@ import java.util.List;
 
 public class SearchDAOimpl implements SearchDAO {
     @Override
-    public List<Home> searchHomesByName(String name) {
+    public List<Home> searchHomesByAdress(String address) {
         String sql = "SELECT id, name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardId, homeTypeId, createdBy " +
-                "FROM Homes WHERE name LIKE ?";
+                "FROM Homes WHERE address LIKE ?";
 
         List<Home> homes = new ArrayList<>();
 
@@ -25,7 +25,7 @@ public class SearchDAOimpl implements SearchDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             // Set the wildcard for partial matching
-            preparedStatement.setString(1, "%" + name + "%");
+            preparedStatement.setString(1, "%" + address + "%");
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -55,7 +55,7 @@ public class SearchDAOimpl implements SearchDAO {
                 }
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Error searching homes by name: " + e.getMessage(), e);
+            throw new RuntimeException("Error searching homes by address: " + e.getMessage(), e);
         }
 
         return homes;

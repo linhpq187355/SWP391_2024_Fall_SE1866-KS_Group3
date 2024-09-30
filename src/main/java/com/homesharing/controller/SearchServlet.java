@@ -57,7 +57,7 @@ public class SearchServlet extends HttpServlet {
 
             // Perform search based on the provided name or price range
             if (name != null && !name.trim().isEmpty()) {
-                homes = searchService.searchHomesByName(name); // Search by name
+                homes = searchService.searchHomesByAdress(name); // Search by name
             } else {
                 homes = searchService.searchByPriceRange(minPrice, maxPrice); // Search by price range
             }
