@@ -113,10 +113,5 @@ public class PreferenceDAOImpl implements PreferenceDAO {
     }
 
 
-    public static void main(String[] args) {
-        PreferenceDAOImpl preferenceDAO = new PreferenceDAOImpl();
-        System.out.println(preferenceDAO.getPreference(7));
-    }
-
 
 }

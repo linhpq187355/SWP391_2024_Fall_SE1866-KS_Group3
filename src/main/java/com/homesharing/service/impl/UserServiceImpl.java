@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
         CookieUtil.removeCookie(response, "firstName");
         CookieUtil.removeCookie(response, "lastName");
         CookieUtil.removeCookie(response, "email");
-        CookieUtil.removeCookie(response, "token");
+        CookieUtil.removeCookie(response, "roleId");
         return "logout success";
     }
 }

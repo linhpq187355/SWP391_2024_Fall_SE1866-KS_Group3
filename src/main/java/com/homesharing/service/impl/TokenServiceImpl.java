@@ -61,22 +61,6 @@ public class TokenServiceImpl implements TokenService {
         LocalDateTime requestedTime;
 
         if (oldToken != null) {
-
-            if (oldToken.isVerified()) {
-                logger.info("Email {} đã được xác thực.", email);
-                // Notify the user that the email is already verified and provide a link to the login page
-                String loginPageUrl = Config.getBaseUrl() + "/login"; // Adjust the URL as needed
-                String subject = "Xác thực email thành công";
-                String content = "Email của bạn đã được xác thực thành công. Bạn có thể đăng nhập tại đây: "
-                        + loginPageUrl;
-                try {
-                    SendingEmail.sendMail(email, subject, content);
-                } catch (MessagingException e) {
-                    logger.error("Error while sending verification success email to {}: {}", email, e.getMessage());
-                    throw new GeneralException("Error while sending email");
-                }
-                return false; // No new token sent
-            }
             // Use the existing token code and requested time
             tokenCode = oldToken.getToken();
         } else {

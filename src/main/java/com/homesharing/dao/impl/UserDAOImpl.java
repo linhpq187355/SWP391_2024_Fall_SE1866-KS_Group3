@@ -4,34 +4,28 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
+import com.homesharing.util.PasswordUtil;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import static java.sql.Statement.RETURN_GENERATED_KEYS; // Static import for RETURN_GENERATED_KEYS
+
 
 /**
- * Implementation of UserDao interface, handling database operations related to the User entity.
- * This class interacts with the database to save a user and check if an email already exists.
+ * Implementation of the UserDAO interface, handling database operations for the User entity.
  */
 public class UserDAOImpl implements UserDAO {
 
-    // Logger for logging test execution
-    private static final Logger LOGGER = Logger.getLogger(UserDAOImpl.class.getName());
-
-
     /**
      * Saves a user to the database by executing an INSERT SQL query.
-     * All database-related exceptions are caught and thrown as a runtime exception
-     * to be handled in the service layer.
      *
-     * @param user The user object to be saved into the database.
-     * @return
+     * @param user The {@link User} object containing user details to be saved.
+     * @return The generated ID of the newly created user.
+     * @throws GeneralException if there is an error saving the user to the database.
      */
     @Override
     public int saveUser(User user) {
@@ -68,28 +62,25 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
-            throw new RuntimeException("Error saving user to the database: " + e.getMessage(), e);
+            throw new GeneralException("Error saving user to the database: " + e.getMessage(), e);
         }
     }
 
 
     /**
      * Checks if an email already exists in the database by executing a SELECT COUNT SQL query.
-     * Returns true if the email exists, otherwise false.
-     * Any database-related exceptions are caught and thrown as a runtime exception to be handled by the service layer.
      *
      * @param email The email address to check.
-     * @return True if the email exists in the database, false otherwise.
+     * @return {@code true} if the email exists, {@code false} otherwise.
+     * @throws GeneralException if there is an error checking email existence in the database.
      */
     @Override
     public boolean emailExists(String email) {
         String sql = "SELECT COUNT(*) FROM [HSS_Users] WHERE [email] = ?";
 
-        // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            // Set the email parameter for the prepared statement
             preparedStatement.setString(1, email);
 
             // Execute the query to check for email existence
@@ -100,17 +91,25 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
-            throw new RuntimeException("Error checking email existence in the database", e);
+            throw new GeneralException("Error checking email existence in the database", e);
         }
 
         // Return false if no email match is found
         return false;
     }
 
+    /**
+     * Retrieves a {@link User} by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The {@link User} object if found, or {@code null} if no user is found.
+     * @throws GeneralException if there is an error retrieving the user from the database.
+     */
     @Override
     public User getUser(int id) {
-        String sql = "select u.id, u.email, u.phoneNumber, u.firstName, u.lastName, u.avatar, u.dob\n" +
-                "\tfrom [HSS_Users] u where u.id = ?";
+        String sql = "SELECT u.id, u.email, u.phoneNumber, u.firstName, u.lastName, u.avatar, u.dob "
+                + "FROM [HSS_Users] u WHERE u.id = ?";
+
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -119,7 +118,7 @@ public class UserDAOImpl implements UserDAO {
 
             // Execute the query to check for email existence
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
+                if (resultSet.next()) {
                     User user = new User();
                     user.setId(resultSet.getInt("id"));
                     user.setEmail(resultSet.getString("email"));
@@ -127,22 +126,26 @@ public class UserDAOImpl implements UserDAO {
                     user.setFirstName(resultSet.getString("firstName"));
                     user.setLastName(resultSet.getString("lastName"));
                     user.setAvatar(resultSet.getString("avatar"));
-                    if (resultSet.getDate("dob") != null) {
-                        user.setDob(resultSet.getDate("dob").toLocalDate());
-                    } else {
-                        user.setDob(null);
-                    }
+                    user.setDob(resultSet.getDate("dob") != null ? resultSet.getDate("dob").toLocalDate() : null);
                     return user;
                 }
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
-            throw new RuntimeException("Error checking email existence in the database", e);
+            throw new GeneralException("Error checking email existence in the database", e);
         }
-        return null;
+
+        return null; // Return null if user is not found
     }
 
+    /**
+     * Finds a user by their email address.
+     *
+     * @param email The email address of the user to find.
+     * @return The {@link User} object if found, or {@code null} if no user is found.
+     * @throws GeneralException if there is an error finding the user by email in the database.
+     */
     @Override
     public User findUserByEmail(String email) {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_Users] WHERE [email] = ?";
@@ -162,7 +165,15 @@ public class UserDAOImpl implements UserDAO {
                 user.setRolesId(resultSet.getInt("Rolesid"));
                 user.setStatus(resultSet.getString("status"));
                 user.setHashedPassword(resultSet.getString("hashedPassword"));
-                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+
+                // Check null before call toLocalDateTime()
+                Timestamp createdAtTimestamp = resultSet.getTimestamp("createdAt");
+                if (createdAtTimestamp != null) {
+                    user.setCreatedAt(createdAtTimestamp.toLocalDateTime());
+                } else {
+                    user.setCreatedAt(null);
+                }
+
                 return user;
             }
 
@@ -229,7 +240,7 @@ public class UserDAOImpl implements UserDAO {
                 userList.add(user);
             }
         } catch (IOException | ClassNotFoundException | SQLException e) {
-            throw new RuntimeException(e);
+            throw new GeneralException("Error: ",e);
         }
         return userList;
     }
@@ -256,7 +267,11 @@ public class UserDAOImpl implements UserDAO {
             statement.setString(3, user.getFirstName());
             statement.setString(4, user.getLastName());
             statement.setString(5, user.getAvatar());
-            statement.setDate(6, java.sql.Date.valueOf(user.getDob()));
+            if (user.getDob() != null) {
+                statement.setDate(6, java.sql.Date.valueOf(user.getDob()));
+            } else {
+                statement.setNull(6, java.sql.Types.DATE);
+            }
             statement.setInt(7, user.getId());
 
             rowsUpdated = statement.executeUpdate();
@@ -336,5 +351,28 @@ public class UserDAOImpl implements UserDAO {
 
         return null; // Return null if no user is found
     }
+
+    @Override
+    public int resetPassword(String password, int id) {
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [hashedPassword] = ?\n"+
+                " WHERE id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+
+            statement.setString(1, PasswordUtil.hashPassword(password));
+            statement.setInt(2, id);
+
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error update user profile: " + e.getMessage(), e);
+        }
+        return rowsUpdated;
+    }
+
+
 
 }

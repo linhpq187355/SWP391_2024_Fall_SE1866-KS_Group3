@@ -12,6 +12,7 @@
 <head>
     <title>Đăng nhập</title>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
 <!-- Login 11 - Bootstrap Brain Component -->
@@ -38,6 +39,13 @@
                                         </div>
                                     </div>
                                 </c:if>
+                                <c:if test="${requestScope.message != null}">
+                                    <div class="col-12">
+                                        <div class="alert alert-success" role="alert">
+                                                ${requestScope.message}
+                                        </div>
+                                    </div>
+                                </c:if>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
                                         <input type="email" class="form-control border-0 border-bottom rounded-0" name="email" id="email" placeholder="ten@example.com" required>
@@ -48,6 +56,9 @@
                                     <div class="form-floating mb-3">
                                         <input type="password" class="form-control border-0 border-bottom rounded-0" name="password" id="password" value="" placeholder="Mật khẩu" required>
                                         <label for="password" class="form-label">Mật khẩu</label>
+                                        <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y me-2" onclick="togglePassword('password')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -62,7 +73,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="text-end">
-                                                <a href="#!" class="link-secondary text-decoration-none">Quên mật khẩu?</a>
+                                                <a href="forgot-password.jsp" class="link-secondary text-decoration-none">Quên mật khẩu?</a>
                                             </div>
                                         </div>
                                     </div>
@@ -122,6 +133,22 @@
         }
 
         return true;
+    }
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const type = field.getAttribute('type');
+        field.setAttribute('type', type === 'password' ? 'text' : 'password');
+        const button = field.parentElement.querySelector('button');
+        const icon = button.querySelector('i');
+        if (type === "password") {
+            field.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+        } else {
+            field.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+        }
     }
 </script>
 </body>
