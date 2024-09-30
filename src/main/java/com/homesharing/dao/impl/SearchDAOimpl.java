@@ -15,7 +15,7 @@ import java.util.List;
 
 public class SearchDAOimpl implements SearchDAO {
     @Override
-    public List<Home> searchHomesByAdress(String address) {
+    public List<Home> searchHomesByAdress   (String address) {
         String sql = "SELECT id, name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardId, homeTypeId, createdBy " +
                 "FROM Homes WHERE address LIKE ?";
 

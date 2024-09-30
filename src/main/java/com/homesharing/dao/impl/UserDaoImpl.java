@@ -4,7 +4,6 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDao;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
-import com.homesharing.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,17 +13,16 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Implementation of UserDao interface, handling database operations related to the User entity.
  * This class interacts with the database to save a user and check if an email already exists.
  */
-public class UserDaoImpl implements UserDao {
+public class UserDAOImpl implements UserDao {
 
     // Logger for logging test execution
-    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UserDAOImpl.class.getName());
     private static final List<User> userList = new ArrayList<>();
 
 
