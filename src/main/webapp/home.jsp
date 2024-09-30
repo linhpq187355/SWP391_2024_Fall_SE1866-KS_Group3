@@ -18,7 +18,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
-
     <!-- Place favicon.ico  the root directory -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -451,6 +450,23 @@
 <script src="assets/js/price-range.js"></script>
 
 <script src="assets/js/main.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%
+    String message = (String) session.getAttribute("message");
+    String messageType = (String) session.getAttribute("messageType");
+    if (message != null && messageType != null) {
+%>
+<script type="text/javascript">
+    Swal.fire({
+        icon: '<%= messageType %>',
+        title: '<%= message %>'
+    });
+</script>
+<%
+        // Sau khi hiển thị thông báo, xóa nó khỏi session để tránh hiển thị lại khi trang được làm mới
+        session.removeAttribute("message");
+        session.removeAttribute("messageType");
+    }
+%>
 </body>
 </html>

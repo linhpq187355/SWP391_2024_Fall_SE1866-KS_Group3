@@ -61,10 +61,13 @@ public class LoginServlet extends HttpServlet {
 
             if (result.equals("success")) {
                 // Login successful, redirect to home page
-                resp.sendRedirect("home-page");
+                req.getSession().setAttribute("message", "Đăng nhập thành công.");
+                req.getSession().setAttribute("messageType", "success");
+                resp.sendRedirect(req.getContextPath() + "/home-page");
             } else {
                 // Login failed, display error message
                 req.setAttribute("error", result);
+                req.setAttribute("email", email);
                 req.getRequestDispatcher("/login.jsp").forward(req, resp);
             }
         } catch (Exception e) {

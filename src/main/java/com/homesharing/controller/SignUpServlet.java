@@ -81,14 +81,16 @@ public class SignUpServlet extends HttpServlet {
                 // Attempt to register the user
                 String result = userService.registerUser(firstName, lastName, email, password, role);
                 if ("success".equals(result)) {
-                    /// Redirect to home page on success
-                    ServletUtils.redirectToHomePage(req, resp);
+                    // Redirect to home page on success
+                    req.getSession().setAttribute("message", "Đăng kí thành công. Vui lòng kiểm tra email để xác thực tài khoản.");
+                    req.getSession().setAttribute("messageType", "success");
+                    resp.sendRedirect(req.getContextPath() + "/home-page");
                 } else {
                     // Set error message if registration fails
                     req.setAttribute(ERROR_ATTRIBUTE, result);
                     ServletUtils.forwardToErrorPage(req, resp);
                 }
-            } catch (RuntimeException e) {
+            } catch (RuntimeException | IOException e) {
                 // Handle any runtime exceptions thrown by the service
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
                 ServletUtils.forwardToErrorPage(req, resp);
