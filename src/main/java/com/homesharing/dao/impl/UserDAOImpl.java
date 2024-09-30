@@ -4,6 +4,7 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
+import com.homesharing.util.PasswordUtil;
 
 import java.io.IOException;
 import java.sql.*;
@@ -345,6 +346,27 @@ public class UserDAOImpl implements UserDAO {
         }
 
         return null; // Return null if no user is found
+    }
+
+    @Override
+    public int resetPassword(String password, int id) {
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [hashedPassword] = ?\n"+
+                " WHERE id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+
+            statement.setString(1, PasswordUtil.hashPassword(password));
+            statement.setInt(2, id);
+
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error update user profile: " + e.getMessage(), e);
+        }
+        return rowsUpdated;
     }
 
 }

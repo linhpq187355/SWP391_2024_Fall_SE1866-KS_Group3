@@ -39,4 +39,6 @@ public interface UserDAO {
     void updateUserStatus(int id, String status);
 
     User getUserById(int id);
+
+    int resetPassword(String password, int id);
 }
