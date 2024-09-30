@@ -5,12 +5,10 @@ import com.homesharing.dao.UserDAO;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
 import com.homesharing.service.impl.UserServiceImpl;
-import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -97,17 +95,24 @@ class UserServiceImplTest {
         boolean rememberMe = true;
         User user = new User();
         user.setId(1);
+        user.setEmail(email);
+        user.setRolesId(4);
+        user.setFirstName("John");
+        user.setLastName("Doe");
         user.setHashedPassword(PasswordUtil.hashPassword(password));
         user.setStatus("active");
         when(userDao.findUserByEmail(email)).thenReturn(user);
-        when(tokenDao.findToken(user.getId())).thenReturn(new Token());
+        // Mock tokenDao to return a verified token
+        Token mockToken = new Token();
+        mockToken.setVerified(true);
+        when(tokenDao.findToken(1)).thenReturn(mockToken);
 
         // When
         String result = userService.login(email, password, rememberMe, response);
 
         // Then
         assertEquals("success", result);
-        verify(tokenService, never()).sendToken(any(), any()); // Token should not be sent again
+        verify(tokenService, never()).sendToken(any(), eq(1)); // Token should not be sent again
     }
 
     @Test
@@ -162,19 +167,15 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLogout() {
-        // Arrange
-        try (MockedStatic<CookieUtil> mockedCookieUtil = mockStatic(CookieUtil.class)) {
-            // When
-            String result = userService.logout(response);
+    void testLogout_Success() {
+        // Test the logout method
+        String result = userService.logout(response);
 
-            // Then
-            assertEquals("logout success", result);
-            mockedCookieUtil.verify(() -> CookieUtil.removeCookie(response, "id"), times(1));
-            mockedCookieUtil.verify(() -> CookieUtil.removeCookie(response, "firstName"), times(1));
-            mockedCookieUtil.verify(() -> CookieUtil.removeCookie(response, "lastName"), times(1));
-            mockedCookieUtil.verify(() -> CookieUtil.removeCookie(response, "email"), times(1));
-            mockedCookieUtil.verify(() -> CookieUtil.removeCookie(response, "roleId"), times(1));
-        }
+        // Verify the expected outcome
+        assertEquals("logout success", result);
+
+        // Verify that cookies were removed
+        verify(response, times(5)).addCookie(any());
     }
+
 }

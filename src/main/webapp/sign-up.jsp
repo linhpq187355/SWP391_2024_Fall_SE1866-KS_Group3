@@ -13,6 +13,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
     <style>
         .error-message {
             color: red;
@@ -46,13 +48,23 @@
                                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required maxlength="100">
                             </div>
-                            <div class="col-12">
+                            <div class="col-12 position-relative">
                                 <label for="password" class="form-label">Mật Khẩu <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Mật Khẩu" required minlength="8" maxlength="50">
+                                <div class="position-relative">
+                                    <input type="password" class="form-control" name="password" id="password" placeholder="Mật Khẩu" required minlength="8" maxlength="50">
+                                    <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y me-2" onclick="togglePassword('password')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12 position-relative">
                                 <label for="confirmPassword" class="form-label">Nhập lại mật khẩu <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Nhập lại mật khẩu" required minlength="8" maxlength="50">
+                                <div class="position-relative">
+                                    <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Nhập lại mật khẩu" required minlength="8" maxlength="50">
+                                    <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y me-2" onclick="togglePassword('confirmPassword')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="col-12">
                                 <label for="role" class="form-label">Vai trò <span class="text-danger">*</span></label>
@@ -167,6 +179,22 @@
         document.getElementById("email").value = email;
 
         return true;
+    }
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const type = field.getAttribute('type');
+        field.setAttribute('type', type === 'password' ? 'text' : 'password');
+        const button = field.parentElement.querySelector('button');
+        const icon = button.querySelector('i');
+        if (type === "password") {
+            field.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+        } else {
+            field.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+        }
     }
 </script>
 </body>

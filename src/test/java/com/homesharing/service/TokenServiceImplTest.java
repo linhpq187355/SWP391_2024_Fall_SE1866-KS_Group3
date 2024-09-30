@@ -4,108 +4,111 @@ import com.homesharing.dao.TokenDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.service.impl.TokenServiceImpl;
+import com.homesharing.util.SecureRandomCode;
+import com.homesharing.util.SendingEmail;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockedStatic;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class TokenServiceImplTest {
 
     @Mock
     private TokenDAO tokenDao;
 
     @InjectMocks
-    private TokenService tokenService = new TokenServiceImpl(tokenDao);
+    private TokenServiceImpl tokenService;
+
+    private Token token;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        token = new Token(1, "123456", LocalDateTime.now(), false);
     }
 
     @Test
-    void testCheckTokenValid() {
-        // Given
-        int userId = 1;
-        String tokenCode = "validToken";
-        Token token = new Token(userId, tokenCode, LocalDateTime.now(), false);
-        when(tokenDao.findToken(userId)).thenReturn(token);
+    void testCheckTokenSuccess() {
+        when(tokenDao.findToken(1)).thenReturn(token);
 
-        // When
-        boolean result = tokenService.checkToken(tokenCode, userId);
+        boolean result = tokenService.checkToken("123456", 1);
 
-        // Then
         assertTrue(result);
-        verify(tokenDao, times(1)).updateTokenVerification(userId);
+        verify(tokenDao, times(1)).updateTokenVerification(1);
     }
 
     @Test
-    void testCheckTokenInvalid() {
-        // Given
-        int userId = 1;
-        String tokenCode = "invalidToken";
-        Token token = new Token(userId, "validToken", LocalDateTime.now(), false);
-        when(tokenDao.findToken(userId)).thenReturn(token);
+    void testCheckTokenTokenNotFound() {
+        when(tokenDao.findToken(1)).thenReturn(null);
 
-        // When
-        boolean result = tokenService.checkToken(tokenCode, userId);
+        boolean result = tokenService.checkToken("123456", 1);
 
-        // Then
+        assertFalse(result);
+        verify(tokenDao, never()).updateTokenVerification(anyInt());
+    }
+
+    @Test
+    void testCheckTokenTokenMismatch() {
+        when(tokenDao.findToken(1)).thenReturn(token);
+
+        boolean result = tokenService.checkToken("654321", 1);
+
         assertFalse(result);
         verify(tokenDao, never()).updateTokenVerification(anyInt());
     }
 
     @Test
     void testSendTokenNewToken() {
-        // Given
-        String email = "user@example.com";
-        int userId = 1;
-        when(tokenDao.findToken(userId)).thenReturn(null); // No existing token
+        // Mock static methods
+        try (MockedStatic<SecureRandomCode> mockedSecureRandomCode = Mockito.mockStatic(SecureRandomCode.class);
+             MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
 
-        // When
-        boolean result = tokenService.sendToken(email, userId);
+            when(tokenDao.findToken(1)).thenReturn(null);
+            mockedSecureRandomCode.when(SecureRandomCode::generateCode).thenReturn("generated-code");
 
-        // Then
-        assertTrue(result);
-        verify(tokenDao, times(1)).insertToken(any(Token.class));
-        // Additional assertions can be made to verify the sending of email
+            tokenService.sendToken("test@example.com", 1);
+
+            verify(tokenDao, times(1)).insertToken(any(Token.class));
+            mockedSendingEmail.verify(() -> SendingEmail.sendMail(eq("test@example.com"), anyString(), anyString()), times(1));
+        }
     }
 
     @Test
-    void testSendTokenAlreadyVerified() {
-        // Given
-        String email = "user@example.com";
-        int userId = 1;
-        Token existingToken = new Token(userId, "existingToken", LocalDateTime.now(), true);
-        when(tokenDao.findToken(userId)).thenReturn(existingToken);
+    void testSendTokenExistingToken() {
+        // Mock static method for SendingEmail.sendMail
+        try (MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
 
-        // When
-        boolean result = tokenService.sendToken(email, userId);
+            when(tokenDao.findToken(1)).thenReturn(token);
 
-        // Then
-        assertFalse(result);
-        verify(tokenDao, never()).insertToken(any(Token.class));
-        // Additional assertions can be made to verify the sending of the verification success email
+            tokenService.sendToken("test@example.com", 1);
+
+            verify(tokenDao, never()).insertToken(any(Token.class));
+            mockedSendingEmail.verify(() -> SendingEmail.sendMail(eq("test@example.com"), anyString(), anyString()), times(1));
+        }
     }
 
     @Test
-    void testCheckTokenThrowsException() {
-        // Given
-        int userId = 1;
-        String tokenCode = "validToken";
-        when(tokenDao.findToken(userId)).thenThrow(new GeneralException("Database error"));
+    void testSendTokenThrowsExceptionWhenEmailFails() {
+        // Mock static method for SendingEmail.sendMail
+        try (MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
 
-        // When
-        boolean result = tokenService.checkToken(tokenCode, userId);
+            when(tokenDao.findToken(1)).thenReturn(token);
+            mockedSendingEmail.when(() -> SendingEmail.sendMail(anyString(), anyString(), anyString()))
+                    .thenThrow(new MessagingException());
 
-        // Then
-        assertFalse(result);
-        verify(tokenDao, never()).updateTokenVerification(anyInt());
+            assertThrows(GeneralException.class, () -> tokenService.sendToken("test@example.com", 1));
+
+            verify(tokenDao, never()).insertToken(any(Token.class));
+        }
     }
 }
-

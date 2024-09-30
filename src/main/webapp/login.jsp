@@ -56,6 +56,9 @@
                                     <div class="form-floating mb-3">
                                         <input type="password" class="form-control border-0 border-bottom rounded-0" name="password" id="password" value="" placeholder="Mật khẩu" required>
                                         <label for="password" class="form-label">Mật khẩu</label>
+                                        <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y me-2" onclick="togglePassword('password')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="col-12">
