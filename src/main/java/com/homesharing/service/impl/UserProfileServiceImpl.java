@@ -1,7 +1,7 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.PreferenceDAO;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Preference;
@@ -10,7 +10,7 @@ import com.homesharing.service.UserProfileService;
 
 public class UserProfileServiceImpl implements UserProfileService {
     private PreferenceDAO preferenceDAO;
-    private UserDao userDao;
+    private UserDAO userDao;
 
     public UserProfileServiceImpl() {
         this.preferenceDAO = new PreferenceDAOImpl();

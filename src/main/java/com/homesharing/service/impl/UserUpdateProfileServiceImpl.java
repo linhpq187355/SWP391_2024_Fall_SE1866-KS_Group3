@@ -6,12 +6,12 @@ import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Preference;
 import com.homesharing.model.User;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.service.UserUpdateProfileService;
 
 public class UserUpdateProfileServiceImpl implements UserUpdateProfileService {
 
-    private UserDao userDAO;
+    private UserDAO userDAO;
     private PreferenceDAO preferenceDAO;
 
     public UserUpdateProfileServiceImpl() {

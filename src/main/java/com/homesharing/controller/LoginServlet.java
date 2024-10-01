@@ -1,7 +1,7 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.TokenDao;
-import com.homesharing.dao.UserDao;
+import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.TokenDaoImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.service.TokenService;
@@ -28,8 +28,8 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
-        UserDao userDao = new UserDAOImpl();
-        TokenDao tokenDao = new TokenDaoImpl();
+        UserDAO userDao = new UserDAOImpl();
+        TokenDAO tokenDao = new TokenDaoImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
         userService = new UserServiceImpl(userDao, tokenDao,tokenService);

@@ -35,9 +35,9 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Retrieve search parameters from the request
-        String name = req.getParameter("name");
-        String minPriceStr = req.getParameter("minPrice");
-        String maxPriceStr = req.getParameter("maxPrice");
+        String name = req.getParameter("name") != null ? req.getParameter("name").trim().replaceAll("\\s+", " ").replaceAll("[^a-zA-Z0-9\\s]", "") : null;
+        String minPriceStr = req.getParameter("minPrice") != null ? req.getParameter("minPrice").trim() : null;
+        String maxPriceStr = req.getParameter("maxPrice") != null ? req.getParameter("maxPrice").trim() : null;
 
         List<Home> homes = new ArrayList<>(); // Initialize an empty list to store the search results
         int minPrice = 0; // Default minimum price

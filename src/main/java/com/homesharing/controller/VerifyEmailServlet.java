@@ -1,6 +1,6 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.TokenDao;
+import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.impl.TokenDaoImpl;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.impl.TokenServiceImpl;
@@ -21,7 +21,7 @@ public class VerifyEmailServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(VerifyEmailServlet.class); // Logger instance
     @Override
     public void init(){
-        TokenDao tokenDao = new TokenDaoImpl();
+        TokenDAO tokenDao = new TokenDaoImpl();
         tokenService = new TokenServiceImpl(tokenDao);
     }
 
