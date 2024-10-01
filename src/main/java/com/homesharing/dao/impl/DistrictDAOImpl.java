@@ -10,23 +10,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class DistrictDAOImpl implements DistrictDAO {
-    private List<District> districts = new ArrayList<District>();
+    public final String DB_RESOURCE = "Error closing database resources:";
+    Logger logger = Logger.getLogger(DistrictDAOImpl.class.getName());
+    private final List<District> districts = new ArrayList<>();
 
     @Override
     public List<District> getAllDistricts() {
         String sql = "SELECT [id],[name],[status] FROM [dbo].[Districts]";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-
         try {
             connection = DBContext.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
-
             while (resultSet.next()) {
                 District district = new District();
                 district.setId(resultSet.getInt("id"));
@@ -34,7 +34,6 @@ public class DistrictDAOImpl implements DistrictDAO {
                 district.setStatus(resultSet.getString("status"));
                 districts.add(district);
             }
-
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Throwing exception to the upper layer to handle it properly
             throw new GeneralException("Error retrieving homes from the database: " + e.getMessage(), e);
@@ -51,32 +50,99 @@ public class DistrictDAOImpl implements DistrictDAO {
                     connection.close();
                 }
             } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+                logger.severe(DB_RESOURCE + e.getMessage());
             }
         }
         return districts;
     }
 
+    /**
+     * Fetch a district info based on the given id
+     *
+     * @param id
+     * @return district that you want to find
+     */
     @Override
-    public List<District> getDistrictByProvinceId(int provinceId) {
-        String sql = "SELECT d.id, d.name, d.status\nFROM Districts d\nINNER JOIN Provinces p ON d.provincesId = p.id\nWHERE p.id = ?;";
+    public District getDistrictById(int id) {
+        String sql = "SELECT [id],[name],[status] FROM [dbo].[Districts] WHERE id=?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
-            preparedStatement.setInt(1, provinceId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    District district = new District();
-                    district.setProvinceId(provinceId);
-                    district.setName(resultSet.getString("name"));
-                    district.setStatus(resultSet.getString("status"));
-                    districts.add(district);
-                }
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                District district = new District();
+                district.setId(resultSet.getInt("id"));
+                district.setName(resultSet.getString("name"));
+                district.setStatus(resultSet.getString("status"));
+                return district;
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw as runtime exception to be handled by the service layer
-            throw new IllegalArgumentException("Error saving home to the database: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Error saving to the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.severe(DB_RESOURCE + e.getMessage());
+            }
         }
         return null;
     }
+
+    @Override
+    public List<District> getDistrictByProvinceId(int provinceId) {
+        String sql = "SELECT [id],[name] FROM [dbo].[Districts] WHERE provincesId=?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, provinceId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                District district = new District();
+                district.setId(resultSet.getInt("id"));
+                district.setName(resultSet.getString("name"));
+                districts.add(district);
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            throw new IllegalArgumentException("Error saving to the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.severe(DB_RESOURCE + e.getMessage());
+            }
+        }
+        return districts;
+    }
 }
+
+
