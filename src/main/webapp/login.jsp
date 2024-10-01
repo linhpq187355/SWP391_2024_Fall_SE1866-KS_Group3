@@ -132,6 +132,10 @@
                             <i class="glyphicon glyphicon-log-in"></i>
                             <span>Đăng nhập bằng Google</span>
                         </a>
+                        <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">
+                            <i class="glyphicon glyphicon-user"></i>
+                            <span>Bạn là nhân viên?</span>
+                        </a>
                     </div>
                 </div>
             </div>

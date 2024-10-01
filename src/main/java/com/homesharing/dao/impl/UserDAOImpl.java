@@ -203,9 +203,8 @@ public class UserDAOImpl implements UserDAO {
                 "      ,[status]\n" +
                 "      ,[isVerified]\n" +
                 "      ,[lastModified]\n" +
-                "      ,[wardsId]\n" +
                 "      ,[rolesid]\n" +
-                "  FROM [dbo].[HSS Users]";
+                "  FROM [dbo].[HSS_Users]";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -230,11 +229,22 @@ public class UserDAOImpl implements UserDAO {
                 user.setAddress(resultSet.getString("address"));
                 user.setGender(resultSet.getString("gender"));
                 user.setCitizenNumber(resultSet.getString("citizenNumber"));
-                user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
+                // Check null before call toLocalDateTime()
+                Timestamp createdAtTimestamp = resultSet.getTimestamp("createdAt");
+                if (createdAtTimestamp != null) {
+                    user.setCreatedAt(createdAtTimestamp.toLocalDateTime());
+                } else {
+                    user.setCreatedAt(null);
+                }
                 user.setStatus(resultSet.getString("status"));
                 user.setVerified(resultSet.getBoolean("isVerified"));
-                user.setLastModified(resultSet.getTimestamp("lastModified").toLocalDateTime());
-                user.setWardsId(resultSet.getString("wardsId"));
+                // Check null before call toLocalDateTime()
+                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("lastModified");
+                if (lastModifiedTimestamp != null) {
+                    user.setLastModified(lastModifiedTimestamp.toLocalDateTime());
+                } else {
+                    user.setLastModified(null);
+                }
                 user.setRolesId(resultSet.getInt("Rolesid"));
 
                 userList.add(user);
@@ -307,7 +317,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateUserStatus(int id, String status) {
-        String sql = "UPDATE [dbo].[HSS Users]\n" +
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
                 "   SET [status] = ?\n" +
                 " WHERE [id] = ?";
 

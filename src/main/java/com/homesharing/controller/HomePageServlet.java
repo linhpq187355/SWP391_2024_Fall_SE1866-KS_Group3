@@ -28,12 +28,10 @@ public class HomePageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get message
-        String message = (String) req.getAttribute("message");
         List<Home> homes = homePageService.getNewHomes();
         List<Price> prices = homePageService.getHomePrice(homes);
         req.setAttribute("homes", homes);
         req.setAttribute("prices", prices);
-        req.setAttribute("message", message);
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
 
