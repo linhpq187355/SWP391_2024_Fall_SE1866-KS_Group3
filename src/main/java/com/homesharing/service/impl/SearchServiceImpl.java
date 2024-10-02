@@ -45,8 +45,8 @@ public class SearchServiceImpl implements SearchSevice {
      * Gets the maximum price of homes available in the database.
      *
      * @return The highest price of homes or -1 if no homes are available.
-     * @throws IOException If there’s an input/output error.
-     * @throws SQLException If there’s an issue with the database access.
+     * @throws IOException            If there’s an input/output error.
+     * @throws SQLException           If there’s an issue with the database access.
      * @throws ClassNotFoundException If the database driver class isn’t found.
      */
     @Override
@@ -59,7 +59,7 @@ public class SearchServiceImpl implements SearchSevice {
      *
      * @param homeId The ID of the home whose price you want to fetch.
      * @return The Price object associated with the specified home ID, or null if not found.
-     * @throws SQLException If there’s an issue with the database access.
+     * @throws SQLException           If there’s an issue with the database access.
      * @throws ClassNotFoundException If the database driver class isn’t found.
      */
     @Override

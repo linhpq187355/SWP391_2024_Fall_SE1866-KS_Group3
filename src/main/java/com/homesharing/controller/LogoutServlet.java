@@ -39,7 +39,11 @@ public class LogoutServlet extends HttpServlet {
         try {
             String logoutMessage = userService.logout(resp);
             logger.info(logoutMessage);
-            resp.sendRedirect("home-page");
+            // Redirect to home page on success
+            req.getSession().setAttribute("message", "Đăng xuất thành công.");
+            req.getSession().setAttribute("messageType", "success");
+            resp.sendRedirect(req.getContextPath() + "/home-page");
+
         } catch (Exception e) {
             logger.error("Error processing logout request: {}", e.getMessage(), e);
             ServletUtils.handleError(resp, "Error while processing your logout request.");

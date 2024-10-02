@@ -92,6 +92,36 @@ class UserServiceImplTest {
     }
 
     @Test
+    void testValidateUserInput_ValidInput() {
+        assertTrue(userService.validateUserInput("John", "Doe", "john.doe@example.com", "Password123", "Password123", "findRoommate"));
+    }
+
+    @Test
+    void testValidateUserInput_InvalidFirstName() {
+        assertFalse(userService.validateUserInput("John123", "Doe", "john.doe@example.com", "Password123", "Password123", "findRoommate"));
+    }
+
+    @Test
+    void testValidateUserInput_InvalidEmail() {
+        assertFalse(userService.validateUserInput("John", "Doe", "john.doe@com", "Password123", "Password123", "findRoommate"));
+    }
+
+    @Test
+    void testValidateUserInput_PasswordTooShort() {
+        assertFalse(userService.validateUserInput("John", "Doe", "john.doe@example.com", "Pass", "Pass", "findRoommate"));
+    }
+
+    @Test
+    void testValidateUserInput_PasswordMismatch() {
+        assertFalse(userService.validateUserInput("John", "Doe", "john.doe@example.com", "Password123", "Password", "findRoommate"));
+    }
+
+    @Test
+    void testValidateUserInput_InvalidRole() {
+        assertFalse(userService.validateUserInput("John", "Doe", "john.doe@example.com", "Password123", "Password123", "invalidRole"));
+    }
+
+    @Test
     void testLoginSuccess() {
         // Given
         String email = "john.doe@example.com";
@@ -120,6 +150,49 @@ class UserServiceImplTest {
     }
 
     @Test
+    void testLogin_UnverifiedToken() {
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
+        user.setStatus("active");
+        user.setRolesId(3);
+        user.setEmail("user@example.com");
+
+        when(userDao.findUserByEmail("user@example.com")).thenReturn(user);
+        // Mock tokenDao to return a verified token
+        Token mockToken = new Token();
+        mockToken.setVerified(false);
+        when(tokenDao.findToken(1)).thenReturn(mockToken);
+
+        String result = userService.login("user@example.com", "Password123",false, response);
+
+        assertEquals("Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.", result);
+        verify(tokenService).sendToken("user@example.com", 1); // Should send token
+    }
+
+    @Test
+    void testLoginStaff_Success() {
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
+        user.setStatus("active");
+        user.setRolesId(2); // Assuming 2 is a valid role
+
+        // Mock tokenDao to return a verified token
+        Token mockToken = new Token();
+        mockToken.setVerified(true);
+        when(userDao.findUserByEmail("admin@example.com")).thenReturn(user);
+        when(tokenDao.findToken(1)).thenReturn(mockToken);
+
+        String result = userService.loginStaff("admin@example.com", "Password123", response);
+
+        assertEquals("success", result);
+        verify(tokenService, never()).sendToken(any(), eq(1)); // Should not send token
+    }
+
+    @Test
     void testLoginUserNotFound() {
         // Given
         String email = "unknown@example.com";
@@ -131,6 +204,15 @@ class UserServiceImplTest {
         String result = userService.login(email, password, false, response);
 
         // Then
+        assertEquals("Email hoặc mật khẩu không đúng", result);
+    }
+
+    @Test
+    void testLoginStaff_UserNotFound() {
+        when(userDao.findUserByEmail("unknown@example.com")).thenReturn(null);
+
+        String result = userService.loginStaff("unknown@example.com", "Password123", response);
+
         assertEquals("Email hoặc mật khẩu không đúng", result);
     }
 
@@ -150,6 +232,74 @@ class UserServiceImplTest {
 
         // Then
         assertEquals("Email hoặc mật khẩu không đúng", result);
+    }
+
+    @Test
+    void testLoginStaff_IncorrectPassword() {
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword("WrongPassword"));
+        user.setStatus("active");
+        user.setRolesId(2);
+
+        when(userDao.findUserByEmail("admin@example.com")).thenReturn(user);
+
+        String result = userService.loginStaff("admin@example.com", "Password123", response);
+
+        assertEquals("Email hoặc mật khẩu không đúng", result);
+    }
+
+    @Test
+    void testLoginStaff_UserNotAdminOrModerator() {
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
+        user.setStatus("active");
+        user.setRolesId(3); // Assuming 3 is not allowed
+
+        when(userDao.findUserByEmail("admin@example.com")).thenReturn(user);
+
+        String result = userService.loginStaff("admin@example.com", "Password123", response);
+
+        assertEquals("Bạn không có quyền đăng nhập ở đây.", result);
+    }
+
+    @Test
+    void testLoginStaff_UserInactive() {
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
+        user.setStatus("inactive");
+        user.setRolesId(2);
+
+        when(userDao.findUserByEmail("admin@example.com")).thenReturn(user);
+
+        String result = userService.loginStaff("admin@example.com", "Password123", response);
+
+        assertEquals("Tài khoản này đã bị khóa", result);
+    }
+
+    @Test
+    void testLoginStaff_UnverifiedToken() {
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
+        user.setStatus("active");
+        user.setRolesId(2);
+        user.setEmail("admin@example.com");
+
+        when(userDao.findUserByEmail("admin@example.com")).thenReturn(user);
+        // Mock tokenDao to return a verified token
+        Token mockToken = new Token();
+        mockToken.setVerified(false);
+        when(tokenDao.findToken(1)).thenReturn(mockToken);
+
+        String result = userService.loginStaff("admin@example.com", "Password123", response);
+
+        assertEquals("Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.", result);
+        verify(tokenService).sendToken("admin@example.com", 1); // Should send token
     }
 
     @Test

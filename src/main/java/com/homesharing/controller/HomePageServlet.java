@@ -63,4 +63,23 @@ public class HomePageServlet extends HttpServlet {
         // Forward the request to the JSP page for rendering
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String message = (String) req.getSession().getAttribute("message");
+        if (message != null) {
+            req.setAttribute("message", message);
+            req.getSession().removeAttribute("message"); // Xoá message sau khi lấy ra
+        }
+        String messageType = (String) req.getSession().getAttribute("messageType");
+        if (messageType != null) {
+            req.setAttribute("messageType", messageType);
+            req.getSession().removeAttribute("messageType"); // Xoá messageType sau khi lấy ra
+        }
+        List<Home> homes = homePageService.getNewHomes();
+        List<Price> prices = homePageService.getHomePrice(homes);
+        req.setAttribute("homes", homes);
+        req.setAttribute("prices", prices);
+        req.getRequestDispatcher("/home.jsp").forward(req, resp);
+    }
 }

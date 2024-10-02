@@ -12,16 +12,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/**
+ * Implementation of the TokenDAO interface for managing token-related database operations.
+ */
 public class TokenDAOImpl implements TokenDAO {
 
+    /**
+     * Inserts a token into the database.
+     *
+     * @param token the token to be inserted
+     * @throws GeneralException if an error occurs while inserting the token
+     */
     @Override
-    // Method to insert a token into the database
     public void insertToken(Token token) {
         String sql = "INSERT INTO [dbo].[Token] " +
                 "([userId], [otp], [requestedTime], [isVerified]) " +
                 "VALUES (?, ?, ?, ?)";
 
-        // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -39,6 +46,13 @@ public class TokenDAOImpl implements TokenDAO {
         }
     }
 
+    /**
+     * Finds a token in the database by user ID.
+     *
+     * @param userId the user ID associated with the token
+     * @return the Token object if found, or null if no token exists for the given user ID
+     * @throws GeneralException if an error occurs while finding the token
+     */
     @Override
     public Token findToken(int userId) {
         String sql = "SELECT [otp], [requestedTime], [isVerified] FROM [dbo].[Token] WHERE [userId] = ?";
@@ -70,6 +84,12 @@ public class TokenDAOImpl implements TokenDAO {
         }
     }
 
+    /**
+     * Updates the verification status of a token for the given user ID.
+     *
+     * @param userId the user ID associated with the token
+     * @throws GeneralException if an error occurs while updating the token verification
+     */
     @Override
     public void updateTokenVerification(int userId) {
         String sql = "UPDATE [dbo].[Token] SET [isVerified] = ? WHERE [userId] = ?";

@@ -114,7 +114,6 @@ class UserDAOImplTest {
         assertNull(user.getCreatedAt());
     }
 
-
     @Test
     void testSaveUserThrowsException() throws SQLException {
         when(connection.prepareStatement(any(String.class), eq(Statement.RETURN_GENERATED_KEYS)))

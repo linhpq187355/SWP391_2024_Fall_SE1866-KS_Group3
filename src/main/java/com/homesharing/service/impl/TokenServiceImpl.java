@@ -11,6 +11,7 @@ import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 
 public class TokenServiceImpl implements TokenService {
@@ -72,10 +73,23 @@ public class TokenServiceImpl implements TokenService {
         }
         // Get base URL from properties
         String baseUrl = Config.getBaseUrl();
-        String subject = "Xác nhận email";
-        String content = "Click vào link sau để xác thực email: "
-                + baseUrl + "/verify?code=" + tokenCode
-                + "&userId=" + userId;
+        String subject = "Xac nhan email!!!";
+        String content = "<!DOCTYPE html>"
+                + "<html>"
+                + "<head><meta charset='UTF-8'></head>"
+                + "<body>"
+                + "<h2>Xác nhận email</h2>"
+                + "<p>Xin chào,</p>"
+                + "<p>Vui lòng nhấn vào nút bên dưới để xác thực email của bạn:</p>"
+                + "<a href='" + baseUrl + "/verify?code=" + tokenCode + "&userId=" + userId + "' "
+                + "style='text-decoration: none;'>"
+                + "<button style='padding: 10px 20px; background-color: blue; color: white; border: none;'>"
+                + "Xác thực Email"
+                + "</button>"
+                + "</a>"
+                + "<p>Trân trọng,<br>Đội ngũ hỗ trợ</p>"
+                + "</body>"
+                + "</html>";
         try {
             SendingEmail.sendMail(email, subject, content);
         } catch (MessagingException e) {
