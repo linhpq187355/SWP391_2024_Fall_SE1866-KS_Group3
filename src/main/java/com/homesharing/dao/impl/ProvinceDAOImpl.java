@@ -4,7 +4,6 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Province;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
