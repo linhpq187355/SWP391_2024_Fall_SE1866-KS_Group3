@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="HSS_DB@localhost" uuid="cac4ab81-379d-48cf-b8f0-8191c2866074">
+    <data-source source="LOCAL" name="HSS_DB@localhost" uuid="cbd1229a-d991-43e0-ae8d-0461a3cc1e38">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
@@ -14,7 +14,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="@localhost" uuid="cbd1229a-d991-43e0-ae8d-0461a3cc1e38">
+    <data-source source="LOCAL" name="@localhost [2]" uuid="4f023431-b83f-4536-8f84-75dcba6e1a62">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>

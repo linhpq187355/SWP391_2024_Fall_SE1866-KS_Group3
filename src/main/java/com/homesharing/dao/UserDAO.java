@@ -29,7 +29,7 @@ public interface UserDAO {
     /**
      * Retrieves a {@link User} by their ID.
      *
-     * @param id The ID of the user to retrieve.
+     * @param userId The ID of the user to retrieve.
      * @return The {@link User} object if found, or {@code null} if no user is found.
      */
     User getUser(int userId);

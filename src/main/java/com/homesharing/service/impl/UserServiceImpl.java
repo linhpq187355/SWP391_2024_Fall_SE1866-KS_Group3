@@ -68,9 +68,9 @@ public class UserServiceImpl implements UserService {
             // Determine role value based on input role
             int roleValue;
             if ("findRoommate".equals(role)) {
-                roleValue = 4;
-            } else if ("postRoom".equals(role)) {
                 roleValue = 3;
+            } else if ("postRoom".equals(role)) {
+                roleValue = 4;
             } else {
                 return "Invalid role: " + role;
             }
