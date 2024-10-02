@@ -118,7 +118,15 @@ public class UserServiceImpl implements UserService {
         return role != null && (role.equals("findRoommate") || role.equals("postRoom"));
     }
 
-
+    /**
+     * Logs a user into the system.
+     *
+     * @param email the email address of the user
+     * @param password the password of the user
+     * @param rememberMe a boolean indicating whether to remember the user
+     * @param response the HttpServletResponse object used to set cookies
+     * @return a message indicating the result of the login attempt, either success or an error message
+     */
     @Override
     public String login(String email, String password, boolean rememberMe, HttpServletResponse response) {
         // Attempt to find the user by their email address
@@ -154,7 +162,7 @@ public class UserServiceImpl implements UserService {
         // If the token does not exist, create a new one
         if (token == null || !token.isVerified()) {
             tokenService.sendToken(email, user.getId());
-            return "Tài khoản này chưa được xác thực,  hãy click vào đường link trong email để xác thực tài khoản.";
+            return "Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.";
         }
 
         // identity max age
@@ -170,8 +178,16 @@ public class UserServiceImpl implements UserService {
         return "success";
     }
 
+    /**
+     * Logs an admin into the system.
+     *
+     * @param email the email address of the admin
+     * @param password the password of the admin
+     * @param response the HttpServletResponse object used to set cookies
+     * @return a message indicating the result of the login attempt, either success or an error message
+     */
     @Override
-    public String loginAdmin(String email, String password, HttpServletResponse response) {
+    public String loginStaff(String email, String password, HttpServletResponse response) {
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
@@ -205,7 +221,7 @@ public class UserServiceImpl implements UserService {
         // If the token does not exist, create a new one
         if (token == null || !token.isVerified()) {
             tokenService.sendToken(email, user.getId());
-            return "Tài khoản này chưa được xác thực,  hãy click vào đường link trong email để xác thực tài khoản.";
+            return "Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.";
         }
 
         // identity max age
@@ -221,6 +237,12 @@ public class UserServiceImpl implements UserService {
         return "success";
     }
 
+    /**
+     * Logs the user out of the system.
+     *
+     * @param response the HttpServletResponse object used to remove cookies
+     * @return a message indicating the result of the logout attempt
+     */
     @Override
     public String logout(HttpServletResponse response) {
         //delete all cookie
