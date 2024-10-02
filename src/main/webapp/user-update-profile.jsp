@@ -171,13 +171,6 @@
                                     <input type="hidden" id="petStatus" name="petStatus" value="${requestScope.preference.pet != 100 ? 'true' : 'false'}">
                                 </div>
                             </div>
-
-                            <c:if test="${empty requestScope.preference}">
-                                <input type="text" name="preference" value="false" hidden="hidden"/>
-                            </c:if>
-                            <c:if test="${not empty requestScope.preference}">
-                                <input type="text" name="preference" value="true" hidden="hidden"/>
-                            </c:if>
                         </div>
 
                     </div>
@@ -236,15 +229,33 @@
         const dob = new Date(form["dob"].value);
         const today = new Date();
 
+        // Check if first name is empty
+        if (firstName === "") {
+            alert("Họ không được để trống");
+            return false;
+        }
+
         // Check if first name exceeds max length
         if (firstName.length > 50) {
             alert("Họ không được vượt quá 50 ký tự");
             return false;
         }
 
+        // Check if last name is empty
+        if (lastName === "") {
+            alert("Tên không được để trống");
+            return false;
+        }
+
         // Check if last name exceeds max length
         if (lastName.length > 50) {
             alert("Tên không được vượt quá 50 ký tự");
+            return false;
+        }
+
+        // Check if address is empty
+        if (address === "") {
+            alert("Địa chỉ không được để trống");
             return false;
         }
 

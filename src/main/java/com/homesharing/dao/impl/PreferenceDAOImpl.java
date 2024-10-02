@@ -29,7 +29,7 @@ public class PreferenceDAOImpl implements PreferenceDAO {
      */
     @Override
     public Preference getPreference(int userId) {
-        String sql = "SELECT * FROM Preferences WHERE user_id = ?";
+        String sql = "SELECT * FROM Preferences WHERE usersId = ?";
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -74,7 +74,7 @@ public class PreferenceDAOImpl implements PreferenceDAO {
      */
     @Override
     public int updatePreference(Map<String, Integer> preferences) {
-        if (preferences == null || !preferences.containsKey("user_id")) {
+        if (preferences == null || !preferences.containsKey("usersId")) {
             LOGGER.warn("Preferences map is null or does not contain user_id. No updates will be made.");
             return 0;
         }
@@ -94,8 +94,8 @@ public class PreferenceDAOImpl implements PreferenceDAO {
             sql.setLength(sql.length() - 2);
         }
 
-        sql.append(" WHERE user_id = ?");
-        values.add(preferences.get("user_id")); // Add the user_id at the end
+        sql.append(" WHERE usersId = ?");
+        values.add(preferences.get("usersId")); // Add the user_id at the end
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql.toString())) {
@@ -125,7 +125,7 @@ public class PreferenceDAOImpl implements PreferenceDAO {
      */
     @Override
     public int insertPreference(int userId) {
-        String sql = "INSERT INTO [dbo].[Preferences] ([user_id]) VALUES (?)";
+        String sql = "INSERT INTO [dbo].[Preferences] ([usersId]) VALUES (?)";
         int affectedRows = 0;
 
         // Using try-with-resources to ensure automatic resource management

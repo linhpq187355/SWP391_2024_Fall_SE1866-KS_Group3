@@ -139,6 +139,13 @@
             isValid = false;
         }
 
+        // Kiểm tra mật khẩu không có dấu cách
+        if (password.includes(' ')) {
+            document.getElementById('pass-error').textContent = "Mật khẩu không được có dấu cách.";
+            document.getElementById('pass-error').style.display = 'block';
+            isValid = false;
+        }
+
         // Kiểm tra mật khẩu xác nhận
         if (password !== confirmPassword) {
             document.getElementById('re_pass-error').style.display = 'block';

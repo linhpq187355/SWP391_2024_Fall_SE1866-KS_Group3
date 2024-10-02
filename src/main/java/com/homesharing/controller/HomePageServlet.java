@@ -2,6 +2,8 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.service.impl.HomePageServiceImpl;
@@ -35,6 +37,9 @@ public class HomePageServlet extends HttpServlet {
      */
     @Override
     public void init() throws ServletException {
+        // Initialize the DAOs
+        homeDAO = new HomeDAOImpl();
+        priceDAO = new PriceDAOImpl();
         // Initialize the home page service with the required DAOs
         homePageService = new HomePageServiceImpl(homeDAO, priceDAO);
     }

@@ -73,7 +73,7 @@ public class PreferenceServiceImpl implements PreferenceService {
         try {
             // Create a map to store preference updates for the user
             Map<String, Integer> preferenceMap = new HashMap<>();
-            preferenceMap.put("user_id", Integer.parseInt(userId));
+            preferenceMap.put("usersId", Integer.parseInt(userId));
 
             // Check the status of each preference and update the map accordingly
             if ("true".equals(cleanlinessStatus)) {
