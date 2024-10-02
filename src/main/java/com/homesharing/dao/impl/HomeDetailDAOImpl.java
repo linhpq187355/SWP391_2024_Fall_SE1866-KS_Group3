@@ -19,8 +19,7 @@ public Home getHomeById(int id) {
     String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], " +
             "[area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], " +
             "[createdDate], [modifiedDate], [homeDescription], [tenantDescription], " +
-            "[wardId], [homeTypeId], [createdBy] FROM [dbo].[Homes] WHERE [id] = ?";
-
+            "[wardsId], [homeTypeId], [createdBy] FROM [dbo].[Homes] WHERE [id] = ?";
     Home home = null;
 
     try (Connection connection = DBContext.getConnection();
@@ -47,7 +46,7 @@ public Home getHomeById(int id) {
                     ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
             home.setHomeDescription(resultSet.getString("homeDescription"));
             home.setTenantDescription(resultSet.getString("tenantDescription"));
-            home.setWardId(resultSet.getInt("wardId"));
+            home.setWardId(resultSet.getInt("wardsId"));
             home.setHomeTypeId(resultSet.getInt("homeTypeId"));
             home.setCreatedBy(resultSet.getInt("createdBy"));
         }
@@ -88,7 +87,7 @@ public List<Price> getHomePricesByHomeId(int homeId) {
 @Override
 public User getCreatorByHomeId(int homeId) {
     String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
-            "FROM [HSS Users] u " +
+            "FROM [HSS_Users] u " +
             "JOIN Homes h ON u.id = h.createdBy " +
             "WHERE h.id = ?";
     User user = null;
