@@ -47,7 +47,7 @@ public class LocationServlet extends HttpServlet {
         }
 
         if ("getDistricts".equals(action)) {
-            List<District> districts = submissonFormService.getDistrictByWard(parentId);
+            List<District> districts = submissonFormService.getDistrictByProvince(parentId);
             out.print(gson.toJson(districts));
         } else if ("getWards".equals(action)) {
             List<Ward> wards = submissonFormService.getWardByDistrict(parentId);

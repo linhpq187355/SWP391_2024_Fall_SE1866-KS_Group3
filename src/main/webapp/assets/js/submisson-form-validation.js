@@ -71,12 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
         //     alert('Vui lòng chọn ít nhất một hình ảnh');
         //     isValid = false;
         // }
-        // Step 4 validation
-        const agreeTerms = document.querySelector('input[type="checkbox"]');
-        if (!agreeTerms.checked) {
-            alert('Để đăng tin, vui lòng đồng ý với điều khoản và điều kiện');
-            isValid = false;
-        }
         return isValid;
     }
 });
