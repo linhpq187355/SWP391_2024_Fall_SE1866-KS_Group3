@@ -88,22 +88,22 @@ public class UserUpdateProfileServlet extends HttpServlet {
                 user.setPhoneNumber(phone);
                 user.setDob(LocalDate.parse(dob));
 
-                // Nếu người dùng upload avatar mới thì set ảnh mới
+
                 if (avatarFileName != null) {
                     user.setAvatar(avatarFileName);
                 } else {
                     user.setAvatar(userUpdateProfileService.getUserAvatar(Integer.parseInt(userId)));
                 }
 
-                // Gọi service để cập nhật hồ sơ người dùng
+
                 int rowsUpdated = userUpdateProfileService.updateUserProfile(user);
 
                 if (rowsUpdated > 0) {
-                    // Xử lý preference
+
                     Preference pref = new Preference();
                     pref.setUserId(Integer.parseInt(userId));
 
-                    // Kiểm tra và xử lý null hoặc giá trị trống
+
                     pref.setCleanliness(r_cleanliness != null ? Integer.parseInt(r_cleanliness) : 0); // Giá trị mặc định là 0 nếu null
                     pref.setSmoking(r_smoking != null ? Integer.parseInt(r_smoking) : 0);
                     pref.setDrinking(r_drinking != null ? Integer.parseInt(r_drinking) : 0);
@@ -111,7 +111,7 @@ public class UserUpdateProfileServlet extends HttpServlet {
                     pref.setCooking(r_cooking != null ? Integer.parseInt(r_cooking) : 0);
                     pref.setPet(r_pet != null ? Integer.parseInt(r_pet) : 0);
 
-                    // Kiểm tra xem người dùng đã có preference hay chưa
+
                     int rowsUpdatedPref = 0;
                     if ("false".equals(preference)) {
                         rowsUpdatedPref = userUpdateProfileService.insertUserPreference(pref);
@@ -121,7 +121,7 @@ public class UserUpdateProfileServlet extends HttpServlet {
 
 
 
-                    // Kiểm tra cập nhật preference thành công
+
                     if (rowsUpdatedPref > 0) {
                         resp.sendRedirect("user-profile");
                     } else {

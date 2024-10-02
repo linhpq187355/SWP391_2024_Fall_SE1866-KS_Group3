@@ -2,7 +2,7 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.TokenDaoImpl;
+import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
@@ -25,14 +25,15 @@ import java.io.IOException;
  */
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
-    private transient  UserService userService;// Mark userService as transient
+    private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(SignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
+
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
         UserDAO userDao = new UserDAOImpl();
-        TokenDAO tokenDao = new TokenDaoImpl();
+        TokenDAO tokenDao = new TokenDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
         userService = new UserServiceImpl(userDao, tokenDao, tokenService);
@@ -80,14 +81,16 @@ public class SignUpServlet extends HttpServlet {
                 // Attempt to register the user
                 String result = userService.registerUser(firstName, lastName, email, password, role);
                 if ("success".equals(result)) {
-                    /// Redirect to home page on success
-                    ServletUtils.redirectToHomePage(req, resp);
+                    // Redirect to home page on success
+                    req.getSession().setAttribute("message", "Đăng kí thành công. Vui lòng kiểm tra email để xác thực tài khoản.");
+                    req.getSession().setAttribute("messageType", "success");
+                    resp.sendRedirect(req.getContextPath() + "/home-page");
                 } else {
                     // Set error message if registration fails
                     req.setAttribute(ERROR_ATTRIBUTE, result);
                     ServletUtils.forwardToErrorPage(req, resp);
                 }
-            } catch (RuntimeException e) {
+            } catch (RuntimeException | IOException e) {
                 // Handle any runtime exceptions thrown by the service
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
                 ServletUtils.forwardToErrorPage(req, resp);

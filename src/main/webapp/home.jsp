@@ -18,7 +18,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
-
     <!-- Place favicon.ico  the root directory -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -40,113 +39,7 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
 </head>
-<style>
 
-
-    .search-bar {
-        display: flex;
-        align-items: center;
-        background-color: #f0f0f0;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
-
-    .search-bar input {
-        border: none;
-        outline: none;
-        flex: 1;
-        padding: 10px;
-        margin-left: 10px;
-    }
-
-    .search-bar button {
-        background-color: #f1c40f;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-    .filters {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
-
-    .filter {
-        background-color: #d4ac0d;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .filter .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f1c40f;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-    }
-
-    .filter .dropdown-content a {
-        color: white;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-    .filter .dropdown-content a:hover {
-        background-color: #d4ac0d;
-    }
-
-    .filter:hover .dropdown-content {
-        display: block;
-    }
-
-    .toggle-switch {
-        display: flex;
-        align-items: center;
-        margin-left: auto;
-    }
-
-    .toggle-switch input {
-        display: none;
-    }
-
-    .toggle-switch label {
-        background-color: #ccc;
-        border-radius: 15px;
-        cursor: pointer;
-        display: inline-block;
-        height: 20px;
-        position: relative;
-        width: 40px;
-    }
-
-    .toggle-switch label::after {
-        background-color: white;
-        border-radius: 50%;
-        content: '';
-        height: 16px;
-        left: 2px;
-        position: absolute;
-        top: 2px;
-        transition: 0.3s;
-        width: 16px;
-    }
-
-    .toggle-switch input:checked + label {
-        background-color: #2ecc71;
-    }
-
-    .toggle-switch input:checked + label::after {
-        transform: translateX(20px);
-    }
-</style>
 <body>
 
 <div id="preloader">
@@ -175,43 +68,29 @@
         </div>
     </div>
 </div>
+
 <div class="home-lager-shearch" style="background-color: rgb(252, 252, 252); padding-top: 25px; margin-top: -125px;">
     <div class="container">
         <div class="col-md-12 large-search">
             <div class="search-form wow pulse">
-                <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline">
+                <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline" onsubmit="return validateSearchInput()">
                     <div class="col-md-12">
-                        <!-- Search bar for location -->
-                        <div class="search-bar">
-                            <div class="dropdown">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Hà Nội</span>
-                                <i class="fas fa-chevron-down"></i>
-                                <div class="dropdown-content">
-                                    <a href="#">Hà Nội</a>
-                                    <a href="#">Hồ Chí Minh</a>
-                                    <a href="#">Đà Nẵng</a>
-                                    <a href="#">Hải Phòng</a>
-                                </div>
-                            </div>
-                            <input type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label">Giá:</label>
-                                <div class="col-md-5">
-                                    <input type="number" name="minPrice" class="form-control" placeholder="min" value="${param.minPrice}">
-                                </div>
-                                <div class="col-md-5">
-                                    <input type="number" name="maxPrice" class="form-control" placeholder="max" value="${param.maxPrice}">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-default btn-lg-sheach"></button>
+                        <div class="col-md-12">
+                            <input id="searchInput" type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
                         </div>
                     </div>
+                    <div class="col-md-12" style="color: red;">
+                        <span id="error-message"></span>
+                    </div>
+                    <div class="center">
+                        <input type="submit" value="Tìm kiếm" class="btn btn-default btn-lg-sheach">
+                    </div>
+
                 </form>
             </div>
         </div>
     </div>
-</div>
+
 
 
 <!-- property area -->
@@ -222,7 +101,12 @@
                 <c:choose>
                     <c:when test="${!empty param.name || !empty param.minPrice || !empty param.maxPrice}">
                         <h2>Kết quả tìm kiếm của bạn</h2>
+
+                        <c:if test="${empty homes}">
+                            <h2> hiện không khả dụng, vui lòng tìm kiếm lại.</h2>
+                        </c:if>
                     </c:when>
+
                     <c:otherwise>
                         <h2>Bài đăng mới nhất</h2>
                     </c:otherwise>
@@ -271,7 +155,6 @@
             </div>
         </div>
 
-
 <!--Welcome area -->
 <div class="Welcome-area">
     <div class="container">
@@ -282,7 +165,7 @@
                         <div class="row">
                             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
                                 <!-- /.feature title -->
-                                <h2>GARO ESTATE </h2>
+                                <h2>Roomify </h2>
                             </div>
                         </div>
                     </div>
@@ -337,63 +220,6 @@
     </div>
 </div>
 
-<!--TESTIMONIALS -->
-<div class="testimonial-area recent-property" style="background-color: #FCFCFC; padding-bottom: 15px;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
-                <!-- /.feature title -->
-                <h2>Our Customers Said  </h2>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row testimonial">
-                <div class="col-md-12">
-                    <div id="testimonial-slider">
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face wow fadeInRight" data-wow-delay=".9s">
-                                <img src="assets/img/client-face1.png" alt="">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face">
-                                <img src="assets/img/client-face2.png" alt="">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face">
-                                <img src="assets/img/client-face1.png" alt="">
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="client-text">
-                                <p>Nulla quis dapibus nisl. Suspendisse llam sed arcu ultried arcu ultricies !</p>
-                                <h4><strong>Ohidul Islam, </strong><i>Web Designer</i></h4>
-                            </div>
-                            <div class="client-face">
-                                <img src="assets/img/client-face2.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 <!-- Count area -->
 <div class="count-area">
@@ -401,57 +227,46 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
                 <!-- /.feature title -->
-                <h2>You can trust Us </h2>
+                <h2>Những con số ấn tượng </h2>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 col-xs-12 percent-blocks m-main" data-waypoint-scroll="true">
                 <div class="row">
-                    <div class="col-sm-3 col-xs-6">
+                    <div class="col-sm-4 col-xs-6">
                         <div class="count-item">
                             <div class="count-item-circle">
                                 <span class="pe-7s-users"></span>
                             </div>
                             <div class="chart" data-percent="5000">
                                 <h2 class="percent" id="counter">0</h2>
-                                <h5>HAPPY CUSTOMER </h5>
+                                <h5>Người dùng </h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-xs-6">
+                    <div class="col-sm-4 col-xs-6">
                         <div class="count-item">
                             <div class="count-item-circle">
                                 <span class="pe-7s-home"></span>
                             </div>
                             <div class="chart" data-percent="12000">
                                 <h2 class="percent" id="counter1">0</h2>
-                                <h5>Properties in stock</h5>
+                                <h5>Bài đăng</h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-xs-6">
+                    <div class="col-sm-4 col-xs-6">
                         <div class="count-item">
                             <div class="count-item-circle">
                                 <span class="pe-7s-flag"></span>
                             </div>
                             <div class="chart" data-percent="120">
                                 <h2 class="percent" id="counter2">0</h2>
-                                <h5>City registered </h5>
+                                <h5>Tỉnh thành </h5>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-xs-6">
-                        <div class="count-item">
-                            <div class="count-item-circle">
-                                <span class="pe-7s-graph2"></span>
-                            </div>
-                            <div class="chart" data-percent="5000">
-                                <h2 class="percent"  id="counter3">5000</h2>
-                                <h5>DEALER BRANCHES</h5>
-                            </div>
-                        </div>
 
-                    </div>
                 </div>
             </div>
         </div>
@@ -520,6 +335,54 @@
 <script src="assets/js/price-range.js"></script>
 
 <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%
+    String message = (String) session.getAttribute("message");
+    String messageType = (String) session.getAttribute("messageType");
+    if (message != null && messageType != null) {
+%>
+<script type="text/javascript">
+    Swal.fire({
+        icon: '<%= messageType %>',
+        title: '<%= message %>'
+    });
+</script>
+<%
+        // Sau khi hiển thị thông báo, xóa nó khỏi session để tránh hiển thị lại khi trang được làm mới
+        session.removeAttribute("message");
+        session.removeAttribute("messageType");
+    }
+%>
+
+    <script>
+        function validateSearchInput() {
+            let searchInput = document.getElementById("searchInput").value.trim();
+
+            // Lấy phần tử để hiển thị thông báo lỗi
+            let errorMessage = document.getElementById("error-message");
+
+            errorMessage.textContent = "";
+
+            if (searchInput === "") {
+                return true;
+            }
+
+            if (searchInput.length > 100) {
+                errorMessage.textContent = "Đầu vào không được vượt quá 100 ký tự.";
+                return false;
+            }
+
+            let inputRegex = /^[a-zA-Z0-9\s]+$/;
+            if (!inputRegex.test(searchInput)) {
+                errorMessage.textContent = "Đầu vào chỉ được phép chứa chữ cái và số.";
+                return false;
+            }
+
+            document.getElementById("searchInput").value = searchInput;
+
+            return true;
+        }
+    </script>
 
 </body>
 </html>

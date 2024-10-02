@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
      * hashing the password, and saving the user to the database.
      *
      * @param firstName The first name of the user.
-     * @param lastName The last name of the user.
-     * @param email The email address of the user.
-     * @param password The password of the user.
-     * @param role The role of the user (findRoommate or postRoom).
+     * @param lastName  The last name of the user.
+     * @param email     The email address of the user.
+     * @param password  The password of the user.
+     * @param role      The role of the user (findRoommate or postRoom).
      * @return A success message or an error message.
      */
     @Override
@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService {
     /**
      * Validates user input for registration.
      *
-     * @param firstName The first name of the user.
-     * @param lastName The last name of the user.
-     * @param email The email address of the user.
-     * @param password The password of the user.
+     * @param firstName       The first name of the user.
+     * @param lastName        The last name of the user.
+     * @param email           The email address of the user.
+     * @param password        The password of the user.
      * @param confirmPassword The confirmation password.
-     * @param role The role of the user.
+     * @param role            The role of the user.
      * @return True if all input is valid, false otherwise.
      */
     @Override
@@ -142,6 +142,12 @@ public class UserServiceImpl implements UserService {
             return "Tài khoản này đã bị khóa";
         }
 
+        int roleValue = user.getRolesId();
+        //check if user is not a host or tenant
+        if (roleValue == 1 || roleValue == 2) {
+            return "Bạn không có quyền đăng nhập ở đây.";
+        }
+
         // Find token for user
         Token token = tokenDao.findToken(user.getId());
 
@@ -154,11 +160,62 @@ public class UserServiceImpl implements UserService {
         // identity max age
         int cookieAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 1 week or 1 month
         // Save user's information to cookies
-        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()),cookieAge);
-        CookieUtil.addCookie(response, "firstName", user.getFirstName(),cookieAge);
-        CookieUtil.addCookie(response, "lastName", user.getLastName(),cookieAge);
-        CookieUtil.addCookie(response, "email", user.getEmail(),cookieAge);
-        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()),cookieAge);
+        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
+        CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
+        CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
+        CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
+
+        // Return true to indicate a successful login
+        return "success";
+    }
+
+    @Override
+    public String loginAdmin(String email, String password, HttpServletResponse response) {
+        // Attempt to find the user by their email address
+        User user = userDao.findUserByEmail(email);
+
+        // If the user does not exist, return false
+        if (user == null) {
+            // User does not exist
+            return "Email hoặc mật khẩu không đúng";
+        }
+
+        // Check if the provided password matches the user's hashed password
+        if (!user.getHashedPassword().equals(PasswordUtil.hashPassword(password))) {
+            // Password is incorrect
+            return "Email hoặc mật khẩu không đúng";
+        }
+
+        // Check if the user's status is active
+        if (!user.getStatus().equals("active")) {
+            // User's status is not active
+            return "Tài khoản này đã bị khóa";
+        }
+
+        int roleValue = user.getRolesId();
+        //check if user is not an admin or moderator
+        if (roleValue == 3 || roleValue == 4) {
+            return "Bạn không có quyền đăng nhập ở đây.";
+        }
+
+        // Find token for user
+        Token token = tokenDao.findToken(user.getId());
+
+        // If the token does not exist, create a new one
+        if (token == null || !token.isVerified()) {
+            tokenService.sendToken(email, user.getId());
+            return "Tài khoản này chưa được xác thực,  hãy click vào đường link trong email để xác thực tài khoản.";
+        }
+
+        // identity max age
+        int cookieAge = 24 * 60 * 60; // 1 day
+        // Save user's information to cookies
+        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
+        CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
+        CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
+        CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
 
         // Return true to indicate a successful login
         return "success";
@@ -171,7 +228,7 @@ public class UserServiceImpl implements UserService {
         CookieUtil.removeCookie(response, "firstName");
         CookieUtil.removeCookie(response, "lastName");
         CookieUtil.removeCookie(response, "email");
-        CookieUtil.removeCookie(response, "token");
+        CookieUtil.removeCookie(response, "roleId");
         return "logout success";
     }
 }

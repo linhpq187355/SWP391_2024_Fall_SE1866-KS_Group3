@@ -32,4 +32,23 @@ public class ListUserServlet extends HttpServlet {
         request.getRequestDispatcher("account-list.jsp").forward(request, response);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String message = (String) request.getSession().getAttribute("message");
+        if (message != null) {
+            request.setAttribute("message", message);
+            request.getSession().removeAttribute("message"); // Xoá message sau khi lấy ra
+        }
+        String messageType = (String) request.getSession().getAttribute("messageType");
+        if (messageType != null) {
+            request.setAttribute("messageType", messageType);
+            request.getSession().removeAttribute("messageType"); // Xoá messageType sau khi lấy ra
+        }
+        List<User> userList = userManagementServie.getAllUsers();
+        List<Role> roleList = userManagementServie.getAllRoles();
+        request.setAttribute("userList", userList);
+        request.setAttribute("roleList", roleList);
+        request.getRequestDispatcher("account-list.jsp").forward(request, response);
+    }
+
 }

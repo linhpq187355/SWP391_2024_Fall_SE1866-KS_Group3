@@ -1,9 +1,6 @@
 package com.homesharing.dao;
 
-import com.homesharing.model.Home;
-import com.homesharing.model.HomeType;
-import com.homesharing.model.Price;
-import com.homesharing.model.User;
+import com.homesharing.model.*;
 
 import java.util.List;
 
@@ -40,4 +37,7 @@ public interface HomeDetailDAO {
      */
     List<HomeType> getHomeTypesByHomeId(int homeId);
 
+    List<Amentity> getHomeAmenitiesByHomeId(int homeId);
+
+    List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
 }

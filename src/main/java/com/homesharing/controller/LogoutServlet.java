@@ -2,7 +2,7 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.TokenDaoImpl;
+import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
@@ -20,18 +20,18 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 @WebServlet("/logout")
-public class LogoutServiet extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
     private transient UserService userService;// Mark userService as transient
-    private static final Logger logger = LoggerFactory.getLogger(LogoutServiet.class); // Logger instance
+    private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class); // Logger instance
 
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
         UserDAO userDao = new UserDAOImpl();
-        TokenDAO tokenDao = new TokenDaoImpl();
+        TokenDAO tokenDao = new TokenDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
-        userService = new UserServiceImpl(userDao, tokenDao,tokenService);
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService);
     }
 
     @Override
@@ -39,7 +39,11 @@ public class LogoutServiet extends HttpServlet {
         try {
             String logoutMessage = userService.logout(resp);
             logger.info(logoutMessage);
-            resp.sendRedirect("home-page");
+            // Redirect to home page on success
+            req.getSession().setAttribute("message", "Đăng xuất thành công.");
+            req.getSession().setAttribute("messageType", "success");
+            resp.sendRedirect(req.getContextPath() + "/home-page");
+
         } catch (Exception e) {
             logger.error("Error processing logout request: {}", e.getMessage(), e);
             ServletUtils.handleError(resp, "Error while processing your logout request.");

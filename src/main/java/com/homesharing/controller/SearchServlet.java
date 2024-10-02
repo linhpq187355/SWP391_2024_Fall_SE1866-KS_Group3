@@ -14,9 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 // URL pattern mapped to this servlet
@@ -24,12 +22,12 @@ import java.util.List;
 public class SearchServlet extends HttpServlet {
 
     private SearchSevice searchService;
-    private HomePageService HomePageService;
+    private HomePageService homePageService;
 
     @Override
     public void init() throws ServletException {
         searchService = new SearchServiceImpl();
-        HomePageService = new HomePageServiceImpl();
+        homePageService = new HomePageServiceImpl();
     }
 
     @Override
@@ -39,9 +37,10 @@ public class SearchServlet extends HttpServlet {
         String minPriceStr = req.getParameter("minPrice") != null ? req.getParameter("minPrice").trim() : null;
         String maxPriceStr = req.getParameter("maxPrice") != null ? req.getParameter("maxPrice").trim() : null;
 
-        List<Home> homes = new ArrayList<>(); // Initialize an empty list to store the search results
+        List<Home> homes = homePageService.getNewHomes();
+        List<Price> prices = homePageService.getHomePrice(homes);
         int minPrice = 0; // Default minimum price
-        int maxPrice; // Variable to hold the maximum price
+        int maxPrice = 1000000; // Variable to hold the maximum price
 
         try {
             // Parse the minimum price from the request parameter if provided
@@ -52,11 +51,7 @@ public class SearchServlet extends HttpServlet {
             // Parse the maximum price from the request parameter if provided
             if (maxPriceStr != null && !maxPriceStr.trim().isEmpty()) {
                 maxPrice = Integer.parseInt(maxPriceStr);
-            } else {
-                // If max price is not provided, retrieve the maximum price from the service
-                maxPrice = searchService.getMaxPrice();
             }
-
             // Perform search based on the provided name or price range
             if (name != null && !name.trim().isEmpty()) {
                 homes = searchService.searchHomesByAdress(name); // Search by name
@@ -66,21 +61,17 @@ public class SearchServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             // Handle case wh   ere price parameters cannot be parsed
             req.setAttribute("error", "error"); // Set error attribute for the request
-            homes = HomePageService.getHomes(); // Retrieve all homes as a fallback
-        } catch (SQLException | ClassNotFoundException e) {
+            homes = homePageService.getNewHomes(); // Retrieve all homes as a fallback
             // Handle SQL or class not found exceptions
             throw new RuntimeException("error: " + e.getMessage(), e);
         }
-        List<Price> prices = HomePageService.getHomePrice(homes);
-
-
         // Set the search results and parameters as attributes for the request
         req.setAttribute("homes", homes);
         req.setAttribute("searchName", name);
         req.setAttribute("minPrice", minPriceStr);
         req.setAttribute("maxPrice", maxPriceStr);
         req.setAttribute("prices", prices);
-        // Forward the request to the home.jsp page to display results
+        //Forward the request to the home.jsp page to display results
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
 }
