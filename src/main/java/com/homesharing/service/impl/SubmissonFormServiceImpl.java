@@ -15,7 +15,7 @@ public class SubmissonFormServiceImpl implements SubmissionFormService {
     private final HomeTypeDAO homeTypeDAO;
     private final AmentityDAO amentityDAO;
     private final FireEquipmentDAO fireEquipmentDAO;
-    private final HomeImageDAO homeImageDAO;
+//    private final HomeImageDAO homeImageDAO;
     private final AmentityHomeDAO amentityHomeDAO;
 
     public SubmissonFormServiceImpl() {
@@ -25,7 +25,7 @@ public class SubmissonFormServiceImpl implements SubmissionFormService {
         this.homeTypeDAO = new HomeTypeDAOImpl();
         this.amentityDAO = new AmentityDAOImpl();
         this.fireEquipmentDAO = new FireEquipmentDAOImpl();
-        this.homeImageDAO = new HomeImageDAOImp();
+//        this.homeImageDAO = new HomeImageDAOImp();
         this.homeDAO = new HomeDAOImpl();
         this.amentityHomeDAO = new AmentityHomeDAOImpl();
     }
@@ -75,10 +75,10 @@ public class SubmissonFormServiceImpl implements SubmissionFormService {
         return homeDAO.saveHome(home);
     }
 
-    @Override
-    public int saveHomeImages(HomeImage homeImage) {
-        return homeImageDAO.save(homeImage);
-    }
+//    @Override
+//    public int saveHomeImages(HomeImage homeImage) {
+//        return homeImageDAO.save(homeImage);
+//    }
 
     @Override
     public int saveAmentityHome(AmentityHome amentityHome) {

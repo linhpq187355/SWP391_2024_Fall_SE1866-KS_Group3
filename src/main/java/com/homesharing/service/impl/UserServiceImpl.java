@@ -11,6 +11,8 @@ import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Implementation of UserService interface, handling user-related business logic.
  * This class manages user registration and input validation.
@@ -187,7 +189,7 @@ public class UserServiceImpl implements UserService {
      * @return a message indicating the result of the login attempt, either success or an error message
      */
     @Override
-    public String loginStaff(String email, String password, HttpServletResponse response) {
+    public String loginStaff(String email, String password, HttpServletResponse response){
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
