@@ -16,7 +16,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.MockedStatic;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,7 +68,7 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void testSendTokenNewToken() throws UnsupportedEncodingException {
+    void testSendTokenNewToken() {
         // Mock static methods
         try (MockedStatic<SecureRandomCode> mockedSecureRandomCode = Mockito.mockStatic(SecureRandomCode.class);
              MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
@@ -85,7 +84,7 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void testSendTokenExistingToken() throws UnsupportedEncodingException {
+    void testSendTokenExistingToken() {
         // Mock static method for SendingEmail.sendMail
         try (MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
 

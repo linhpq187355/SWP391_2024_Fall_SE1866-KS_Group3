@@ -198,7 +198,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    public void testGetUserAvatar_Success() throws SQLException {
+    void testGetUserAvatar_Success() throws SQLException {
         int userId = 1;
         String expectedAvatar = "avatar.png";
 
@@ -224,7 +224,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    public void testGetUserAvatar_NoResult() throws SQLException {
+    void testGetUserAvatar_NoResult() throws SQLException {
         int userId = 2;
 
         // Thiết lập hành vi cho các đối tượng mô phỏng
@@ -248,7 +248,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    public void testResetPassword_Success() throws SQLException {
+    void testResetPassword_Success() throws SQLException {
         String password = "newPassword";
         int userId = 1;
         int expectedRowsUpdated = 1; // Giả định rằng có 1 dòng đã được cập nhật
@@ -270,7 +270,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    public void testResetPassword_SQLException() throws SQLException {
+    void testResetPassword_SQLException() throws SQLException {
         String password = "newPassword";
         int userId = 2;
 

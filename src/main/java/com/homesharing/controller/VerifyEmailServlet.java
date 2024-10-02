@@ -15,17 +15,37 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * VerifyEmailServlet handles the email verification process for users.
+ * It retrieves the verification code and user ID from the request, verifies
+ * the token, and provides feedback on whether the verification was successful.
+ *
+ * @version 1.0
+ * @since 2024-10-02
+ */
 @WebServlet("/verify")
 public class VerifyEmailServlet extends HttpServlet {
     private transient TokenService tokenService;
     private static final Logger logger = LoggerFactory.getLogger(VerifyEmailServlet.class); // Logger instance
 
+    /**
+     * Initializes the VerifyEmailServlet by creating an instance of the TokenService.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() {
         TokenDAO tokenDao = new TokenDAOImpl();
         tokenService = new TokenServiceImpl(tokenDao);
     }
 
+    /**
+     * Handles GET requests for email verification.
+     * Retrieves the verification code and user ID from the request, validates them,
+     * and checks if the token is valid.
+     *
+     * @param request  HttpServletRequest containing the client request.
+     * @param response HttpServletResponse used to send a response to the client.
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         // 1. Get verification code and user ID from the URL parameters
@@ -56,6 +76,14 @@ public class VerifyEmailServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Helper method to forward the request to the announcement page with a message.
+     * The message is displayed on the target page.
+     *
+     * @param request  HttpServletRequest containing the client request.
+     * @param response HttpServletResponse used to send a response to the client.
+     * @param message  The message to be displayed to the user.
+     */
     private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response, String message) {
         request.setAttribute("notificationMessage", message);
         try {

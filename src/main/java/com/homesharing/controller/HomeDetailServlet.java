@@ -1,9 +1,6 @@
 package com.homesharing.controller;
 
-import com.homesharing.model.Home;
-import com.homesharing.model.HomeType;
-import com.homesharing.model.Price;
-import com.homesharing.model.User;
+import com.homesharing.model.*;
 import com.homesharing.service.HomeDetailService;
 import com.homesharing.service.impl.HomeDetailServiceImpl;
 import jakarta.servlet.ServletException;
@@ -11,8 +8,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebServlet("/home-detail")
@@ -49,16 +48,28 @@ public class HomeDetailServlet extends HttpServlet {
             return;
         }
 
-        // Fetch prices and creator details
+        // Fetch prices , creator , hometypes , amenity details
         List<Price> prices = homeDetailService.getHomePricesByHomeId(homeId);
         User creator = homeDetailService.getCreatorByHomeId(homeId);
         List<HomeType> hometypes = homeDetailService.getHomeTypesByHomeId(homeId);
+        List<Amentity> amentities = homeDetailService.getHomeAmenitiesByHomeId(homeId);
+        List<FireEquipment> fireEquipments = homeDetailService.getHomeFireEquipmentsByHomeId(homeId);
+
+        LocalDateTime moveInDate = home.getMoveInDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        String formattedMoveInDate = (moveInDate != null) ? moveInDate.format(formatter) : "Chưa có thông tin";
+
         req.setAttribute("hometypes", hometypes);
         req.setAttribute("home", home);
         req.setAttribute("prices", prices);
         req.setAttribute("creator", creator);
+        req.setAttribute("amentities", amentities);
+        req.setAttribute("fireEquipments", fireEquipments);
+        req.setAttribute("formattedMoveInDate", formattedMoveInDate);
 
-        // Forward the request to the JSP
+
+        //Forward the request to the JSP
         req.getRequestDispatcher("home-detail.jsp").forward(req, resp);
     }
 }
