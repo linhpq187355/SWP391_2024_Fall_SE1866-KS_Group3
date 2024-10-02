@@ -13,12 +13,14 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 class UserDAOImplTest {
 
@@ -288,5 +290,48 @@ class UserDAOImplTest {
         Mockito.verify(preparedStatement).setString(1, PasswordUtil.hashPassword(password)); // Chỉ cần xác minh rằng nó đã được gọi
         Mockito.verify(preparedStatement).setInt(2, userId); // Chỉ cần xác minh rằng nó đã được gọi
         Mockito.verify(preparedStatement).executeUpdate();
+    }
+
+
+    @Test
+    public void getAllUsers() throws SQLException, GeneralException {
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        //create simulated data
+        when(resultSet.next()).thenReturn(true, true, false);
+        when(resultSet.getInt("id")).thenReturn(1, 2);
+        when(resultSet.getString("email")).thenReturn("john@example.com", "nick@example.com");
+        when(resultSet.getString("hashedPassword")).thenReturn("password", "password2");
+        when(resultSet.getString("firstName")).thenReturn("John", "Nick");
+        when(resultSet.getString("lastName")).thenReturn("Doe", "Vujicic");
+        when(resultSet.getString("avatar")).thenReturn("avatar.png", "avatar2.png");
+        when(resultSet.getString("dob")).thenReturn("2000-01-01", "2000-02-02");
+        when(resultSet.getTimestamp("createdAt")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
+        when(resultSet.getString("status")).thenReturn("active", "inactive");
+        when(resultSet.getTimestamp("lastModified")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
+        when(resultSet.getInt("rolesid")).thenReturn(1, 3);
+        //actual list
+        List<User> actualUsers = userDAO.getAllUsers();
+        //check result
+        assertEquals(1, actualUsers.get(0).getId());
+        assertEquals(2, actualUsers.get(1).getId());
+        assertEquals("john@example.com", actualUsers.get(0).getEmail());
+        assertEquals("nick@example.com", actualUsers.get(1).getEmail());
+        assertEquals("password", actualUsers.get(0).getHashedPassword());
+        assertEquals("password2", actualUsers.get(1).getHashedPassword());
+        assertEquals("active", actualUsers.get(0).getStatus());
+        assertEquals("inactive", actualUsers.get(1).getStatus());
+        assertEquals(1, actualUsers.get(0).getRolesId());
+        assertEquals(3, actualUsers.get(1).getRolesId());
+        //check verify
+        verify(resultSet, times(3)).next();
+        verify(resultSet, times(2)).getInt("id");
+        verify(resultSet, times(2)).getString("email");
+        verify(resultSet, times(2)).getString("hashedPassword");
+        verify(resultSet, times(2)).getInt("rolesid");
+    }
+
+    @Test
+    void getUserById() {
     }
 }

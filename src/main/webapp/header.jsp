@@ -192,11 +192,6 @@
                                     <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
                                 </li>
                             </c:if>
-                            <c:if test="${cookie.roleId.value ==3}">
-                                <li>
-                                    <a href="account-manage" class="li-acc-op">Quản lí danh sách nguời dùng</a>
-                                </li>
-                            </c:if>
 
                             <li>
                                 <a href="logout" class="li-acc-op">Đăng xuất</a>
