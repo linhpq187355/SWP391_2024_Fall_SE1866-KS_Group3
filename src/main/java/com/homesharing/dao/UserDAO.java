@@ -26,8 +26,20 @@ public interface UserDAO {
      */
     boolean emailExists(String email);
 
+    /**
+     * Retrieves a {@link User} by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The {@link User} object if found, or {@code null} if no user is found.
+     */
     User getUser(int userId);
 
+    /**
+     * Finds a user by their email address.
+     *
+     * @param email The email address of the user to find.
+     * @return The {@link User} object if found, or {@code null} if no user is found.
+     */
     User findUserByEmail(String email);
 
     List<User> getAllUsers();

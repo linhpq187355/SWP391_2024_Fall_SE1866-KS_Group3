@@ -11,8 +11,6 @@ import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.UnsupportedEncodingException;
-
 /**
  * Implementation of UserService interface, handling user-related business logic.
  * This class manages user registration and input validation.

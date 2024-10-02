@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Utility class for sending emails.
+ * This class cannot be instantiated.
+ */
 public class SendingEmail {
 
     // Private constructor to prevent instantiation
@@ -16,6 +20,15 @@ public class SendingEmail {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
+    /**
+     * Sends an email with the specified recipient, subject, and content.
+     *
+     * @param to      the recipient's email address
+     * @param subject the subject of the email
+     * @param content the content of the email (HTML format)
+     * @throws MessagingException if an error occurs while sending the email
+     * @throws GeneralException   if unable to find the configuration file or load properties
+     */
     public static void sendMail(String to, String subject, String content) throws MessagingException {
         Properties configProps = new Properties();
         try (InputStream input = SendingEmail.class.getClassLoader().getResourceAsStream("config.properties")) {
