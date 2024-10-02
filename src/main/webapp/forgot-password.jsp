@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Title</title>
@@ -25,10 +26,20 @@
                         </div>
                         <div class="col-12">
                             <h2 class="fs-6 fw-normal text-center text-secondary m-0 px-md-5">Vui lòng nhập email liên kết với tài khoản của bạn.</h2>
-                            <p style="color: red">
-                                ${requestScope.error}
-                                ${requestScope.message}
-                            </p>
+                            <c:if test="${not empty requestScope.message}">
+                                <div class="col-md-12">
+                                    <div class="alert alert-success" role="alert" id="successMessage">
+                                            ${requestScope.message}
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${not empty requestScope.error}">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger" role="alert" id="errorMessage">
+                                            ${requestScope.error}
+                                    </div>
+                                </div>
+                            </c:if>
                         </div>
                     </div>
                     <form action="forgot-password" method="post">
@@ -44,9 +55,10 @@
                                     <input type="email" class="form-control" name="email" id="email" required>
                                 </div>
                             </div>
+                            <div id="error-message" class="text-danger" style="display: none;"></div>
                             <div class="col-12">
                                 <div class="d-grid">
-                                    <button class="btn btn-primary btn-lg" type="submit">Reset Password</button>
+                                    <button class="btn btn-primary btn-lg" type="submit" onclick="validateEmail()">Reset Password</button>
                                 </div>
                             </div>
                         </div>
@@ -56,5 +68,24 @@
         </div>
     </div>
 </div>
+<script>
+    function validateEmail() {
+        const emailInput = document.getElementById('email');
+        const errorMessageDiv = document.getElementById('error-message');
+        const email = emailInput.value.trim();
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email)) {
+            errorMessageDiv.textContent = 'Địa chỉ email không hợp lệ!';
+            errorMessageDiv.style.display = 'block';
+            emailInput.focus();
+            return false;
+        } else {
+            errorMessageDiv.style.display = 'none';
+            alert('Email hợp lệ!');
+        }
+    }
+</script>
 </body>
 </html>

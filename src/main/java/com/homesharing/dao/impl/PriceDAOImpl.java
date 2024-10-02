@@ -4,8 +4,9 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.PriceDAO;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,10 +14,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * PriceDAOImpl implements the PriceDAO interface to provide
+ * database operations related to Price entities.
+ */
 public class PriceDAOImpl implements PriceDAO {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PriceDAOImpl.class);
+
+    /**
+     * Retrieves a list of Price objects for the given list of Home objects.
+     *
+     * @param homes a list of Home objects for which the prices are to be retrieved
+     * @return a list of Price objects corresponding to the given homes
+     */
     @Override
-    public List<Price> getPrice(List<Home> homes) {
+    public List<Price> getPrices(List<Home> homes) {
+        // Validate input
+        if (homes == null || homes.isEmpty()) {
+            LOGGER.warn("Home list is null or empty. Returning an empty price list.");
+            return new ArrayList<>();
+        }
+
+        // Construct SQL query with placeholders for prepared statement
         StringBuilder sql = new StringBuilder("SELECT id, price, Homesid FROM prices WHERE id IN (");
+
+        // Append placeholders for each home price ID
         for (int i = 0; i < homes.size(); i++) {
             sql.append("?");
             if (i < homes.size() - 1) {
@@ -26,14 +48,15 @@ public class PriceDAOImpl implements PriceDAO {
         sql.append(")");
 
         List<Price> prices = new ArrayList<>();
-
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 
+            // Set the price ID parameters in the prepared statement
             for (int i = 0; i < homes.size(); i++) {
                 preparedStatement.setInt(i + 1, homes.get(i).getPriceId());
             }
 
+            // Execute the query and process the result set
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Price price = new Price();
@@ -44,11 +67,14 @@ public class PriceDAOImpl implements PriceDAO {
                 }
             }
 
-        } catch (SQLException | IOException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            LOGGER.error("SQL error occurred while retrieving prices from the database: {}", e.getMessage(), e);
+            throw new RuntimeException("Error retrieving prices from the database: " + e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error occurred: {}", e.getMessage(), e);
             throw new RuntimeException("Error retrieving prices from the database: " + e.getMessage(), e);
         }
 
         return prices;
     }
-
 }

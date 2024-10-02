@@ -1,11 +1,16 @@
 package com.homesharing.controller;
 
+import com.homesharing.dao.PreferenceDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.PreferenceDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Preference;
 import com.homesharing.model.User;
-import com.homesharing.service.UserProfileService;
-import com.homesharing.service.UserUpdateProfileService;
-import com.homesharing.service.impl.UserProfileServiceImpl;
-import com.homesharing.service.impl.UserUpdateProfileServiceImpl;
+import com.homesharing.service.PreferenceService;
+import com.homesharing.service.UserService;
+import com.homesharing.service.impl.PreferenceServiceImpl;
+import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.CookieUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -17,126 +22,157 @@ import jakarta.servlet.http.Part;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@MultipartConfig()
+/**
+ * Servlet for handling user profile update requests.
+ * Handles both GET and POST requests for retrieving and updating user profile and preferences.
+ */
+@MultipartConfig
 @WebServlet("/user-update-profile")
 public class UserUpdateProfileServlet extends HttpServlet {
 
-    private UserUpdateProfileService userUpdateProfileService;
-    private UserProfileService userProfileService;
-    private static final String UPLOAD_DIRECTORY = "assets/img/user_avatar";
+    // Declare service layer interfaces
+    private UserService userService;
+    private PreferenceService preferenceService;
 
+    private static final Logger LOGGER = Logger.getLogger(UserUpdateProfileServlet.class.getName());
+
+    /**
+     * Initializes services and DAOs used by the servlet.
+     */
     @Override
     public void init() throws ServletException {
-        this.userUpdateProfileService = new UserUpdateProfileServiceImpl();
-        this.userProfileService = new UserProfileServiceImpl();
+        UserDAO userDAO = new UserDAOImpl(); // Initialize UserDAO
+        PreferenceDAO preferenceDAO = new PreferenceDAOImpl(); // Initialize PreferenceDAO
+
+        // Initialize services with corresponding DAOs
+        this.userService = new UserServiceImpl(userDAO, null, null, null);
+        this.preferenceService = new PreferenceServiceImpl(preferenceDAO);
     }
 
+    /**
+     * Handles GET request to display the user update profile page.
+     *
+     * @param req  HttpServletRequest object
+     * @param resp HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an input or output error occurs
+     */
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Retrieve user information based on the user ID stored in cookies
+        String userId = CookieUtil.getCookie(req, "id");
 
-        User user = userProfileService.getUser(Integer.parseInt(Objects.requireNonNull(CookieUtil.getCookie(req, "id"))));
-        Preference preference = userProfileService.getPreference(Integer.parseInt(Objects.requireNonNull(CookieUtil.getCookie(req, "id"))));
+        if (userId != null) {
+            // Fetch user and preference data from the services
+            User user = userService.getUser(Integer.parseInt(Objects.requireNonNull(userId)));
+            Preference preference = preferenceService.getPreference(Integer.parseInt(userId));
 
-        req.setAttribute("user", user);
-        req.setAttribute("preference", preference);
+            // Set the retrieved data as request attributes for displaying on the JSP page
+            req.setAttribute("user", user);
+            req.setAttribute("preference", preference);
 
-        req.getRequestDispatcher("/user-update-profile.jsp").forward(req, resp);
-
+            // Forward the request to the user update profile JSP page
+            req.getRequestDispatcher("/user-update-profile.jsp").forward(req, resp);
+        } else {
+            // Redirect to login page if user ID is not found
+            LOGGER.warning("User ID cookie is missing. Redirecting to login page.");
+            resp.sendRedirect("login.jsp");
+        }
     }
 
+    /**
+     * Handles POST request to update user profile and preferences.
+     *
+     * @param req  HttpServletRequest object
+     * @param resp HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an input or output error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Retrieve user profile information from request parameters
         String firstName = req.getParameter("firstname");
         String lastName = req.getParameter("lastname");
-        String email = req.getParameter("email");
-        String phone = req.getParameter("phone");
-        String dob = req.getParameter("dob");
+        String address = req.getParameter("address");
+        String gender = req.getParameter("gender");
+        String dob = req.getParameter("dob"); // Optional field for date of birth
 
+        // Retrieve user preferences from request parameters
         String r_cleanliness = req.getParameter("cleanliness");
+        String cleanlinessStatus = req.getParameter("cleanlinessStatus");
         String r_smoking = req.getParameter("smoking");
+        String smokingStatus = req.getParameter("smokingStatus");
         String r_drinking = req.getParameter("drinking");
+        String drinkingStatus = req.getParameter("drinkingStatus");
         String r_interaction = req.getParameter("interaction");
+        String interactionStatus = req.getParameter("interactionStatus");
         String r_cooking = req.getParameter("cooking");
+        String cookingStatus = req.getParameter("cookingStatus");
         String r_pet = req.getParameter("pet");
-        String preference = req.getParameter("preference");
+        String petStatus = req.getParameter("petStatus");
 
+        // Handle avatar upload
         Part avatarPart = req.getPart("avatar");
         String avatarFileName = null;
 
         if (avatarPart != null && avatarPart.getSize() > 0) {
+            // Extract the avatar file name and save the file to the specified upload directory
             avatarFileName = Path.of(avatarPart.getSubmittedFileName()).getFileName().toString();
             String uploadDir = "D:\\Java\\HomeSharingWebsite\\src\\main\\webapp\\assets\\img\\user-avatar";
             avatarPart.write(uploadDir + File.separator + avatarFileName);
 
-            avatarFileName = "user-avatar" + "/" + avatarFileName;
+            // Update the file path to be saved in the database
+            avatarFileName = "user-avatar/" + avatarFileName;
         }
 
+        // Retrieve the user ID from the cookies
         String userId = CookieUtil.getCookie(req, "id");
 
         if (userId != null) {
             try {
-                User user = new User();
-                user.setId(Integer.parseInt(userId));
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setEmail(email);
-                user.setPhoneNumber(phone);
-                user.setDob(LocalDate.parse(dob));
-
-
-                if (avatarFileName != null) {
-                    user.setAvatar(avatarFileName);
-                } else {
-                    user.setAvatar(userUpdateProfileService.getUserAvatar(Integer.parseInt(userId)));
-                }
-
-
-                int rowsUpdated = userUpdateProfileService.updateUserProfile(user);
+                // Call the service to update the user profile
+                int rowsUpdated = userService.updateUserProfile(userId, firstName, lastName, address, gender, dob, avatarFileName);
 
                 if (rowsUpdated > 0) {
+                    // If the user profile update is successful, update the user preferences
+                    try {
+                        int rowsUpdatedPref = preferenceService.updateUserPreference(
+                                r_cleanliness, cleanlinessStatus, r_smoking, smokingStatus,
+                                r_drinking, drinkingStatus, r_interaction, interactionStatus,
+                                r_cooking, cookingStatus, r_pet, petStatus, userId
+                        );
 
-                    Preference pref = new Preference();
-                    pref.setUserId(Integer.parseInt(userId));
-
-
-                    pref.setCleanliness(r_cleanliness != null ? Integer.parseInt(r_cleanliness) : 0); // Giá trị mặc định là 0 nếu null
-                    pref.setSmoking(r_smoking != null ? Integer.parseInt(r_smoking) : 0);
-                    pref.setDrinking(r_drinking != null ? Integer.parseInt(r_drinking) : 0);
-                    pref.setInteraction(r_interaction != null ? Integer.parseInt(r_interaction) : 0);
-                    pref.setCooking(r_cooking != null ? Integer.parseInt(r_cooking) : 0);
-                    pref.setPet(r_pet != null ? Integer.parseInt(r_pet) : 0);
-
-
-                    int rowsUpdatedPref = 0;
-                    if ("false".equals(preference)) {
-                        rowsUpdatedPref = userUpdateProfileService.insertUserPreference(pref);
-                    } else {
-                        rowsUpdatedPref = userUpdateProfileService.updateUserPreference(pref);
-                    }
-
-
-
-
-                    if (rowsUpdatedPref > 0) {
-                        resp.sendRedirect("user-profile");
-                    } else {
-                        req.setAttribute("errorMessage", "Không cập nhật được sở thích.");
-                        req.getRequestDispatcher("user-update-profile.jsp").forward(req, resp);
+                        if (rowsUpdatedPref > 0) {
+                            // If preferences are updated successfully, redirect to the profile page
+                            resp.sendRedirect("user-profile?message=Profile updated successfully!");
+                        } else {
+                            // If preferences update fails, display an error message
+                            LOGGER.warning("Failed to update user preferences.");
+                            req.getRequestDispatcher("user-profile?error=Unable to update preferences.").forward(req, resp);
+                        }
+                    } catch (GeneralException e) {
+                        LOGGER.log(Level.SEVERE, "Error updating user preferences.", e);
+                        req.getRequestDispatcher("user-profile?error=Unable to update preferences.").forward(req, resp);
                     }
 
                 } else {
-                    req.setAttribute("errorMessage", "Không có thay đổi nào được thực hiện.");
-                    req.getRequestDispatcher("user-update-profile.jsp").forward(req, resp);
+                    // If no rows are updated in the user profile, display an appropriate message
+                    LOGGER.warning("No rows updated for user profile.");
+                    req.getRequestDispatcher("user-profile?error=Unable to update profile.").forward(req, resp);
                 }
             } catch (NumberFormatException e) {
+                // Handle invalid user ID errors
+                LOGGER.log(Level.SEVERE, "Invalid user ID: " + userId, e);
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID");
             }
         } else {
+            // Redirect to the login page if the user is not authenticated
+            LOGGER.warning("User ID cookie is missing. Redirecting to login page.");
             resp.sendRedirect("login.jsp");
         }
     }

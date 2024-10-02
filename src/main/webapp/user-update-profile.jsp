@@ -60,7 +60,7 @@
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1 profiel-container">
 
-                <form action="user-update-profile" method="post" enctype="multipart/form-data">
+                <form id="preferenceForm" action="user-update-profile" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="profiel-header">
                         <h3>
                             <b>Thông tin của bạn</b>
@@ -99,19 +99,24 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Email</label>
-                                <input name="email" type="email" class="form-control" value="${requestScope.user.email}">
+                                <label>Địa chỉ</label>
+                                <input name="address" type="text" class="form-control" value="${requestScope.user.address}">
                             </div>
 
-                            <div class="form-group">
-                                <label>SĐT</label>
-                                <input name="phone" type="tel" class="form-control" value="${requestScope.user.phoneNumber}">
-                            </div>
+
                         </div>
                         <div class="col-sm-3 padding-top-25">
                             <div class="form-group">
                                 <label>Ngày sinh</label>
                                 <input name="dob" type="date" class="form-control" value="${requestScope.user.dob}">
+                            </div>
+                            <div class="form-group">
+                                <label>Giới tính</label>
+                                <select name="gender" class="form-control">
+                                    <option value="Nam" ${requestScope.user.gender == 'Nam' ? 'selected' : ''}>Nam</option>
+                                    <option value="Nữ" ${requestScope.user.gender == 'Nữ' ? 'selected' : ''}>Nữ</option>
+                                    <option value="Khác" ${requestScope.user.gender == 'Khác' ? 'selected' : ''}>Khác</option>
+                                </select>
                             </div>
                         </div>
 
@@ -125,19 +130,22 @@
                             <div class="form-group">
                                 <label>Sạch sẽ</label>
                                 <div class="slider-container">
-                                    <input name="cleanliness" type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cleanliness};">
+                                    <input id="cleanliness-slider" name="cleanliness" type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness != 100 ? requestScope.preference.cleanliness : ''}" class="slider" style="--value: ${requestScope.preference.cleanliness != 100 ? requestScope.preference.cleanliness : ''};">
+                                    <input type="hidden" id="cleanlinessStatus" name="cleanlinessStatus" value="${requestScope.preference.cleanliness != 100 ? 'true' : 'false'}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Hút thuốc</label>
                                 <div class="slider-container">
-                                    <input name="smoking" type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.smoking};">
+                                    <input id="smoking-slider" name="smoking" type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking != 100 ? requestScope.preference.smoking : ''}" class="slider"  style="--value: ${requestScope.preference.smoking != 100 ? requestScope.preference.smoking : ''};">
+                                    <input type="hidden" id="smokingStatus" name="smokingStatus" value="${requestScope.preference.smoking != 100 ? 'true' : 'false'}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Uống rượu/bia</label>
                                 <div class="slider-container">
-                                    <input name="drinking" type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.drinking};">
+                                    <input id="drinking-slider" name="drinking" type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking != 100 ? requestScope.preference.drinking : ''}" class="slider"  style="--value: ${requestScope.preference.drinking != 100 ? requestScope.preference.drinking : ''};">
+                                    <input type="hidden" id="drinkingStatus" name="drinkingStatus" value="${requestScope.preference.drinking != 100 ? 'true' : 'false'}">
                                 </div>
                             </div>
                         </div>
@@ -145,19 +153,22 @@
                             <div class="form-group">
                                 <label>Hướng ngoại</label>
                                 <div class="slider-container">
-                                    <input name="interaction" type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.interaction};">
+                                    <input id="interaction-slider" name="interaction" type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction != 100 ? requestScope.preference.interaction : ''}" class="slider" style="--value: ${requestScope.preference.interaction != 100 ? requestScope.preference.interaction : ''};">
+                                    <input type="hidden" id="interactionStatus" name="interactionStatus" value="${requestScope.preference.interaction != 100 ? 'true' : 'false'}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Nấu ăn</label>
                                 <div class="slider-container">
-                                    <input name="cooking"d type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cooking};">
+                                    <input id="cooking-slider" name="cooking" type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking != 100 ? requestScope.preference.cooking : ''}" class="slider"  style="--value: ${requestScope.preference.cooking != 100 ? requestScope.preference.cooking : ''};">
+                                    <input type="hidden" id="cookingStatus" name="cookingStatus" value="${requestScope.preference.cooking != 100 ? 'true' : 'false'}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Thú cưng</label>
                                 <div class="slider-container">
-                                    <input name="pet" type="range" min="1" max="5" step="1" value="${requestScope.preference.pet}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.pet};">
+                                    <input id="pet-slider" name="pet" type="range" min="1" max="5" step="1" value="${requestScope.preference.pet != 100 ? requestScope.preference.pet : ''}" class="slider"  style="--value: ${requestScope.preference.pet != 100 ? requestScope.preference.pet : ''};">
+                                    <input type="hidden" id="petStatus" name="petStatus" value="${requestScope.preference.pet != 100 ? 'true' : 'false'}">
                                 </div>
                             </div>
 
@@ -199,6 +210,58 @@
             reader.readAsDataURL(input.files[0]);
         }
     });
+    document.getElementById('cleanliness-slider').addEventListener('input', function() {
+        document.getElementById('cleanlinessStatus').value = 'true';
+    });
+    document.getElementById('smoking-slider').addEventListener('input', function() {
+        document.getElementById('smokingStatus').value = 'true';
+    });
+    document.getElementById('drinking-slider').addEventListener('input', function() {
+        document.getElementById('drinkingStatus').value = 'true';
+    });
+    document.getElementById('interaction-slider').addEventListener('input', function() {
+        document.getElementById('interactionStatus').value = 'true';
+    });
+    document.getElementById('cooking-slider').addEventListener('input', function() {
+        document.getElementById('cookingStatus').value = 'true';
+    });
+    document.getElementById('pet-slider').addEventListener('input', function() {
+        document.getElementById('petStatus').value = 'true';
+    });
+    function validateForm() {
+        const form = document.forms["preferenceForm"];
+        const firstName = form["firstname"].value.trim();
+        const lastName = form["lastname"].value.trim();
+        const address = form["address"].value.trim();
+        const dob = new Date(form["dob"].value);
+        const today = new Date();
+
+        // Check if first name exceeds max length
+        if (firstName.length > 50) {
+            alert("Họ không được vượt quá 50 ký tự");
+            return false;
+        }
+
+        // Check if last name exceeds max length
+        if (lastName.length > 50) {
+            alert("Tên không được vượt quá 50 ký tự");
+            return false;
+        }
+
+        // Check if address exceeds max length
+        if (address.length > 100) {
+            alert("Địa chỉ không được vượt quá 100 ký tự");
+            return false;
+        }
+        // Check if date of birth is not in the future
+        if (dob > today) {
+            alert("Ngày sinh không được trong tương lai");
+            return false;
+        }
+
+        // All checks passed
+        return true;
+    }
 </script>
 </body>
 </html>

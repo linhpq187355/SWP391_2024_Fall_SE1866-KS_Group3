@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
         TokenDAO tokenDao = new TokenDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
-        userService = new UserServiceImpl(userDao, tokenDao, tokenService);
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);
     }
 
     @Override

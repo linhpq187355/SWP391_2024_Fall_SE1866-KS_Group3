@@ -1,11 +1,15 @@
 package com.homesharing.controller;
 
+import com.homesharing.dao.PreferenceDAO;
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.service.PreferenceService;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
+import com.homesharing.service.impl.PreferenceServiceImpl;
 import com.homesharing.service.impl.TokenServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.ServletUtils;
@@ -34,9 +38,11 @@ public class SignUpServlet extends HttpServlet {
         // Create instances of UserDao and TokenDao
         UserDAO userDao = new UserDAOImpl();
         TokenDAO tokenDao = new TokenDAOImpl();
+        PreferenceDAO preferenceDao = new PreferenceDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
+        PreferenceService preferenceService = new PreferenceServiceImpl(preferenceDao);
         // Inject UserDao into UserServiceImpl
-        userService = new UserServiceImpl(userDao, tokenDao, tokenService);
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService,preferenceService);
     }
 
     /**

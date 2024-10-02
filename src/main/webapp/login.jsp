@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="text-end">
-                                                <a href="forgot-password.jsp" class="link-secondary text-decoration-none">Quên mật khẩu?</a>
+                                                <a href="forgot-password" class="link-secondary text-decoration-none">Quên mật khẩu?</a>
                                             </div>
                                         </div>
                                     </div>

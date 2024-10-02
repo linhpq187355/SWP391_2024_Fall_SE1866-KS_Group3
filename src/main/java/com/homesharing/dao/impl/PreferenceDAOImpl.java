@@ -4,114 +4,148 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.PreferenceDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Preference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * Implementation of the PreferenceDAO interface for managing user preferences.
+ */
 public class PreferenceDAOImpl implements PreferenceDAO {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PreferenceDAOImpl.class);
+
+    /**
+     * Retrieves the preferences for a specific user based on their user ID.
+     *
+     * @param userId the ID of the user whose preferences are to be retrieved
+     * @return the Preference object containing the user's preferences, or null if not found
+     */
     @Override
     public Preference getPreference(int userId) {
-        String sql = "select * from Preferences where user_id = ?";
+        String sql = "SELECT * FROM Preferences WHERE user_id = ?";
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            // Set the email parameter for the prepared statement
+            // Set the user ID parameter for the prepared statement
             preparedStatement.setInt(1, userId);
 
-            // Execute the query to check for email existence
+            // Execute the query to retrieve user preferences
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
+                if (resultSet.next()) {
                     Preference preference = new Preference();
-                    preference.setCleanliness(resultSet.getInt("cleanliness"));
-                    preference.setDrinking(resultSet.getInt("drinking"));
-                    preference.setSmoking(resultSet.getInt("smoking"));
-                    preference.setInteraction(resultSet.getInt("interaction"));
-                    preference.setCooking(resultSet.getInt("cooking"));
-                    preference.setPet(resultSet.getInt("pet"));
+                    preference.setCleanliness(resultSet.getObject("cleanliness", Integer.class) != null
+                            ? resultSet.getInt("cleanliness") : 100);
+                    preference.setDrinking(resultSet.getObject("drinking", Integer.class) != null
+                            ? resultSet.getInt("drinking") : 100);
+                    preference.setSmoking(resultSet.getObject("smoking", Integer.class) != null
+                            ? resultSet.getInt("smoking") : 100);
+                    preference.setInteraction(resultSet.getObject("interaction", Integer.class) != null
+                            ? resultSet.getInt("interaction") : 100);
+                    preference.setCooking(resultSet.getObject("cooking", Integer.class) != null
+                            ? resultSet.getInt("cooking") : 100);
+                    preference.setPet(resultSet.getObject("pet", Integer.class) != null
+                            ? resultSet.getInt("pet") : 100);
                     return preference;
                 }
             }
 
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            // Re-throw exceptions as runtime to be handled by the service layer
-            throw new RuntimeException("Error user existence in the database", e);
+        } catch (SQLException e) {
+            LOGGER.error("SQL error occurred while retrieving user preferences for userId {}: {}", userId, e.getMessage());
+            throw new RuntimeException("Error retrieving user preferences from the database", e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error occurred: {}", e.getMessage(), e);
+            throw new RuntimeException("Error retrieving user preferences from the database", e);
         }
         return null;
     }
 
+    /**
+     * Updates the preferences for a user in the database.
+     *
+     * @param preferences a map of preference names and their corresponding values
+     * @return the number of rows updated in the database
+     */
     @Override
-    public int updatePreference(Preference preference) {
+    public int updatePreference(Map<String, Integer> preferences) {
+        if (preferences == null || !preferences.containsKey("user_id")) {
+            LOGGER.warn("Preferences map is null or does not contain user_id. No updates will be made.");
+            return 0;
+        }
+
         int rowsUpdated = 0;
-        String sql = "UPDATE [dbo].[Preferences]\n" +
-                "   SET [cleanliness] = ?\n" +
-                "      ,[smoking] = ?\n" +
-                "      ,[drinking] = ?\n" +
-                "      ,[interaction] = ?\n" +
-                "      ,[cooking] = ?\n" +
-                "      ,[pet] = ?\n" +
-                " WHERE [user_id] = ?";
+        StringBuilder sql = new StringBuilder("UPDATE [dbo].[Preferences] SET ");
+        List<Integer> values = new ArrayList<>();
+
+        // Build SQL query and collect values
+        for (Map.Entry<String, Integer> entry : preferences.entrySet()) {
+            sql.append(entry.getKey()).append(" = ?, ");
+            values.add(entry.getValue());
+        }
+
+        // Remove the last comma and space
+        if (sql.length() > 0) {
+            sql.setLength(sql.length() - 2);
+        }
+
+        sql.append(" WHERE user_id = ?");
+        values.add(preferences.get("user_id")); // Add the user_id at the end
 
         try (Connection connection = DBContext.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(sql.toString())) {
 
+            // Set the parameters in the PreparedStatement
+            for (int i = 0; i < values.size(); i++) {
+                statement.setInt(i + 1, values.get(i));
+            }
 
-            statement.setInt(1, preference.getCleanliness());
-            statement.setInt(2, preference.getSmoking());
-            statement.setInt(3, preference.getDrinking());
-            statement.setInt(4, preference.getInteraction());
-            statement.setInt(5, preference.getCooking());
-            statement.setInt(6, preference.getPet());
-            statement.setInt(7, preference.getUserId());
-
+            // Execute the update and get the number of rows updated
             rowsUpdated = statement.executeUpdate();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error update user profile: " + e.getMessage(), e);
+        } catch (SQLException e) {
+            LOGGER.error("SQL error occurred while updating user preferences: {}", e.getMessage());
+            throw new GeneralException("Error updating user preferences: " + e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error occurred: {}", e.getMessage());
+            throw new GeneralException("Error updating user preferences: " + e.getMessage(), e);
         }
         return rowsUpdated;
     }
 
+    /**
+     * Inserts a new preference record for a user in the database.
+     *
+     * @param userId the ID of the user for whom preferences are being created
+     * @return the number of rows affected by the insert operation
+     */
     @Override
-    public int insertPreference(Preference preference) {
-        String sql = "INSERT INTO [dbo].[Preferences]\n" +
-                "           ([cleanliness]\n" +
-                "           ,[smoking]\n" +
-                "           ,[drinking]\n" +
-                "           ,[interaction]\n" +
-                "           ,[cooking]\n" +
-                "           ,[pet]\n" +
-                "           ,[user_id])\n" +
-                "     VALUES\n" +
-                "           (?,?,?,?,?,?,?)";
+    public int insertPreference(int userId) {
+        String sql = "INSERT INTO [dbo].[Preferences] ([user_id]) VALUES (?)";
         int affectedRows = 0;
 
         // Using try-with-resources to ensure automatic resource management
         try (Connection connection = DBContext.getConnection();
-             // Create PreparedStatement with RETURN_GENERATED_KEYS to get the inserted ID
              PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            // Set parameters for the prepared statement based on the user's information
-            preparedStatement.setInt(1, preference.getCleanliness());
-            preparedStatement.setInt(2, preference.getSmoking());
-            preparedStatement.setInt(3, preference.getDrinking());
-            preparedStatement.setInt(4, preference.getInteraction());
-            preparedStatement.setInt(5, preference.getCooking());
-            preparedStatement.setInt(6, preference.getPet());
-            preparedStatement.setInt(7, preference.getUserId());
+            // Set parameters for the prepared statement
+            preparedStatement.setInt(1, userId);
             // Execute the update to insert the user into the database
             affectedRows = preparedStatement.executeUpdate();
 
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            // Re-throw exceptions as runtime to be handled by the service layer
+        } catch (SQLException e) {
+            LOGGER.error("SQL error occurred while inserting preferences for userId {}: {}", userId, e.getMessage());
+            throw new RuntimeException("Error saving preferences to the database: " + e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error occurred: {}", e.getMessage());
             throw new RuntimeException("Error saving preferences to the database: " + e.getMessage(), e);
         }
         return affectedRows;
     }
-
 
 
 }
