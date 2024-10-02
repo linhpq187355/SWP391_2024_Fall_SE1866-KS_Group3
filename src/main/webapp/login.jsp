@@ -90,13 +90,13 @@
                                     <div class="form-group">
                                         <label for="email">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" placeholder="ten@example.com"
-                                               value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" required>
+                                               value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" required maxlength="100">
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="form-group position-relative">
                                         <label for="password">Mật khẩu</label>
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu" required>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu" required minlength="8" maxlength="50">
                                         <button type="button" class="btn btn-link position-absolute toggle-password" onclick="togglePassword('password')">
                                             <i class="bi bi-eye"></i>
                                         </button>

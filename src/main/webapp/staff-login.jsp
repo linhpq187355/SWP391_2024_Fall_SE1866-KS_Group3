@@ -43,11 +43,11 @@
             <div class="mb-4 relative">
                 <label class="absolute -top-3 left-3 bg-white px-1 text-gray-700 text-sm font-bold" for="email">Email</label>
                 <input name="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email"
-                       value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" required>
+                       value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" required maxlength="100">
             </div>
             <div class="mb-6 relative">
                 <label class="absolute -top-3 left-3 bg-white px-1 text-gray-700 text-sm font-bold" for="password">Password</label>
-                <input name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" required>
+                <input name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" required minlength="8" maxlength="50">
                 <i id="eye-icon" class="fas fa-eye absolute right-3 top-3 text-gray-500 cursor-pointer" onclick="togglePasswordVisibility()"></i>
             </div>
             <div class="flex items-center justify-between">
