@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * Utility class for handling common servlet operations.
+ * This class cannot be instantiated.
+ */
 public class ServletUtils {
 
     // Private constructor to prevent instantiation
@@ -17,17 +21,14 @@ public class ServletUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
     private static final String ERROR_PAGE = "/404.jsp";
-    private static final String REDIRECT_ERROR_MESSAGE = "Error redirecting to home page.";
     private static final String FORWARD_ERROR_MESSAGE = "Error forwarding to error page.";
 
-    public static void redirectToHomePage(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            resp.sendRedirect(req.getContextPath() + "/home.jsp");
-        } catch (IOException e) {
-            handleError(resp, REDIRECT_ERROR_MESSAGE);
-        }
-    }
-
+    /**
+     * Forwards the request to the error page.
+     *
+     * @param req the HttpServletRequest object that contains the request
+     * @param resp the HttpServletResponse object for the response
+     */
     public static void forwardToErrorPage(HttpServletRequest req, HttpServletResponse resp) {
         try {
             req.getRequestDispatcher(ERROR_PAGE).forward(req, resp);
@@ -36,6 +37,12 @@ public class ServletUtils {
         }
     }
 
+    /**
+     * Sends an error response to the client with the specified message.
+     *
+     * @param resp the HttpServletResponse object for the response
+     * @param message the error message to be sent
+     */
     public static void handleError(HttpServletResponse resp, String message) {
         try {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);

@@ -19,11 +19,23 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * LogoutServlet handles user logout requests by interacting with the
+ * UserService to perform logout operations. It processes the logout action
+ * and redirects the user to the home page.
+ *
+ * @version 1.0
+ * @since 2024-10-02
+ */
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
     private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class); // Logger instance
 
+    /**
+     * Initializes the LogoutServlet by creating instances of necessary services.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
@@ -34,6 +46,18 @@ public class LogoutServlet extends HttpServlet {
         userService = new UserServiceImpl(userDao, tokenDao, tokenService);
     }
 
+    /**
+     * Handles GET requests for the logout action. This method calls the
+     * UserService to log out the user, logs the logout action, and redirects
+     * the user to the home page with a success message.
+     *
+     * @param req  HttpServletRequest object that contains the request
+     *             the client has made of the servlet
+     * @param resp HttpServletResponse object that contains the response
+     *             the servlet sends to the client
+     * @throws ServletException If an input or output error occurs
+     * @throws IOException      If the request could not be handled
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {

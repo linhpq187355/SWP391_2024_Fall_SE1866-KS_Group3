@@ -10,18 +10,32 @@ import com.homesharing.util.SendingEmail;
 import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.time.LocalDateTime;
 
+/**
+ * Implementation of the TokenService interface that handles email verification token-related logic.
+ */
 public class TokenServiceImpl implements TokenService {
 
     private final TokenDAO tokenDao;
     private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
+    /**
+     * Constructor that initializes the TokenDAO.
+     *
+     * @param tokenDao The data access object used for token operations.
+     */
     public TokenServiceImpl(TokenDAO tokenDao) {
         this.tokenDao = tokenDao;
     }
 
+    /**
+     * Checks if a given token is valid and updates the verification status if necessary.
+     *
+     * @param tokenCode The token code provided by the user.
+     * @param userID    The ID of the user whose token is being checked.
+     * @return True if the token is valid, false otherwise.
+     */
     @Override
     public boolean checkToken(String tokenCode, int userID) {
         try {
@@ -54,8 +68,14 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
+    /**
+     * Sends a verification email to the user with a token link.
+     *
+     * @param email  The user's email address.
+     * @param userId The ID of the user receiving the email.
+     */
     @Override
-    public boolean sendToken(String email, int userId) {
+    public void sendToken(String email, int userId) {
         Token oldToken = tokenDao.findToken(userId);
         String tokenCode;
         LocalDateTime requestedTime;
@@ -72,15 +92,27 @@ public class TokenServiceImpl implements TokenService {
         }
         // Get base URL from properties
         String baseUrl = Config.getBaseUrl();
-        String subject = "Xác nhận email";
-        String content = "Click vào link sau để xác thực email: "
-                + baseUrl + "/verify?code=" + tokenCode
-                + "&userId=" + userId;
+        String subject = "Xac nhan email!!!";
+        String content = "<!DOCTYPE html>"
+                + "<html>"
+                + "<head><meta charset='UTF-8'></head>"
+                + "<body>"
+                + "<h2>Xác nhận email</h2>"
+                + "<p>Xin chào,</p>"
+                + "<p>Vui lòng nhấn vào nút bên dưới để xác thực email của bạn:</p>"
+                + "<a href='" + baseUrl + "/verify?code=" + tokenCode + "&userId=" + userId + "' "
+                + "style='text-decoration: none;'>"
+                + "<button style='padding: 10px 20px; background-color: blue; color: white; border: none;'>"
+                + "Xác thực Email"
+                + "</button>"
+                + "</a>"
+                + "<p>Trân trọng,<br>Đội ngũ hỗ trợ</p>"
+                + "</body>"
+                + "</html>";
         try {
             SendingEmail.sendMail(email, subject, content);
         } catch (MessagingException e) {
             throw new GeneralException("Error while sending email");
         }
-        return true;
     }
 }

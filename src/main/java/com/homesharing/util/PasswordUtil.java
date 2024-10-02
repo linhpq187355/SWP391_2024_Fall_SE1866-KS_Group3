@@ -5,6 +5,10 @@ import com.homesharing.exception.GeneralException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
+/**
+ * Utility class for password hashing and management.
+ */
 public class PasswordUtil {
 
     // Private constructor to prevent instantiation
@@ -12,6 +16,12 @@ public class PasswordUtil {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
+    /**
+     * Hashes the provided password using SHA-256 with a random salt.
+     *
+     * @param password The password to hash.
+     * @return A string containing the salt and the hashed password, separated by a colon.
+     */
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

@@ -128,10 +128,10 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-lg-5">
-                        <a href="#!" class="btn btn-lg btn-danger btn-block">
-                            <i class="glyphicon glyphicon-log-in"></i>
-                            <span>Đăng nhập bằng Google</span>
-                        </a>
+<%--                        <a href="#!" class="btn btn-lg btn-danger btn-block">--%>
+<%--                            <i class="glyphicon glyphicon-log-in"></i>--%>
+<%--                            <span>Đăng nhập bằng Google</span>--%>
+<%--                        </a>--%>
                         <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">
                             <i class="glyphicon glyphicon-user"></i>
                             <span>Bạn là nhân viên?</span>

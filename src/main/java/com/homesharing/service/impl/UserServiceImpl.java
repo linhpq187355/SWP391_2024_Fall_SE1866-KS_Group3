@@ -68,9 +68,9 @@ public class UserServiceImpl implements UserService {
             // Determine role value based on input role
             int roleValue;
             if ("findRoommate".equals(role)) {
-                roleValue = 4;
-            } else if ("postRoom".equals(role)) {
                 roleValue = 3;
+            } else if ("postRoom".equals(role)) {
+                roleValue = 4;
             } else {
                 return "Invalid role: " + role;
             }
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
      * @return a message indicating the result of the login attempt, either success or an error message
      */
     @Override
-    public String loginStaff(String email, String password, HttpServletResponse response) {
+    public String loginStaff(String email, String password, HttpServletResponse response){
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 

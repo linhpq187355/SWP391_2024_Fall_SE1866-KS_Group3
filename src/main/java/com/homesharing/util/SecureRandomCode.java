@@ -2,6 +2,9 @@ package com.homesharing.util;
 
 import java.security.SecureRandom;
 
+/**
+ * Utility class for generating secure random verification codes.
+ */
 public class SecureRandomCode {
 
     // Private constructor to prevent instantiation
@@ -9,11 +12,21 @@ public class SecureRandomCode {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
-    // Valid characters for generating the code
+    /**
+     * Valid characters for generating the verification code.
+     */
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    /**
+     * Length of the verification code.
+     */
     private static final int CODE_LENGTH = 6; // Length of the verification code
 
-    // Method to generate a verification code and return it as a string
+    /**
+     * Generates a secure random verification code.
+     *
+     * @return a randomly generated verification code as a string
+     */
     public static String generateCode() {
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder code = new StringBuilder(CODE_LENGTH);
