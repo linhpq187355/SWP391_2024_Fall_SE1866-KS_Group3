@@ -12,8 +12,10 @@ public interface SubmissionFormService {
     List<Amentity> getAmentities();
     List<FireEquipment> getFireEquipments();
     List<Ward> getWardByDistrict(int districtId);
-    List<District> getDistrictByWard(int wardId);
+    List<District> getDistrictByProvince(int provinceId);
     int saveHome(Home home);
+    int savePrice(Price price);
     int saveHomeImages(HomeImage homeImage);
     int saveAmentityHome(AmentityHome amentityHome);
+    int saveFireEquipHome(FireEquipmentsHome fireEquipmentsHome);
 }

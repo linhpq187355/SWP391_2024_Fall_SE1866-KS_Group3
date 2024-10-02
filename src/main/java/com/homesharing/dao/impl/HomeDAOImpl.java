@@ -2,7 +2,7 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.HomeDAO;
-                                                                                                                                        import com.homesharing.exception.GeneralException;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
 
 import java.io.IOException;
@@ -10,16 +10,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeDAOImpl implements HomeDAO {
     private List<Home> homes = new ArrayList<>();
 
     @Override
     public List<Home> getAllHomes() {
-        String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [wardId], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
+        String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -81,7 +82,7 @@ public class HomeDAOImpl implements HomeDAO {
         String sql = "SELECT [id], [name], [status] FROM [dbo].[Provinces] WHERE [id]=?";
 
         try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -116,20 +117,20 @@ public class HomeDAOImpl implements HomeDAO {
 
     @Override
     public int saveHome(Home home) {
-        String sql = "INSERT INTO Homes (name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardId, homeTypeId, createdBy) " +
+        String sql = "INSERT INTO Homes (name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, homeTypeId, createdBy, wardsId) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Using try-with-resources to manage the database connection and resources
         try (Connection connection = DBContext.getConnection();
              // PreparedStatement with RETURN_GENERATED_KEYS to capture the inserted Home ID
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             // Setting parameters for the PreparedStatement using the Home object
-            preparedStatement.setString(1, home.getName());
-            preparedStatement.setString(2, home.getAddress());
+            preparedStatement.setString(1, home.getName().trim());
+            preparedStatement.setString(2, home.getAddress().trim());
             preparedStatement.setBigDecimal(3, home.getLongitude());
             preparedStatement.setBigDecimal(4, home.getLatitude());
-            preparedStatement.setString(5, home.getOrientation());
+            preparedStatement.setString(5, home.getOrientation().trim());
             preparedStatement.setBigDecimal(6, home.getArea());
             preparedStatement.setInt(7, home.getLeaseDuration());
             preparedStatement.setTimestamp(8, java.sql.Timestamp.valueOf(home.getMoveInDate()));
@@ -137,11 +138,11 @@ public class HomeDAOImpl implements HomeDAO {
             preparedStatement.setInt(10, home.getNumOfBath());
             preparedStatement.setTimestamp(11, java.sql.Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setTimestamp(12, home.getModifiedDate() != null ? java.sql.Timestamp.valueOf(LocalDateTime.now()) : null);
-            preparedStatement.setString(13, home.getHomeDescription());
-            preparedStatement.setString(14, home.getTenantDescription());
-            preparedStatement.setInt(15, home.getWardId());
-            preparedStatement.setInt(16, home.getHomeTypeId());
-            preparedStatement.setInt(17, home.getCreatedBy());
+            preparedStatement.setString(13, home.getHomeDescription().trim());
+            preparedStatement.setString(14, home.getTenantDescription().trim());
+            preparedStatement.setInt(15, home.getHomeTypeId());
+            preparedStatement.setInt(16, home.getCreatedBy());
+            preparedStatement.setInt(17, home.getWardId());
 
             // Execute the insert statement and capture affected rows
             int affectedRows = preparedStatement.executeUpdate();

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PriceDAO {
     List<Price> getPrice(List<Home> homes);
+    int savePrice(Price price);
 }

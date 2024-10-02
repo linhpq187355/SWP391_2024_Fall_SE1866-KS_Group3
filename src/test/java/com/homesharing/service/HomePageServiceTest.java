@@ -27,12 +27,11 @@ class HomePageServiceTest {
 
     @ParameterizedTest
     @CsvSource({
-            "1,Test Home,123 Test St,1.23,4.56,North,100.5,12,2023-06-01T10:00,2,1,2023-05-31T09:00,2023-05-31T09:00,Nice home,Good tenants,1,1,1,1",
-            "2,Another Home,456 Sample Ave,7.89,10.11,South,150.75,24,2023-07-01T11:00,3,2,2023-06-15T14:00,2023-06-15T14:00,Spacious home,Quiet tenants,2,2,2,2"
+            "Test Home,123 Test St,1.23,4.56,North,100.5,12,2023-06-01T10:00,2,1,2023-05-31T09:00,2023-05-31T09:00,Nice home,Good tenants,1,1",
+            "Another Home,456 Sample Ave,7.89,10.11,South,150.75,24,2023-07-01T11:00,3,2,2023-06-15T14:00,2023-06-15T14:00,Spacious home,Quiet tenants,2,1"
     })
-    void testAddHome(String id, String name, String address, String longitude, String latitude, String orientation, String area, String leaseDuration, String moveInDate, String numOfBedRoom, String numOfBath, String createdDate, String modifiedDate, String homeDescription, String tenantDescription, String wardId, String homeTypeId, String createdBy, String priceId) {
+    void testAddHome(String name, String address, String longitude, String latitude, String orientation, String area, String leaseDuration, String moveInDate, String numOfBedRoom, String numOfBath, String createdDate, String modifiedDate, String homeDescription, String tenantDescription, String homeTypeId, String createdBy) {
         Home home = new Home();
-        home.setId(Integer.parseInt(id));
         home.setName(name);
         home.setAddress(address);
         home.setLongitude(new BigDecimal(longitude));
@@ -47,10 +46,9 @@ class HomePageServiceTest {
         home.setModifiedDate(LocalDateTime.parse(modifiedDate));
         home.setHomeDescription(homeDescription);
         home.setTenantDescription(tenantDescription);
-        home.setWardId(Integer.parseInt(wardId));
         home.setHomeTypeId(Integer.parseInt(homeTypeId));
         home.setCreatedBy(Integer.parseInt(createdBy));
-        home.setPriceId(Integer.parseInt(priceId));
+        //home.setPriceId(Integer.parseInt(priceId));
 
         int initialHomeCount = homePageService.getHomes().size();
 

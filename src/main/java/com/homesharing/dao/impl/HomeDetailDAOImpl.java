@@ -139,11 +139,9 @@ public User getCreatorByHomeId(int homeId) {
                 homeType.setStatus(resultSet.getString("status"));
                 homeTypes.add(homeType);
             }
-
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error retrieving home types from the database: " + e.getMessage(), e);
         }
-
         return homeTypes;
     }
 

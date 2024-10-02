@@ -27,6 +27,7 @@
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link href="assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
     <link href="assets/fonts/icon-7-stroke/css/helper.css" rel="stylesheet">
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link href="css/animate.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="assets/css/upload-img.css">
@@ -39,6 +40,8 @@
     <link rel="stylesheet" href="assets/css/wizard.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <link href="assets/dist/imageuploadify.min.css" rel="stylesheet">
+    <br type="_moz">
     <style>
         #map {
             width: 100%;
@@ -50,6 +53,14 @@
         label {
             color: darkgrey;
         }
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -58,6 +69,8 @@
     <div id="status">&nbsp;</div>
 </div>
 <!-- Body content -->
+
+<jsp:include page="header-demo.jsp"/>
 
 <div class="page-head">
     <div class="container">
@@ -76,7 +89,7 @@
         <div class="clearfix">
             <div class="wizard-container">
                 <div class="wizard-card ct-wizard-orange" id="wizardProperty">
-                    <form action="submit-home" method="post">
+                    <form action="submit-home" method="post" enctype="multipart/form-data">
                         <ul>
                             <li><a href="#step1" data-toggle="tab">Bước 1 </a></li>
                             <li><a href="#step2" data-toggle="tab">Bước 2 </a></li>
@@ -92,7 +105,8 @@
                                         <div class="form-group">
                                             <label>Loại hình nhà ở <small>(*)</small></label><br>
                                             <select name="home-type" id="home-type" class="form-control"
-                                                    aria-label="VD nhà nguyên căn" required>
+                                                    required>
+                                                <option value="" selected>Chọn loại hình nhà ở</option>
                                                 <c:forEach var="hometype" items="${homeTypes}">
                                                     <option value="${hometype.id}">${hometype.name}</option>
                                                 </c:forEach>
@@ -106,7 +120,7 @@
                                         </div>
                                     </div>
                                     <div style="margin-left: 15px;">
-                                        <select class="form-select form-select-sm mb-3" id="province"
+                                        <select class="form-select form-select-sm mb-3" name="province" id="province"
                                                 aria-label=".form-select-sm">
                                             <option value="" selected>Chọn tỉnh thành</option>
                                             <c:forEach var="province" items="${provinces}">
@@ -114,12 +128,12 @@
                                             </c:forEach>
                                         </select>
 
-                                        <select class="form-select form-select-sm mb-3" id="district"
+                                        <select class="form-select form-select-sm mb-3" name="district" id="district"
                                                 aria-label=".form-select-sm">
                                             <option value="" selected>Chọn quận huyện</option>
                                         </select>
 
-                                        <select class="form-select form-select-sm" id="ward"
+                                        <select class="form-select form-select-sm" name="ward" id="ward"
                                                 aria-label=".form-select-sm">
                                             <option value="" selected>Chọn phường xã</option>
                                         </select>
@@ -134,7 +148,9 @@
                                         <div class="form-group">
                                             <label>Vui lòng chọn vị trí trên bản đồ</label>
                                             <div id="map"></div>
-                                            <div id="selected-location"></div>
+                                            <%--                                            <div id="selected-location"></div>--%>
+                                            <input type="hidden" name="latitude" id="latitude" value="">
+                                            <input type="hidden" name="longitude" id="longitude" value="">
                                         </div>
                                     </div>
                                 </div>
@@ -264,10 +280,10 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="container" style="margin-top: 30px;">
-                                            <label for="imageUpload">Chọn hình ảnh <small>(có thể chọn nhiều ảnh)</small></label>
-<%--                                            <input type="file" id="imageUpload" name="imageUpload" class="form-control"--%>
-<%--                                                   multiple accept="image/*">--%>
-                                                <input type="file" id="imageUpload" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+                                            <label for="imageUpload">Chọn hình ảnh <small>(có thể chọn nhiều
+                                                ảnh)</small></label>
+                                            <input type="file" id="imageUpload" name="images" accept="image/*" multiple>
+                                            <div id="imagePreview" class="mt-3"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -285,11 +301,10 @@
                                                 nhu cầu tìm kiếm roommate. Sử dụng website này đồng nghĩa với việc
                                                 bạn đồng ý tuân thủ các điều khoản và điều kiện của chúng tôi.
                                             </p>
-                                            <div class="checkbox">
+                                            <div>
                                                 <label>
-                                                    <input type="checkbox" required/> <strong>Tôi đồng ý các điều khoản
-                                                    và điều
-                                                    kiện.</strong>
+                                                    <input type="checkbox"/> <strong>Tôi đồng ý các điều khoản
+                                                    và điều kiện.</strong>
                                                 </label>
                                             </div>
                                         </div>
@@ -297,7 +312,6 @@
                                 </div>
                             </div>
                             <!--  End step 4 -->
-
                         </div>
 
                         <div class="wizard-footer">
@@ -320,6 +334,7 @@
     </div>
 </div>
 
+<jsp:include page="footer-demo.jsp"/>
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="assets/js//jquery-1.10.2.min.js"></script>
@@ -341,29 +356,9 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/js/map.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-<script type="text/javascript"
-        src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+<script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
 <script type="text/javascript" src="assets/dist/imageuploadify.min.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('input[type="file"]').imageuploadify();
-    })
-</script>
-<script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-36251023-1']);
-    _gaq.push(['_setDomainName', 'jqueryscript.net']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
-</script>
+<script src="assets/js/img-preview.js"></script>
 <script src="assets/js/submisson-form-validation.js"></script>
 </body>
 </html>

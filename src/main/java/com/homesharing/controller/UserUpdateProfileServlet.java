@@ -70,7 +70,11 @@ public class UserUpdateProfileServlet extends HttpServlet {
 
         if (avatarPart != null && avatarPart.getSize() > 0) {
             avatarFileName = Path.of(avatarPart.getSubmittedFileName()).getFileName().toString();
-            String uploadDir = "D:\\Java\\HomeSharingWebsite\\src\\main\\webapp\\assets\\img\\user-avatar";
+            String uploadDir = "src\\main\\webapp\\assets\\img\\user-avatar";
+            File uploadDirFile = new File(uploadDir);
+            if (!uploadDirFile.exists()) {
+                uploadDirFile.mkdirs();
+            }
             avatarPart.write(uploadDir + File.separator + avatarFileName);
 
             avatarFileName = "user-avatar" + "/" + avatarFileName;
