@@ -14,6 +14,6 @@ public interface SubmissionFormService {
     List<Ward> getWardByDistrict(int districtId);
     List<District> getDistrictByWard(int wardId);
     int saveHome(Home home);
-    int saveHomeImages(HomeImage homeImage);
+//    int saveHomeImages(HomeImage homeImage);
     int saveAmentityHome(AmentityHome amentityHome);
 }

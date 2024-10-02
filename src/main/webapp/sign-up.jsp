@@ -89,18 +89,18 @@
                         </form>
                         <hr>
                         <p class="text-center">Đã có tài khoản? <a href="login.jsp" class="text-primary">Đăng nhập</a></p>
-                        <p class="text-center">Hoặc đăng nhập với</p>
-                        <div class="text-center">
-                            <a href="#!" class="btn btn-default">
-                                <i class="glyphicon glyphicon-google"></i> Google
-                            </a>
-                            <a href="#!" class="btn btn-default">
-                                <i class="glyphicon glyphicon-facebook"></i> Facebook
-                            </a>
-                            <a href="#!" class="btn btn-default">
-                                <i class="glyphicon glyphicon-twitter"></i> Twitter
-                            </a>
-                        </div>
+<%--                        <p class="text-center">Hoặc đăng nhập với</p>--%>
+<%--                        <div class="text-center">--%>
+<%--                            <a href="#!" class="btn btn-default">--%>
+<%--                                <i class="glyphicon glyphicon-google"></i> Google--%>
+<%--                            </a>--%>
+<%--                            <a href="#!" class="btn btn-default">--%>
+<%--                                <i class="glyphicon glyphicon-facebook"></i> Facebook--%>
+<%--                            </a>--%>
+<%--                            <a href="#!" class="btn btn-default">--%>
+<%--                                <i class="glyphicon glyphicon-twitter"></i> Twitter--%>
+<%--                            </a>--%>
+<%--                        </div>--%>
                     </div>
                 </div>
             </div>

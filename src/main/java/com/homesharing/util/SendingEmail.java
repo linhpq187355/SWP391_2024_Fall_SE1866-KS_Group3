@@ -44,7 +44,7 @@ public class SendingEmail {
         message.setFrom(new InternetAddress(senderMail));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
         message.setSubject(subject);
-        message.setContent(content, "text/html");
+        message.setContent(content, "text/html; charset=UTF-8");
         Transport.send(message);
 
     }
