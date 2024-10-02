@@ -21,12 +21,12 @@ public class SearchServiceImpl implements SearchSevice {
     /**
      * Searches for homes using the provided name.
      *
-     * @param name The name or keyword to search for.
+     * @param address The name or keyword to search for.
      * @return A list of Home objects that match the search criteria.
      */
     @Override
-    public List<Home> searchHomesByName(String name) {
-        return searchDAO.searchHomesByName(name);
+    public List<Home> searchHomesByAdress(String address) {
+        return searchDAO.searchHomesByAdress(address);
     }
 
     /**
