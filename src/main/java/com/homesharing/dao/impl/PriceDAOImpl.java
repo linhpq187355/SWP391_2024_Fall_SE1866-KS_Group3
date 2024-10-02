@@ -4,6 +4,8 @@ import com.homesharing.conf.DBContext;
 import com.homesharing.dao.PriceDAO;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -14,8 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PriceDAOImpl implements PriceDAO {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PriceDAOImpl.class);
+
     @Override
     public List<Price> getPrice(List<Home> homes) {
+        if (homes == null || homes.isEmpty()) {
+            LOGGER.warn("Home list is null or empty. Returning an empty price list.");
+            return new ArrayList<>();
+        }
         StringBuilder sql = new StringBuilder("SELECT id, price, Homesid FROM prices WHERE id IN (");
         for (int i = 0; i < homes.size(); i++) {
             sql.append("?");

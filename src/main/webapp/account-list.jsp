@@ -769,37 +769,39 @@
                                         </tfoot>
                                         <tbody>
                                         <c:forEach items="${requestScope.userList}" var="user">
-                                            <tr>
-                                                <td>${user.id}</td>
-                                                <td>${user.email}</td>
-                                                <td>${user.createdAt}</td>
-                                                    <%--                                                <td>${user.verify}</td>--%>
-                                                <c:forEach items="${requestScope.roleList}" var="role">
-                                                    <c:if test="${role.id == user.rolesId}">
-                                                        <td>${role.name}</td>
+                                            <c:if test="${user.rolesId!=1}">
+                                                <tr>
+                                                    <td>${user.id}</td>
+                                                    <td>${user.email}</td>
+                                                    <td>${user.createdAt}</td>
+                                                        <%--                                                <td>${user.verify}</td>--%>
+                                                    <c:forEach items="${requestScope.roleList}" var="role">
+                                                        <c:if test="${role.id == user.rolesId}">
+                                                            <td class="text-center capitalize">${role.name}</td>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    <c:if test="${user.status=='active'}">
+                                                        <td class="text-center text-success capitalize">${user.status}</td>
                                                     </c:if>
-                                                </c:forEach>
-                                                <c:if test="${user.status=='active'}">
-                                                    <td class="text-center text-success capitalize">${user.status}</td>
-                                                </c:if>
-                                                <c:if test="${user.status!='active'}">
-                                                    <td class="text-center text-danger capitalize">Inactive</td>
-                                                </c:if>
-                                                <td class="space-y-4">
-                                                    <a href="ban?userId=${user.id}">
-                                                        <button class="bg-red-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-red-600">
-                                                            <i class="fas fa-ban"></i>
-                                                            <span>Ban</span>
-                                                        </button>
-                                                    </a>
-                                                    <a href="activate?userId=${user.id}">
-                                                        <button class="bg-green-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-green-600">
-                                                            <i class="fas fa-check"></i>
-                                                            <span>Activate</span>
-                                                        </button>
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                    <c:if test="${user.status!='active'}">
+                                                        <td class="text-center text-danger capitalize">Inactive</td>
+                                                    </c:if>
+                                                    <td class="space-y-4">
+                                                        <a href="ban?userId=${user.id}">
+                                                            <button class="bg-red-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-red-600">
+                                                                <i class="fas fa-ban"></i>
+                                                                <span>Ban</span>
+                                                            </button>
+                                                        </a>
+                                                        <a href="activate?userId=${user.id}">
+                                                            <button class="bg-green-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-green-600">
+                                                                <i class="fas fa-check"></i>
+                                                                <span>Activate</span>
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
                                         </c:forEach>
                                         </tbody>
                                     </table>
