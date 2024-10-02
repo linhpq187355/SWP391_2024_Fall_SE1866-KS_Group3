@@ -11,10 +11,10 @@ public interface SearchSevice {
     /**
      * Searches for homes based on the provided name.
      *
-     * @param name The name or keyword to search for in home listings.
+     * @param address The name or keyword to search for in home listings.
      * @return A list of Home objects that match the given name, or an empty list if none are found.
      */
-    List<Home> searchHomesByName(String name);
+    List<Home> searchHomesByAdress(String address);
 
     /**
      * Searches for homes within a specified price range.

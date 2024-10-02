@@ -88,7 +88,7 @@
                             </div>
                         </form>
                         <hr>
-                        <p class="text-center">Đã có tài khoản? <a href="login.jsp" class="text-primary">Đăng nhập</a></p>
+                           <p class="text-center">Đã có tài khoản? <a href="login.jsp" class="text-primary">Đăng nhập</a></p>
 <%--                        <p class="text-center">Hoặc đăng nhập với</p>--%>
 <%--                        <div class="text-center">--%>
 <%--                            <a href="#!" class="btn btn-default">--%>

@@ -15,9 +15,9 @@ import java.util.List;
 
 public class SearchDAOimpl implements SearchDAO {
     @Override
-    public List<Home> searchHomesByName(String name) {
-        String sql = "SELECT id, name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardId, homeTypeId, createdBy " +
-                "FROM Homes WHERE name LIKE ?";
+    public List<Home> searchHomesByAdress   (String address) {
+        String sql = "SELECT id, name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardsId, homeTypeId, createdBy " +
+                "FROM Homes WHERE address LIKE ?";
 
         List<Home> homes = new ArrayList<>();
 
@@ -25,7 +25,7 @@ public class SearchDAOimpl implements SearchDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             // Set the wildcard for partial matching
-            preparedStatement.setString(1, "%" + name + "%");
+            preparedStatement.setString(1, "%" + address + "%");
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -46,7 +46,7 @@ public class SearchDAOimpl implements SearchDAO {
                     home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
                     home.setHomeDescription(resultSet.getString("homeDescription"));
                     home.setTenantDescription(resultSet.getString("tenantDescription"));
-                    home.setWardId(resultSet.getInt("wardId"));
+                    home.setWardId(resultSet.getInt("wardsId"));
                     home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                     home.setCreatedBy(resultSet.getInt("createdBy"));
 
@@ -55,7 +55,7 @@ public class SearchDAOimpl implements SearchDAO {
                 }
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Error searching homes by name: " + e.getMessage(), e);
+            throw new RuntimeException("Error searching homes by address: " + e.getMessage(), e);
         }
 
         return homes;
@@ -65,7 +65,7 @@ public class SearchDAOimpl implements SearchDAO {
     public List<Home> searchByPriceRange(int minPrice, int maxPrice) {
         String sql = "SELECT h.id, h.name, h.address, h.longitude, h.latitude, h.orientation, h.area, " +
                 "h.leaseDuration, h.moveInDate, h.numOfBedroom, h.numOfBath, h.createdDate, " +
-                "h.modifiedDate, h.homeDescription, h.tenantDescription, h.wardId, h.homeTypeId, " +
+                "h.modifiedDate, h.homeDescription, h.tenantDescription, h.wardsId, h.homeTypeId, " +
                 "h.createdBy " +
                 "FROM Homes h " +
                 "JOIN Prices p ON h.id = p.Homesid " +
@@ -99,7 +99,7 @@ public class SearchDAOimpl implements SearchDAO {
                     home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
                     home.setHomeDescription(resultSet.getString("homeDescription"));
                     home.setTenantDescription(resultSet.getString("tenantDescription"));
-                    home.setWardId(resultSet.getInt("wardId"));
+                    home.setWardId(resultSet.getInt("wardsId"));
                     home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                     home.setCreatedBy(resultSet.getInt("createdBy"));
 

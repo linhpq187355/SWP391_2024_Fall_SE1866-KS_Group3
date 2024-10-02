@@ -19,11 +19,23 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * StaffLoginServlet handles staff login requests and processes
+ * login form submissions. It validates credentials and communicates
+ * with the UserService to authenticate staff users.
+ *
+ * @version 1.0
+ * @since 2024-10-02
+ */
 @WebServlet("/staff-login")
 public class StaffLoginServlet extends HttpServlet {
     private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(StaffLoginServlet.class); // Logger instance
 
+    /**
+     * Initializes the StaffLoginServlet by creating instances of required services.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
@@ -34,6 +46,13 @@ public class StaffLoginServlet extends HttpServlet {
         userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);
     }
 
+    /**
+     * Handles GET requests to display the staff login page.
+     * This method forwards the request to the login JSP page.
+     *
+     * @param req  HttpServletRequest containing the client request.
+     * @param resp HttpServletResponse used to send a response to the client.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -45,6 +64,13 @@ public class StaffLoginServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POST requests for staff login authentication.
+     * This method validates the login credentials and processes the login request.
+     *
+     * @param req  HttpServletRequest containing the client input.
+     * @param resp HttpServletResponse used to send a response to the client.
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {

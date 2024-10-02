@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
             // Insert new user into the database
             int userId = userDao.saveUser(user);
             tokenService.sendToken(email, userId);
-            preferenceService.addPreference(userId);
             return "success";
         } catch (GeneralException e) {
             // Handle runtime exceptions thrown by the UserDao

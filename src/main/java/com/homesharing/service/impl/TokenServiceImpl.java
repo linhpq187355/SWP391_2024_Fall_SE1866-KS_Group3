@@ -10,19 +10,32 @@ import com.homesharing.util.SendingEmail;
 import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 
+/**
+ * Implementation of the TokenService interface that handles email verification token-related logic.
+ */
 public class TokenServiceImpl implements TokenService {
 
     private final TokenDAO tokenDao;
     private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
+    /**
+     * Constructor that initializes the TokenDAO.
+     *
+     * @param tokenDao The data access object used for token operations.
+     */
     public TokenServiceImpl(TokenDAO tokenDao) {
         this.tokenDao = tokenDao;
     }
 
+    /**
+     * Checks if a given token is valid and updates the verification status if necessary.
+     *
+     * @param tokenCode The token code provided by the user.
+     * @param userID    The ID of the user whose token is being checked.
+     * @return True if the token is valid, false otherwise.
+     */
     @Override
     public boolean checkToken(String tokenCode, int userID) {
         try {
@@ -55,8 +68,14 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
+    /**
+     * Sends a verification email to the user with a token link.
+     *
+     * @param email  The user's email address.
+     * @param userId The ID of the user receiving the email.
+     */
     @Override
-    public boolean sendToken(String email, int userId) {
+    public void sendToken(String email, int userId) {
         Token oldToken = tokenDao.findToken(userId);
         String tokenCode;
         LocalDateTime requestedTime;
@@ -95,6 +114,5 @@ public class TokenServiceImpl implements TokenService {
         } catch (MessagingException e) {
             throw new GeneralException("Error while sending email");
         }
-        return true;
     }
 }

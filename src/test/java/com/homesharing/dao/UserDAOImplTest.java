@@ -231,7 +231,6 @@ class UserDAOImplTest {
         verify(preparedStatement).setInt(1, userId);
     }
 
-
     @Test
     public void testResetPassword_Success() throws SQLException {
         // Set up user data
@@ -288,5 +287,4 @@ class UserDAOImplTest {
         verify(preparedStatement).setString(1, "hashedPassword123");
         verify(preparedStatement).setInt(2, userId);
     }
-
 }

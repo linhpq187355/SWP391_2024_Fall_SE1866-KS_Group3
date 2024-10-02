@@ -2,10 +2,7 @@ package com.homesharing.service.impl;
 
 import com.homesharing.dao.HomeDetailDAO;
 import com.homesharing.dao.impl.HomeDetailDAOImpl;
-import com.homesharing.model.Home;
-import com.homesharing.model.HomeType;
-import com.homesharing.model.Price;
-import com.homesharing.model.User;
+import com.homesharing.model.*;
 import com.homesharing.service.HomeDetailService;
 
 import java.util.List;
@@ -60,5 +57,21 @@ public class HomeDetailServiceImpl implements HomeDetailService {
     @Override
     public List<HomeType> getHomeTypesByHomeId(int homeId) {
         return homeDetailDAO.getHomeTypesByHomeId(homeId);
+    }
+
+    /**
+     * Retrieves a list of home types associated with a specific home, identified by its ID.
+     *
+     * @param homeId The ID of the home for which you want to get the types.
+     * @return A list of HomeType objects linked to the specified home ID.
+     */
+    @Override
+    public List<Amentity> getHomeAmenitiesByHomeId(int homeId) {
+        return homeDetailDAO.getHomeAmenitiesByHomeId(homeId);
+    }
+
+    @Override
+    public List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId) {
+        return homeDetailDAO.getHomeFireEquipmentsByHomeId(homeId);
     }
 }

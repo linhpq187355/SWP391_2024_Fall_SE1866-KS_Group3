@@ -19,12 +19,25 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * LoginServlet handles user login requests, managing both GET and POST
+ * requests for the "/login" URL. This servlet interacts with the UserService
+ * to perform login operations, and handles forwarding and redirection based
+ * on the login result.
+ *
+ * @version 1.0
+ * @since 2024-10-02
+ */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
     private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class); // Logger instance
 
+    /**
+     * Initializes the LoginServlet by creating instances of necessary services.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
@@ -35,6 +48,15 @@ public class LoginServlet extends HttpServlet {
         userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);
     }
 
+    /**
+     * Handles GET requests for the login page. This method forwards the request
+     * to the "login.jsp" page to display the login form.
+     *
+     * @param req  HttpServletRequest object that contains the request
+     *             the client has made of the servlet
+     * @param resp HttpServletResponse object that contains the response
+     *             the servlet sends to the client
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -46,6 +68,17 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POST requests for login processing. This method receives login
+     * credentials (email, password, and optional remember-me flag), validates
+     * them using the UserService, and either redirects to the home page upon
+     * success or displays error messages on the login page upon failure.
+     *
+     * @param req  HttpServletRequest object that contains the request
+     *             the client has made of the servlet
+     * @param resp HttpServletResponse object that contains the response
+     *             the servlet sends to the client
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {

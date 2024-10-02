@@ -24,8 +24,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * Servlet for handling user sign-up requests.
- * This servlet processes registration form submissions and communicates with the UserService.
+ * SignUpServlet handles user registration requests and processes
+ * form submissions for account creation. It validates the input
+ * and communicates with the UserService to register new users.
+ *
+ * @version 1.0
+ * @since 2024-10-02
  */
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
@@ -33,6 +37,10 @@ public class SignUpServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(SignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
 
+    /**
+     * Initializes the SignUpServlet by creating instances of required services.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
@@ -47,9 +55,10 @@ public class SignUpServlet extends HttpServlet {
 
     /**
      * Handles GET requests to display the sign-up page.
+     * This method forwards the request to the sign-up JSP page.
      *
-     * @param req  The HttpServletRequest containing the user's input.
-     * @param resp The HttpServletResponse used to send a response to the client.
+     * @param req  HttpServletRequest containing the client request.
+     * @param resp HttpServletResponse used to send a response to the client.
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {

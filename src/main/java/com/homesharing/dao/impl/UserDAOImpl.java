@@ -250,12 +250,27 @@ public class UserDAOImpl implements UserDAO {
                 } else {
                     user.setLastModified(null);
                 }
-                user.setRolesId(resultSet.getInt("Rolesid"));
+                user.setRolesId(resultSet.getInt("rolesid"));
 
                 userList.add(user);
             }
         } catch (IOException | ClassNotFoundException | SQLException e) {
-            throw new GeneralException("Error: ",e);
+            throw new GeneralException("Error: ", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
         }
         return userList;
     }
@@ -367,7 +382,7 @@ public class UserDAOImpl implements UserDAO {
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+            //
             preparedStatement.setInt(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -377,7 +392,7 @@ public class UserDAOImpl implements UserDAO {
                 user.setFirstName(resultSet.getString("firstName"));
                 user.setLastName(resultSet.getString("lastName"));
                 user.setEmail(resultSet.getString("email"));
-                user.setRolesId(resultSet.getInt("Rolesid"));
+                user.setRolesId(resultSet.getInt("rolesid"));
                 user.setStatus(resultSet.getString("status"));
                 user.setHashedPassword(resultSet.getString("hashedPassword"));
                 user.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
@@ -430,6 +445,5 @@ public class UserDAOImpl implements UserDAO {
         User user = userDAO.getUser(1);
         System.out.println(user.getFirstName());
     }
-
 
 }
