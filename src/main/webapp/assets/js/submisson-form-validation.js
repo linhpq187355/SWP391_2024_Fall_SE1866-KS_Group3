@@ -6,17 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
             this.submit();
         }
     });
-
     function validateForm() {
         let isValid = true;
-
         // Step 1 validation
         const homeType = document.getElementById('home-type');
         const city = document.getElementById('city');
         const district = document.getElementById('district');
         const ward = document.getElementById('ward');
         const addressDetail = document.querySelector('input[name="address-detail"]');
-
         if (!homeType.value) {
             alert('Vui lòng chọn loại hình nhà ở tại bước 1');
             isValid = false;
@@ -29,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Vui lòng nhập địa chỉ cụ thể tại bước 1');
             isValid = false;
         }
-
         // Step 2 validation
         const area = document.getElementById('area');
         const leaseDuration = document.getElementById('leaseDuration');
@@ -37,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const numOfBedroom = document.getElementById('numOfBedroom');
         const numOfBath = document.getElementById('numOfBath');
         const price = document.getElementById('price');
-
         if (isNaN(area.value) || area.value < 10 || area.value > 1000) {
             alert('Diện tích phải từ 10 đến 1000 mét vuông');
             isValid = false;
@@ -70,21 +65,18 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Mức giá phải từ 1,000,000 VND trở lên');
             isValid = false;
         }
-
         // Step 3 validation
-        const imageUpload = document.getElementById('imageUpload');
-        if (imageUpload.files.length === 0) {
-            alert('Vui lòng chọn ít nhất một hình ảnh');
-            isValid = false;
-        }
-
+        // const imageUpload = document.getElementById('imageUpload');
+        // if (imageUpload.files.length === 0) {
+        //     alert('Vui lòng chọn ít nhất một hình ảnh');
+        //     isValid = false;
+        // }
         // Step 4 validation
         const agreeTerms = document.querySelector('input[type="checkbox"]');
         if (!agreeTerms.checked) {
             alert('Để đăng tin, vui lòng đồng ý với điều khoản và điều kiện');
             isValid = false;
         }
-
         return isValid;
     }
 });

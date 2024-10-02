@@ -90,13 +90,13 @@
                                     <div class="form-group">
                                         <label for="email">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" placeholder="ten@example.com"
-                                               value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" required>
+                                               value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>" required maxlength="100">
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="form-group position-relative">
                                         <label for="password">Mật khẩu</label>
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu" required>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu" required minlength="8" maxlength="50">
                                         <button type="button" class="btn btn-link position-absolute toggle-password" onclick="togglePassword('password')">
                                             <i class="bi bi-eye"></i>
                                         </button>
@@ -128,10 +128,10 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-lg-5">
-                        <a href="#!" class="btn btn-lg btn-danger btn-block">
-                            <i class="glyphicon glyphicon-log-in"></i>
-                            <span>Đăng nhập bằng Google</span>
-                        </a>
+<%--                        <a href="#!" class="btn btn-lg btn-danger btn-block">--%>
+<%--                            <i class="glyphicon glyphicon-log-in"></i>--%>
+<%--                            <span>Đăng nhập bằng Google</span>--%>
+<%--                        </a>--%>
                         <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">
                             <i class="glyphicon glyphicon-user"></i>
                             <span>Bạn là nhân viên?</span>

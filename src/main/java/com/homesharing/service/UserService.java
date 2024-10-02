@@ -2,6 +2,8 @@ package com.homesharing.service;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * UserService interface defines methods for user registration and validation.
  * It contains methods to register a user and validate user input data.
@@ -38,7 +40,7 @@ public interface UserService {
 
     String login(String email, String password, boolean rememberMe, HttpServletResponse response);
 
-    String loginAdmin(String email, String password, HttpServletResponse response);
+    String loginStaff(String email, String password, HttpServletResponse response);
 
     String logout(HttpServletResponse response);
 

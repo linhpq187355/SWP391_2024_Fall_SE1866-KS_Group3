@@ -55,7 +55,7 @@ public class StaffLoginServlet extends HttpServlet {
             // Log the email for debugging (make sure to not log sensitive information)
             logger.debug("Login attempt for email: {}", email);
             // Pass information to service
-            String result = userService.loginAdmin(email, password, resp);
+            String result = userService.loginStaff(email, password, resp);
 
             if (result.equals("success")) {
                 // Login successful, redirect to home page
