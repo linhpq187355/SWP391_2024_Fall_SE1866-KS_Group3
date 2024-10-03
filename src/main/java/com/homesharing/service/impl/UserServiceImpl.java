@@ -5,11 +5,16 @@ import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
+import com.homesharing.service.PreferenceService;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
 import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implementation of UserService interface, handling user-related business logic.
@@ -20,16 +25,19 @@ public class UserServiceImpl implements UserService {
     private final UserDAO userDao;
     private final TokenDAO tokenDao;
     private final TokenService tokenService;
+    private final PreferenceService preferenceService;
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
     /**
      * Constructor for UserServiceImpl, initializing the UserDao instance.
      *
      * @param userDao The UserDao instance for database operations.
      */
-    public UserServiceImpl(UserDAO userDao, TokenDAO tokenDao, TokenService tokenService) {
+    public UserServiceImpl(UserDAO userDao, TokenDAO tokenDao, TokenService tokenService, PreferenceService preferenceService) {
         this.userDao = userDao;
         this.tokenDao = tokenDao;
         this.tokenService = tokenService;
+        this.preferenceService = preferenceService;
     }
 
     /**
@@ -68,9 +76,9 @@ public class UserServiceImpl implements UserService {
             // Determine role value based on input role
             int roleValue;
             if ("findRoommate".equals(role)) {
-                roleValue = 3;
-            } else if ("postRoom".equals(role)) {
                 roleValue = 4;
+            } else if ("postRoom".equals(role)) {
+                roleValue = 3;
             } else {
                 return "Invalid role: " + role;
             }
@@ -253,4 +261,77 @@ public class UserServiceImpl implements UserService {
         CookieUtil.removeCookie(response, "roleId");
         return "logout success";
     }
+
+    /**
+     * Updates the profile information of a user.
+     *
+     * @param userId          The unique ID of the user to update.
+     * @param firstName       The new first name of the user.
+     * @param lastName        The new last name of the user.
+     * @param address         The new address of the user.
+     * @param gender          The new gender of the user.
+     * @param dob             The new date of birth of the user in string format.
+     * @param avatarFileName  The new avatar file name of the user.
+     * @return The number of rows affected by the update operation.
+     */
+    @Override
+    public int updateUserProfile(String userId, String firstName, String lastName, String address, String gender, String dob, String avatarFileName) {
+        try {
+            User user = new User();
+            user.setId(Integer.parseInt(userId));
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setAddress(address);
+            user.setGender(gender);
+            user.setDob(dob.isEmpty() ? null : LocalDate.parse(dob));
+
+            // Set avatar if available
+            if (avatarFileName != null) {
+                user.setAvatar(avatarFileName);
+            } else {
+                user.setAvatar(userDao.getUserAvatar(Integer.parseInt(userId)));
+            }
+
+            return userDao.updateUserProfile(user);
+
+        } catch (Exception e) {
+            throw new GeneralException("Failed to update user profile", e);
+        }
+    }
+
+    /**
+     * Retrieves a User object from the database based on the provided userId.
+     *
+     * @param userId The ID of the user to be retrieved.
+     * @return The User object associated with the given userId, or throws a GeneralException if the user is not found or an error occurs during retrieval.
+     * @throws GeneralException if an error occurs while accessing the database or if the user is not found.
+     */
+    @Override
+    public User getUser(int userId) {
+        try {
+            // Attempt to retrieve the user from the DAO using the provided userId
+            return userDao.getUser(userId);
+        } catch (GeneralException e) {
+            // Handle the exception
+            throw new GeneralException("Could not retrieve user with ID: " + userId, e);
+        }
+    }
+
+    /**
+     * Resets the password for a user by delegating the task to UserDAO.
+     *
+     * @param userId      The ID of the user whose password is to be reset.
+     * @param newPassword The new password to set for the user.
+     * @return The number of rows affected by the update (1 if successful, 0 otherwise).
+     */
+    @Override
+    public int resetUserPassword(int userId, String newPassword) {
+        try {
+            return userDao.resetPassword(newPassword, userId);
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to reset password for user ID: " + userId, e);
+            throw new GeneralException("Error resetting password for user ID: " + userId, e);
+        }
+    }
+
 }

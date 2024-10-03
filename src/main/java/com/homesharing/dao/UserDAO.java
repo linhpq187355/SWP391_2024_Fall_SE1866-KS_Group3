@@ -27,30 +27,51 @@ public interface UserDAO {
     boolean emailExists(String email);
 
     /**
-     * Retrieves a {@link User} by their ID.
+     * Retrieves a user from the database based on the user ID.
      *
-     * @param userId The ID of the user to retrieve.
-     * @return The {@link User} object if found, or {@code null} if no user is found.
+     * @param userId The unique ID of the user to retrieve.
+     * @return The {@link User} object corresponding to the user ID, or {@code null} if no user is found.
      */
     User getUser(int userId);
-
     /**
-     * Finds a user by their email address.
+     * Finds a user from the database by their email address.
      *
-     * @param email The email address of the user to find.
+     * @param email The email address to search for.
      * @return The {@link User} object if found, or {@code null} if no user is found.
      */
     User findUserByEmail(String email);
 
     List<User> getAllUsers();
-
+    /**
+     * Updates the profile information of an existing user in the database.
+     *
+     * @param user The {@link User} object containing updated user information.
+     * @return The number of rows affected by the update operation.
+     */
     int updateUserProfile(User user);
-
+    /**
+     * Retrieves the avatar (profile picture URL or path) of a user based on their ID.
+     *
+     * @param id The unique ID of the user.
+     * @return The avatar URL or path as a {@link String}, or {@code null} if no avatar is found.
+     */
     String getUserAvatar(int id);
-
+    /**
+     * Updates the status of a user in the database.
+     *
+     * @param id The unique ID of the user whose status is being updated.
+     * @param status The new status to be set for the user.
+     */
     void updateUserStatus(int id, String status);
 
     User getUserById(int id);
-
+    /**
+     * Resets the password for a user.
+     * The password is hashed before being stored in the database.
+     *
+     * @param password The new password in plaintext to be hashed and stored.
+     * @param id The unique ID of the user whose password is being reset.
+     * @return The number of rows affected by the password update.
+     */
     int resetPassword(String password, int id);
 }

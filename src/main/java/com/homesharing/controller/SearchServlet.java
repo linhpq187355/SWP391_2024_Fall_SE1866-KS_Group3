@@ -1,6 +1,8 @@
 package com.homesharing.controller;
 
 
+import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.PriceDAO;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.service.HomePageService;
@@ -15,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 // URL pattern mapped to this servlet
@@ -22,12 +25,15 @@ import java.util.List;
 public class SearchServlet extends HttpServlet {
 
     private SearchSevice searchService;
+    private HomePageService HomePageService;
+    private HomeDAO homeDAO;
+    private PriceDAO priceDAO;
     private HomePageService homePageService;
 
     @Override
     public void init() throws ServletException {
         searchService = new SearchServiceImpl();
-        homePageService = new HomePageServiceImpl();
+        HomePageService = new HomePageServiceImpl(homeDAO, priceDAO);
     }
 
     @Override
@@ -65,6 +71,7 @@ public class SearchServlet extends HttpServlet {
             // Handle SQL or class not found exceptions
             throw new RuntimeException("error: " + e.getMessage(), e);
         }
+
         // Set the search results and parameters as attributes for the request
         req.setAttribute("homes", homes);
         req.setAttribute("searchName", name);

@@ -111,8 +111,10 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-xs-5 text-right">
-                                            <a href="forgot-password.jsp" class="text-muted">Quên mật khẩu?</a>
+                                        <div class="col-6">
+                                            <div class="text-end">
+                                                <a href="forgot-password" class="text-muted">Quên mật khẩu?</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
