@@ -35,7 +35,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
@@ -48,12 +47,25 @@ public class CreateHomeServlet extends HttpServlet {
     private SubmissonFormServiceImpl submissonFormService;
     private UserProfileServiceImpl userProfileService;
 
+    /**
+     * Initializes the servlet by creating instances of the submission form service and user profile service.
+     *
+     * @throws ServletException if an error occurs during initialization
+     */
     @Override
     public void init() throws ServletException {
         submissonFormService = new SubmissonFormServiceImpl();
         userProfileService = new UserProfileServiceImpl();
     }
 
+    /**
+     * Handles HTTP GET requests by retrieving the user's information from the cookie and displaying the submission form.
+     *
+     * @param req  the HTTP request
+     * @param resp the HTTP response
+     * @throws ServletException if an error occurs during the request
+     * @throws IOException      if an I/O error occurs during the request
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String cookieValue = CookieUtil.getCookie(req, "id");
@@ -79,6 +91,13 @@ public class CreateHomeServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles HTTP POST requests by processing the submission form data and saving the home information to the database.
+     *
+     * @param req  the HTTP request
+     * @param resp the HTTP response
+     * @throws IOException if an I/O error occurs during the request
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
@@ -87,6 +106,7 @@ public class CreateHomeServlet extends HttpServlet {
                 //Fetch user info from cookie
                 User user = userProfileService.getUser(Integer.parseInt(cookieValue));
 
+                // Process the submission form data
                 int homeTypeId = Integer.parseInt(req.getParameter("home-type"));
                 String addressDetail = req.getParameter("address-detail");
                 String name = req.getParameter("home-name");
@@ -204,24 +224,9 @@ public class CreateHomeServlet extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            // Log the error
-            e.printStackTrace();
+            logger.error("An error occurred during the request: " + e.getMessage(), e);
             // Redirect to an error page
             resp.sendRedirect("404.jsp");
         }
-    }
-
-    private String getFileExtension(String fileName) {
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex > 0) {
-            return fileName.substring(dotIndex);
-        } else {
-            return "";
-        }
-    }
-
-    // Helper method to get a unique file name based on the upload time
-    private String getUniqueFileName(String originalFileName) {
-        return UUID.randomUUID().toString() + "_" + originalFileName;
     }
 }
