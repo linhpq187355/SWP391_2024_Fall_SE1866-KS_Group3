@@ -94,7 +94,7 @@ public class PreferenceServiceImplTest {
         verify(preferenceDAO).updatePreference(captor.capture());
 
         Map<String, Integer> capturedMap = captor.getValue();
-        assertEquals(1, capturedMap.get("user_id"));
+        assertEquals(1, capturedMap.get("usersId"));
         assertEquals(5, capturedMap.get("cleanliness"));
         assertEquals(3, capturedMap.get("drinking"));
         assertEquals(4, capturedMap.get("interaction"));

@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * Implementation of HomeDAO to interact with the Homes database.
  */
-public class HomeDAOImpl implements HomeDAO {
+public class HomeDAOImpl extends DBContext implements HomeDAO {
     private List<Home> homes = new ArrayList<>();
     // Logger for logging errors or information
     private static final Logger logger = Logger.getLogger(HomeDAOImpl.class.getName());
@@ -197,12 +197,15 @@ public class HomeDAOImpl implements HomeDAO {
 
         // List to store fetched Home objects
         List<Home> homeList = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
 
         // Try-with-resources to automatically close resources
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
+        try{
+            connection = DBContext.getConnection(); // Get database connection
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
             // Process each result row and map it to a Home object
             while (resultSet.next()) {
                 Home home = new Home();
@@ -218,6 +221,15 @@ public class HomeDAOImpl implements HomeDAO {
             // Log the exception and throw a custom exception
             logger.severe("Error retrieving homes from the database: " + e.getMessage());
             throw new GeneralException("Error retrieving homes from the database", e);
+        } finally {
+            // Ensure resources are closed in the finally block
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) closeConnection(); // close the connection using DBContext's method
+            } catch (SQLException e) {
+                logger.warning("Failed to close resources: " + e.getMessage());
+            }
         }
 
         return homeList; // Return the list of homes

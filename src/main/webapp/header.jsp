@@ -221,7 +221,7 @@
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
                 <c:if test="${cookie.roleId.value ==4}">
-                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Đăng bài</a></li>
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="submit-home">Đăng bài</a></li>
                 </c:if>
 
             </ul>

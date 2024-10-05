@@ -2,12 +2,12 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +19,7 @@ import java.util.List;
  * PriceDAOImpl implements the PriceDAO interface to provide
  * database operations related to Price entities.
  */
-public class PriceDAOImpl implements PriceDAO {
+public class PriceDAOImpl extends DBContext implements PriceDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(PriceDAOImpl.class);
 
     /**
@@ -48,24 +48,29 @@ public class PriceDAOImpl implements PriceDAO {
         }
         sql.append(")");
 
+
         List<Price> prices = new ArrayList<>();
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql.toString());
+
 
             // Set the price ID parameters in the prepared statement
             for (int i = 0; i < homes.size(); i++) {
                 preparedStatement.setInt(i + 1, homes.get(i).getPriceId());
             }
 
-            // Execute the query and process the result set
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Price price = new Price();
-                    price.setHomesId(resultSet.getInt("Homesid"));
-                    price.setId(resultSet.getInt("id"));
-                    price.setPrice(resultSet.getInt("price"));
-                    prices.add(price);
-                }
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Price price = new Price();
+                price.setHomesId(resultSet.getInt("Homesid"));
+                price.setId(resultSet.getInt("id"));
+                price.setPrice(resultSet.getInt("price"));
+                prices.add(price);
             }
 
         } catch (SQLException e) {
@@ -74,6 +79,21 @@ public class PriceDAOImpl implements PriceDAO {
         } catch (Exception e) {
             LOGGER.error("Unexpected error occurred: {}", e.getMessage(), e);
             throw new RuntimeException("Error retrieving prices from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
         }
 
         return prices;
