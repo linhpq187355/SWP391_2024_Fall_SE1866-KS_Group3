@@ -1,14 +1,27 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.service;
 
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
 
-
-import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 
 /**
- * UserService interface defines methods for user registration and validation.
- * It contains methods to register a user and validate user input data.
+ * UserService interface defines methods for user registration and validation,
+ * handling login and logout processes, updating user profiles, and retrieving user details.
+ * All methods are meant to manage user-related operations in the Home Sharing System.
+ *
+ * @version 1.0
+ * @since 2024-09-18
+ * @author ManhNC
  */
 public interface UserService {
 
@@ -22,7 +35,7 @@ public interface UserService {
      * @param role      The role of the user (e.g., findRoommate, postRoom).
      * @return A string indicating the result of the registration (e.g., success message, error).
      */
-    String registerUser(String firstName, String lastName, String email, String password, String role);
+    String registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException;
 
     /**
      * Validates the user input for registration.
@@ -49,7 +62,7 @@ public interface UserService {
      * @param response   The HttpServletResponse used for managing cookies (if rememberMe is true).
      * @return A string indicating the result of the login attempt (e.g., success, error).
      */
-    String login(String email, String password, boolean rememberMe, HttpServletResponse response);
+    String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException;
 
     /**
      * Handles staff member login by verifying credentials.
@@ -59,7 +72,7 @@ public interface UserService {
      * @param response The HttpServletResponse used for handling cookies or redirects.
      * @return A string indicating the result of the login attempt (e.g., success, error).
      */
-    String loginStaff(String email, String password, HttpServletResponse response);
+    String loginStaff(String email, String password, HttpServletResponse response) throws SQLException;
 
     /**
      * Logs the user out by clearing session and relevant cookies.
@@ -87,7 +100,7 @@ public interface UserService {
      * @param userId The ID of the user to be retrieved.
      * @return The User object containing the user's details, or null if not found.
      */
-    User getUser(int userId);
+    User getUser(int userId) throws SQLException;
     /**
      * Resets the password for a user with the given ID.
      *

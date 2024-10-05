@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -14,8 +23,25 @@ import java.time.LocalDateTime;
 
 /**
  * Implementation of the TokenDAO interface for managing token-related database operations.
+ * @author ManhNC
  */
-public class TokenDAOImpl implements TokenDAO {
+public class TokenDAOImpl extends DBContext implements TokenDAO {
+
+    /**
+     * Constructor initializes the database connection by reading the
+     * configuration file.
+     *
+     * @throws SQLException           if a database access error occurs
+     * @throws IOException            if there is an issue reading the configuration file
+     * @throws ClassNotFoundException if the JDBC driver class cannot be found
+     */
+    public TokenDAOImpl() throws SQLException, IOException, ClassNotFoundException {
+        super();
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
 
     /**
      * Inserts a token into the database.
@@ -24,13 +50,16 @@ public class TokenDAOImpl implements TokenDAO {
      * @throws GeneralException if an error occurs while inserting the token
      */
     @Override
-    public void insertToken(Token token) {
+    public void insertToken(Token token) throws SQLException {
         String sql = "INSERT INTO [dbo].[Token] " +
                 "([userId], [otp], [requestedTime], [isVerified]) " +
                 "VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
 
             // Set parameters for the prepared statement
             preparedStatement.setInt(1, token.getUserId()); // Set userId
@@ -43,6 +72,8 @@ public class TokenDAOImpl implements TokenDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error inserting token into the database", e);
+        } finally {
+            closeConnection();
         }
     }
 
@@ -54,13 +85,13 @@ public class TokenDAOImpl implements TokenDAO {
      * @throws GeneralException if an error occurs while finding the token
      */
     @Override
-    public Token findToken(int userId) {
+    public Token findToken(int userId) throws SQLException {
         String sql = "SELECT [otp], [requestedTime], [isVerified] FROM [dbo].[Token] WHERE [userId] = ?";
-
-        // Using try-with-resources to ensure automatic resource management
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             // Set parameters for the prepared statement
             preparedStatement.setInt(1, userId); // Set userId
 
@@ -81,6 +112,8 @@ public class TokenDAOImpl implements TokenDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error finding token in the database", e);
+        } finally {
+            closeConnection();
         }
     }
 
@@ -91,13 +124,14 @@ public class TokenDAOImpl implements TokenDAO {
      * @throws GeneralException if an error occurs while updating the token verification
      */
     @Override
-    public void updateTokenVerification(int userId) {
+    public void updateTokenVerification(int userId) throws SQLException {
         String sql = "UPDATE [dbo].[Token] SET [isVerified] = ? WHERE [userId] = ?";
 
-        // Using try-with-resources to ensure automatic resource management
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             // Set parameters for the prepared statement
             preparedStatement.setBoolean(1, true); // Set isVerified to true
             preparedStatement.setInt(2, userId); // Set userId
@@ -112,6 +146,8 @@ public class TokenDAOImpl implements TokenDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error updating token verification in the database", e);
+        } finally {
+            closeConnection();
         }
     }
 

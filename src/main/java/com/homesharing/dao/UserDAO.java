@@ -1,12 +1,23 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.dao;
 
 import com.homesharing.model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
  * UserDao interface defines the data access methods for user-related operations.
  * It includes saving a user to the database and checking if an email already exists.
+ * @author ManhNC
  */
 public interface UserDAO {
 
@@ -16,7 +27,7 @@ public interface UserDAO {
      * @param user The user object to be saved.
      * @return userId
      */
-    int saveUser(User user);
+    int saveUser(User user) throws SQLException;
 
     /**
      * Checks if an email already exists in the database.
@@ -24,7 +35,7 @@ public interface UserDAO {
      * @param email The email address to check.
      * @return True if the email exists, false otherwise.
      */
-    boolean emailExists(String email);
+    boolean emailExists(String email) throws SQLException;
 
     /**
      * Retrieves a user from the database based on the user ID.
@@ -32,14 +43,14 @@ public interface UserDAO {
      * @param userId The unique ID of the user to retrieve.
      * @return The {@link User} object corresponding to the user ID, or {@code null} if no user is found.
      */
-    User getUser(int userId);
+    User getUser(int userId) throws SQLException;
     /**
      * Finds a user from the database by their email address.
      *
      * @param email The email address to search for.
      * @return The {@link User} object if found, or {@code null} if no user is found.
      */
-    User findUserByEmail(String email);
+    User findUserByEmail(String email) throws SQLException;
 
     List<User> getAllUsers();
     /**

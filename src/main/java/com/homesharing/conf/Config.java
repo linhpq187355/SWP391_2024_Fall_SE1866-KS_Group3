@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-03      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.conf;
 
     import org.slf4j.Logger;
@@ -11,6 +20,7 @@ import java.util.Properties;
  * properties, such as the base URL, from the {@code config.properties} file.
  * <p>
  * This class cannot be instantiated and all methods are static.
+ * @author ManhNC
  */
 public class Config {
 

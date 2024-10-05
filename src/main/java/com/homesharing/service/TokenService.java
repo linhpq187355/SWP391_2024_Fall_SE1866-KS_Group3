@@ -1,4 +1,15 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.service;
+
+import java.sql.SQLException;
 
 /**
  * TokenService is an interface that defines the operations for handling tokens,
@@ -7,6 +18,7 @@ package com.homesharing.service;
  *
  * @version 1.0
  * @since 2024-10-02
+ * @author ManhNC
  */
 public interface TokenService {
 
@@ -18,7 +30,7 @@ public interface TokenService {
      * @param userId The ID of the user to whom the token belongs.
      * @return true if the token is valid, false otherwise.
      */
-    boolean checkToken(String token, int userId);
+    boolean checkToken(String token, int userId) throws SQLException;
 
     /**
      * Sends a verification token to the user's email address.
@@ -27,6 +39,6 @@ public interface TokenService {
      * @param email  The email address to which the token should be sent.
      * @param userId The ID of the user to whom the token belongs.
      */
-    void sendToken(String email, int userId);
+    void sendToken(String email, int userId) throws SQLException;
 
 }

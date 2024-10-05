@@ -1,5 +1,13 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.exception;
-
 
 /**
  * Custom exception class for handling general exceptions related to UserDao operations
@@ -7,6 +15,7 @@ package com.homesharing.exception;
  * <p>
  * This exception extends {@code RuntimeException} and can be thrown when an
  * error occurs during runtime.
+ * @author ManhNC
  */
 public class GeneralException extends RuntimeException {
 

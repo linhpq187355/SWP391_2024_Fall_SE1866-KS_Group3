@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -17,10 +26,24 @@ import java.util.logging.Logger;
 
 /**
  * Implementation of the UserDAO interface, handling database operations for the User entity.
+ * @author ManhNC
  */
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl extends DBContext implements UserDAO {
 
     private static final Logger logger = Logger.getLogger(UserDAOImpl.class.getName());
+
+    /**
+     * Constructor initializes the database connection by reading the
+     * configuration file.
+     *
+     * @throws SQLException           if a database access error occurs
+     * @throws IOException            if there is an issue reading the configuration file
+     * @throws ClassNotFoundException if the JDBC driver class cannot be found
+     */
+    public UserDAOImpl() throws SQLException, IOException, ClassNotFoundException {
+        super();
+    }
+
 
     /**
      * Saves a user to the database by executing an INSERT SQL query.
@@ -30,14 +53,13 @@ public class UserDAOImpl implements UserDAO {
      * @throws GeneralException if there is an error saving the user to the database.
      */
     @Override
-    public int saveUser(User user) {
+    public int saveUser(User user) throws SQLException {
         String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        // Using try-with-resources to ensure automatic resource management
-        try (Connection connection = DBContext.getConnection();
-             // Create PreparedStatement with RETURN_GENERATED_KEYS to get the inserted ID
-             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             // Set parameters for the prepared statement based on the user's information
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -65,6 +87,8 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error saving user to the database: " + e.getMessage(), e);
+        } finally {
+            closeConnection();
         }
     }
 
@@ -77,12 +101,13 @@ public class UserDAOImpl implements UserDAO {
      * @throws GeneralException if there is an error checking email existence in the database.
      */
     @Override
-    public boolean emailExists(String email) {
+    public boolean emailExists(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM [HSS_Users] WHERE [email] = ?";
-
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, email);
 
             // Execute the query to check for email existence
@@ -94,6 +119,8 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error checking email existence in the database", e);
+        } finally {
+            closeConnection();
         }
 
         // Return false if no email match is found
@@ -108,13 +135,15 @@ public class UserDAOImpl implements UserDAO {
      * @throws GeneralException if there is an error retrieving the user from the database.
      */
     @Override
-    public User getUser(int id) {
+    public User getUser(int id) throws SQLException {
         String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber "
                 + "FROM [HSS_Users] u WHERE u.id = ?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             // Set the email parameter for the prepared statement
             preparedStatement.setInt(1, id);
 
@@ -139,6 +168,8 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Error getting user from database", e);
             throw new GeneralException("Error getting user from database", e);
+        } finally {
+            closeConnection();
         }
 
         return null; // Return null if user is not found
@@ -152,12 +183,14 @@ public class UserDAOImpl implements UserDAO {
      * @throws GeneralException if there is an error finding the user by email in the database.
      */
     @Override
-    public User findUserByEmail(String email) {
+    public User findUserByEmail(String email) throws SQLException {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_Users] WHERE [email] = ?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, email);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -184,6 +217,8 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error finding user by email in the database: " + e.getMessage(), e);
+        } finally {
+            closeConnection();
         }
 
         return null; // Return null if no user is found
@@ -215,7 +250,7 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = DBContext.getConnection();
+            connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -254,7 +289,7 @@ public class UserDAOImpl implements UserDAO {
 
                 userList.add(user);
             }
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+        } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error: ", e);
         } finally {
             // Closing resources in reverse order of opening
@@ -296,7 +331,7 @@ public class UserDAOImpl implements UserDAO {
                 "      ,[lastModified] = GETDATE()\n" +
                 " WHERE id = ?";
 
-        try (Connection connection = DBContext.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             // Set the parameters for the update statement
@@ -337,7 +372,7 @@ public class UserDAOImpl implements UserDAO {
     public String getUserAvatar(int id) {
         String sql = "SELECT u.avatar\n" +
                 "  FROM [HSS_Users] u WHERE u.id = ?";
-        try (Connection connection = DBContext.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             // Set the user ID parameter in the prepared statement
@@ -366,7 +401,7 @@ public class UserDAOImpl implements UserDAO {
                 " WHERE [id] = ?";
 
         try (
-                Connection connection = DBContext.getConnection();
+                Connection connection = getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, id);
@@ -380,7 +415,7 @@ public class UserDAOImpl implements UserDAO {
     public User getUserById(int id) {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
 
-        try (Connection connection = DBContext.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             //
             preparedStatement.setInt(1, id);
@@ -421,7 +456,7 @@ public class UserDAOImpl implements UserDAO {
                 "   SET [hashedPassword] = ?\n" +
                 " WHERE id = ?";
 
-        try (Connection connection = DBContext.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             // Hash the new password using a utility method before storing
@@ -440,10 +475,6 @@ public class UserDAOImpl implements UserDAO {
         return rowsUpdated;
     }
 
-    public static void main(String[] args) {
-        UserDAOImpl userDAO = new UserDAOImpl();
-        User user = userDAO.getUser(1);
-        System.out.println(user.getFirstName());
-    }
+
 
 }

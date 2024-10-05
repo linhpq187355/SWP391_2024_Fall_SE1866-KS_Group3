@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.TokenDAO;
@@ -12,13 +21,17 @@ import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Implementation of UserService interface, handling user-related business logic.
- * This class manages user registration and input validation.
+ * UserServiceImpl is an implementation of the UserService interface.
+ * This class is responsible for managing user-related operations,
+ * including registration, login, profile updates, and input validation.
+ *
+ * @author ManhNC
  */
 public class UserServiceImpl implements UserService {
 
@@ -52,7 +65,7 @@ public class UserServiceImpl implements UserService {
      * @return A success message or an error message.
      */
     @Override
-    public String registerUser(String firstName, String lastName, String email, String password, String role) {
+    public String registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException {
         // Validate user input
         if (!validateUserInput(firstName, lastName, email, password, password, role)) {
             return "Invalid input!";
@@ -76,9 +89,9 @@ public class UserServiceImpl implements UserService {
             // Determine role value based on input role
             int roleValue;
             if ("findRoommate".equals(role)) {
-                roleValue = 4;
-            } else if ("postRoom".equals(role)) {
                 roleValue = 3;
+            } else if ("postRoom".equals(role)) {
+                roleValue = 4;
             } else {
                 return "Invalid role: " + role;
             }
@@ -86,10 +99,10 @@ public class UserServiceImpl implements UserService {
             // Insert new user into the database
             int userId = userDao.saveUser(user);
             tokenService.sendToken(email, userId);
+            preferenceService.addPreference(userId);
             return "success";
         } catch (GeneralException e) {
-            // Handle runtime exceptions thrown by the UserDao
-            return "Error during registration: " + e.getMessage();
+            throw new GeneralException(e.getMessage());
         }
     }
 
@@ -136,7 +149,8 @@ public class UserServiceImpl implements UserService {
      * @return a message indicating the result of the login attempt, either success or an error message
      */
     @Override
-    public String login(String email, String password, boolean rememberMe, HttpServletResponse response) {
+    public String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException {
+        try{
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
@@ -184,6 +198,9 @@ public class UserServiceImpl implements UserService {
 
         // Return true to indicate a successful login
         return "success";
+        } catch (GeneralException e) {
+            throw new GeneralException("Error:" ,e);
+        }
     }
 
     /**
@@ -195,7 +212,8 @@ public class UserServiceImpl implements UserService {
      * @return a message indicating the result of the login attempt, either success or an error message
      */
     @Override
-    public String loginStaff(String email, String password, HttpServletResponse response){
+    public String loginStaff(String email, String password, HttpServletResponse response) throws SQLException {
+        try{
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
@@ -243,6 +261,9 @@ public class UserServiceImpl implements UserService {
 
         // Return true to indicate a successful login
         return "success";
+        } catch (GeneralException e) {
+            throw new GeneralException("Error",e);
+        }
     }
 
     /**
@@ -307,7 +328,7 @@ public class UserServiceImpl implements UserService {
      * @throws GeneralException if an error occurs while accessing the database or if the user is not found.
      */
     @Override
-    public User getUser(int userId) {
+    public User getUser(int userId) throws SQLException {
         try {
             // Attempt to retrieve the user from the DAO using the provided userId
             return userDao.getUser(userId);

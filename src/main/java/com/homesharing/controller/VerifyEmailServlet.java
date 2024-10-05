@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-02      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDAO;
@@ -14,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * VerifyEmailServlet handles the email verification process for users.
@@ -22,6 +32,7 @@ import java.io.IOException;
  *
  * @version 1.0
  * @since 2024-10-02
+ * @author ManhNC
  */
 @WebServlet("/verify")
 public class VerifyEmailServlet extends HttpServlet {
@@ -34,7 +45,12 @@ public class VerifyEmailServlet extends HttpServlet {
      */
     @Override
     public void init() {
-        TokenDAO tokenDao = new TokenDAOImpl();
+        TokenDAO tokenDao = null;
+        try {
+            tokenDao = new TokenDAOImpl();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.error("Lỗi khởi tạo TokenDAO trong init(): {}", e.getMessage(), e);
+        }
         tokenService = new TokenServiceImpl(tokenDao);
     }
 
@@ -70,7 +86,7 @@ public class VerifyEmailServlet extends HttpServlet {
             } else {
                 forwardWithMessage(request, response, "Xác thực không thành công.");
             }
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | SQLException e) {
             // Handle any errors that occur during token verification
             forwardWithMessage(request, response, "Lỗi khi xác thực email: " + e.getMessage());
         }
