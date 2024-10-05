@@ -1,41 +1,21 @@
-USE [master]
-GO
-
--- Drop database if it exists
-IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'HSS_DB')
-BEGIN
-    ALTER DATABASE [HSS_DB] SET OFFLINE WITH ROLLBACK IMMEDIATE;
-    ALTER DATABASE [HSS_DB] SET ONLINE;
-    DROP DATABASE [HSS_DB];
-END
-GO
-
-CREATE DATABASE [HSS_DB]
-GO
-
-USE [HSS_DB]
-GO
-
 CREATE TABLE HSS_Users (
-  id               int IDENTITY NOT NULL, 
-  email            varchar(255) NOT NULL, 
-  hashedPassword   nvarchar(255) NULL, 
-  phoneNumber      varchar(12) NULL, 
-  username         varchar(50) NULL, 
-  firstName        nvarchar(50) NULL, 
-  lastName         nvarchar(50) NULL, 
-  avatar           varchar(255) NULL, 
-  dob              date NULL, 
-  address          nvarchar(255) NULL, 
-  gender           nvarchar(255) NULL, 
-  citizenNumber    varchar(20) NULL, 
-  createdAt        datetime NULL, 
-  status           nvarchar(20) DEFAULT 'active' NOT NULL, 
-  isVerified       bit DEFAULT 0 NOT NULL, 
-  lastModified     datetime2(7) NULL, 
-  wardsId          int NULL, 
-  rolesid          int NOT NULL, 
-  verificationCode nvarchar(255) NULL, 
+  id             int IDENTITY NOT NULL, 
+  email          varchar(255) NOT NULL UNIQUE, 
+  hashedPassword nvarchar(255) NULL, 
+  phoneNumber    varchar(12) NULL, 
+  username       varchar(50) NULL, 
+  firstName      nvarchar(50) NULL, 
+  lastName       nvarchar(50) NULL, 
+  avatar         varchar(255) NULL, 
+  dob            date NULL, 
+  address        nvarchar(255) NULL, 
+  gender         nvarchar(255) NULL, 
+  citizenNumber  varchar(20) NULL, 
+  createdAt      datetime NULL, 
+  status         nvarchar(20) DEFAULT 'active' NOT NULL, 
+  isVerified     bit DEFAULT 0 NOT NULL, 
+  lastModified   datetime2(7) NULL, 
+  rolesid        int NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE HomeImages (
   id      int IDENTITY(1, 1) NOT NULL, 
@@ -75,8 +55,8 @@ CREATE TABLE Homes (
   numOfBath         int NOT NULL, 
   createdDate       datetime NOT NULL, 
   modifiedDate      datetime NULL, 
-  homeDescription   text NULL, 
-  tenantDescription text NULL, 
+  homeDescription   nvarchar(300) NULL, 
+  tenantDescription nvarchar(300) NULL, 
   homeTypeId        int NOT NULL, 
   createdBy         int NOT NULL, 
   wardsId           int NOT NULL, 
@@ -218,6 +198,7 @@ CREATE TABLE Token (
   userId        int NOT NULL, 
   otp           varchar(10) NOT NULL, 
   requestedTime datetime NOT NULL, 
+  isVerified    bit DEFAULT 0 NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE Prices (
   id          int IDENTITY(1, 1) NOT NULL, 
