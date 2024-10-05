@@ -8,6 +8,7 @@ import com.homesharing.model.Price;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +23,7 @@ import java.util.List;
  * database operations related to Price entities.
  */
 public class PriceDAOImpl extends DBContext implements PriceDAO {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PriceDAOImpl.class);
 
     /**
