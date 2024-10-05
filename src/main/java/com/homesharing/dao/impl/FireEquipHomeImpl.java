@@ -1,7 +1,9 @@
 package com.homesharing.dao.impl;
+
 import com.homesharing.conf.DBContext;
-import com.homesharing.dao.AmentityHomeDAO;
-import com.homesharing.model.AmentityHome;
+import com.homesharing.dao.FireEquipHomeDAO;
+import com.homesharing.model.FireEquipmentsHome;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,17 +11,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class AmentityHomeDAOImpl implements AmentityHomeDAO {
+public class FireEquipHomeImpl implements FireEquipHomeDAO {
     @Override
-    public int save(AmentityHome amentityHome) {
-        String sql = "INSERT INTO [dbo].[Amenities_Homes] ([amenitiesId],[homesId]) VALUES(?,?)";
+    public int save(FireEquipmentsHome fireEquipmentsHome) {
+        String sql = "INSERT INTO [dbo].[FireEquipments_Homes] ([fireEquipmentsId],[homesId]) VALUES (?,?)";
         // Using try-with-resources to manage the database connection and resources
         try (Connection connection = DBContext.getConnection();
              // PreparedStatement with RETURN_GENERATED_KEYS to capture the inserted Home ID
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Setting parameters for the PreparedStatement using the Home object
-            preparedStatement.setInt(1, amentityHome.getAmenityId());
-            preparedStatement.setInt(2, amentityHome.getHomesId());
+            preparedStatement.setInt(1, fireEquipmentsHome.getFireEquipmentsId());
+            preparedStatement.setInt(2, fireEquipmentsHome.getHomesId());
             // Execute the insert statement and capture affected rows
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {

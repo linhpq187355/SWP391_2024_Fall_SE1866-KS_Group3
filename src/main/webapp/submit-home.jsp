@@ -23,11 +23,11 @@
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/fontello.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-          crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link href="assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
     <link href="assets/fonts/icon-7-stroke/css/helper.css" rel="stylesheet">
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link href="css/animate.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="assets/css/upload-img.css">
@@ -40,14 +40,26 @@
     <link rel="stylesheet" href="assets/css/wizard.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <link href="assets/dist/imageuploadify.min.css" rel="stylesheet">
+    <br type="_moz">
     <style>
         #map {
             width: 100%;
             height: 60%;
         }
-
+        img {
+            max-width: 50%;
+        }
         label {
             color: darkgrey;
+        }
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
         }
     </style>
 </head>
@@ -57,6 +69,8 @@
     <div id="status">&nbsp;</div>
 </div>
 <!-- Body content -->
+
+<jsp:include page="header-demo.jsp"/>
 
 <div class="page-head">
     <div class="container">
@@ -74,9 +88,8 @@
     <div class="container">
         <div class="clearfix">
             <div class="wizard-container">
-
                 <div class="wizard-card ct-wizard-orange" id="wizardProperty">
-                    <form action="submit-home" method="post">
+                    <form action="submit-home" method="post" enctype="multipart/form-data">
                         <ul>
                             <li><a href="#step1" data-toggle="tab">Bước 1 </a></li>
                             <li><a href="#step2" data-toggle="tab">Bước 2 </a></li>
@@ -85,15 +98,15 @@
                         </ul>
 
                         <div class="tab-content">
-
                             <div class="tab-pane" id="step1">
                                 <div class="row p-b-15  ">
                                     <h4 class="info-text"> THÔNG TIN CƠ BẢN</h4>
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label>Loại hình nhà ở <small>(required)</small></label><br>
+                                            <label>Loại hình nhà ở <small>(*)</small></label><br>
                                             <select name="home-type" id="home-type" class="form-control"
-                                                    aria-label="VD nhà nguyên căn" required>
+                                                    required>
+                                                <option value="" selected>Chọn loại hình nhà ở</option>
                                                 <c:forEach var="hometype" items="${homeTypes}">
                                                     <option value="${hometype.id}">${hometype.name}</option>
                                                 </c:forEach>
@@ -102,12 +115,12 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label>Tên nơi ở của bạn <small>(required)</small></label>
+                                            <label>Tên nơi ở của bạn <small>(*)</small></label>
                                             <input name="home-name" type="text" class="form-control" required>
                                         </div>
                                     </div>
                                     <div style="margin-left: 15px;">
-                                        <select class="form-select form-select-sm mb-3" id="city"
+                                        <select class="form-select form-select-sm mb-3" name="province" id="province"
                                                 aria-label=".form-select-sm">
                                             <option value="" selected>Chọn tỉnh thành</option>
                                             <c:forEach var="province" items="${provinces}">
@@ -115,29 +128,31 @@
                                             </c:forEach>
                                         </select>
 
-                                        <select class="form-select form-select-sm mb-3" id="district"
+                                        <select class="form-select form-select-sm mb-3" name="district" id="district"
                                                 aria-label=".form-select-sm">
                                             <option value="" selected>Chọn quận huyện</option>
                                         </select>
 
-                                        <select class="form-select form-select-sm" id="ward"
+                                        <select class="form-select form-select-sm" name="ward" id="ward"
                                                 aria-label=".form-select-sm">
                                             <option value="" selected>Chọn phường xã</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label>Địa chỉ cụ thể <small>(required)</small></label>
+                                            <label>Địa chỉ cụ thể <small>(*)</small></label>
                                             <input name="address-detail" type="text" class="form-control" required>
                                         </div>
                                     </div>
-
-                                    <%--                  <div class="col-sm-12">--%>
-                                    <%--                    <div class="form-group">--%>
-                                    <%--                      <label>Vị trí trên bản đồ <small>(required)</small></label>--%>
-                                    <%--                      <div id="map"></div>--%>
-                                    <%--                    </div>--%>
-                                    <%--                  </div>--%>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Vui lòng chọn vị trí trên bản đồ</label>
+                                            <div id="map"></div>
+                                            <%--                                            <div id="selected-location"></div>--%>
+                                            <input type="hidden" name="latitude" id="latitude" value="">
+                                            <input type="hidden" name="longitude" id="longitude" value="">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!--  End step 1 -->
@@ -148,12 +163,12 @@
                                     <div class="col-sm-12">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label>Mô tả về nơi ở của bạn:</label>
+                                                <label>Mô tả về nơi ở của bạn <small>(*)</small></label>
                                                 <textarea name="home-description" class="form-control"
                                                           required></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label>Mô tả về người bạn muốn ở ghép:</label>
+                                                <label>Mô tả về người bạn muốn ở ghép <small>(*)</small></label>
                                                 <textarea name="tenant-description" class="form-control"
                                                           required></textarea>
                                             </div>
@@ -163,7 +178,7 @@
                                     <div class="col-sm-12">
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label>Diện tích nơi ở (mét vuông) :</label>
+                                                <label>Diện tích nơi ở (mét vuông) <small>(*)</small></label>
                                                 <input type="number" class="form-control" id="area" name="area"
                                                        step="0.01" min="10" max="1000" required>
                                             </div>
@@ -173,7 +188,7 @@
                                                 <label>Hướng nhà :</label>
                                                 <select id="direction" name="direction" class="selectpicker"
                                                         data-live-search="true"
-                                                        data-live-search-style="begins" title="Chọn hướng nhà" required>
+                                                        data-live-search-style="begins" title="Chọn hướng nhà">
                                                     <option>Hướng Đông</option>
                                                     <option>Hướng Tây</option>
                                                     <option>Hướng Nam</option>
@@ -187,7 +202,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label>Thời gian cho ở ghép :</label>
+                                                <label>Thời gian cho ở ghép <small>(*)</small></label>
                                                 <input type="number" class="form-control" id="leaseDuration"
                                                        name="leaseDuration" placeholder="Chọn thời gian theo tháng"
                                                        min="1" max="12" required>
@@ -195,7 +210,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label>Ngày chuyển đến :</label>
+                                                <label>Ngày chuyển đến <small>(*)</small></label>
                                                 <input type="date" id="moveInDate" name="moveInDate" required>
                                             </div>
                                         </div>
@@ -203,7 +218,7 @@
                                     <div class="col-sm-12 padding-top-15">
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label>Số phòng ngủ :</label>
+                                                <label>Số phòng ngủ <small>(*)</small></label>
                                                 <input type="number" class="form-control" id="numOfBedroom"
                                                        name="numOfBedroom" min="1" max="10" required>
                                             </div>
@@ -211,7 +226,7 @@
                                         <div class="col-sm-4">
 
                                             <div class="form-group">
-                                                <label>Số nhà vệ sinh :</label>
+                                                <label>Số nhà vệ sinh <small>(*)</small></label>
                                                 <input type="number" class="form-control" id="numOfBath"
                                                        name="numOfBath" min="1" max="10" required>
                                             </div>
@@ -219,7 +234,7 @@
                                         <div class="col-sm-4">
 
                                             <div class="form-group">
-                                                <label>Mức giá theo tháng (VND) :</label>
+                                                <label>Mức giá theo tháng (VND) <small>(*)</small></label>
                                                 <input type="number" class="form-control" id="price" name="price"
                                                        min="1000000" step="20000000" required>
                                             </div>
@@ -260,17 +275,19 @@
                             </div>
                             <!-- End step 2 -->
 
-                            <%--              <div class="tab-pane" id="step3">--%>
-                            <%--                <h4 class="info-text">HÌNH ẢNH</h4>--%>
-                            <%--                <div class="row">--%>
-                            <%--                  <div class="col-sm-12">--%>
-                            <%--                    <div class="form-group">--%>
-                            <%--                      <label for="imageUpload">Chọn hình ảnh <small>(có thể chọn nhiều hình ảnh)</small></label>--%>
-                            <%--                      <input type="file" id="imageUpload" name="imageUpload"  class="form-control" multiple accept="image/*">--%>
-                            <%--                    </div>--%>
-                            <%--                  </div>--%>
-                            <%--                </div>--%>
-                            <%--              </div>--%>
+                            <div class="tab-pane" id="step3">
+                                <h4 class="info-text">HÌNH ẢNH</h4>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="container" style="margin-top: 30px;">
+                                            <label for="imageUpload">Chọn hình ảnh <small>(có thể chọn nhiều
+                                                ảnh)</small></label>
+                                            <input type="file" id="imageUpload" name="images" accept="image/*" multiple>
+                                            <div id="imagePreview" class="mt-3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!--  End step 3 -->
 
 
@@ -284,10 +301,10 @@
                                                 nhu cầu tìm kiếm roommate. Sử dụng website này đồng nghĩa với việc
                                                 bạn đồng ý tuân thủ các điều khoản và điều kiện của chúng tôi.
                                             </p>
-                                            <div class="checkbox">
+                                            <div>
                                                 <label>
-                                                    <input type="checkbox"/> <strong>Tôi đồng ý các điều khoản và điều
-                                                    kiện.</strong>
+                                                    <input type="checkbox"/> <strong>Tôi đồng ý các điều khoản
+                                                    và điều kiện.</strong>
                                                 </label>
                                             </div>
                                         </div>
@@ -295,7 +312,6 @@
                                 </div>
                             </div>
                             <!--  End step 4 -->
-
                         </div>
 
                         <div class="wizard-footer">
@@ -318,6 +334,7 @@
     </div>
 </div>
 
+<jsp:include page="footer-demo.jsp"/>
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="assets/js//jquery-1.10.2.min.js"></script>
@@ -330,71 +347,18 @@
 <script src="assets/js/wow.js"></script>
 <script src="assets/js/icheck.min.js"></script>
 <script src="assets/js/upload-img.js"></script>
-
 <script src="assets/js/price-range.js"></script>
 <script src="assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
 <script src="assets/js/jquery.validate.min.js"></script>
 <script src="assets/js/wizard.js"></script>
-
 <script src="assets/js/main.js"></script>
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-        crossorigin=""></script>
-<script>
-    $(document).ready(function () {
-        var mapObj = null;
-        var defaultCoord = [21.0819, 105.6363]; // coord mặc định, Hà Nội
-        var zoomLevel = 16; // Mức phóng to bản đồ
-        var mapConfig = {
-            attributionControl: false, // để ko hiện watermark nữa, nếu bị liên hệ đòi thì nhớ open nha
-            center: defaultCoord, // vị trí map mặc định hiện tại
-            zoom: zoomLevel,
-        };
-
-        mapObj = L.map('map', mapConfig);
-
-        // thêm tile để map có thể hoạt động, xài free từ OSM
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(mapObj);
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('#province').change(function() {
-            let provinceId = $(this).val();
-            if (provinceId) {
-                $.get('LocationServlet', {action: 'getDistricts', parentId: provinceId}, function(data) {
-                    $('#district').empty().append('<option value="">Chọn quận huyện</option>');
-                    $('#ward').empty().append('<option value="">Chọn phường xã</option>');
-                    $.each(data, function(index, item) {
-                        $('#district').append($('<option></option>').val(item.id).text(item.name));
-                    });
-                });
-            } else {
-                $('#district').empty().append('<option value="">Chọn quận huyện</option>');
-                $('#ward').empty().append('<option value="">Chọn phường xã</option>');
-            }
-        });
-
-        $('#district').change(function() {
-            let districtId = $(this).val();
-            if (districtId) {
-                $.get('LocationServlet', {action: 'getWards', parentId: districtId}, function(data) {
-                    $('#ward').empty().append('<option value="">Chọn phường xã</option>');
-                    $.each(data, function(index, item) {
-                        $('#ward').append($('<option></option>').val(item.id).text(item.name));
-                    });
-                });
-            } else {
-                $('#ward').empty().append('<option value="">Chọn phường xã</option>');
-            }
-        });
-    });
-</script>
-
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="assets/js/map.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-<script src="assets/js/administrative-territory.js"></script>
+<script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="assets/dist/imageuploadify.min.js"></script>
+<script src="assets/js/img-preview.js"></script>
 <script src="assets/js/submisson-form-validation.js"></script>
 </body>
 </html>

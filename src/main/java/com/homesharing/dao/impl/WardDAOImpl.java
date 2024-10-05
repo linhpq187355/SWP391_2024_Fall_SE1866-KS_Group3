@@ -14,12 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WardDAOImpl implements WardDAO {
-    private final List<Ward> wards = new ArrayList<>();
+
 
     @Override
     public List<Ward> getAllWards() {
         String sql = "SELECT [id],[name],[status] FROM [dbo].[Wards]";
 
+        List<Ward> wards = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -63,6 +64,8 @@ public class WardDAOImpl implements WardDAO {
     public List<Ward> getWardsByDistrictId(int districtId) {
         String sql = "SELECT [id],[name] FROM [dbo].[Wards] \n" +
                 "WHERE Districtsid = ? AND status='active'";
+
+        List<Ward> wards = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

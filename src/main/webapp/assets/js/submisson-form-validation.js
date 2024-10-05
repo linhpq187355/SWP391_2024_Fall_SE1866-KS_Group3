@@ -1,82 +1,198 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        if (validateForm()) {
-            this.submit();
-        }
-    });
-    function validateForm() {
-        let isValid = true;
-        // Step 1 validation
-        const homeType = document.getElementById('home-type');
-        const city = document.getElementById('city');
-        const district = document.getElementById('district');
-        const ward = document.getElementById('ward');
-        const addressDetail = document.querySelector('input[name="address-detail"]');
-        if (!homeType.value) {
-            alert('Vui lòng chọn loại hình nhà ở tại bước 1');
-            isValid = false;
-        }
-        if (!city.value || !district.value || !ward.value) {
-            alert('Vui lòng chọn đầy đủ tỉnh thành, quận huyện, phường xã tại bước 1');
-            isValid = false;
-        }
-        if (!addressDetail.value.trim()) {
-            alert('Vui lòng nhập địa chỉ cụ thể tại bước 1');
-            isValid = false;
-        }
-        // Step 2 validation
-        const area = document.getElementById('area');
-        const leaseDuration = document.getElementById('leaseDuration');
-        const moveInDate = document.getElementById('moveInDate');
-        const numOfBedroom = document.getElementById('numOfBedroom');
-        const numOfBath = document.getElementById('numOfBath');
-        const price = document.getElementById('price');
-        if (isNaN(area.value) || area.value < 10 || area.value > 1000) {
-            alert('Diện tích phải từ 10 đến 1000 mét vuông');
-            isValid = false;
-        }
-        if (isNaN(leaseDuration.value) || leaseDuration.value < 1 || leaseDuration.value > 12) {
-            alert('Thời gian cho ở ghép phải từ 1 đến 12 tháng');
-            isValid = false;
-        }
-        if (!moveInDate.value) {
-            alert('Vui lòng chọn ngày chuyển đến');
-            isValid = false;
-        } else {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const selectedDate = new Date(moveInDate.value);
-            if (selectedDate <= today) {
-                alert('Ngày chuyển đến phải là ngày trong tương lai');
-                isValid = false;
+$.validator.addMethod('futureDate', function(value, element) {
+    var date = new Date(value);
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date >= today) {
+        return true;
+    } else {
+        return false;
+    }
+}, 'Ngày chuyển đến không được là ngày trong quá khứ');
+
+$.validator.addMethod('withinOneMonth', function(value, element) {
+    var date = new Date(value);
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var oneMonthLater = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    if (date <= oneMonthLater) {
+        return true;
+    } else {
+        return false;
+    }
+}, 'Ngày chuyển đến phải trong vòng 1 tháng kể từ ngày hiện tại');
+
+$(document).ready(function() {
+    // Validate form fields
+    $('#wizardProperty form').validate({
+        rules: {
+            'home-type': {
+                required: true
+            },
+            'home-name': {
+                required: true,
+                minlength: 5,
+                maxlength: 255
+            },
+            'province': {
+                required: true
+            },
+            'district': {
+                required: true
+            },
+            'ward': {
+                required: true
+            },
+            'address-detail': {
+                required: true,
+                minlength: 5,
+                maxlength: 255
+            },
+            'home-description': {
+                required: true,
+                minlength: 10,
+                maxlength: 500
+            },
+            'tenant-description': {
+                required: true,
+                minlength: 10,
+                maxlength: 500
+            },
+            'area': {
+                required: true,
+                number: true,
+                min: 10,
+                max: 1000
+            },
+            'leaseDuration': {
+                required: true,
+                number: true,
+                min: 1,
+                max: 12
+            },
+            'moveInDate': {
+                required: true,
+                date: true,
+                futureDate: true,
+                withinOneMonth: true
+            },
+            'numOfBedroom': {
+                required: true,
+                number: true,
+                min: 1,
+                max: 10
+            },
+            'numOfBath': {
+                required: true,
+                number: true,
+                min: 1,
+                max: 10
+            },
+            'price': {
+                required: true,
+                number: true,
+                min: 1000000,
+                max: 100000000
+            },
+            'amentityIds': {
+                required: true,
+                minlength: 1
+            },
+            'fireEquipIds': {
+                required: true,
+                minlength: 1
+            },
+            'images': {
+                required: true,
+                accept: 'image/*'
+            }
+        },
+        messages: {
+            'home-type': {
+                required: 'Vui lòng chọn loại hình nhà ở'
+            },
+            'home-name': {
+                required: 'Vui lòng nhập tên nơi ở',
+                minlength: 'Tên nơi ở phải có ít nhất 5 ký tự',
+                maxlength: 'Tên nơi ở không được quá 255 ký tự'
+            },
+            'province': {
+                required: 'Vui lòng chọn tỉnh thành'
+            },
+            'district': {
+                required: 'Vui lòng chọn quận huyện'
+            },
+            'ward': {
+                required: 'Vui lòng chọn phường xã'
+            },
+            'address-detail': {
+                required: 'Vui lòng nhập địa chỉ cụ thể',
+                minlength: 'Địa chỉ cụ thể phải có ít nhất 5 ký tự',
+                maxlength: 'Địa chỉ cụ thể không được quá 255 ký tự'
+            },
+            'latitude': {
+                required: 'Vui lòng nhập vĩ độ',
+                number: 'Vĩ độ phải là số'
+            },
+            'longitude': {
+                required: 'Vui lòng nhập kinh độ',
+                number: 'Kinh độ phải là số'
+            },
+            'home-description': {
+                required: 'Vui lòng nhập mô tả về nơi ở',
+                minlength: 'Mô tả về nơi ở phải có ít nhất 10 ký tự',
+                maxlength: 'Mô tả về nơi ở không được quá 500 ký tự'
+            },
+            'tenant-description': {
+                required: 'Vui lòng nhập mô tả về người bạn muốn ở ghép',
+                minlength: 'Mô tả về người bạn muốn ở ghép phải có ít nhất 10 ký tự',
+                maxlength: 'Mô tả về người bạn muốn ở ghép không được quá 500 ký tự'
+            },
+            'area': {
+                required: 'Vui lòng nhập diện tích nơi ở',
+                number: 'Diện tích nơi ở phải là số',
+                min: 'Diện tích nơi ở phải từ 10 mét vuông trở lên',
+                max: 'Diện tích nơi ở không được quá 1000 mét vuông'
+            },
+            'leaseDuration': {
+                required: 'Vui lòng nhập thời gian cho ở ghép',
+                number: 'Thời gian cho ở ghép phải là số',
+                min: 'Thời gian cho ở ghép phải từ 1 tháng trở lên',
+                max: 'Thời gian cho ở ghép không được quá 12 tháng'
+            },
+            'moveInDate': {
+                required: 'Vui lòng nhập ngày chuyển đến',
+                date: 'Ngày chuyển đến phải ở định dạng date',
+                futureDate: 'Ngày chuyển đến không được là ngày trong quá khứ',
+                withinOneMonth: 'Ngày chuyển đến phải trong vòng 1 tháng kể từ ngày hiện tại'
+            },
+            'numOfBedroom': {
+                required: 'Vui lòng nhập số phòng ngủ',
+                number: 'Số phòng ngủ phải là số',
+                min: 'Số phòng ngủ phải từ 1 trở lên',
+                max: 'Số phòng ngủ không được quá 10'
+            },
+            'numOfBath': {
+                required: 'Vui lòng nhập số nhà vệ sinh',
+                number: 'Số nhà vệ sinh phải là số',
+                min: 'Số nhà vệ sinh phải từ 1 trở lên',
+                max: 'Số nhà vệ sinh không được quá 10'
+            },
+            'price': {
+                required: 'Vui lòng nhập mức giá',
+                number: 'Mức giá phải là số',
+                min: 'Mức giá phải từ 1.000.000 đồng trở lên',
+                max: 'Mức giá không được quá 100.000.000 đồng'
+            },
+            'amentityIds': {
+                required: 'Vui lòng chọn ít nhất một tiện ích'
+            },
+            'fireEquipIds': {
+                required: 'Vui lòng chọn ít nhất một thiết bị phòng cháy chữa cháy'
+            },
+            'images': {
+                required: 'Vui lòng chọn hình ảnh',
+                accept: 'Hình ảnh phải là file ảnh'
             }
         }
-        if (isNaN(numOfBedroom.value) || numOfBedroom.value < 1 || numOfBedroom.value > 10) {
-            alert('Số phòng ngủ phải từ 1 đến 10');
-            isValid = false;
-        }
-        if (isNaN(numOfBath.value) || numOfBath.value < 1 || numOfBath.value > 10) {
-            alert('Số nhà vệ sinh phải từ 1 đến 10');
-            isValid = false;
-        }
-        if (isNaN(price.value) || price.value < 1000000) {
-            alert('Mức giá phải từ 1,000,000 VND trở lên');
-            isValid = false;
-        }
-        // Step 3 validation
-        // const imageUpload = document.getElementById('imageUpload');
-        // if (imageUpload.files.length === 0) {
-        //     alert('Vui lòng chọn ít nhất một hình ảnh');
-        //     isValid = false;
-        // }
-        // Step 4 validation
-        const agreeTerms = document.querySelector('input[type="checkbox"]');
-        if (!agreeTerms.checked) {
-            alert('Để đăng tin, vui lòng đồng ý với điều khoản và điều kiện');
-            isValid = false;
-        }
-        return isValid;
-    }
+    });
 });
