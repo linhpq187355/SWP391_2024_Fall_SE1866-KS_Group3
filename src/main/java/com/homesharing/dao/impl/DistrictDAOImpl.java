@@ -15,11 +15,12 @@ import java.util.logging.Logger;
 public class DistrictDAOImpl implements DistrictDAO {
     public final String DB_RESOURCE = "Error closing database resources:";
     Logger logger = Logger.getLogger(DistrictDAOImpl.class.getName());
-    private final List<District> districts = new ArrayList<>();
+
 
     @Override
     public List<District> getAllDistricts() {
         String sql = "SELECT [id],[name],[status] FROM [dbo].[Districts]";
+        List<District> districts = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -107,6 +108,7 @@ public class DistrictDAOImpl implements DistrictDAO {
     public List<District> getDistrictByProvinceId(int provinceId) {
         String sql = "SELECT [id],[name] FROM [dbo].[Districts] WHERE provincesId=?";
 
+        List<District> districts = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

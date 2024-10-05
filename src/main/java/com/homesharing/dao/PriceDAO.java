@@ -17,4 +17,5 @@ public interface PriceDAO {
      * @return a list of Price objects corresponding to the given homes
      */
     List<Price> getPrices(List<Home> homes);
+    int savePrice(Price price);
 }

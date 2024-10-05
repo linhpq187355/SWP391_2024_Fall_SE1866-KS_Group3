@@ -2,10 +2,8 @@ package com.homesharing.dao;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.impl.PreferenceDAOImpl;
-import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Preference;
-import org.eclipse.tags.shaded.org.apache.xpath.res.XPATHErrorResources_de;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +19,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -55,12 +52,12 @@ public class PreferenceDAOImplTest {
     @Test
     public void testUpdatePreference_Success() throws Exception {
         Map<String, Integer> preferences = new HashMap<>();
-        preferences.put("user_id", 1);
+        preferences.put("usersId", 1);
         preferences.put("cleanliness", 80);
         preferences.put("drinking", 90);
 
         when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-        String sql = "UPDATE [dbo].[Preferences] SET cleanliness = ?, drinking = ? WHERE user_id = ?";
+        String sql = "UPDATE [dbo].[Preferences] SET cleanliness = ?, drinking = ? WHERE usersId = ?";
         when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1); // simulate 1 row updated
 
@@ -78,10 +75,10 @@ public class PreferenceDAOImplTest {
     @Test
     public void testUpdatePreference_SQLException() throws Exception {
         Map<String, Integer> preferences = new HashMap<>();
-        preferences.put("user_id", 1);
+        preferences.put("usersId", 1);
         preferences.put("cleanliness", 80);
 
-        String sql = "UPDATE [dbo].[Preferences] SET cleanliness = ? WHERE user_id = ?";
+        String sql = "UPDATE [dbo].[Preferences] SET cleanliness = ? WHERE usersId = ?";
         when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
         when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Database error"));
@@ -96,7 +93,7 @@ public class PreferenceDAOImplTest {
     @Test
     public void testInsertPreference_Success() throws Exception {
         int userId = 1;
-        String sql = "INSERT INTO [dbo].[Preferences] ([user_id]) VALUES (?)";
+        String sql = "INSERT INTO [dbo].[Preferences] ([usersId]) VALUES (?)";
         when(connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1); // simulate 1 row affected
 
@@ -108,7 +105,7 @@ public class PreferenceDAOImplTest {
     @Test
     public void testInsertPreference_SQLException() throws Exception {
         int userId = 1;
-        String sql = "INSERT INTO [dbo].[Preferences] ([user_id]) VALUES (?)";
+        String sql = "INSERT INTO [dbo].[Preferences] ([usersId]) VALUES (?)";
         when(connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Database error"));
 
