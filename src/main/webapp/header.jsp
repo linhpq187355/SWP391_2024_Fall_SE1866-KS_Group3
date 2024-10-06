@@ -90,7 +90,7 @@
             <c:if test="${not empty cookie.id}">
                 <div class="button navbar-right"
                      style="padding-top: 1.5em; display: flex; justify-content: space-around; width: 15em">
-                    <c:if test="${cookie.roleId.value == 4}">
+                    <c:if test="${cookie.roleId.value == 3}">
                         <div class="dropdown ymm-sw">
                             <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                                class="fa-regular fa-heart dropdown-toggle" style="font-size: 2em"></i>
@@ -139,7 +139,7 @@
                                         <a href="product.html">Pham Quang Linh</a>
                                     </h4>
                                     <span class="recent-chat">
-                                             qua la ok la
+                                             Ok chốt vậy nhé
                                         </span>
                                 </div>
                             </div>
@@ -157,12 +157,10 @@
                                         <a href="product.html">Pham Quang Linh</a>
                                     </h4>
                                     <span class="recent-chat">
-                                             qua la ok la
+                                             Bạn đã tìm được người chưa?
                                         </span>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="dropdown ymm-sw" style="position: relative">
@@ -187,7 +185,7 @@
                             <li>
                                 <a href="user-profile" class="li-acc-op">Thông tin cá nhân</a>
                             </li>
-                            <c:if test="${cookie.roleId.value ==3}">
+                            <c:if test="${cookie.roleId.value ==4}">
                                 <li>
                                     <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
                                 </li>
@@ -222,6 +220,9 @@
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-page">Tất cả nhà</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
+                <c:if test="${cookie.roleId.value ==4}">
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="submit-home">Đăng bài</a></li>
+                </c:if>
 
             </ul>
         </div><!-- /.navbar-collapse -->

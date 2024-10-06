@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-02      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDAO;
@@ -26,6 +35,7 @@ import java.io.IOException;
  *
  * @version 1.0
  * @since 2024-10-02
+ * @author ManhNC
  */
 @WebServlet("/staff-login")
 public class StaffLoginServlet extends HttpServlet {
@@ -43,7 +53,7 @@ public class StaffLoginServlet extends HttpServlet {
         TokenDAO tokenDao = new TokenDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
-        userService = new UserServiceImpl(userDao, tokenDao, tokenService);
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);
     }
 
     /**

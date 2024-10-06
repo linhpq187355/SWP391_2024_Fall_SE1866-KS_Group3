@@ -89,18 +89,22 @@
                         </form>
                         <hr>
                            <p class="text-center">Đã có tài khoản? <a href="login.jsp" class="text-primary">Đăng nhập</a></p>
-<%--                        <p class="text-center">Hoặc đăng nhập với</p>--%>
-<%--                        <div class="text-center">--%>
-<%--                            <a href="#!" class="btn btn-default">--%>
-<%--                                <i class="glyphicon glyphicon-google"></i> Google--%>
-<%--                            </a>--%>
+                        <p class="text-center">Hoặc đăng kí với</p>
+                        <div class="text-center">
+                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
+&redirect_uri=http://localhost:9999/homeSharing/sign-up-google
+&response_type=code
+&client_id=415667748014-s26phr0538d31vn3o169a1l85m1e1fa3.apps.googleusercontent.com
+&approval_prompt=force" class="btn btn-default">
+                                <i class="glyphicon glyphicon-google"></i> Google
+                            </a>
 <%--                            <a href="#!" class="btn btn-default">--%>
 <%--                                <i class="glyphicon glyphicon-facebook"></i> Facebook--%>
 <%--                            </a>--%>
 <%--                            <a href="#!" class="btn btn-default">--%>
 <%--                                <i class="glyphicon glyphicon-twitter"></i> Twitter--%>
 <%--                            </a>--%>
-<%--                        </div>--%>
+                        </div>
                     </div>
                 </div>
             </div>

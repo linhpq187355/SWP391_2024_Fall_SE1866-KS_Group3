@@ -8,12 +8,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-// Maps the servlet to the URL "/home-detail"
 @WebServlet("/home-detail")
 public class HomeDetailServlet extends HttpServlet {
 
@@ -28,7 +30,6 @@ public class HomeDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String homeIdParam = req.getParameter("id");
 
-        // Check if the home ID parameter is missing or empty
         if (homeIdParam == null || homeIdParam.isEmpty()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Home ID is required");
             return;
@@ -61,7 +62,6 @@ public class HomeDetailServlet extends HttpServlet {
 
         String formattedMoveInDate = (moveInDate != null) ? moveInDate.format(formatter) : "Chưa có thông tin";
 
-        // Set attributes for the JSP page
         req.setAttribute("hometypes", hometypes);
         req.setAttribute("home", home);
         req.setAttribute("prices", prices);

@@ -1,14 +1,28 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.service;
 
+import com.homesharing.model.GoogleAccount;
+import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.sql.SQLException;
+
 /**
- * UserService interface defines methods for handling user-related operations,
- * such as registration, validation, login, and logout.
- * It supports user interactions for both regular users and staff members.
+ * UserService interface defines methods for user registration and validation,
+ * handling login and logout processes, updating user profiles, and retrieving user details.
+ * All methods are meant to manage user-related operations in the Home Sharing System.
  *
  * @version 1.0
- * @since 2024-10-02
+ * @since 2024-09-18
+ * @author ManhNC
  */
 public interface UserService {
 
@@ -22,7 +36,24 @@ public interface UserService {
      * @param role      The role of the user (e.g., findRoommate, postRoom).
      * @return A string indicating the result of the registration (e.g., success message, error).
      */
-    String registerUser(String firstName, String lastName, String email, String password, String role);
+    String registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException;
+
+    /**
+     * Registers a new user using their Google account information.
+     * If the user already exists, updates their Google ID and sets the cookie values accordingly.
+     *
+     * @param googleAccount The GoogleAccount object containing user information.
+     * @param role The role to assign to the user.
+     *             If the role is null, it indicates that the user needs to set their role again.
+     * @param response The HttpServletResponse object used to set cookies for the user.
+     * @return An integer indicating the result of the registration process:
+     *         1 if the user was successfully logged in,
+     *         2 if a new user was registered successfully,
+     *         -1 if the role is null, and
+     *         0 if the role is invalid.
+     * @throws SQLException if a database access error occurs.
+     */
+    int registerByGoogle(GoogleAccount googleAccount, String role, HttpServletResponse response) throws SQLException;
 
     /**
      * Validates the user input for registration.
@@ -49,7 +80,7 @@ public interface UserService {
      * @param response   The HttpServletResponse used for managing cookies (if rememberMe is true).
      * @return A string indicating the result of the login attempt (e.g., success, error).
      */
-    String login(String email, String password, boolean rememberMe, HttpServletResponse response);
+    String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException;
 
     /**
      * Handles staff member login by verifying credentials.
@@ -59,7 +90,7 @@ public interface UserService {
      * @param response The HttpServletResponse used for handling cookies or redirects.
      * @return A string indicating the result of the login attempt (e.g., success, error).
      */
-    String loginStaff(String email, String password, HttpServletResponse response);
+    String loginStaff(String email, String password, HttpServletResponse response) throws SQLException;
 
     /**
      * Logs the user out by clearing session and relevant cookies.
@@ -68,5 +99,32 @@ public interface UserService {
      * @return A string indicating the result of the logout process (e.g., success, error).
      */
     String logout(HttpServletResponse response);
-
+    /**
+     * Updates the user's profile with the provided details.
+     *
+     * @param userId          The user's ID.
+     * @param firstName       The updated first name of the user.
+     * @param lastName        The updated last name of the user.
+     * @param address         The updated address of the user.
+     * @param gender          The updated gender of the user.
+     * @param dob             The updated date of birth of the user.
+     * @param avatarFileName  The name of the updated avatar file.
+     * @return An integer indicating the result of the update operation (e.g., number of rows affected).
+     */
+    int updateUserProfile(String userId, String firstName, String lastName, String address, String gender, String dob, String avatarFileName);
+    /**
+     * Retrieves the user details based on the provided user ID.
+     *
+     * @param userId The ID of the user to be retrieved.
+     * @return The User object containing the user's details, or null if not found.
+     */
+    User getUser(int userId) throws SQLException;
+    /**
+     * Resets the password for a user with the given ID.
+     *
+     * @param userId The ID of the user whose password is to be reset.
+     * @param newPassword The new password to be set for the user.
+     * @return The number of rows affected by the password reset (1 if successful, 0 if unsuccessful).
+     */
+    int resetUserPassword(int userId, String newPassword);
 }

@@ -3,6 +3,7 @@ package com.homesharing.conf;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,6 +21,7 @@ public class DBContextTest {
     private static final Logger LOGGER = Logger.getLogger(DBContextTest.class.getName());
     // Database connection variable
     private static Connection connection;
+    private static DBContext dbContext;
 
     /**
      * This method will be executed once before all test cases.
@@ -28,8 +30,10 @@ public class DBContextTest {
     @BeforeAll
     public static void setup() throws SQLException, IOException, ClassNotFoundException {
         // Establish connection before running tests
-        connection = DBContext.getConnection();
-        LOGGER.log(Level.INFO, "Kết nối đã được thiết lập cho kiểm thử.");
+        dbContext = new DBContext();
+        connection = dbContext.getConnection();
+
+        LOGGER.log(Level.INFO, "Mock connection đã được thiết lập cho kiểm thử.");
     }
 
     /**
@@ -58,7 +62,7 @@ public class DBContextTest {
     public static void tearDown() throws SQLException {
         // Close connection after testing
         if (connection != null && !connection.isClosed()) {
-            DBContext.closeConnection();
+            dbContext.closeConnection();
             LOGGER.log(Level.INFO, "Kết nối đã được đóng.");
         }
     }

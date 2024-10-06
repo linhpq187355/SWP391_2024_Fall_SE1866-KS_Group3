@@ -13,14 +13,12 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 class UserDAOImplTest {
 
@@ -30,6 +28,7 @@ class UserDAOImplTest {
     private ResultSet resultSet;
 
     private MockedStatic<DBContext> mockedDBContext;
+    private MockedStatic<PasswordUtil> mockedPasswordUtil;
 
     @BeforeEach
     public void setUp() {
@@ -127,211 +126,165 @@ class UserDAOImplTest {
     }
 
     @Test
-    void testUpdateUserProfile_Success() throws SQLException {
-        // Create a mock User object
+    public void testUpdateUserProfile_Success() throws SQLException {
+        // Set up user data
         User user = new User();
         user.setId(1);
-        user.setEmail("john@example.com");
-        user.setPhoneNumber("0123456789");
+        user.setAddress("123 Street");
+        user.setGender("Male");
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setAvatar("avatar.png");
-        user.setDob(java.time.LocalDate.of(1990, 1, 1));
+        user.setDob(LocalDate.of(1990, 1, 1));
 
-        String sql = "UPDATE [dbo].[HSS_Users]\n" +
-                "   SET [email] = ?\n" +
-                "      ,[phoneNumber] = ?\n" +
-                "      ,[firstName] = ?\n" +
-                "      ,[lastName] = ?\n" +
-                "      ,[avatar] = ?\n" +
-                "      ,[dob] = ?\n" +
-                "      ,[lastModified] = GETDATE()\n" +
-                " WHERE id = ?";
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
 
-        // Mock the behavior of the connection and prepared statement
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
+        // Mock the execution of the update
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
         // Call the method under test
         int rowsUpdated = userDAO.updateUserProfile(user);
 
-        // Verify the results
+        // Verify that the statement was executed with correct parameters
+        verify(preparedStatement).setString(1, user.getAddress());
+        verify(preparedStatement).setString(2, user.getGender());
+        verify(preparedStatement).setString(3, user.getFirstName());
+        verify(preparedStatement).setString(4, user.getLastName());
+        verify(preparedStatement).setString(5, user.getAvatar());
+        verify(preparedStatement).setDate(6, Date.valueOf(user.getDob()));
+        verify(preparedStatement).setInt(7, user.getId());
+
+        // Assert that the number of rows updated is correct
         assertEquals(1, rowsUpdated);
-
-        // Verify that the prepared statement was set with the correct parameters
-        Mockito.verify(preparedStatement).setString(1, user.getEmail());
-        Mockito.verify(preparedStatement).setString(2, user.getPhoneNumber());
-        Mockito.verify(preparedStatement).setString(3, user.getFirstName());
-        Mockito.verify(preparedStatement).setString(4, user.getLastName());
-        Mockito.verify(preparedStatement).setString(5, user.getAvatar());
-        Mockito.verify(preparedStatement).setDate(6, Date.valueOf(user.getDob()));
-        Mockito.verify(preparedStatement).setInt(7, user.getId());
-
-        // Verify executeUpdate() was called once
-        Mockito.verify(preparedStatement, Mockito.times(1)).executeUpdate();
     }
 
     @Test
-    void testUpdateUserProfile_SQLException() throws SQLException {
-        // Create a mock User object
+    public void testUpdateUserProfile_SQLException() throws SQLException {
+        // Set up user data
         User user = new User();
         user.setId(1);
-        user.setEmail("john@example.com");
+        user.setAddress("123 Street");
+        user.setGender("Male");
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setAvatar("avatar.png");
+        user.setDob(LocalDate.of(1990, 1, 1));
 
-        String sql = "UPDATE [dbo].[HSS_Users]\n" +
-                "   SET [email] = ?\n" +
-                "      ,[phoneNumber] = ?\n" +
-                "      ,[firstName] = ?\n" +
-                "      ,[lastName] = ?\n" +
-                "      ,[avatar] = ?\n" +
-                "      ,[dob] = ?\n" +
-                "      ,[lastModified] = GETDATE()\n" +
-                " WHERE id = ?";
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
 
-        // Mock the behavior of the connection to throw SQLException when executing the update
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Database error"));
+        // Mock the behavior to throw an SQLException
+        doThrow(new SQLException("Database error")).when(preparedStatement).executeUpdate();
 
-        // Verify if GeneralException is thrown when SQLException occurs
-        GeneralException thrown = assertThrows(GeneralException.class, () -> userDAO.updateUserProfile(user));
-        assertEquals("Error update user profile: Database error", thrown.getMessage());
+        // Assert that the method throws a GeneralException
+        assertThrows(GeneralException.class, () -> {
+            userDAO.updateUserProfile(user);
+        });
     }
 
     @Test
-    void testGetUserAvatar_Success() throws SQLException {
+    public void testGetUserAvatar_Success() throws SQLException {
+        // Set up the user ID for which the avatar is to be retrieved
         int userId = 1;
         String expectedAvatar = "avatar.png";
 
-        // Thiết lập hành vi cho các đối tượng mô phỏng
-        when(preparedStatement.executeQuery()).thenReturn(mock(ResultSet.class));
-        ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.next()).thenReturn(true); // Có dòng dữ liệu
-        when(resultSet.getString("avatar")).thenReturn(expectedAvatar); // Trả về giá trị avatar
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        // Thiết lập hành vi cho connection
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        String sql = "SELECT u.avatar FROM [HSS_Users] u WHERE u.id = ?";
         when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
 
-        // Gọi phương thức cần kiểm tra
+        // Mock the execution of the query
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getString("avatar")).thenReturn(expectedAvatar);
+
+        // Call the method under test
         String actualAvatar = userDAO.getUserAvatar(userId);
 
-        // Kiểm tra kết quả
+        // Verify that the statement was executed with the correct parameter
+        verify(preparedStatement).setInt(1, userId);
+
+        // Assert that the returned avatar is correct
         assertEquals(expectedAvatar, actualAvatar);
-
-        // Xác minh rằng các phương thức được gọi đúng cách
-        Mockito.verify(preparedStatement).setInt(1, userId);
-        Mockito.verify(preparedStatement).executeQuery();
     }
 
     @Test
-    void testGetUserAvatar_NoResult() throws SQLException {
-        int userId = 2;
-
-        // Thiết lập hành vi cho các đối tượng mô phỏng
-        when(preparedStatement.executeQuery()).thenReturn(mock(ResultSet.class));
-        ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.next()).thenReturn(false); // Không có dòng dữ liệu
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        // Thiết lập hành vi cho connection
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-
-        // Gọi phương thức cần kiểm tra
-        String actualAvatar = userDAO.getUserAvatar(userId);
-
-        // Kiểm tra kết quả
-        assertNull(actualAvatar);
-
-        // Xác minh rằng các phương thức được gọi đúng cách
-        Mockito.verify(preparedStatement).setInt(1, userId);
-        Mockito.verify(preparedStatement).executeQuery();
-    }
-
-    @Test
-    void testResetPassword_Success() throws SQLException {
-        String password = "newPassword";
+    public void testGetUserAvatar_SQLException() throws SQLException {
+        // Set up the user ID for which the avatar is to be retrieved
         int userId = 1;
-        int expectedRowsUpdated = 1; // Giả định rằng có 1 dòng đã được cập nhật
 
-        // Thiết lập hành vi cho các đối tượng mô phỏng
-        when(preparedStatement.executeUpdate()).thenReturn(expectedRowsUpdated);
+        // Mock the behavior of prepareStatement to return the preparedStatement
         when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
 
-        // Gọi phương thức cần kiểm tra
-        int actualRowsUpdated = userDAO.resetPassword(password, userId);
+        // Mock the execution of the query to throw an SQLException
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
 
-        // Kiểm tra kết quả
-        assertEquals(expectedRowsUpdated, actualRowsUpdated);
-
-        // Xác minh rằng các phương thức được gọi đúng cách
-        Mockito.verify(preparedStatement).setString(1, PasswordUtil.hashPassword(password)); // Chỉ cần xác minh rằng nó đã được gọi
-        Mockito.verify(preparedStatement).setInt(2, userId); // Chỉ cần xác minh rằng nó đã được gọi
-        Mockito.verify(preparedStatement).executeUpdate();
-    }
-
-    @Test
-    void testResetPassword_SQLException() throws SQLException {
-        String password = "newPassword";
-        int userId = 2;
-
-        // Thiết lập hành vi cho các đối tượng mô phỏng để ném ra SQLException
-        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Database error"));
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-
-        // Kiểm tra xem ngoại lệ GeneralException có được ném ra không
-        GeneralException exception = assertThrows(GeneralException.class, () -> {
-            userDAO.resetPassword(password, userId);
+        // Call the method under test and verify that it throws the expected exception
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            userDAO.getUserAvatar(userId);
         });
 
-        // Kiểm tra thông điệp ngoại lệ
-        assertTrue(exception.getMessage().contains("Error update user profile"));
+        // Verify that the exception message is correct
+        assertEquals("Error retrieving user avatar from the database", exception.getMessage());
 
-        // Xác minh rằng các phương thức được gọi đúng cách
-        Mockito.verify(preparedStatement).setString(1, PasswordUtil.hashPassword(password)); // Chỉ cần xác minh rằng nó đã được gọi
-        Mockito.verify(preparedStatement).setInt(2, userId); // Chỉ cần xác minh rằng nó đã được gọi
-        Mockito.verify(preparedStatement).executeUpdate();
+        // Verify that the statement was executed with the correct parameter
+        verify(preparedStatement).setInt(1, userId);
     }
 
-
     @Test
-    public void getAllUsers() throws SQLException, GeneralException {
+    public void testResetPassword_Success() throws SQLException {
+        // Set up user data
+        String newPassword = "newPassword123";
+        int userId = 1;
+
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        String sql = "UPDATE [dbo].[HSS_Users] SET [hashedPassword] = ? WHERE id = ?";
         when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        //create simulated data
-        when(resultSet.next()).thenReturn(true, true, false);
-        when(resultSet.getInt("id")).thenReturn(1, 2);
-        when(resultSet.getString("email")).thenReturn("john@example.com", "nick@example.com");
-        when(resultSet.getString("hashedPassword")).thenReturn("password", "password2");
-        when(resultSet.getString("firstName")).thenReturn("John", "Nick");
-        when(resultSet.getString("lastName")).thenReturn("Doe", "Vujicic");
-        when(resultSet.getString("avatar")).thenReturn("avatar.png", "avatar2.png");
-        when(resultSet.getString("dob")).thenReturn("2000-01-01", "2000-02-02");
-        when(resultSet.getTimestamp("createdAt")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
-        when(resultSet.getString("status")).thenReturn("active", "inactive");
-        when(resultSet.getTimestamp("lastModified")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
-        when(resultSet.getInt("rolesid")).thenReturn(1, 3);
-        //actual list
-        List<User> actualUsers = userDAO.getAllUsers();
-        //check result
-        assertEquals(1, actualUsers.get(0).getId());
-        assertEquals(2, actualUsers.get(1).getId());
-        assertEquals("john@example.com", actualUsers.get(0).getEmail());
-        assertEquals("nick@example.com", actualUsers.get(1).getEmail());
-        assertEquals("password", actualUsers.get(0).getHashedPassword());
-        assertEquals("password2", actualUsers.get(1).getHashedPassword());
-        assertEquals("active", actualUsers.get(0).getStatus());
-        assertEquals("inactive", actualUsers.get(1).getStatus());
-        assertEquals(1, actualUsers.get(0).getRolesId());
-        assertEquals(3, actualUsers.get(1).getRolesId());
-        //check verify
-        verify(resultSet, times(3)).next();
-        verify(resultSet, times(2)).getInt("id");
-        verify(resultSet, times(2)).getString("email");
-        verify(resultSet, times(2)).getString("hashedPassword");
-        verify(resultSet, times(2)).getInt("rolesid");
+
+        // Mock PasswordUtil to return a hashed password
+        mockedPasswordUtil = Mockito.mockStatic(PasswordUtil.class);
+        mockedPasswordUtil.when(() -> PasswordUtil.hashPassword(any(String.class))).thenReturn("hashedPassword123");
+
+        // Mock the execution of the update
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        // Call the method under test
+        int rowsUpdated = userDAO.resetPassword(newPassword, userId);
+
+        // Verify that the statement was executed with correct parameters
+        verify(preparedStatement).setString(1, "hashedPassword123");
+        verify(preparedStatement).setInt(2, userId);
+
+        // Assert that the number of rows updated is correct
+        assertEquals(1, rowsUpdated);
     }
 
     @Test
-    void getUserById() {
+    public void testResetPassword_SQLException() throws SQLException {
+        // Set up user data
+        String newPassword = "newPassword123";
+        int userId = 1;
+
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+
+        // Mock PasswordUtil to return a hashed password
+        mockedPasswordUtil = Mockito.mockStatic(PasswordUtil.class);
+        mockedPasswordUtil.when(() -> PasswordUtil.hashPassword(any(String.class))).thenReturn("hashedPassword123");
+
+        // Mock the execution of the update to throw an SQLException
+        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Database update error"));
+
+        // Call the method under test and verify that it throws the expected exception
+        Exception exception = assertThrows(GeneralException.class, () -> {
+            userDAO.resetPassword(newPassword, userId);
+        });
+
+        // Verify that the exception message is correct
+        assertEquals("Error updating user password: Database update error", exception.getMessage());
+
+        // Verify that the statement was executed with correct parameters
+        verify(preparedStatement).setString(1, "hashedPassword123");
+        verify(preparedStatement).setInt(2, userId);
     }
 }

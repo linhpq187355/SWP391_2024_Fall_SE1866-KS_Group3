@@ -1,5 +1,7 @@
 package com.homesharing.dao;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import com.homesharing.model.Home;
 
@@ -22,7 +24,7 @@ public interface HomeDAO {
      * @return List of Home objects.
      */
 
-    List<Home> getNewHomes();
+    List<Home> getNewHomes() throws SQLException, IOException, ClassNotFoundException;
 
     /**
      * Get home object via id

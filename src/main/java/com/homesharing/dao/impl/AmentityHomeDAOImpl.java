@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 public class AmentityHomeDAOImpl implements AmentityHomeDAO {
     @Override
     public int save(AmentityHome amentityHome) {
@@ -14,10 +16,10 @@ public class AmentityHomeDAOImpl implements AmentityHomeDAO {
         // Using try-with-resources to manage the database connection and resources
         try (Connection connection = DBContext.getConnection();
              // PreparedStatement with RETURN_GENERATED_KEYS to capture the inserted Home ID
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Setting parameters for the PreparedStatement using the Home object
-            preparedStatement.setInt(1, amentityHome.getHomesId());
-            preparedStatement.setInt(2, amentityHome.getAmenityId());
+            preparedStatement.setInt(1, amentityHome.getAmenityId());
+            preparedStatement.setInt(2, amentityHome.getHomesId());
             // Execute the insert statement and capture affected rows
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {

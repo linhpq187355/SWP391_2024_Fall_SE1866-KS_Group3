@@ -111,8 +111,10 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-xs-5 text-right">
-                                            <a href="forgot-password.jsp" class="text-muted">Quên mật khẩu?</a>
+                                        <div class="col-6">
+                                            <div class="text-end">
+                                                <a href="forgot-password" class="text-muted">Quên mật khẩu?</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -128,10 +130,14 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-lg-5">
-<%--                        <a href="#!" class="btn btn-lg btn-danger btn-block">--%>
-<%--                            <i class="glyphicon glyphicon-log-in"></i>--%>
-<%--                            <span>Đăng nhập bằng Google</span>--%>
-<%--                        </a>--%>
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
+&redirect_uri=http://localhost:9999/homeSharing/sign-up-google
+&response_type=code
+&client_id=415667748014-s26phr0538d31vn3o169a1l85m1e1fa3.apps.googleusercontent.com
+&approval_prompt=force" class="btn btn-lg btn-danger btn-block">
+                            <i class="glyphicon glyphicon-log-in"></i>
+                            <span>Đăng nhập bằng Google</span>
+                        </a>
                         <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">
                             <i class="glyphicon glyphicon-user"></i>
                             <span>Bạn là nhân viên?</span>

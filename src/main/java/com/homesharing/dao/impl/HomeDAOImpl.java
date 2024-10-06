@@ -13,9 +13,16 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
-public class HomeDAOImpl implements HomeDAO {
+/**
+ * Implementation of HomeDAO to interact with the Homes database.
+ */
+public class HomeDAOImpl extends DBContext implements HomeDAO {
     private List<Home> homes = new ArrayList<>();
+    // Logger for logging errors or information
+    private static final Logger logger = Logger.getLogger(HomeDAOImpl.class.getName());
+
 
     @Override
     public List<Home> getAllHomes() {
@@ -165,25 +172,41 @@ public class HomeDAOImpl implements HomeDAO {
         }
     }
 
+    /**
+     * Retrieve a list of the 12 newest homes from the database.
+     *
+     * @return List of the 12 newest homes.
+     */
     @Override
     public List<Home> getNewHomes() {
+        // SQL query to fetch 12 newest homes with price information
         String sql = """
-                select top 12 h.id, h.address, h.area, h.createdDate, tb1.id [priceId]
-                \t   from Homes h
-                \t   left join (
-                \t   select Homesid, price, createdDate, id
-                \t   from Prices
-                \t   where createdDate in (
-                \t\t\tselect max(p.createdDate) createdDate
-                \t\t\tfrom Prices p
-                \t\t\tgroup by p.Homesid
-                \t   )) tb1 on tb1.Homesid = h.id
-                \t   order by h.createdDate desc""";
-        List<Home> homes = new ArrayList<>();
-        // Use try-with-resources to manage database resources (Connection, PreparedStatement, and ResultSet)
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+                SELECT TOP 12 h.id, h.address, h.area, h.createdDate, tb1.id AS priceId
+                FROM Homes h
+                LEFT JOIN (
+                    SELECT Homesid, price, createdDate, id
+                    FROM Prices
+                    WHERE createdDate IN (
+                        SELECT MAX(p.createdDate) 
+                        FROM Prices p
+                        GROUP BY p.Homesid
+                    )
+                ) tb1 ON tb1.Homesid = h.id
+                ORDER BY h.createdDate DESC
+                """;
+
+        // List to store fetched Home objects
+        List<Home> homeList = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        // Try-with-resources to automatically close resources
+        try{
+            connection = DBContext.getConnection(); // Get database connection
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            // Process each result row and map it to a Home object
             while (resultSet.next()) {
                 Home home = new Home();
                 home.setId(resultSet.getInt("id"));
@@ -192,17 +215,23 @@ public class HomeDAOImpl implements HomeDAO {
                 home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
                 home.setPriceId(resultSet.getInt("priceId"));
 
-                homes.add(home);
+                homeList.add(home); // Add the Home object to the list
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            // Ném ngoại lệ dưới dạng runtime exception để xử lý tại tầng service
-            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+            // Log the exception and throw a custom exception
+            logger.severe("Error retrieving homes from the database: " + e.getMessage());
+            throw new GeneralException("Error retrieving homes from the database", e);
+        } finally {
+            // Ensure resources are closed in the finally block
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) closeConnection(); // close the connection using DBContext's method
+            } catch (SQLException e) {
+                logger.warning("Failed to close resources: " + e.getMessage());
+            }
         }
 
-        return homes;
+        return homeList; // Return the list of homes
     }
-
-
-
-
 }

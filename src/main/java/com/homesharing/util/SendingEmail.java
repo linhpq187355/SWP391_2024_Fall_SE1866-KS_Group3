@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.util;
 
 import com.homesharing.exception.GeneralException;
@@ -9,9 +18,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 /**
- * Utility class for sending emails.
- * This class cannot be instantiated.
+ * Utility class for sending emails in the Home Sharing System.
+ * This class provides a method to send emails with specified recipient, subject, and content.
+ * All methods are static, and the class cannot be instantiated.
+ *
+ * @version 1.0
+ * @since 2024-09-18
+ * @author ManhNC
  */
 public class SendingEmail {
 
