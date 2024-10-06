@@ -32,7 +32,15 @@ public class SearchServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        searchService = new SearchServiceImpl();
+        try {
+            searchService = new SearchServiceImpl();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         HomePageService = new HomePageServiceImpl(homeDAO, priceDAO);
     }
 

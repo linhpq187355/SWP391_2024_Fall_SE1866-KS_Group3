@@ -28,22 +28,6 @@ import java.time.LocalDateTime;
 public class TokenDAOImpl extends DBContext implements TokenDAO {
 
     /**
-     * Constructor initializes the database connection by reading the
-     * configuration file.
-     *
-     * @throws SQLException           if a database access error occurs
-     * @throws IOException            if there is an issue reading the configuration file
-     * @throws ClassNotFoundException if the JDBC driver class cannot be found
-     */
-    public TokenDAOImpl() throws SQLException, IOException, ClassNotFoundException {
-        super();
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
-    /**
      * Inserts a token into the database.
      *
      * @param token the token to be inserted

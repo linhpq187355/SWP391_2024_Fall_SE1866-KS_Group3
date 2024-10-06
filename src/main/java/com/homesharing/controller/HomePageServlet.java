@@ -74,12 +74,12 @@ public class HomePageServlet extends HttpServlet {
         String message = (String) req.getSession().getAttribute("message");
         if (message != null) {
             req.setAttribute("message", message);
-            req.getSession().removeAttribute("message"); // Xoá message sau khi lấy ra
+            req.getSession().removeAttribute("message");
         }
         String messageType = (String) req.getSession().getAttribute("messageType");
         if (messageType != null) {
             req.setAttribute("messageType", messageType);
-            req.getSession().removeAttribute("messageType"); // Xoá messageType sau khi lấy ra
+            req.getSession().removeAttribute("messageType");
         }
         List<Home> homes = homePageService.getNewHomes();
         List<Price> prices = homePageService.getHomePrice(homes);

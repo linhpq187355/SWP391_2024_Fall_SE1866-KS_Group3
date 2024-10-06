@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +51,7 @@ class HomePageServiceTest {
     }
 
     @Test
-    void testGetNewHomes_Success() throws GeneralException {
+    void testGetNewHomes_Success() throws GeneralException, SQLException, IOException, ClassNotFoundException {
         // Arrange
         List<Home> expectedNewHomes = new ArrayList<>();
         expectedNewHomes.add(new Home()); // Thêm một đối tượng Home giả định vào danh sách
@@ -64,7 +66,7 @@ class HomePageServiceTest {
     }
 
     @Test
-    void testGetNewHomes_Exception() throws GeneralException {
+    void testGetNewHomes_Exception() throws GeneralException, SQLException, IOException, ClassNotFoundException {
         // Arrange
         when(homeDAO.getNewHomes()).thenThrow(new GeneralException("Database error"));
 

@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-03      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.conf;
 
 import java.io.IOException;
@@ -12,6 +21,7 @@ import java.util.Properties;
  * DBContext class is responsible for managing the database connection.
  * It reads the configuration from 'dbconfig.properties' and provides
  * methods to get and close the connection.
+ * @author ManhNC
  */
 public class DBContext {
 

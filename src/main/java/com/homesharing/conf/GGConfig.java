@@ -12,6 +12,7 @@ package com.homesharing.conf;
 /**
  * The {@code GGConfig} class contains configuration constants
  * for the Google OAuth 2.0 integration.
+ *
  * This class holds the following constants:
  * <ul>
  *     <li>GOOGLE_CLIENT_ID: The client ID obtained from Google Developer Console.</li>
@@ -44,4 +45,13 @@ public class GGConfig {
     /** The URL to get user information using the access token. */
     public static final String GOOGLE_LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
+    public static void main(String[] args) {
+        // Kiểm tra và in ra giá trị của các biến môi trường
+        System.out.println("Google Client ID: " + GOOGLE_CLIENT_ID);
+        System.out.println("Google Client Secret: " + GOOGLE_CLIENT_SECRET);
+        System.out.println("Google Redirect URI: " + GOOGLE_REDIRECT_URI);
+        System.out.println("Google Grant Type: " + GOOGLE_GRANT_TYPE);
+        System.out.println("Google Link Get Token: " + GOOGLE_LINK_GET_TOKEN);
+        System.out.println("Google Link Get User Info: " + GOOGLE_LINK_GET_USER_INFO);
+    }
 }

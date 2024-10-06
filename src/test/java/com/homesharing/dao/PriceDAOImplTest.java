@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,14 +31,10 @@ public class PriceDAOImplTest {
     private MockedStatic<DBContext> mockedDBContext;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws SQLException, IOException, ClassNotFoundException {
         connection = mock(Connection.class);
         preparedStatement = mock(PreparedStatement.class);
         resultSet = mock(ResultSet.class);
-
-        // Mock DBContext.getConnection() to return the mock connection
-        mockedDBContext = Mockito.mockStatic(DBContext.class);
-        mockedDBContext.when(DBContext::getConnection).thenReturn(connection);
 
         priceDAO = new PriceDAOImpl();
     }

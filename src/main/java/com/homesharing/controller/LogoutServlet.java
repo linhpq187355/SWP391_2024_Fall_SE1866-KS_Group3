@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * LogoutServlet handles user logout requests by interacting with the
@@ -50,18 +49,8 @@ public class LogoutServlet extends HttpServlet {
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
-        UserDAO userDao = null;
-        try {
-            userDao = new UserDAOImpl();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            logger.error("Lỗi khởi tạo UserDAO trong init(): {}", e.getMessage(), e);
-        }
-        TokenDAO tokenDao = null;
-        try {
-            tokenDao = new TokenDAOImpl();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            logger.error("Lỗi khởi tạo TokenDAO trong init(): {}", e.getMessage(), e);
-        }
+        UserDAO userDao = new UserDAOImpl();
+        TokenDAO tokenDao = new TokenDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
         userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);

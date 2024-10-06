@@ -22,6 +22,23 @@ import java.util.List;
 public interface UserDAO {
 
     /**
+     * update the user to the database.
+     *
+     * @param googleId The id of user to be saved.
+     * @param email The email of user to be saved.
+     * @return rowUpdated
+     */
+    int updateGoogleId(String googleId, String email)throws SQLException;
+
+    /**
+     * get the googleID of user to the database.
+     *
+     * @param email The email of user to be saved.
+     * @return googleID
+     */
+    String getGoogleId(String email) throws SQLException;
+
+    /**
      * Saves the user to the database.
      *
      * @param user The user object to be saved.

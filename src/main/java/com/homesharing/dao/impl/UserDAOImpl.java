@@ -33,6 +33,96 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     private static final Logger logger = Logger.getLogger(UserDAOImpl.class.getName());
 
     /**
+     * update the user to the database.
+     *
+     * @param googleId The id of user to be saved.
+     * @param email The email of user to be saved.
+     * @return rowUpdated
+     */
+    @Override
+    public int updateGoogleId(String googleId, String email) throws SQLException {
+        int rowUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [googleID] = ?\n" +
+                " WHERE email = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // Set the parameters for the update statement
+            preparedStatement.setString(1, googleId);
+            preparedStatement.setString(2, email);
+
+            // Execute the update and get the number of affected rows
+            rowUpdated = preparedStatement.executeUpdate();
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error updating user googleId", e);
+            throw new GeneralException("Error updating user googleId: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return rowUpdated;
+    }
+
+    /**
+     * get the googleID of user to the database.
+     *
+     * @param email The email of user to be saved.
+     * @return googleID
+     */
+    @Override
+    public String getGoogleId(String email) throws SQLException {
+        String sql = "SELECT [googleID] FROM [HSS_Users] WHERE [email] = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, email);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("googleID");
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error finding googleID by email in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return null; // Return null if no user is found
+    }
+
+    /**
      * Saves a user to the database by executing an INSERT SQL query.
      *
      * @param user The {@link User} object containing user details to be saved.
@@ -41,7 +131,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public int saveUser(User user) throws SQLException {
-        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [googleID], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -54,7 +144,8 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             preparedStatement.setInt(4, user.getRolesId());
             preparedStatement.setString(5, user.getStatus());
             preparedStatement.setString(6, user.getHashedPassword());
-            preparedStatement.setTimestamp(7, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setString(7, user.getGoogleId());
+            preparedStatement.setTimestamp(8, java.sql.Timestamp.valueOf(LocalDateTime.now()));
             // Execute the update to insert the user into the database
             int affectedRows = preparedStatement.executeUpdate();
 

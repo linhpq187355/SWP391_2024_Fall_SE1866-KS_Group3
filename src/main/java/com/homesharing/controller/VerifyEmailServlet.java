@@ -45,12 +45,7 @@ public class VerifyEmailServlet extends HttpServlet {
      */
     @Override
     public void init() {
-        TokenDAO tokenDao = null;
-        try {
-            tokenDao = new TokenDAOImpl();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            logger.error("Lỗi khởi tạo TokenDAO trong init(): {}", e.getMessage(), e);
-        }
+        TokenDAO tokenDao = new TokenDAOImpl();
         tokenService = new TokenServiceImpl(tokenDao);
     }
 

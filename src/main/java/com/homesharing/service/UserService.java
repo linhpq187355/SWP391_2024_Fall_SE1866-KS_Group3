@@ -9,6 +9,7 @@
  */
 package com.homesharing.service;
 
+import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -36,6 +37,23 @@ public interface UserService {
      * @return A string indicating the result of the registration (e.g., success message, error).
      */
     String registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException;
+
+    /**
+     * Registers a new user using their Google account information.
+     * If the user already exists, updates their Google ID and sets the cookie values accordingly.
+     *
+     * @param googleAccount The GoogleAccount object containing user information.
+     * @param role The role to assign to the user.
+     *             If the role is null, it indicates that the user needs to set their role again.
+     * @param response The HttpServletResponse object used to set cookies for the user.
+     * @return An integer indicating the result of the registration process:
+     *         1 if the user was successfully logged in,
+     *         2 if a new user was registered successfully,
+     *         -1 if the role is null, and
+     *         0 if the role is invalid.
+     * @throws SQLException if a database access error occurs.
+     */
+    int registerByGoogle(GoogleAccount googleAccount, String role, HttpServletResponse response) throws SQLException;
 
     /**
      * Validates the user input for registration.

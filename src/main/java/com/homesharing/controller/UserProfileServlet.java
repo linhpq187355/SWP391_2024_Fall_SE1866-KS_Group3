@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 @WebServlet("/user-profile")
@@ -57,7 +58,12 @@ public class UserProfileServlet extends HttpServlet {
         int userId = Integer.parseInt(userIdCookie);
 
         // Fetch user information and preferences using the services
-        User user = userService.getUser(userId);
+        User user = null;
+        try {
+            user = userService.getUser(userId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         Preference preference = preferenceService.getPreference(userId);
 
         // Get message and error from request parameters

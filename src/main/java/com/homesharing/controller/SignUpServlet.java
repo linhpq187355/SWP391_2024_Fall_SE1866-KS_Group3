@@ -15,7 +15,6 @@ import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
-import com.homesharing.exception.GeneralException;
 import com.homesharing.service.PreferenceService;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
@@ -56,24 +55,9 @@ public class SignUpServlet extends HttpServlet {
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
-        UserDAO userDao = null;
-        try {
-            userDao = new UserDAOImpl();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            logger.error("Lỗi khởi tạo UserDAO trong init(): {}", e.getMessage(), e);
-        }
-        TokenDAO tokenDao = null;
-        try {
-            tokenDao = new TokenDAOImpl();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            logger.error("Lỗi khởi tạo TokenDAO trong init(): {}", e.getMessage(), e);
-        }
-        PreferenceDAO preferenceDao = null;
-        try {
-            preferenceDao = new PreferenceDAOImpl();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error:", e);
-        }
+        UserDAO userDao = new UserDAOImpl();
+        TokenDAO tokenDao = new TokenDAOImpl();
+        PreferenceDAO preferenceDao = new PreferenceDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         PreferenceService preferenceService = new PreferenceServiceImpl(preferenceDao);
         // Inject UserDao into UserServiceImpl
