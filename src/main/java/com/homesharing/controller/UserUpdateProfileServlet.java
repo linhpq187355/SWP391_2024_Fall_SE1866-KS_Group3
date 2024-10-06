@@ -23,6 +23,7 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,7 +70,12 @@ public class UserUpdateProfileServlet extends HttpServlet {
 
         if (userId != null) {
             // Fetch user and preference data from the services
-            User user = userService.getUser(Integer.parseInt(Objects.requireNonNull(userId)));
+            User user = null;
+            try {
+                user = userService.getUser(Integer.parseInt(Objects.requireNonNull(userId)));
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
             Preference preference = preferenceService.getPreference(Integer.parseInt(userId));
 
             // Set the retrieved data as request attributes for displaying on the JSP page

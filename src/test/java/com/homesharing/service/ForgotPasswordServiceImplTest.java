@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +31,7 @@ public class ForgotPasswordServiceImplTest {
     }
 
     @Test
-    void testSendResetPasswordToken_Success() throws MessagingException {
+    void testSendResetPasswordToken_Success() throws MessagingException, SQLException {
         // Arrange
         String email = "test@example.com";
         User user = new User();
@@ -66,7 +68,7 @@ public class ForgotPasswordServiceImplTest {
     }
 
     @Test
-    void testSendResetPasswordToken_UserNotFound() {
+    void testSendResetPasswordToken_UserNotFound() throws SQLException {
         // Arrange
         String email = "nonexistent@example.com";
 
@@ -83,7 +85,7 @@ public class ForgotPasswordServiceImplTest {
     }
 
     @Test
-    void testSendResetPasswordToken_EmailSendingFailure() throws MessagingException {
+    void testSendResetPasswordToken_EmailSendingFailure() throws MessagingException, SQLException {
         // Arrange
         String email = "test@example.com";
         User user = new User();

@@ -1,9 +1,24 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.util;
 
 import java.security.SecureRandom;
 
 /**
- * Utility class for generating secure random verification codes.
+ * Utility class for generating secure random verification codes in the Home Sharing System.
+ * This class provides a method to create a random verification code using secure random generation.
+ * All methods are static, and the class cannot be instantiated.
+ *
+ * @version 1.0
+ * @since 2024-09-18
+ * @author ManhNC
  */
 public class SecureRandomCode {
 

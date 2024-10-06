@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -17,10 +26,101 @@ import java.util.logging.Logger;
 
 /**
  * Implementation of the UserDAO interface, handling database operations for the User entity.
+ * @author ManhNC
  */
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl extends DBContext implements UserDAO {
 
     private static final Logger logger = Logger.getLogger(UserDAOImpl.class.getName());
+
+    /**
+     * update the user to the database.
+     *
+     * @param googleId The id of user to be saved.
+     * @param email The email of user to be saved.
+     * @return rowUpdated
+     */
+    @Override
+    public int updateGoogleId(String googleId, String email) throws SQLException {
+        int rowUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [googleID] = ?\n" +
+                " WHERE email = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // Set the parameters for the update statement
+            preparedStatement.setString(1, googleId);
+            preparedStatement.setString(2, email);
+
+            // Execute the update and get the number of affected rows
+            rowUpdated = preparedStatement.executeUpdate();
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error updating user googleId", e);
+            throw new GeneralException("Error updating user googleId: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return rowUpdated;
+    }
+
+    /**
+     * get the googleID of user to the database.
+     *
+     * @param email The email of user to be saved.
+     * @return googleID
+     */
+    @Override
+    public String getGoogleId(String email) throws SQLException {
+        String sql = "SELECT [googleID] FROM [HSS_Users] WHERE [email] = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, email);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("googleID");
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error finding googleID by email in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return null; // Return null if no user is found
+    }
 
     /**
      * Saves a user to the database by executing an INSERT SQL query.
@@ -30,14 +130,13 @@ public class UserDAOImpl implements UserDAO {
      * @throws GeneralException if there is an error saving the user to the database.
      */
     @Override
-    public int saveUser(User user) {
-        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        // Using try-with-resources to ensure automatic resource management
-        try (Connection connection = DBContext.getConnection();
-             // Create PreparedStatement with RETURN_GENERATED_KEYS to get the inserted ID
-             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
+    public int saveUser(User user) throws SQLException {
+        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [googleID], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             // Set parameters for the prepared statement based on the user's information
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -45,7 +144,8 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setInt(4, user.getRolesId());
             preparedStatement.setString(5, user.getStatus());
             preparedStatement.setString(6, user.getHashedPassword());
-            preparedStatement.setTimestamp(7, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setString(7, user.getGoogleId());
+            preparedStatement.setTimestamp(8, java.sql.Timestamp.valueOf(LocalDateTime.now()));
             // Execute the update to insert the user into the database
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -65,6 +165,8 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error saving user to the database: " + e.getMessage(), e);
+        } finally {
+            closeConnection();
         }
     }
 
@@ -77,12 +179,13 @@ public class UserDAOImpl implements UserDAO {
      * @throws GeneralException if there is an error checking email existence in the database.
      */
     @Override
-    public boolean emailExists(String email) {
+    public boolean emailExists(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM [HSS_Users] WHERE [email] = ?";
-
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, email);
 
             // Execute the query to check for email existence
@@ -94,6 +197,8 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error checking email existence in the database", e);
+        } finally {
+            closeConnection();
         }
 
         // Return false if no email match is found
@@ -112,33 +217,53 @@ public class UserDAOImpl implements UserDAO {
         String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber "
                 + "FROM [HSS_Users] u WHERE u.id = ?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
 
             // Set the email parameter for the prepared statement
             preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
 
             // Execute the query to check for email existence
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    User user = new User();
-                    user.setId(resultSet.getInt("id"));
-                    user.setAddress(resultSet.getString("address"));
-                    user.setGender(resultSet.getString("gender"));
-                    user.setFirstName(resultSet.getString("firstName"));
-                    user.setLastName(resultSet.getString("lastName"));
-                    user.setAvatar(resultSet.getString("avatar"));
-                    user.setVerified(resultSet.getBoolean("isVerified"));
-                    user.setEmail(resultSet.getString("email"));
-                    user.setPhoneNumber(resultSet.getString("phoneNumber"));
-                    user.setDob(resultSet.getDate("dob") != null ? resultSet.getDate("dob").toLocalDate() : null);
-                    return user;
-                }
+
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setAddress(resultSet.getString("address"));
+                user.setGender(resultSet.getString("gender"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAvatar(resultSet.getString("avatar"));
+                user.setVerified(resultSet.getBoolean("isVerified"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                user.setDob(resultSet.getDate("dob") != null ? resultSet.getDate("dob").toLocalDate() : null);
+                return user;
             }
+
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Error getting user from database", e);
             throw new GeneralException("Error getting user from database", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
         }
 
         return null; // Return null if user is not found
@@ -155,12 +280,16 @@ public class UserDAOImpl implements UserDAO {
     public User findUserByEmail(String email) {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_Users] WHERE [email] = ?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+
 
             preparedStatement.setString(1, email);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getInt("id"));
@@ -184,6 +313,21 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error finding user by email in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
         }
 
         return null; // Return null if no user is found
@@ -215,7 +359,7 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = DBContext.getConnection();
+            connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -296,32 +440,46 @@ public class UserDAOImpl implements UserDAO {
                 "      ,[lastModified] = GETDATE()\n" +
                 " WHERE id = ?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             // Set the parameters for the update statement
-            statement.setString(1, user.getAddress());
-            statement.setString(2, user.getGender());
-            statement.setString(3, user.getFirstName());
-            statement.setString(4, user.getLastName());
-            statement.setString(5, user.getAvatar());
+            preparedStatement.setString(1, user.getAddress());
+            preparedStatement.setString(2, user.getGender());
+            preparedStatement.setString(3, user.getFirstName());
+            preparedStatement.setString(4, user.getLastName());
+            preparedStatement.setString(5, user.getAvatar());
 
             // Handle null date of birth case
             if (user.getDob() != null) {
-                statement.setDate(6, java.sql.Date.valueOf(user.getDob()));
+                preparedStatement.setDate(6, java.sql.Date.valueOf(user.getDob()));
             } else {
-                statement.setNull(6, java.sql.Types.DATE);
+                preparedStatement.setNull(6, java.sql.Types.DATE);
             }
 
             // Set the user ID to identify the correct record
-            statement.setInt(7, user.getId());
+            preparedStatement.setInt(7, user.getId());
 
             // Execute the update and get the number of affected rows
-            rowsUpdated = statement.executeUpdate();
+            rowsUpdated = preparedStatement.executeUpdate();
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Error updating user profile", e);
             throw new GeneralException("Error updating user profile: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
         }
         return rowsUpdated;
     }
@@ -337,23 +495,41 @@ public class UserDAOImpl implements UserDAO {
     public String getUserAvatar(int id) {
         String sql = "SELECT u.avatar\n" +
                 "  FROM [HSS_Users] u WHERE u.id = ?";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
 
             // Set the user ID parameter in the prepared statement
             preparedStatement.setInt(1, id);
 
-            // Execute the query to retrieve the avatar
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                // If a result is found, return the avatar string
-                if (resultSet.next()) {
-                    return resultSet.getString("avatar");
-                }
+            resultSet = preparedStatement.executeQuery();
+            // If a result is found, return the avatar string
+            if (resultSet.next()) {
+                return resultSet.getString("avatar");
             }
+
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Error retrieving user avatar from the database", e);
             throw new RuntimeException("Error retrieving user avatar from the database", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
         }
         // Return null if no avatar was found for the given user ID
         return null;
@@ -366,7 +542,7 @@ public class UserDAOImpl implements UserDAO {
                 " WHERE [id] = ?";
 
         try (
-                Connection connection = DBContext.getConnection();
+                Connection connection = getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, id);
@@ -379,6 +555,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserById(int id) {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
+
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -421,21 +598,36 @@ public class UserDAOImpl implements UserDAO {
                 "   SET [hashedPassword] = ?\n" +
                 " WHERE id = ?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
 
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             // Hash the new password using a utility method before storing
             String hashedPassword = PasswordUtil.hashPassword(password);
 
             // Set the hashed password and the user ID parameters in the prepared statement
-            statement.setString(1, hashedPassword);
-            statement.setInt(2, id);
+            preparedStatement.setString(1, hashedPassword);
+            preparedStatement.setInt(2, id);
 
             // Execute the update and capture the number of rows affected
-            rowsUpdated = statement.executeUpdate();
+            rowsUpdated = preparedStatement.executeUpdate();
         } catch (SQLException | IOException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Error updating user password", e);
             throw new GeneralException("Error updating user password: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
         }
         return rowsUpdated;
     }

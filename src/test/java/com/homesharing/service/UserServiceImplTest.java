@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +37,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testRegisterUserSuccess() {
+    void testRegisterUserSuccess() throws SQLException {
         // Given
         String firstName = "John";
         String lastName = "Doe";
@@ -58,7 +59,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testRegisterUserEmailExists() {
+    void testRegisterUserEmailExists() throws SQLException {
         // Given
         String firstName = "Jane";
         String lastName = "Doe";
@@ -76,7 +77,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testRegisterUserInvalidInput() {
+    void testRegisterUserInvalidInput() throws SQLException {
         // Given invalid input
         String firstName = "John";
         String lastName = "Doe";
@@ -122,7 +123,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginSuccess() {
+    void testLoginSuccess() throws SQLException {
         // Given
         String email = "john.doe@example.com";
         String password = "password123";
@@ -150,7 +151,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLogin_UnverifiedToken() {
+    void testLogin_UnverifiedToken() throws SQLException {
         User user = new User();
         user.setId(1);
         user.setFirstName("John");
@@ -173,7 +174,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginStaff_Success() {
+    void testLoginStaff_Success() throws SQLException {
         User user = new User();
         user.setId(1);
         user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
@@ -193,7 +194,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginUserNotFound() {
+    void testLoginUserNotFound() throws SQLException {
         // Given
         String email = "unknown@example.com";
         String password = "password123";
@@ -208,7 +209,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginStaff_UserNotFound() {
+    void testLoginStaff_UserNotFound() throws SQLException {
         when(userDao.findUserByEmail("unknown@example.com")).thenReturn(null);
 
         String result = userService.loginStaff("unknown@example.com", "Password123", response);
@@ -217,7 +218,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginInvalidPassword() {
+    void testLoginInvalidPassword() throws SQLException {
         // Given
         String email = "john.doe@example.com";
         String password = "wrongPassword";
@@ -235,7 +236,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginStaff_IncorrectPassword() {
+    void testLoginStaff_IncorrectPassword() throws SQLException {
         User user = new User();
         user.setId(1);
         user.setHashedPassword(PasswordUtil.hashPassword("WrongPassword"));
@@ -250,7 +251,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginStaff_UserNotAdminOrModerator() {
+    void testLoginStaff_UserNotAdminOrModerator() throws SQLException {
         User user = new User();
         user.setId(1);
         user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
@@ -265,7 +266,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginStaff_UserInactive() {
+    void testLoginStaff_UserInactive() throws SQLException {
         User user = new User();
         user.setId(1);
         user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
@@ -280,7 +281,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginStaff_UnverifiedToken() {
+    void testLoginStaff_UnverifiedToken() throws SQLException {
         User user = new User();
         user.setId(1);
         user.setFirstName("John");
@@ -303,7 +304,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginUserNotActive() {
+    void testLoginUserNotActive() throws SQLException {
         // Given
         String email = "john.doe@example.com";
         String password = "password123";

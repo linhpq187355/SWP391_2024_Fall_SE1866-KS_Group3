@@ -1,5 +1,7 @@
 package com.homesharing.controller;
 
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Amentity;
 import com.homesharing.model.AmentityHome;
 import com.homesharing.model.FireEquipment;
@@ -11,7 +13,7 @@ import com.homesharing.model.Price;
 import com.homesharing.model.Province;
 import com.homesharing.model.User;
 import com.homesharing.service.impl.SubmissonFormServiceImpl;
-import com.homesharing.service.impl.UserProfileServiceImpl;
+import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.CookieUtil;
 import com.homesharing.util.ImageUtil;
 import com.homesharing.util.ServletUtils;
@@ -28,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -45,7 +48,7 @@ public class CreateHomeServlet extends HttpServlet {
     private static final String UPLOAD_DIRECTORY = "assets/img/home-images";
     private static final String ERROR_ATTRIBUTE = "error";
     private SubmissonFormServiceImpl submissonFormService;
-    private UserProfileServiceImpl userProfileService;
+    private UserServiceImpl userService;
 
     /**
      * Initializes the servlet by creating instances of the submission form service and user profile service.
@@ -54,8 +57,9 @@ public class CreateHomeServlet extends HttpServlet {
      */
     @Override
     public void init() throws ServletException {
+        UserDAO userDAO = new UserDAOImpl();
         submissonFormService = new SubmissonFormServiceImpl();
-        userProfileService = new UserProfileServiceImpl();
+        userService = new UserServiceImpl(userDAO,null,null,null);
     }
 
     /**
@@ -70,7 +74,12 @@ public class CreateHomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String cookieValue = CookieUtil.getCookie(req, "id");
         if (cookieValue != null) {
-            User user = userProfileService.getUser(Integer.parseInt(cookieValue));
+            User user = null;
+            try {
+                user = userService.getUser(Integer.parseInt(cookieValue));
+            } catch (SQLException e) {
+                logger.error(e.getMessage());
+            }
             if (user.getRolesId() != 2) {
                 List<HomeType> homeTypes = submissonFormService.getHomeTypes();
                 List<Amentity> amentities = submissonFormService.getAmentities();
@@ -104,7 +113,7 @@ public class CreateHomeServlet extends HttpServlet {
             String cookieValue = CookieUtil.getCookie(req, "id");
             if (cookieValue != null) {
                 //Fetch user info from cookie
-                User user = userProfileService.getUser(Integer.parseInt(cookieValue));
+                User user = userService.getUser(Integer.parseInt(cookieValue));
 
                 // Process the submission form data
                 int homeTypeId = Integer.parseInt(req.getParameter("home-type"));

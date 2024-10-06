@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.util;
 
 import jakarta.servlet.ServletException;
@@ -9,8 +18,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * Utility class for handling common servlet operations.
- * This class cannot be instantiated.
+ * Utility class for handling common servlet operations in the Home Sharing System.
+ * This class provides methods for forwarding requests to error pages and handling error responses.
+ * All methods are static, and the class cannot be instantiated.
+ *
+ * @version 1.0
+ * @since 2024-09-18
+ * @author ManhNC
  */
 public class ServletUtils {
 

@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-02      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.PreferenceDAO;
@@ -22,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * SignUpServlet handles user registration requests and processes
@@ -30,6 +40,7 @@ import java.io.IOException;
  *
  * @version 1.0
  * @since 2024-10-02
+ * @author ManhNC
  */
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
@@ -105,7 +116,7 @@ public class SignUpServlet extends HttpServlet {
                     req.setAttribute(ERROR_ATTRIBUTE, result);
                     ServletUtils.forwardToErrorPage(req, resp);
                 }
-            } catch (RuntimeException | IOException e) {
+            } catch (RuntimeException | SQLException | IOException e) {
                 // Handle any runtime exceptions thrown by the service
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
                 ServletUtils.forwardToErrorPage(req, resp);

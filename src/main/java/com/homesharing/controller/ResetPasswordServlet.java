@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,7 +74,7 @@ public class ResetPasswordServlet extends HttpServlet {
                 req.setAttribute("error", "Xác thực không thành công."); // Set error message for unsuccessful verification
                 req.getRequestDispatcher("forgot-password.jsp").forward(req, resp); // Forward to forgot password page
             }
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | SQLException e) {
             LOGGER.log(Level.SEVERE, "Error during token verification", e); // Log the error
             req.setAttribute("error", "Đã xảy ra lỗi trong quá trình xác thực. Vui lòng thử lại."); // Set error message for exception
             req.getRequestDispatcher("forgot-password.jsp").forward(req, resp); // Forward to forgot password page

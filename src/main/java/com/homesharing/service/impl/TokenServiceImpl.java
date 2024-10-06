@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.service.impl;
 
 import com.homesharing.conf.Config;
@@ -8,18 +17,18 @@ import com.homesharing.service.TokenService;
 import com.homesharing.util.SecureRandomCode;
 import com.homesharing.util.SendingEmail;
 import jakarta.mail.MessagingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 /**
- * Implementation of the TokenService interface that handles email verification token-related logic.
+ * This class implements the TokenService interface to handle
+ * email verification token-related logic, including checking
+ * token validity and sending verification emails.
+ * @author ManhNC
  */
 public class TokenServiceImpl implements TokenService {
 
     private final TokenDAO tokenDao;
-    private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
-
     /**
      * Constructor that initializes the TokenDAO.
      *
@@ -37,34 +46,24 @@ public class TokenServiceImpl implements TokenService {
      * @return True if the token is valid, false otherwise.
      */
     @Override
-    public boolean checkToken(String tokenCode, int userID) {
-        try {
-            // Attempt to find the token for the given userID
-            Token token = tokenDao.findToken(userID);
+    public boolean checkToken(String tokenCode, int userID) throws RuntimeException, SQLException {
+        // Attempt to find the token for the given userID
+        Token token = tokenDao.findToken(userID);
 
-            // Check if the token exists
-            if (token == null) {
-                return false; // Token not found
-            }
+        // Check if the token exists
+        if (token == null) {
+            return false; // Token not found
+        }
 
-            // Check if the provided tokenCode matches the stored token
-            if (token.getToken().equals(tokenCode)) {
-                // If the token is not verified, update its status
-                if (!token.isVerified()) {
-                    tokenDao.updateTokenVerification(userID);
-                }
-                return true; // Token is valid
-            } else {
-                return false; // Token code does not match
+        // Check if the provided tokenCode matches the stored token
+        if (token.getToken().equals(tokenCode)) {
+            // If the token is not verified, update its status
+            if (!token.isVerified()) {
+                tokenDao.updateTokenVerification(userID);
             }
-        } catch (GeneralException e) {
-            // Log the exception with contextual information
-            logger.error("Error while checking token for userId {}: {}", userID, e.getMessage());
-            return false; // Return false when an error occurs
-        } catch (RuntimeException e) {
-            // Log unexpected exceptions
-            logger.error("Unexpected error occurred for userId {}: {}", userID, e.getMessage());
-            return false; // Return false when an error occurs
+            return true; // Token is valid
+        } else {
+            return false; // Token code does not match
         }
     }
 
@@ -75,7 +74,7 @@ public class TokenServiceImpl implements TokenService {
      * @param userId The ID of the user receiving the email.
      */
     @Override
-    public void sendToken(String email, int userId) {
+    public void sendToken(String email, int userId) throws SQLException {
         Token oldToken = tokenDao.findToken(userId);
         String tokenCode;
         LocalDateTime requestedTime;
