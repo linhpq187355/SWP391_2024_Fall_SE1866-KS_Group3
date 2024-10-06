@@ -12,8 +12,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * HomeDetailDAOImpl is a class that implements the HomeDetailDAO interface.
+ * This class is responsible for interacting with the database to retrieve
+ * details related to homes, such as home information, prices, creator information, etc.
+ */
 public class HomeDetailDAOImpl implements HomeDetailDAO {
 
+    /**
+     * Retrieve a Home object by its unique ID.
+     *
+     * @param id the unique identifier of the home
+     * @return Home object with the given ID or null if not found
+     * @throws GeneralException if there is an error during the database query
+     */
 @Override
 public Home getHomeById(int id) {
     String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], " +
@@ -58,6 +71,13 @@ public Home getHomeById(int id) {
     return home;
 }
 
+    /**
+     * Retrieve a list of Price objects for a specific home by its ID.
+     *
+     * @param homeId the unique identifier of the home
+     * @return List of Price objects associated with the home
+     * @throws GeneralException if there is an error during the database query
+     */
 @Override
 public List<Price> getHomePricesByHomeId(int homeId) {
     String sql = "SELECT [id], [price], [createdDate] FROM [Prices] WHERE [Homesid] = ?";
@@ -84,6 +104,13 @@ public List<Price> getHomePricesByHomeId(int homeId) {
     return prices;
 }
 
+    /**
+     * Retrieve the User object who created a specific home by its ID.
+     *
+     * @param homeId the unique identifier of the home
+     * @return User object who created the home
+     * @throws GeneralException if there is an error during the database query
+     */
 @Override
 public User getCreatorByHomeId(int homeId) {
     String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
@@ -113,6 +140,13 @@ public User getCreatorByHomeId(int homeId) {
 
     return user;
 }
+    /**
+     * Retrieve a list of Price objects for a specific home by its ID.
+     *
+     * @param homeId the unique identifier of the home
+     * @return List of Price objects associated with the home
+     * @throws GeneralException if there is an error during the database query
+     */
     @Override
     public List<HomeType> getHomeTypesByHomeId(int homeId) {
         String sql = "SELECT ht.id, ht.name, ht.description, ht.status " +
@@ -142,6 +176,14 @@ public User getCreatorByHomeId(int homeId) {
 
         return homeTypes;
     }
+    /**
+     * Retrieve a list of Amenity objects for a specific home by its ID.
+     *
+     * @param homeId the unique identifier of the home
+     * @return List of Amenity objects associated with the home
+     * @throws GeneralException if there is an error during the database query
+     */
+    @Override
     public List<Amentity> getHomeAmenitiesByHomeId(int homeId) {
         String sql = "SELECT a.id, a.name, a.icon, a.status " +
                 "FROM Amenities a " +
@@ -171,6 +213,13 @@ public User getCreatorByHomeId(int homeId) {
         return amenities;
     }
 
+    /**
+     * Retrieve a list of FireEquipment objects for a specific home by its ID.
+     *
+     * @param homeId the unique identifier of the home
+     * @return List of FireEquipment objects associated with the home
+     * @throws GeneralException if there is an error during the database query
+     */
     @Override
     public List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId) {
         String sql = "SELECT fe.id, fe.name, fe.icon, fe.status " +

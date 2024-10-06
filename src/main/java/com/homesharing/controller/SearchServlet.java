@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.SQLException;
+
 import java.util.List;
 
 // URL pattern mapped to this servlet
@@ -41,28 +41,21 @@ public class SearchServlet extends HttpServlet {
         List<Price> prices = homePageService.getHomePrice(homes);
         int minPrice = 0; // Default minimum price
         int maxPrice = 1000000; // Variable to hold the maximum price
-
-        try {
-            // Parse the minimum price from the request parameter if provided
+            try {
             if (minPriceStr != null && !minPriceStr.trim().isEmpty()) {
                 minPrice = Integer.parseInt(minPriceStr);
             }
-
-            // Parse the maximum price from the request parameter if provided
             if (maxPriceStr != null && !maxPriceStr.trim().isEmpty()) {
                 maxPrice = Integer.parseInt(maxPriceStr);
             }
-            // Perform search based on the provided name or price range
             if (name != null && !name.trim().isEmpty()) {
                 homes = searchService.searchHomesByAdress(name); // Search by name
             } else {
                 homes = searchService.searchByPriceRange(minPrice, maxPrice); // Search by price range
             }
         } catch (NumberFormatException e) {
-            // Handle case wh   ere price parameters cannot be parsed
             req.setAttribute("error", "error"); // Set error attribute for the request
             homes = homePageService.getNewHomes(); // Retrieve all homes as a fallback
-            // Handle SQL or class not found exceptions
             throw new RuntimeException("error: " + e.getMessage(), e);
         }
         // Set the search results and parameters as attributes for the request
