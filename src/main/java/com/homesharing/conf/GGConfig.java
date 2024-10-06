@@ -12,7 +12,6 @@ package com.homesharing.conf;
 /**
  * The {@code GGConfig} class contains configuration constants
  * for the Google OAuth 2.0 integration.
- *
  * This class holds the following constants:
  * <ul>
  *     <li>GOOGLE_CLIENT_ID: The client ID obtained from Google Developer Console.</li>
