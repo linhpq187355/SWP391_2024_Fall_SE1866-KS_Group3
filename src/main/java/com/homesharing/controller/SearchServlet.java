@@ -1,6 +1,10 @@
 package com.homesharing.controller;
 
 
+import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.service.HomePageService;
@@ -23,13 +27,34 @@ public class SearchServlet extends HttpServlet {
 
     private SearchSevice searchService;
     private HomePageService homePageService;
+    private HomeDAO homeDAO;  // Data Access Object for accessing home data
+    private PriceDAO priceDAO;  // Data Access Object for accessing price data
 
+    /**
+     * Initializes the SearchServlet by creating instances of necessary DAOs and services.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() throws ServletException {
-        searchService = new SearchServiceImpl();
-        homePageService = new HomePageServiceImpl();
+        homeDAO = new HomeDAOImpl();
+        priceDAO = new PriceDAOImpl();
+        try {
+            searchService = new SearchServiceImpl();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO);
     }
 
+    /**
+     * Handles GET requests to search for homes based on provided parameters.
+     * Retrieves search parameters, performs search, and forwards results to the JSP.
+     *
+     * @param req The HttpServletRequest object containing the request data.
+     * @param resp The HttpServletResponse object for sending responses to the client.
+     * @throws ServletException if the request cannot be handled.
+     * @throws IOException if an input or output error occurs during the handling of the request.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Retrieve search parameters from the request

@@ -14,7 +14,7 @@ public class SearchServiceImpl implements SearchSevice {
     private final SearchDAO searchDAO;
 
     // Constructor that initializes the SearchDAO implementation.
-    public SearchServiceImpl() throws SQLException, IOException, ClassNotFoundException {
+    public SearchServiceImpl() throws ClassNotFoundException {
         this.searchDAO = new SearchDAOimpl();
     }
 
