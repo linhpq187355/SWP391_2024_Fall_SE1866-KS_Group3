@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,7 +67,7 @@ public class ResetPasswordServlet extends HttpServlet {
 
         try {
             // Check if the token is valid
-            boolean isValidToken = tokenService.checkToken(verificationCode, Integer.parseInt(userIDString));
+            boolean isValidToken = tokenService.checkToken(verificationCode, Integer.parseInt(userIDString), LocalDateTime.now());
             if (isValidToken) {
                 req.setAttribute("userId", userIDString); // Set user ID for the reset password page
                 req.getRequestDispatcher("reset-password.jsp").forward(req, resp); // Forward to reset password page

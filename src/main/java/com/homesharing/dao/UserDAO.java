@@ -54,6 +54,8 @@ public interface UserDAO {
      */
     boolean emailExists(String email) throws SQLException;
 
+    int passWordExists(int userId) throws SQLException;
+
     /**
      * Retrieves a user from the database based on the user ID.
      *
@@ -68,6 +70,8 @@ public interface UserDAO {
      * @return The {@link User} object if found, or {@code null} if no user is found.
      */
     User findUserByEmail(String email) throws SQLException;
+
+    int updatePhoneNumber(int userId, String phoneNumber) throws SQLException;
 
     List<User> getAllUsers();
     /**

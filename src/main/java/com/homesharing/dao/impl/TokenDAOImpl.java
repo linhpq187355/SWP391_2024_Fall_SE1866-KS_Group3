@@ -135,4 +135,39 @@ public class TokenDAOImpl extends DBContext implements TokenDAO {
         }
     }
 
+    /**
+     * Updates the token code and time for a user.
+     * This method update token code and time instead of create a new token
+     *
+     * @param userId The ID of the user whose token verification status is being updated.
+     */
+    @Override
+    public void updateToken(int userId, String otp, LocalDateTime time) throws SQLException {
+        String sql = "UPDATE [dbo].[Token] SET  [otp] = ?, [requestedTime] = ? WHERE [userId] = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // Set parameters for the prepared statement
+            preparedStatement.setString(1, otp); // Set otp
+            preparedStatement.setTimestamp(2, java.sql.Timestamp.valueOf(time)); // Set requestedTime
+            preparedStatement.setInt(3, userId); // Set userId
+
+            // Execute the update to change the isVerified status
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Optional: Check if the update was successful
+            if (rowsAffected == 0) {
+                throw new GeneralException("Error when update token for userID : " + userId);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error updating token code in the database", e);
+        } finally {
+            closeConnection();
+        }
+    }
+
 }

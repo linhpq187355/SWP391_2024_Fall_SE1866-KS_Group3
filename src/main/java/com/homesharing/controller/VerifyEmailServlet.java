@@ -9,10 +9,19 @@
  */
 package com.homesharing.controller;
 
+import com.homesharing.dao.PreferenceDAO;
 import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.TokenDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.service.PreferenceService;
 import com.homesharing.service.TokenService;
+import com.homesharing.service.UserService;
+import com.homesharing.service.impl.PreferenceServiceImpl;
 import com.homesharing.service.impl.TokenServiceImpl;
+import com.homesharing.service.impl.UserServiceImpl;
+import com.homesharing.util.ServletUtils;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 /**
  * VerifyEmailServlet handles the email verification process for users.
@@ -36,6 +46,7 @@ import java.sql.SQLException;
  */
 @WebServlet("/verify")
 public class VerifyEmailServlet extends HttpServlet {
+    private transient UserService userService;// Mark userService as transient
     private transient TokenService tokenService;
     private static final Logger logger = LoggerFactory.getLogger(VerifyEmailServlet.class); // Logger instance
 
@@ -45,8 +56,14 @@ public class VerifyEmailServlet extends HttpServlet {
      */
     @Override
     public void init() {
+        // Create instances of UserDao and TokenDao
+        UserDAO userDao = new UserDAOImpl();
         TokenDAO tokenDao = new TokenDAOImpl();
+        PreferenceDAO preferenceDao = new PreferenceDAOImpl();
         tokenService = new TokenServiceImpl(tokenDao);
+        PreferenceService preferenceService = new PreferenceServiceImpl(preferenceDao);
+        // Inject UserDao into UserServiceImpl
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService,preferenceService);
     }
 
     /**
@@ -59,31 +76,59 @@ public class VerifyEmailServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        // 1. Get verification code and user ID from the URL parameters
-        String verificationCode = request.getParameter("code");
-        String userIDString = request.getParameter("userId");
-
-        // 2. Convert userID from String to int
-        int userId;
-        try {
-            userId = Integer.parseInt(userIDString);
-        } catch (NumberFormatException e) {
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        if(userId == null) {
             // Handle invalid user ID format
-            forwardWithMessage(request, response, "Invalid user ID.");
+            forwardWithMessage(request, response, "Có lỗi xảy ra, vui lòng đăng nhập lại để xác thực.");
+            return; // Exit the method if the user ID is invalid
+        }
+        try {
+            request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            // Handle any runtime exceptions thrown by the service or servlet
+            request.setAttribute("error", "An error occurred during registration: " + e.getMessage());
+            ServletUtils.forwardToErrorPage(request, response);
+        }
+    }
+
+    /**
+     * Handles POST requests for email verification.
+     * Retrieves the verification code and user ID from the request, validates them,
+     * and checks if the token is valid.
+     *
+     * @param request  HttpServletRequest containing the client request.
+     * @param response HttpServletResponse used to send a response to the client.
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        //Get verification code from the URL parameters
+        String verificationCode = request.getParameter("otp");
+
+        //Get userId from session
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        if(userId == null) {
+            // Handle invalid user ID format
+            forwardWithMessage(request, response, "Có lỗi xảy ra, vui lòng đăng nhập lại để xác thực.");
             return; // Exit the method if the user ID is invalid
         }
 
-        // 3. Check the token using the email service
+        //Check the token using the email service
         try {
-            boolean check = tokenService.checkToken(verificationCode, userId);
+            boolean check = tokenService.checkToken(verificationCode, userId, LocalDateTime.now());
             if (check) {
-                forwardWithMessage(request, response, "Xác thực thành công.");
+                userService.putAccountOnCookie(userId, response);
+                request.getSession().removeAttribute("userId");
+                // Login successful, redirect to home page
+                request.getSession().setAttribute("message", "Xác thực thành công.");
+                request.getSession().setAttribute("messageType", "success");
+                response.sendRedirect(request.getContextPath() + "/home-page");
             } else {
-                forwardWithMessage(request, response, "Xác thực không thành công.");
+                request.setAttribute("error", "OTP không hợp lệ.");
+                request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
             }
-        } catch (RuntimeException | SQLException e) {
+        } catch (RuntimeException | SQLException | IOException | ServletException e) {
             // Handle any errors that occur during token verification
-            forwardWithMessage(request, response, "Lỗi khi xác thực email: " + e.getMessage());
+            forwardWithMessage(request, response, "Lỗi khi xác thực: " + e.getMessage());
         }
     }
 

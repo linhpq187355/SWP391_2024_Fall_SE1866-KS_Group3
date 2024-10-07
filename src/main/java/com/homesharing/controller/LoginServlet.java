@@ -41,7 +41,7 @@ import java.io.IOException;
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-
+    private transient UserDAO userDao;
     private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class); // Logger instance
 
@@ -52,7 +52,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
-        UserDAO userDao = null;
         userDao = new UserDAOImpl();
         TokenDAO tokenDao = new TokenDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
@@ -109,6 +108,10 @@ public class LoginServlet extends HttpServlet {
                 req.getSession().setAttribute("message", "Đăng nhập thành công.");
                 req.getSession().setAttribute("messageType", "success");
                 resp.sendRedirect(req.getContextPath() + "/home-page");
+            } else if (result.equals("not-verify")) {
+                int userId = userDao.findUserByEmail(email).getId();
+                req.getSession().setAttribute("userId",userId);
+                req.getRequestDispatcher("/input-otp.jsp").forward(req, resp);
             } else {
                 req.setAttribute("error", result);
                 if(result.equals("Email hoặc mật khẩu không đúng")) {
