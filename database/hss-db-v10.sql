@@ -1,3 +1,20 @@
+USE [master]
+GO
+
+-- Drop database if it exists
+IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'HSS_DB')
+BEGIN
+    ALTER DATABASE [HSS_DB] SET OFFLINE WITH ROLLBACK IMMEDIATE;
+    ALTER DATABASE [HSS_DB] SET ONLINE;
+    DROP DATABASE [HSS_DB];
+END
+GO
+
+CREATE DATABASE [HSS_DB]
+GO
+
+USE [HSS_DB]
+GO
 CREATE TABLE HSS_Users (
   id             int IDENTITY NOT NULL, 
   email          varchar(255) NOT NULL UNIQUE, 
@@ -15,6 +32,7 @@ CREATE TABLE HSS_Users (
   status         nvarchar(20) DEFAULT 'active' NOT NULL, 
   isVerified     bit DEFAULT 0 NOT NULL, 
   lastModified   datetime2(7) NULL, 
+  googleId       nvarchar(255) NULL, 
   rolesid        int NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE HomeImages (
@@ -88,7 +106,7 @@ CREATE TABLE Wards (
 CREATE TABLE Reviews (
   id               int IDENTITY(1, 1) NOT NULL, 
   star             tinyint NOT NULL, 
-  comments         text NOT NULL, 
+  comments         nvarchar(300) NOT NULL, 
   createdDate      datetime NOT NULL, 
   lastModifiedDate datetime NOT NULL, 
   status           varchar(20) DEFAULT 'active' NOT NULL, 
@@ -111,7 +129,7 @@ CREATE TABLE Reports (
   id           int IDENTITY(1, 1) NOT NULL, 
   reportDate   datetime NOT NULL, 
   title        nvarchar(255) NOT NULL, 
-  description  text NOT NULL, 
+  description  nvarchar(255) NOT NULL, 
   reportedDate datetime NOT NULL, 
   solvedDate   datetime NULL, 
   status       varchar(20) DEFAULT 'active' NOT NULL, 
@@ -153,7 +171,7 @@ CREATE TABLE Users_Announcements (
   notificationsId));
 CREATE TABLE Appointments (
   id        int IDENTITY NOT NULL, 
-  note      text NULL, 
+  note      nvarchar(255) NULL, 
   startDate datetime NOT NULL, 
   endDate   datetime NULL, 
   location  varchar(255) NOT NULL, 
@@ -172,7 +190,7 @@ CREATE TABLE Replies (
 CREATE TABLE Notifications (
   id          int IDENTITY(1, 1) NOT NULL, 
   recieverId  int NOT NULL, 
-  content     text NOT NULL, 
+  content     nvarchar(max) NOT NULL, 
   createdDate datetime NOT NULL, 
   status      varchar(20) DEFAULT 'active' NOT NULL, 
   PRIMARY KEY (id));
