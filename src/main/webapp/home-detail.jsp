@@ -37,6 +37,60 @@
     <link rel="stylesheet" href="assets/css/lightslider.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .card {
+            background-color: #7f7f7f;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .name {
+            font-size: 18px;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+        }
+        .phone-button {
+            background-color: #00c853;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .phone-button i {
+            margin-right: 10px;
+        }
+        .zalo-button, .like-button {
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zalo-button i, .like-button i {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <jsp:include page="header.jsp"/>
 
@@ -70,14 +124,6 @@
                 <div class="row">
                     <div class="light-slide-item">
                         <div class="clearfix">
-                            <div class="favorite-and-print">
-                                <a class="add-to-fav" href="#login-modal" data-toggle="modal">
-                                    <i class="fa fa-star-o"></i>
-                                </a>
-                                <a class="printer-icon" href="javascript:window.print()">
-                                    <i class="fa fa-print"></i>
-                                </a>
-                            </div>
 
                             <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
                                 <li data-thumb="assets/img/property-1/property1.jpg">
@@ -283,40 +329,55 @@
                                         <h3 class="dealer-name">
                                             <a href="">${creator.firstName} ${creator.lastName}</a>
                                         </h3>
-                                        <div class="dealer-social-media">
-                                            <a class="twitter" target="_blank" href="">
-                                                <i class="fa fa-twitter"></i>
-                                            </a>
-                                            <a class="facebook" target="_blank" href="">
-                                                <i class="fa fa-facebook"></i>
-                                            </a>
-                                            <a class="gplus" target="_blank" href="">
-                                                <i class="fa fa-google-plus"></i>
-                                            </a>
-                                            <a class="linkedin" target="_blank" href="">
-                                                <i class="fa fa-linkedin"></i>
-                                            </a>
-                                            <a class="instagram" target="_blank" href="">
-                                                <i class="fa fa-instagram"></i>
-                                            </a>
-                                        </div>
 
                                     </div>
                                 </div>
 
                                 <div class="clear">
                                     <ul class="dealer-contacts">
-                                        <li><i class="pe-7s-map-marker strong"> </i> ${home.address}</li>
-                                        <li><i class="pe-7s-mail strong"> </i> ${creator.email}</li>
-                                        <li><i class="pe-7s-call strong"> </i> ${creator.phoneNumber}</li>
+                                        <li>
+                                            <button class="phone-button">
+                                                <i class="fas fa-phone"></i>
+                                                ${creator.phoneNumber}
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="zalo-button">
+                                                <i class="fas fa-comment"></i>
+                                                Liên Hệ
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="like-button"  href="#login-modal" data-toggle="modal" onclick="showConfirmPopup(homeId, userId)">
+                                                <i class="fas fa-heart"></i> Yêu thích
+                                            </button>
+                                        </li>
                                     </ul>
+
+                                    <!-- Popup xác nhận -->
+                                    <div id="login-modal" class="modal fade" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Xác nhận</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc chắn muốn thêm vào danh sách yêu thích không?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                                    <button type="button" class="btn btn-primary" onclick="confirmAddToWishlist()">Xác nhận</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                            </div>
-                        </div>
-                    </div>
 
-                    <%--                            <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">--%>
+                            <%--                            <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">--%>
                     <%--                                <div class="panel-heading">--%>
                     <%--                                    <h3 class="panel-title">Similar Properties</h3>--%>
                     <%--                                </div>--%>
@@ -712,7 +773,8 @@
 
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="assets/js/jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -743,6 +805,29 @@
             }
         });
     });
+
+    function showConfirmPopup(homeId, userId) {
+        // Hiển thị modal xác nhận
+        $('#login-modal').modal('show');
+
+        // Lưu các ID để sử dụng trong xác nhận
+        window.currentHomeId = homeId;
+        window.currentUserId = userId;
+    }
+
+    function confirmAddToWishlist(homeId, userId) {
+        // Tạo một yêu cầu POST tới servlet
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "add-to-wishlist", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                alert(xhr.responseText); // Hiển thị phản hồi từ servlet
+                $('#login-modal').modal('hide'); // Đóng modal
+            }
+        };
+        xhr.send("homeId=" + homeId + "&userId=" + userId);
+    }
 </script>
 
 </body>
