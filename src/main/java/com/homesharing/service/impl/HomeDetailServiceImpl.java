@@ -73,8 +73,8 @@ public class HomeDetailServiceImpl implements HomeDetailService {
     /**
      * Retrieves a list of FireEquipment associated with a specific home, identified by its ID.
      *
-     * @param homeId The ID of the home for which you want to get FireEquipments.
-     * @return A list FireEquipment objects linked to the specified home ID.
+     * @param homeId The ID of the home for which you want to get the types.
+     * @return A list of HomeType objects linked to the specified home ID.
      */
     @Override
     public List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId) {
