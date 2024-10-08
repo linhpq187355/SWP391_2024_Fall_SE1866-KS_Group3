@@ -823,7 +823,7 @@
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 alert(xhr.responseText); // Hiển thị phản hồi từ servlet
-                $('#login-modal').modal('hide'); // Đóng modal
+                // $('#login-modal').modal('hide'); // Đóng modal
             }
         };
         xhr.send("homeId=" + homeId + "&userId=" + userId);
