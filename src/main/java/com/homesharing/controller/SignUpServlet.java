@@ -105,18 +105,21 @@ public class SignUpServlet extends HttpServlet {
         if (isValid) {
             try {
                 // Attempt to register the user
-                String result = userService.registerUser(firstName, lastName, email, password, role);
-                if ("success".equals(result)) {
-                    // Redirect to home page on success
-                    req.getSession().setAttribute("message", "Đăng kí thành công. Vui lòng kiểm tra email để xác thực tài khoản.");
-                    req.getSession().setAttribute("messageType", "success");
-                    resp.sendRedirect(req.getContextPath() + "/home-page");
+                int result = userService.registerUser(firstName, lastName, email, password, role);
+                if (result > 0) {
+                    //redirect to verify email
+                    req.getSession().setAttribute("userId", result);
+                    resp.sendRedirect(req.getContextPath() + "/verify");
+                } else if (result == 0) {
+                    req.setAttribute("error", "Email này đã được sử dụng, vui lòng nhập email khác.");
+                    req.setAttribute("firstName", firstName);
+                    req.setAttribute("lastName", lastName);
+                    req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
                 } else {
-                    // Set error message if registration fails
-                    req.setAttribute(ERROR_ATTRIBUTE, result);
-                    ServletUtils.forwardToErrorPage(req, resp);
+                    req.setAttribute("error", "Có lỗi xảy ra, vui lòng đăng kí lại.");
+                    req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
                 }
-            } catch (RuntimeException | SQLException | IOException e) {
+            } catch (RuntimeException | SQLException | IOException | ServletException e) {
                 // Handle any runtime exceptions thrown by the service
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
                 ServletUtils.forwardToErrorPage(req, resp);

@@ -51,10 +51,10 @@ class UserServiceImplTest {
         when(userDao.saveUser(any(User.class))).thenReturn(user.getId());
 
         // When
-        String result = userService.registerUser(firstName, lastName, email, password, role);
+        int result = userService.registerUser(firstName, lastName, email, password, role);
 
         // Then
-        assertEquals("success", result);
+        assertTrue(result > 0);
         verify(tokenService).sendToken(email, user.getId());
     }
 
@@ -70,10 +70,10 @@ class UserServiceImplTest {
         when(userDao.emailExists(email)).thenReturn(true);
 
         // When
-        String result = userService.registerUser(firstName, lastName, email, password, role);
+        int result = userService.registerUser(firstName, lastName, email, password, role);
 
         // Then
-        assertEquals("Email đã được sử dụng!", result);
+        assertEquals(0, result);
     }
 
     @Test
@@ -86,10 +86,10 @@ class UserServiceImplTest {
         String role = "findRoommate";
 
         // When
-        String result = userService.registerUser(firstName, lastName, email, password, role);
+        int result = userService.registerUser(firstName, lastName, email, password, role);
 
         // Then
-        assertEquals("Invalid input!", result);
+        assertTrue(result < 0);
     }
 
     @Test

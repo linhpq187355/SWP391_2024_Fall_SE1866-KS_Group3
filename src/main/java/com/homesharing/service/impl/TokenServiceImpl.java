@@ -9,15 +9,18 @@
  */
 package com.homesharing.service.impl;
 
-import com.homesharing.conf.Config;
 import com.homesharing.dao.TokenDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
+import com.homesharing.model.User;
 import com.homesharing.service.TokenService;
 import com.homesharing.util.SecureRandomCode;
 import com.homesharing.util.SendingEmail;
 import jakarta.mail.MessagingException;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
@@ -29,6 +32,7 @@ import java.time.LocalDateTime;
 public class TokenServiceImpl implements TokenService {
 
     private final TokenDAO tokenDao;
+    private UserDAO userDao;
     /**
      * Constructor that initializes the TokenDAO.
      *
@@ -36,6 +40,10 @@ public class TokenServiceImpl implements TokenService {
      */
     public TokenServiceImpl(TokenDAO tokenDao) {
         this.tokenDao = tokenDao;
+    }
+
+    public void setUserDao(UserDAO userDao) {
+        this.userDao = userDao;
     }
 
     /**
@@ -46,7 +54,7 @@ public class TokenServiceImpl implements TokenService {
      * @return True if the token is valid, false otherwise.
      */
     @Override
-    public boolean checkToken(String tokenCode, int userID) throws RuntimeException, SQLException {
+    public boolean checkToken(String tokenCode, int userID, LocalDateTime requestedTime) throws RuntimeException, SQLException {
         // Attempt to find the token for the given userID
         Token token = tokenDao.findToken(userID);
 
@@ -57,11 +65,18 @@ public class TokenServiceImpl implements TokenService {
 
         // Check if the provided tokenCode matches the stored token
         if (token.getToken().equals(tokenCode)) {
-            // If the token is not verified, update its status
-            if (!token.isVerified()) {
-                tokenDao.updateTokenVerification(userID);
+            // Calculate the time difference between time input and the requested time
+            Duration duration = Duration.between(token.getRequestedTime(), requestedTime);
+            // Check if the time difference is less than 5 minutes
+            if (duration.toMinutes() < 5) {
+                // If the token is not verified, update its status
+                if (!token.isVerified()) {
+                    tokenDao.updateTokenVerification(userID);
+                }
+                return true; // Token is valid within the 5-minute window
+            } else {
+                return false; // Token has expired (more than 5 minutes)
             }
-            return true; // Token is valid
         } else {
             return false; // Token code does not match
         }
@@ -78,19 +93,16 @@ public class TokenServiceImpl implements TokenService {
         Token oldToken = tokenDao.findToken(userId);
         String tokenCode;
         LocalDateTime requestedTime;
-
+        tokenCode = SecureRandomCode.generateCode();
+        requestedTime = LocalDateTime.now();
         if (oldToken != null) {
-            // Use the existing token code and requested time
-            tokenCode = oldToken.getToken();
+            tokenDao.updateToken(userId, tokenCode, requestedTime);
         } else {
             // Create a new token
-            tokenCode = SecureRandomCode.generateCode();
-            requestedTime = LocalDateTime.now();
             Token newToken = new Token(userId, tokenCode, requestedTime, false);
             tokenDao.insertToken(newToken);
         }
         // Get base URL from properties
-        String baseUrl = Config.getBaseUrl();
         String subject = "Xac nhan email!!!";
         String content = "<!DOCTYPE html>"
                 + "<html>"
@@ -98,13 +110,9 @@ public class TokenServiceImpl implements TokenService {
                 + "<body>"
                 + "<h2>Xác nhận email</h2>"
                 + "<p>Xin chào,</p>"
-                + "<p>Vui lòng nhấn vào nút bên dưới để xác thực email của bạn:</p>"
-                + "<a href='" + baseUrl + "/verify?code=" + tokenCode + "&userId=" + userId + "' "
-                + "style='text-decoration: none;'>"
-                + "<button style='padding: 10px 20px; background-color: blue; color: white; border: none;'>"
-                + "Xác thực Email"
-                + "</button>"
-                + "</a>"
+                + "<p>Đây là mã OTP để xác thực email của bạn. Mã này có hiệu lực trong vòng 5 phút.</p>"
+                + "<p><strong>Mã OTP của bạn: " + tokenCode + "</strong></p>"
+                + "<p>Lưu ý: Không chia sẻ mã này với bất kỳ ai.</p>"
                 + "<p>Trân trọng,<br>Đội ngũ hỗ trợ</p>"
                 + "</body>"
                 + "</html>";
@@ -113,5 +121,20 @@ public class TokenServiceImpl implements TokenService {
         } catch (MessagingException e) {
             throw new GeneralException("Error while sending email");
         }
+    }
+
+    /**
+     * ReSends a verification token to the user's email address.
+     * The token is used to verify the user's email as part of the registration or email verification process.
+     *
+     * @param userId The ID of the user to whom the token belongs.
+     */
+    @Override
+    public void reSendToken(int userId) throws SQLException {
+        User user = userDao.getUser(userId);
+        if (user == null) {
+            throw new GeneralException("User not found");
+        }
+        sendToken(user.getEmail(), userId);
     }
 }

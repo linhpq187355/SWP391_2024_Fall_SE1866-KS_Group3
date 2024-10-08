@@ -42,7 +42,7 @@ class TokenServiceImplTest {
     void testCheckTokenSuccess() throws SQLException {
         when(tokenDao.findToken(1)).thenReturn(token);
 
-        boolean result = tokenService.checkToken("123456", 1);
+        boolean result = tokenService.checkToken("123456", 1, LocalDateTime.now());
 
         assertTrue(result);
         verify(tokenDao, times(1)).updateTokenVerification(1);
@@ -52,7 +52,7 @@ class TokenServiceImplTest {
     void testCheckTokenTokenNotFound() throws SQLException {
         when(tokenDao.findToken(1)).thenReturn(null);
 
-        boolean result = tokenService.checkToken("123456", 1);
+        boolean result = tokenService.checkToken("123456", 1, LocalDateTime.now());
 
         assertFalse(result);
         verify(tokenDao, never()).updateTokenVerification(anyInt());
@@ -62,7 +62,7 @@ class TokenServiceImplTest {
     void testCheckTokenTokenMismatch() throws SQLException {
         when(tokenDao.findToken(1)).thenReturn(token);
 
-        boolean result = tokenService.checkToken("654321", 1);
+        boolean result = tokenService.checkToken("654321", 1, LocalDateTime.now());
 
         assertFalse(result);
         verify(tokenDao, never()).updateTokenVerification(anyInt());

@@ -34,9 +34,9 @@ public interface UserService {
      * @param email     The user's email address.
      * @param password  The user's password.
      * @param role      The role of the user (e.g., findRoommate, postRoom).
-     * @return A string indicating the result of the registration (e.g., success message, error).
+     * @return An integer indicate userID of new user.
      */
-    String registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException;
+    int registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException;
 
     /**
      * Registers a new user using their Google account information.
@@ -71,6 +71,12 @@ public interface UserService {
      */
     boolean validateUserInput(String firstName, String lastName, String email, String password, String confirmPassword, String role);
 
+    boolean validateEmail(String email);
+
+    int updatePhone(String phone, String userId) throws SQLException;
+
+    void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException;
+
     /**
      * Handles user login by verifying credentials and optionally remembering the user.
      *
@@ -81,6 +87,8 @@ public interface UserService {
      * @return A string indicating the result of the login attempt (e.g., success, error).
      */
     String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException;
+
+    int updatePassword(int userId, int hadPass, String oldPass, String password) throws SQLException;
 
     /**
      * Handles staff member login by verifying credentials.

@@ -44,11 +44,12 @@ import java.time.LocalDateTime;
  * @since 2024-10-02
  * @author ManhNC
  */
-@WebServlet("/verify")
-public class VerifyEmailServlet extends HttpServlet {
+@WebServlet("/verify-new")
+public class VerifyNewEmailServlet extends HttpServlet {
     private transient UserService userService;// Mark userService as transient
     private transient TokenService tokenService;
-    private static final Logger logger = LoggerFactory.getLogger(VerifyEmailServlet.class); // Logger instance
+    private UserDAO userDAO;
+    private static final Logger logger = LoggerFactory.getLogger(VerifyNewEmailServlet.class); // Logger instance
 
     /**
      * Initializes the VerifyEmailServlet by creating an instance of the TokenService.
@@ -57,13 +58,13 @@ public class VerifyEmailServlet extends HttpServlet {
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
-        UserDAO userDao = new UserDAOImpl();
-        TokenDAO tokenDao = new TokenDAOImpl();
+        userDAO = new UserDAOImpl();
+        TokenDAO tokenDAO = new TokenDAOImpl();
         PreferenceDAO preferenceDao = new PreferenceDAOImpl();
-        tokenService = new TokenServiceImpl(tokenDao);
+        tokenService = new TokenServiceImpl(tokenDAO);
         PreferenceService preferenceService = new PreferenceServiceImpl(preferenceDao);
         // Inject UserDao into UserServiceImpl
-        userService = new UserServiceImpl(userDao, tokenDao, tokenService,preferenceService);
+        userService = new UserServiceImpl(userDAO, tokenDAO, tokenService,preferenceService);
     }
 
     /**
@@ -83,7 +84,7 @@ public class VerifyEmailServlet extends HttpServlet {
             return; // Exit the method if the user ID is invalid
         }
         try {
-            request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
+            request.getRequestDispatcher("/input-otp-2.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             // Handle any runtime exceptions thrown by the service or servlet
             request.setAttribute("error", "An error occurred during registration: " + e.getMessage());
@@ -103,28 +104,33 @@ public class VerifyEmailServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         //Get verification code from the URL parameters
         String verificationCode = request.getParameter("otp");
-
         //Get userId from session
         Integer userId = (Integer) request.getSession().getAttribute("userId");
-        if(userId == null) {
+        String email = request.getSession().getAttribute("email").toString();
+        if(userId == null || email == null) {
             // Handle invalid user ID format
             forwardWithMessage(request, response, "Có lỗi xảy ra, vui lòng đăng nhập lại để xác thực.");
             return; // Exit the method if the user ID is invalid
         }
-
         //Check the token using the email service
         try {
             boolean check = tokenService.checkToken(verificationCode, userId, LocalDateTime.now());
             if (check) {
-                userService.putAccountOnCookie(userId, response);
+                int result = userDAO.updateEmail(email, userId);
                 request.getSession().removeAttribute("userId");
-                // Login successful, redirect to home page
-                request.getSession().setAttribute("message", "Xác thực thành công.");
-                request.getSession().setAttribute("messageType", "success");
-                response.sendRedirect(request.getContextPath() + "/home-page");
+                request.getSession().removeAttribute("email");
+                if (result == 1) {
+                    userService.putAccountOnCookie(userId, response);
+                    request.getSession().setAttribute("message", "Cập nhật thành công.");
+                    request.getSession().setAttribute("messageType", "success");
+                } else {
+                    request.getSession().setAttribute("message", "Cập nhật thất bại.");
+                    request.getSession().setAttribute("messageType", "error");
+                }
+                response.sendRedirect(request.getContextPath() + "/user-security");
             } else {
                 request.setAttribute("error", "OTP không hợp lệ.");
-                request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
+                request.getRequestDispatcher("/input-otp-2.jsp").forward(request, response);
             }
         } catch (RuntimeException | SQLException | IOException | ServletException e) {
             // Handle any errors that occur during token verification

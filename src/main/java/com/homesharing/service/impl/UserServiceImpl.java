@@ -68,16 +68,16 @@ public class UserServiceImpl implements UserService {
      * @return A success message or an error message.
      */
     @Override
-    public String registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException {
+    public int registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException {
         // Validate user input
         if (!validateUserInput(firstName, lastName, email, password, password, role)) {
-            return "Invalid input!";
+            return -1;
         }
 
         try {
             // Check if the email already exists
             if (userDao.emailExists(email)) {
-                return "Email đã được sử dụng!";
+                return 0;
             }
 
             // Create a new user and set its properties
@@ -97,14 +97,14 @@ public class UserServiceImpl implements UserService {
             } else if ("postRoom".equals(role)) {
                 roleValue = 4;
             } else {
-                return "Invalid role: " + role;
+                return -1;
             }
             user.setRolesId(roleValue);
             // Insert new user into the database
             int userId = userDao.saveUser(user);
             tokenService.sendToken(email, userId);
             preferenceService.addPreference(userId);
-            return "success";
+            return userId;
         } catch (GeneralException e) {
             throw new GeneralException(e.getMessage());
         }
@@ -231,6 +231,56 @@ public class UserServiceImpl implements UserService {
         return role != null && (role.equals("findRoommate") || role.equals("postRoom"));
     }
 
+    @Override
+    public boolean validateEmail(String email) {
+        // Check if the email is valid
+        String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        if (!email.matches(emailRegex)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int updatePhone(String phone, String userId) throws SQLException {
+        if(userId == null || userId.isEmpty()) {
+            return -1;
+        }
+        if(phone == null || phone.isEmpty()) {
+            return -2;
+        }
+
+        String phoneRegex = "^(0[3|5|7|8|9])+([0-9]{8})$";
+        if (!phone.matches(phoneRegex)) {
+            return -2;
+        }
+
+        int id = Integer.parseInt(userId);
+
+        User user = userDao.getUser(id);
+
+        if(user == null) {
+            return -1;
+        }
+        return userDao.updatePhoneNumber(id, phone);
+    }
+
+    @Override
+    public void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException {
+        User user = userDao.getUser(userId);
+        if(user == null) {
+            throw new GeneralException("User not found");
+        }
+        // identity max age
+        int cookieAge = 7 * 24 * 60 * 60; // 1 week
+        // Save user's information to cookies
+        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
+        CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
+        CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
+        CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
+    }
+
     /**
      * Logs a user into the system.
      *
@@ -250,6 +300,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             // User does not exist
             return "Email hoặc mật khẩu không đúng";
+        }
+
+        if(user.getHashedPassword() == null) {
+            return "Tài khoản này chưa có mật khẩu, vui lòng đăng nhập bằng Google và cập nhật mật khẩu.";
         }
 
         // Check if the provided password matches the user's hashed password
@@ -276,7 +330,7 @@ public class UserServiceImpl implements UserService {
         // If the token does not exist, create a new one
         if (token == null || !token.isVerified()) {
             tokenService.sendToken(email, user.getId());
-            return "Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.";
+            return "not-verify";
         }
 
         // identity max age
@@ -293,6 +347,26 @@ public class UserServiceImpl implements UserService {
         } catch (GeneralException e) {
             throw new GeneralException("Error:" ,e);
         }
+    }
+
+    @Override
+    public int updatePassword(int userId, int hadPass, String oldPass, String password) throws SQLException {
+        if(password == null || password.isEmpty()) {
+            return -2;
+        }
+        if(hadPass == 0) {
+            if(oldPass == null || oldPass.isEmpty()) {
+                return -2;
+            }
+            User user = userDao.getUserById(userId);
+            if(user.getHashedPassword() == null || user.getHashedPassword().isEmpty()) {
+                return -2;
+            }
+            if(!user.getHashedPassword().equals(PasswordUtil.hashPassword(oldPass))) {
+                return -1;
+            }
+        }
+        return userDao.resetPassword(password, userId);
     }
 
     /**

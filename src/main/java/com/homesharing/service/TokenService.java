@@ -10,6 +10,7 @@
 package com.homesharing.service;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 /**
  * TokenService is an interface that defines the operations for handling tokens,
@@ -30,7 +31,7 @@ public interface TokenService {
      * @param userId The ID of the user to whom the token belongs.
      * @return true if the token is valid, false otherwise.
      */
-    boolean checkToken(String token, int userId) throws SQLException;
+    boolean checkToken(String token, int userId, LocalDateTime requestedTime) throws SQLException;
 
     /**
      * Sends a verification token to the user's email address.
@@ -40,5 +41,13 @@ public interface TokenService {
      * @param userId The ID of the user to whom the token belongs.
      */
     void sendToken(String email, int userId) throws SQLException;
+
+    /**
+     * ReSends a verification token to the user's email address.
+     * The token is used to verify the user's email as part of the registration or email verification process.
+     *
+    * @param userId The ID of the user to whom the token belongs.
+     */
+    void reSendToken(int userId) throws SQLException;
 
 }

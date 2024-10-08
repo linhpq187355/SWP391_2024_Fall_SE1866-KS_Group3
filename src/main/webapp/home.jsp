@@ -363,10 +363,6 @@
 
             errorMessage.textContent = "";
 
-            if (searchInput === "") {
-                return true;
-            }
-
             if (searchInput.length > 100) {
                 errorMessage.textContent = "Đầu vào không được vượt quá 100 ký tự.";
                 return false;

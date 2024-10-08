@@ -12,6 +12,7 @@ package com.homesharing.dao;
 import com.homesharing.model.Token;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 /**
  * TokenDAO is an interface that defines the operations for managing tokens in the system.
@@ -47,4 +48,12 @@ public interface TokenDAO {
      * @param userId The ID of the user whose token verification status is being updated.
      */
     void updateTokenVerification(int userId) throws SQLException;
+
+    /**
+     * Updates the token code and time for a user.
+     * This method update token code and time instead of create a new token
+     *
+     * @param userId The ID of the user whose token verification status is being updated.
+     */
+    void updateToken(int userId, String otp, LocalDateTime time) throws SQLException;
 }
