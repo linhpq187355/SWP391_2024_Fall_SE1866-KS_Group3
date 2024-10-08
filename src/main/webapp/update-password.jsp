@@ -30,7 +30,8 @@
             <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
-                        <h3 class="text-muted">Cập nhật mật khẩu</h3>
+                        <h3 class="text-muted">Cập nhật mật khẩu</h3
+                        <p class="text-muted">Nếu quên mật khẩu cũ, hãy đăng xuất và click vào Quên mật khẩu để đặt lại.</p>
                     </div>
                     <div class="panel-body">
                         <form action="user-update-password" method="post" onsubmit="return validateForm()">

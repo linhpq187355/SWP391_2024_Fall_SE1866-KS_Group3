@@ -71,6 +71,8 @@ public interface UserService {
      */
     boolean validateUserInput(String firstName, String lastName, String email, String password, String confirmPassword, String role);
 
+    boolean validateEmail(String email);
+
     int updatePhone(String phone, String userId) throws SQLException;
 
     void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException;

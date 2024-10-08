@@ -232,6 +232,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean validateEmail(String email) {
+        // Check if the email is valid
+        String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        if (!email.matches(emailRegex)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public int updatePhone(String phone, String userId) throws SQLException {
         if(userId == null || userId.isEmpty()) {
             return -1;

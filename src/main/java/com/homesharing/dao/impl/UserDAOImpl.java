@@ -206,6 +206,44 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     }
 
     @Override
+    public int updateEmail(String email, int id) throws SQLException {
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [email] = ?\n" +
+                " WHERE id = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // Set the parameters for the update statement
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, id);
+
+            // Execute the update and get the number of affected rows
+            rowsUpdated = preparedStatement.executeUpdate();
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error updating user profile", e);
+            throw new GeneralException("Error updating user profile: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return rowsUpdated;
+    }
+
+    @Override
     public int passWordExists(int userId) throws SQLException {
         String sql = "SELECT CASE\n" +
                 "           WHEN hashedPassword IS NULL THEN 1\n" +
@@ -246,7 +284,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public User getUser(int id) {
-        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber "
+        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.rolesid "
                 + "FROM [HSS_Users] u WHERE u.id = ?";
 
         Connection connection = null;
@@ -274,6 +312,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setEmail(resultSet.getString("email"));
                 user.setPhoneNumber(resultSet.getString("phoneNumber"));
                 user.setDob(resultSet.getDate("dob") != null ? resultSet.getDate("dob").toLocalDate() : null);
+                user.setRolesId(resultSet.getInt("rolesid"));
                 return user;
             }
 
