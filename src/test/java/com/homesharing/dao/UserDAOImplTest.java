@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -286,5 +288,49 @@ class UserDAOImplTest {
         // Verify that the statement was executed with correct parameters
         verify(preparedStatement).setString(1, "hashedPassword123");
         verify(preparedStatement).setInt(2, userId);
+    }
+
+    @Test
+    void getAllUsers() throws SQLException {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, false);
+        //set up data
+        when(resultSet.getInt("id")).thenReturn(1);
+        when(resultSet.getString("email")).thenReturn("email@email.com");
+        when(resultSet.getString("hashedPassword")).thenReturn("hashedPassword");
+        when(resultSet.getString("phoneNumber")).thenReturn("phoneNumber");
+        when(resultSet.getString("username")).thenReturn("username");
+        when(resultSet.getString("firstName")).thenReturn("John");
+        when(resultSet.getString("lastName")).thenReturn("Doe");
+        when(resultSet.getString("avatar")).thenReturn("avatar.png");
+        when(resultSet.getDate("dob")).thenReturn(Date.valueOf("2000-1-2"));
+        when(resultSet.getString("address")).thenReturn("address");
+        when(resultSet.getString("gender")).thenReturn("gender");
+        when(resultSet.getString("citizenNumber")).thenReturn("citizenNumber");
+        when(resultSet.getTimestamp("createdAt")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
+        when(resultSet.getString("status")).thenReturn("status");
+        when(resultSet.getBoolean("isVerified")).thenReturn(true);
+        when(resultSet.getTimestamp("lastModified")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
+        when(resultSet.getInt("rolesid")).thenReturn(1);
+        //declare the list to add data
+        List<User> userList = userDAO.getAllUsers();
+        //check the expected result with actual result
+        assertEquals(1, userList.size());
+        assertEquals(1, userList.get(0).getId());
+        assertEquals("email@email.com", userList.get(0).getEmail());
+        assertEquals("hashedPassword", userList.get(0).getHashedPassword());
+        assertEquals("phoneNumber", userList.get(0).getPhoneNumber());
+        assertEquals("username", userList.get(0).getUserName());
+        assertEquals(Date.valueOf("2000-1-2"), userList.get(0).getDob());
+
+    }
+
+    @Test
+    void updateUserStatus() {
+    }
+
+    @Test
+    void getUserById() {
     }
 }

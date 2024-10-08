@@ -333,6 +333,10 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return null; // Return null if no user is found
     }
 
+    /**
+     *  Get all user from database
+     * @return the list of user if database has data or null if database empty
+     */
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
@@ -555,7 +559,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     @Override
     public User getUserById(int id) {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
-
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
