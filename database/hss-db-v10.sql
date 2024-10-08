@@ -15,27 +15,25 @@ GO
 
 USE [HSS_DB]
 GO
-
 CREATE TABLE HSS_Users (
-  id               int IDENTITY NOT NULL, 
-  email            varchar(255) NOT NULL, 
-  hashedPassword   nvarchar(255) NULL, 
-  phoneNumber      varchar(12) NULL, 
-  username         varchar(50) NULL, 
-  firstName        nvarchar(50) NULL, 
-  lastName         nvarchar(50) NULL, 
-  avatar           varchar(255) NULL, 
-  dob              date NULL, 
-  address          nvarchar(255) NULL, 
-  gender           nvarchar(255) NULL, 
-  citizenNumber    varchar(20) NULL, 
-  createdAt        datetime NULL, 
-  status           nvarchar(20) DEFAULT 'active' NOT NULL, 
-  isVerified       bit DEFAULT 0 NOT NULL, 
-  lastModified     datetime2(7) NULL, 
-  wardsId          int NULL, 
-  rolesid          int NOT NULL, 
-  verificationCode nvarchar(255) NULL, 
+  id             int IDENTITY NOT NULL, 
+  email          varchar(255) NOT NULL UNIQUE, 
+  hashedPassword nvarchar(255) NULL, 
+  phoneNumber    varchar(12) NULL, 
+  username       varchar(50) NULL, 
+  firstName      nvarchar(50) NULL, 
+  lastName       nvarchar(50) NULL, 
+  avatar         varchar(255) NULL, 
+  dob            date NULL, 
+  address        nvarchar(255) NULL, 
+  gender         nvarchar(255) NULL, 
+  citizenNumber  varchar(20) NULL, 
+  createdAt      datetime NULL, 
+  status         nvarchar(20) DEFAULT 'active' NOT NULL, 
+  isVerified     bit DEFAULT 0 NOT NULL, 
+  lastModified   datetime2(7) NULL, 
+  googleId       nvarchar(255) NULL, 
+  rolesid        int NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE HomeImages (
   id      int IDENTITY(1, 1) NOT NULL, 
@@ -75,8 +73,8 @@ CREATE TABLE Homes (
   numOfBath         int NOT NULL, 
   createdDate       datetime NOT NULL, 
   modifiedDate      datetime NULL, 
-  homeDescription   text NULL, 
-  tenantDescription text NULL, 
+  homeDescription   nvarchar(300) NULL, 
+  tenantDescription nvarchar(300) NULL, 
   homeTypeId        int NOT NULL, 
   createdBy         int NOT NULL, 
   wardsId           int NOT NULL, 
@@ -108,7 +106,7 @@ CREATE TABLE Wards (
 CREATE TABLE Reviews (
   id               int IDENTITY(1, 1) NOT NULL, 
   star             tinyint NOT NULL, 
-  comments         text NOT NULL, 
+  comments         nvarchar(300) NOT NULL, 
   createdDate      datetime NOT NULL, 
   lastModifiedDate datetime NOT NULL, 
   status           varchar(20) DEFAULT 'active' NOT NULL, 
@@ -131,7 +129,7 @@ CREATE TABLE Reports (
   id           int IDENTITY(1, 1) NOT NULL, 
   reportDate   datetime NOT NULL, 
   title        nvarchar(255) NOT NULL, 
-  description  text NOT NULL, 
+  description  nvarchar(255) NOT NULL, 
   reportedDate datetime NOT NULL, 
   solvedDate   datetime NULL, 
   status       varchar(20) DEFAULT 'active' NOT NULL, 
@@ -173,7 +171,7 @@ CREATE TABLE Users_Announcements (
   notificationsId));
 CREATE TABLE Appointments (
   id        int IDENTITY NOT NULL, 
-  note      text NULL, 
+  note      nvarchar(255) NULL, 
   startDate datetime NOT NULL, 
   endDate   datetime NULL, 
   location  varchar(255) NOT NULL, 
@@ -192,7 +190,7 @@ CREATE TABLE Replies (
 CREATE TABLE Notifications (
   id          int IDENTITY(1, 1) NOT NULL, 
   recieverId  int NOT NULL, 
-  content     text NOT NULL, 
+  content     nvarchar(max) NOT NULL, 
   createdDate datetime NOT NULL, 
   status      varchar(20) DEFAULT 'active' NOT NULL, 
   PRIMARY KEY (id));
@@ -218,6 +216,7 @@ CREATE TABLE Token (
   userId        int NOT NULL, 
   otp           varchar(10) NOT NULL, 
   requestedTime datetime NOT NULL, 
+  isVerified    bit DEFAULT 0 NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE Prices (
   id          int IDENTITY(1, 1) NOT NULL, 

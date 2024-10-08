@@ -185,6 +185,9 @@
                             <li>
                                 <a href="user-profile" class="li-acc-op">Thông tin cá nhân</a>
                             </li>
+                            <li>
+                                <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
+                            </li>
                             <c:if test="${cookie.roleId.value ==4}">
                                 <li>
                                     <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>

@@ -46,6 +46,7 @@ public class CookieUtil {
             String encodedValue = URLEncoder.encode(value, StandardCharsets.UTF_8);
             Cookie cookie = new Cookie(name, encodedValue);
             cookie.setPath("/");
+            cookie.setHttpOnly(true);
             cookie.setMaxAge(cookieAge);
             response.addCookie(cookie);
         } catch (Exception e) {

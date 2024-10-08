@@ -133,7 +133,7 @@
                         <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
 &redirect_uri=http://localhost:9999/homeSharing/sign-up-google
 &response_type=code
-&client_id=415667748014-s26phr0538d31vn3o169a1l85m1e1fa3.apps.googleusercontent.com
+&client_id=66002425643-qfqed6dbl9lj6nbhv8ejd5qci14bv4ks.apps.googleusercontent.com
 &approval_prompt=force" class="btn btn-lg btn-danger btn-block">
                             <i class="glyphicon glyphicon-log-in"></i>
                             <span>Đăng nhập bằng Google</span>
