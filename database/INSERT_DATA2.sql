@@ -42,5 +42,6 @@ INSERT INTO ReportTypes (reason) VALUES
 INSERT INTO [dbo].[Roles]([name]) VALUES
 ('admin'),('moderator'),('tenant'),('host');
 
-INSERT INTO [dbo].[HSS_Users]([email],[hashedPassword],[rolesid])
-VALUES('admin123@gmail.com','EF92B778BAFE771E89245B89ECBC08A44A4E166C06659911881F383D4473E94F',1);
+INSERT INTO [dbo].[HSS_Users]([email],[hashedPassword],[rolesid]) VALUES
+('admin123@gmail.com','c63c294a92e253e7f7a3e5417a95e6ae598b68d82d5136d18c8fa9d992474799',1), --pass12345
+('moderator123@gmail.com','c63c294a92e253e7f7a3e5417a95e6ae598b68d82d5136d18c8fa9d992474799',2),
