@@ -68,7 +68,7 @@ public class TokenServiceImpl implements TokenService {
             // Calculate the time difference between time input and the requested time
             Duration duration = Duration.between(token.getRequestedTime(), requestedTime);
             // Check if the time difference is less than 5 minutes
-            if (duration.toMinutes() < 5) {
+            if (duration.toMinutes() < 1) {
                 // If the token is not verified, update its status
                 if (!token.isVerified()) {
                     tokenDao.updateTokenVerification(userID);

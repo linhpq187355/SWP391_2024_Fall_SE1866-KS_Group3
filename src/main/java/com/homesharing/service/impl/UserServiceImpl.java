@@ -232,6 +232,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob) {
+        // Check if names contain only letters and spaces
+        if (!firstName.matches("[\\p{L}\\s]+") || !lastName.matches("[\\p{L}\\s]+")) {
+            return false;
+        }
+
+        // Check if the email is valid
+        String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        if (!email.matches(emailRegex)) {
+            return false;
+        }
+
+        // Check password length and confirmation
+        if (password.length() < 8 || !password.equals(confirmPassword)) {
+            return false;
+        }
+
+        // Validate the new fields (dob and gender)
+        if (dob == null || dob.isEmpty()) {
+            return false;
+        }
+
+        if (gender == null || (!gender.equals("male") && !gender.equals("female"))) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
     public boolean validateEmail(String email) {
         // Check if the email is valid
         String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
@@ -263,6 +294,44 @@ public class UserServiceImpl implements UserService {
             return -1;
         }
         return userDao.updatePhoneNumber(id, phone);
+    }
+
+    @Override
+    public int createAccount(String firstName, String lastName, String email, String password, int role, String gender, String phone, String dob) throws SQLException {
+        try {
+            // Check if the email already exists
+            if (userDao.emailExists(email)) {
+                return -2;
+            }
+
+            // Check if the phone number already exists
+            if (phone != null && !phone.isEmpty() && userDao.phoneExists(phone)) {
+                return -1;
+            }
+
+            // Create a new user and set its properties
+            User user = new User();
+            String hashedPassword = PasswordUtil.hashPassword(password);
+            user.setHashedPassword(hashedPassword);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setStatus("active");
+            user.setDob(dob.isEmpty() ? null : LocalDate.parse(dob));
+            user.setGoogleId(null);
+            user.setPhoneNumber(phone);
+            user.setGender(gender);
+            user.setRolesId(role);
+            // Insert new user into the database
+            int userId = userDao.saveUser(user);
+            String code = SecureRandomCode.generateCode();
+            Token token = new Token(userId, code, LocalDateTime.now(), true);
+            tokenDao.insertToken(token);
+            preferenceService.addPreference(userId);
+            return userId;
+        } catch (GeneralException e) {
+            throw new GeneralException(e.getMessage());
+        }
     }
 
     @Override
@@ -387,6 +456,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             // User does not exist
             return "Email hoặc mật khẩu không đúng";
+        }
+        if(user.getHashedPassword() == null) {
+            // Password is incorrect
+            return "Tài khoản này chưa có mật khẩu, vui lòng đăng nhập ở trang dành cho người dùng, và cập nhật mật khẩu.";
         }
 
         // Check if the provided password matches the user's hashed password

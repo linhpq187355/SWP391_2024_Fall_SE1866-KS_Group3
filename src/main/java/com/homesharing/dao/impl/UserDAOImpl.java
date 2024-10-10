@@ -131,7 +131,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public int saveUser(User user) throws SQLException {
-        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [googleID], [createdAt]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [googleID], [createdAt], [gender], [dob], [phoneNumber]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -146,6 +146,14 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             preparedStatement.setString(6, user.getHashedPassword());
             preparedStatement.setString(7, user.getGoogleId());
             preparedStatement.setTimestamp(8, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setString(9, user.getGender());
+            // Handle null date of birth case
+            if (user.getDob() != null) {
+                preparedStatement.setDate(10, java.sql.Date.valueOf(user.getDob()));
+            } else {
+                preparedStatement.setNull(10, java.sql.Types.DATE);
+            }
+            preparedStatement.setString(11, user.getPhoneNumber());
             // Execute the update to insert the user into the database
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -187,6 +195,33 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, email);
+
+            // Execute the query to check for email existence
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0; // Return true if email exists
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw exceptions as runtime to be handled by the service layer
+            throw new GeneralException("Error checking email existence in the database", e);
+        } finally {
+            closeConnection();
+        }
+
+        // Return false if no email match is found
+        return false;
+    }
+
+    @Override
+    public boolean phoneExists(String phone) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM [HSS_Users] WHERE [phoneNumber] = ?";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, phone);
 
             // Execute the query to check for email existence
             ResultSet resultSet = preparedStatement.executeQuery();
