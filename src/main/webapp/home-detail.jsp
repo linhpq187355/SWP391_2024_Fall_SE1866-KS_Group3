@@ -74,6 +74,45 @@
                                 <a class="add-to-fav" href="#login-modal" data-toggle="modal">
                                     <i class="fa fa-star-o"></i>
                                 </a>
+                                <a class="add-to-fav" href="#" data-toggle="modal" data-target="#reportModal">
+                                    <i class="fa fa-flag-o"></i>
+                                </a>
+                                <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="reportModalLabel">Report Form</h5>
+                                                <button type="button" class="btn-close" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Form Inside Modal -->
+                                                <form id="reportForm">
+                                                    <div class="mb-3">
+                                                        <label for="title" class="form-label">Title</label>
+                                                        <input type="text" class="form-control" id="title" name="title" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="description" class="form-label">Description</label>
+                                                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="reportTypeId" class="form-label">Report Type</label>
+                                                        <select class="form-select" id="reportTypeId" name="reportTypeId">
+                                                            <option value="1">Bug</option>
+                                                            <option value="2">Feedback</option>
+                                                            <option value="3">Complaint</option>
+                                                        </select>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="submitReport()">Submit Report</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <a class="printer-icon" href="javascript:window.print()">
                                     <i class="fa fa-print"></i>
                                 </a>
@@ -691,6 +730,8 @@
             </div>
         </div>
     </div>
+
+
 
     <div class="footer-copy text-center">
         <div class="container">

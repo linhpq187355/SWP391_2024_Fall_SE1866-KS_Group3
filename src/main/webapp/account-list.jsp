@@ -24,6 +24,7 @@
 
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         WebFont.load({
             google: {families: ["Public Sans:300,400,500,600,700"]},
@@ -41,13 +42,11 @@
             },
         });
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
     <link rel="stylesheet" href="./assets/css/kaiadmin.min.css"/>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
 </head>
 <body>
@@ -751,7 +750,6 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-                                            <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
                                             <th>Quản lí</th>
@@ -762,7 +760,6 @@
                                             <th>ID</th>
                                             <th>Email</th>
                                             <th>Tạo lúc</th>
-                                            <%--                                            <th>Xác minh</th>--%>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
                                             <th>Quản lí</th>
@@ -775,17 +772,16 @@
                                                     <td>${user.id}</td>
                                                     <td>${user.email}</td>
                                                     <td>${user.createdAt}</td>
-                                                        <%--                                                <td>${user.verify}</td>--%>
                                                     <c:forEach items="${requestScope.roleList}" var="role">
                                                         <c:if test="${role.id == user.rolesId}">
-                                                            <td class="text-center capitalize">${role.name}</td>
+                                                            <td class="text-center text-capitalize">${role.name}</td>
                                                         </c:if>
                                                     </c:forEach>
                                                     <c:if test="${user.status=='active'}">
-                                                        <td class="text-center text-success capitalize">${user.status}</td>
+                                                        <td class="text-center text-success text-capitalize">${user.status}</td>
                                                     </c:if>
                                                     <c:if test="${user.status!='active'}">
-                                                        <td class="text-center text-danger capitalize">Inactive</td>
+                                                        <td class="text-center text-danger text-capitalize">Inactive</td>
                                                     </c:if>
                                                     <td class="space-y-4">
                                                         <a href="ban?userId=${user.id}"
