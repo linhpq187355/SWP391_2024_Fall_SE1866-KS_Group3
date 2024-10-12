@@ -54,6 +54,8 @@ public interface UserDAO {
      */
     boolean emailExists(String email) throws SQLException;
 
+    boolean phoneExists(String phone) throws SQLException;
+
     int updateEmail(String email, int id) throws SQLException;
 
     int passWordExists(int userId) throws SQLException;

@@ -20,10 +20,23 @@ public interface HomeDAO {
     int saveHome(Home home);
 
     /**
+     * Update home info
+     * @param home
+     * @return home id indicate the task is success or not
+     */
+    int updateHome(Home home);
+
+    /**
+     * Change home status
+     * @param status
+     * @return home id indicate the success of the task or not
+     */
+    int changeStatus(int homeId, String status);
+
+    /**
      * Retrieve new homes' info from the database.
      * @return List of Home objects.
      */
-
     List<Home> getNewHomes() throws SQLException, IOException, ClassNotFoundException;
 
     /**
@@ -32,4 +45,11 @@ public interface HomeDAO {
      * @return the home that need to be found
      */
     Home getHomeById(int id);
+
+    /**
+     * Get home object via author id
+     * @param userId
+     * @return
+     */
+    List<Home> getHomesByUserId(int userId);
 }

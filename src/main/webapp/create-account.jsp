@@ -21,10 +21,11 @@
             href="./assets/img/kaiadmin/favicon.ico"
             type="image/x-icon"
     />
+
     <base href="${pageContext.request.contextPath}/">
+
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         WebFont.load({
             google: {families: ["Public Sans:300,400,500,600,700"]},
@@ -42,11 +43,13 @@
             },
         });
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
     <link rel="stylesheet" href="./assets/css/kaiadmin.min.css"/>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
 </head>
 <body>
@@ -712,10 +715,10 @@
         <div class="container">
             <div class="page-inner">
                 <div class="page-header">
-                    <h3 class="fw-bold mb-3">Tài khoản</h3>
+                    <h3 class="fw-bold mb-3">Tạo tài khoản</h3>
                     <ul class="breadcrumbs mb-3">
                         <li class="nav-home">
-                            <a href="#">
+                            <a href="dashboard/account-manage">
                                 <i class="icon-home"></i>
                             </a>
                         </li>
@@ -723,93 +726,174 @@
                             <i class="icon-arrow-right"></i>
                         </li>
                         <li class="nav-item">
-                            <a href="#">Bảng biểu</a>
-                        </li>
-                        <li class="separator">
-                            <i class="icon-arrow-right"></i>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#">Cơ sở dữ liệu</a>
+                            <a href="dashboard/account-manage">Tài khoản</a>
                         </li>
                     </ul>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header" style="display: flex; justify-content: space-between">
-                                <h4 class="card-title">Danh sách người dùng</h4>
-                                <button class="btn btn-secondary" onclick="window.location.href='dashboard/create-account'">
-                        <span class="btn-label">
-                          <i class="fa fa-plus"></i>
-                        </span>
-                                    Tạo tài khoản
-                                </button>
+                            <form action="dashboard/create-account" method="post" onsubmit="return validateForm()">
+                            <div class="card-header">
+                                <div class="card-title">Điền các thông tin cần thiết</div>
+                                <c:if test="${requestScope.error != null}">
+                                    <div class="col-xs-12">
+                                        <div class="alert alert-danger">
+                                                ${requestScope.error}
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <c:if test="${requestScope.message != null}">
+                                    <div class="col-xs-12">
+                                        <div class="alert alert-success">
+                                                ${requestScope.message}
+                                        </div>
+                                    </div>
+                                </c:if>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table
-                                            id="basic-datatables"
-                                            class="display table table-striped table-hover"
-                                    >
-                                        <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Email</th>
-                                            <th>Tạo lúc</th>
-                                            <th>Vai trò</th>
-                                            <th>Trạng thái</th>
-                                            <th>Quản lí</th>
-                                        </tr>
-                                        </thead>
-                                        <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Email</th>
-                                            <th>Tạo lúc</th>
-                                            <th>Vai trò</th>
-                                            <th>Trạng thái</th>
-                                            <th>Quản lí</th>
-                                        </tr>
-                                        </tfoot>
-                                        <tbody>
-                                        <c:forEach items="${requestScope.userList}" var="user">
-                                                <tr>
-                                                    <td>${user.id}</td>
-                                                    <td>${user.email}</td>
-                                                    <td>${user.createdAt}</td>
-                                                    <c:forEach items="${requestScope.roleList}" var="role">
-                                                        <c:if test="${role.id == user.rolesId}">
-                                                            <td class="text-center text-capitalize">${role.name}</td>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                    <c:if test="${user.status=='active'}">
-                                                        <td class="text-center text-success text-capitalize">${user.status}</td>
-                                                    </c:if>
-                                                    <c:if test="${user.status!='active'}">
-                                                        <td class="text-center text-danger text-capitalize">Inactive</td>
-                                                    </c:if>
-                                                    <td class="space-y-4">
-                                                        <a href="ban?userId=${user.id}"
-                                                           onclick="banAccount('${user.id}')">
-                                                            <button class="bg-red-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-red-600">
-                                                                <i class="fas fa-ban"></i>
-                                                                <span>Ban</span>
-                                                            </button>
-                                                        </a>
-                                                        <a href="activate?userId=${user.id}"
-                                                           onclick="activateAccount('${user.id}')">
-                                                            <button class="bg-green-500 text-white font-bold py-2 px-6 w-32 rounded-lg flex items-center justify-center space-x-2 shadow-lg transform transition-transform duration-200 hover:scale-105 hover:bg-green-600">
-                                                                <i class="fas fa-check"></i>
-                                                                <span>Activate</span>
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group form-group-default">
+                                            <label for="email">Email<span class="text-danger">*</span></label>
+                                            <input
+                                                    name="email"
+                                                    id="email"
+                                                    type="email"
+                                                    class="form-control"
+                                                    required
+                                                    value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>"
+                                            />
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label for="phone">Số điện thoại</label>
+                                            <input
+                                                    name="phone"
+                                                    id="phone"
+                                                    type="tel"
+                                                    class="form-control"
+                                                    value="<%= request.getAttribute("phone") != null ? request.getAttribute("phone") : "" %>"
+                                            />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="role">Vai trò<span class="text-danger">*</span></label>
+                                            <select
+                                                    class="form-select form-control"
+                                                    id="role"
+                                                    name="role"
+                                                    required
+                                            >
+                                                <option value="1">admin</option>
+                                                <option value="2">moderator</option>
+                                                <option value="3">tenant</option>
+                                                <option value="4">host</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group form-group-default">
+                                            <label for="firstName">Họ<span class="text-danger">*</span></label>
+                                            <input
+                                                    name="firstName"
+                                                    id="firstName"
+                                                    type="text"
+                                                    class="form-control"
+                                                    required
+                                                    maxlength="50"
+                                                    value="<%= request.getAttribute("firstName") != null ? request.getAttribute("firstName") : "" %>"
+                                            />
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label for="lastName">Tên<span class="text-danger">*</span></label>
+                                            <input
+                                                    name="lastName"
+                                                    id="lastName"
+                                                    type="text"
+                                                    class="form-control"
+                                                    required
+                                                    maxlength="50"
+                                                    value="<%= request.getAttribute("lastName") != null ? request.getAttribute("lastName") : "" %>"
+                                            />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="dob">Ngày sinh<span class="text-danger">*</span></label>
+                                            <input
+                                                    type="date"
+                                                    class="form-control form-control"
+                                                    id="dob"
+                                                    name="dob"
+                                                    required
+                                                    value="<%= request.getAttribute("dob") != null ? request.getAttribute("dob") : "" %>"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group form-group-default">
+                                            <label for="password">Mật khẩu<span class="text-danger">*</span></label>
+                                            <input
+                                                    id="password"
+                                                    name="password"
+                                                    type="password"
+                                                    class="form-control"
+                                                    required
+                                            />
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label for="rePassword">Nhập lại Mật khẩu<span class="text-danger">*</span></label>
+                                            <input
+                                                    id="rePassword"
+                                                    name="rePassword"
+                                                    type="password"
+                                                    class="form-control"
+                                                    required
+                                            />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="gender">Giới tính<span class="text-danger">*</span></label><br />
+                                            <div class="d-flex">
+                                                <div class="form-check" id="gender">
+                                                    <input
+                                                            class="form-check-input"
+                                                            type="radio"
+                                                            name="gender"
+                                                            id="flexRadioDefault1"
+                                                            value="male"
+                                                    />
+                                                    <label
+                                                            class="form-check-label"
+                                                            for="flexRadioDefault1"
+                                                    >
+                                                        Nam
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input
+                                                            class="form-check-input"
+                                                            type="radio"
+                                                            name="gender"
+                                                            id="flexRadioDefault2"
+                                                            value="female"
+                                                            checked
+                                                    />
+                                                    <label
+                                                            class="form-check-label"
+                                                            for="flexRadioDefault2"
+                                                    >
+                                                        Nữ
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
+                            <div class="card-action">
+                                <button class="btn btn-success" type="submit">Xác nhận</button>
+                                <button class="btn btn-danger">Hủy</button>
+                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -915,26 +999,101 @@
     });
 </script>
 <script type="text/javascript">
-    function activateAccount(id) {
-        if (confirm("Are you sure to activate this account?")) {
-            window.location = "activate?userId=" + id;
-            // If confirmed, announce the success
-            alert("Confirmed request");
-        } else {
-            // If not confirmed, announce failure or do nothing
-            alert("Account activation canceled.");
-        }
-    }
+    function validateForm() {
+        let firstName = document.getElementById("firstName").value.trim();
+        let lastName = document.getElementById("lastName").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let password = document.getElementById("password").value;
+        let confirmPassword = document.getElementById("rePassword").value;
+        let role = document.getElementById("role").value;
 
-    function banAccount(id) {
-        if (confirm("Are you sure to ban this account?")) {
-            window.location = "ban?userId=" + id;
-            // If confirmed, announce the success
-            alert("Confirmed request");
-        } else {
-            // If not confirmed, announce failure or do nothing
-            alert("Account ban canceled.");
+        // Check if a gender is selected
+        let genderMale = document.getElementById("flexRadioDefault1").checked;
+        let genderFemale = document.getElementById("flexRadioDefault2").checked;
+
+        let phone = document.getElementById("phone").value.trim();
+
+        if (phone !== "") { // Optional: chỉ kiểm tra nếu người dùng nhập số điện thoại
+            let phoneRegex = /((09|03|07|08|05)+([0-9]{8})\b)/g; // This regex matches Vietnamese phone numbers
+            if (!phoneRegex.test(phone)) {
+                alert("Vui lòng nhập một số điện thoại hợp lệ!");
+                return false;
+            }
         }
+
+        if (!genderMale && !genderFemale) {
+            alert("Vui lòng chọn giới tính!");
+            return false;
+        }
+
+        let dob = document.getElementById("dob").value;
+
+        if (dob === "") {
+            alert("Vui lòng nhập ngày sinh!");
+            return false;
+        }
+
+// Optional: Check if dob is a valid date and not in the future
+        let dobDate = new Date(dob);
+        let currentDate = new Date();
+
+        if (dobDate > currentDate) {
+            alert("Ngày sinh không thể lớn hơn ngày hiện tại!");
+            return false;
+        }
+
+
+        // Check for required fields and ensure they're not just spaces
+        if (firstName === "" || lastName === "" || email === "" || password === "" || confirmPassword === ""|| role === "") {
+            alert("Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.");
+            return false;
+        }
+
+        // Check if firstName and lastName only contain letters and spaces (supports Vietnamese characters)
+        let nameRegex = /^[\p{L}\s]+$/u;
+
+        if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+            alert("Names can only contain letters and spaces.");
+            return false;
+        }
+
+        // Validate email
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Vui lòng nhập một địa chỉ email hợp lệ!");
+            return false;
+        }
+
+        // Check password length
+        if (password.length < 8) {
+            alert("Mật khẩu phải có ít nhất 8 ký tự!");
+            return false;
+        }
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            alert("Mật khẩu không khớp!");
+            return false;
+        }
+
+        if (password.trim() !== password || confirmPassword.trim() !== confirmPassword) {
+            alert("Mật khẩu không được chứa khoảng trắng ở đầu hoặc cuối.");
+            return false;
+        }
+
+
+        // Check if a role is selected
+        if (role === "") {
+            alert("Vui lòng chọn một vai trò!");
+            return false;
+        }
+
+        // Update trimmed values
+        document.getElementById("firstName").value = firstName;
+        document.getElementById("lastName").value = lastName;
+        document.getElementById("email").value = email;
+
+        return true;
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

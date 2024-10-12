@@ -97,7 +97,7 @@ public class StaffLoginServlet extends HttpServlet {
                 // Login successful, redirect to home page
                 req.getSession().setAttribute("message", "Đăng nhập thành công.");
                 req.getSession().setAttribute("messageType", "success");
-                resp.sendRedirect(req.getContextPath() + "/account-manage");
+                resp.sendRedirect(req.getContextPath() + "/dashboard/account-manage");
             } else {
                 // Login failed, display error message
                 req.setAttribute("error", result);

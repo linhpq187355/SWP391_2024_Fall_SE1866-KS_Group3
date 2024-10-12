@@ -29,9 +29,9 @@ CREATE TABLE HSS_Users (
   gender         nvarchar(255) NULL, 
   citizenNumber  varchar(20) NULL, 
   createdAt      datetime NULL, 
-  status         nvarchar(20) DEFAULT 'active' NOT NULL, 
+  status         nvarchar(20) DEFAULT 'active' NOT NULL, --active (default), inactive
   isVerified     bit DEFAULT 0 NOT NULL, 
-  lastModified   datetime2(7) NULL, 
+  modifiedDate   datetime NULL, 
   googleId       nvarchar(255) NULL, 
   rolesid        int NOT NULL, 
   PRIMARY KEY (id));
@@ -75,6 +75,7 @@ CREATE TABLE Homes (
   modifiedDate      datetime NULL, 
   homeDescription   nvarchar(300) NULL, 
   tenantDescription nvarchar(300) NULL, 
+  status            nvarchar(20) DEFAULT 'pending' NOT NULL, --pending (default), active, sold
   homeTypeId        int NOT NULL, 
   createdBy         int NOT NULL, 
   wardsId           int NOT NULL, 
@@ -214,8 +215,8 @@ CREATE TABLE Users_Permissons (
 CREATE TABLE Token (
   id            int IDENTITY NOT NULL, 
   userId        int NOT NULL, 
-  otp           varchar(10) NOT NULL, 
-  requestedTime datetime NOT NULL, 
+  otp           varchar(10) NULL, 
+  requestedTime datetime NULL, 
   isVerified    bit DEFAULT 0 NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE Prices (
@@ -269,3 +270,125 @@ ALTER TABLE FireEquipments_Homes ADD CONSTRAINT FKFireEquipm893547 FOREIGN KEY (
 ALTER TABLE FireEquipments_Homes ADD CONSTRAINT FKFireEquipm478382 FOREIGN KEY (homesId) REFERENCES Homes (id);
 ALTER TABLE Preferences ADD CONSTRAINT FKPreference475209 FOREIGN KEY (usersId) REFERENCES HSS_Users (id);
 ALTER TABLE Homes ADD CONSTRAINT FKHomes418421 FOREIGN KEY (wardsId) REFERENCES Wards (id);
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_HSS_Users_createdAt')) DROP TRIGGER trg_HSS_Users_createdAt;
+GO
+CREATE TRIGGER trg_HSS_Users_createdAt
+ON HSS_Users
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE HSS_Users
+    SET createdAt = ISNULL(createdAt, GETDATE()),
+        modifiedDate = GETDATE()
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Homes_createdAt')) DROP TRIGGER trg_Homes_createdAt;
+GO
+CREATE TRIGGER trg_Homes_createdAt
+ON Homes
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE Homes
+    SET createdDate = ISNULL(createdDate, GETDATE()),
+        modifiedDate = GETDATE()
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Reviews_createdAt')) DROP TRIGGER trg_Reviews_createdAt;
+GO
+CREATE TRIGGER trg_Reviews_createdAt
+ON Reviews
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE Reviews
+    SET createdDate = ISNULL(createdDate, GETDATE()),
+        lastModifiedDate = GETDATE()
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Announcements_createdAt')) DROP TRIGGER trg_Announcements_createdAt;
+GO
+-- Trigger for Announcements table
+CREATE TRIGGER trg_Announcements_createdAt
+ON Announcements
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE Announcements
+    SET createdDate = ISNULL(createdDate, GETDATE()),
+        modifiedDate = GETDATE()
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Conversations_createdAt')) DROP TRIGGER trg_Conversations_createdAt;
+GO
+-- Trigger for Conversations table
+CREATE TRIGGER trg_Conversations_createdAt
+ON Conversations
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE Conversations
+    SET time = ISNULL(time, GETDATE())
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Replies_createdAt')) DROP TRIGGER trg_Replies_createdAt;
+GO
+-- Trigger for Replies table
+CREATE TRIGGER trg_Replies_createdAt
+ON Replies
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE Replies
+    SET time = ISNULL(time, GETDATE())
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Notifications_createdAt')) DROP TRIGGER trg_Notifications_createdAt;
+GO
+-- Trigger for Notifications table
+CREATE TRIGGER trg_Notifications_createdAt
+ON Notifications
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE Notifications
+    SET createdDate = ISNULL(createdDate, GETDATE())
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Prices_createdAt')) DROP TRIGGER trg_Prices_createdAt;
+GO
+CREATE TRIGGER trg_Prices_createdAt
+ON Prices
+AFTER INSERT
+AS
+BEGIN
+    UPDATE Prices
+    SET createdDate = GETDATE()
+    WHERE id IN (SELECT id FROM inserted)
+END;
+GO
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'trg_Reports_createdAt')) DROP TRIGGER trg_Reports_createdAt;
+GO
+CREATE TRIGGER trg_Reports_createdAt
+ON Reports
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE r
+    SET r.reportedDate = ISNULL(r.reportedDate, GETDATE()),
+        r.solvedDate = CASE
+            WHEN i.status = 'solved' THEN GETDATE()
+            ELSE r.solvedDate
+        END
+    FROM Reports r
+    INNER JOIN inserted i ON r.id = i.id
+    WHERE r.id IN (SELECT id FROM inserted)
+END;
+GO

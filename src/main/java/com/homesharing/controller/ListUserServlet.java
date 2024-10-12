@@ -11,7 +11,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListUserServlet", value = "/account-manage")
+@WebServlet(name = "ListUserServlet", value = "/dashboard/account-manage")
 public class ListUserServlet extends HttpServlet {
     private UserManagementService userManagementServie;
 
@@ -29,7 +29,7 @@ public class ListUserServlet extends HttpServlet {
         List<Role> roleList = userManagementServie.getAllRoles();
         request.setAttribute("userList", userList);
         request.setAttribute("roleList", roleList);
-        request.getRequestDispatcher("account-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/account-list.jsp").forward(request, response);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ListUserServlet extends HttpServlet {
         List<Role> roleList = userManagementServie.getAllRoles();
         request.setAttribute("userList", userList);
         request.setAttribute("roleList", roleList);
-        request.getRequestDispatcher("account-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/account-list.jsp").forward(request, response);
     }
 
 }

@@ -13,6 +13,7 @@ import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.sql.Date;
 import java.sql.SQLException;
 
 /**
@@ -71,9 +72,13 @@ public interface UserService {
      */
     boolean validateUserInput(String firstName, String lastName, String email, String password, String confirmPassword, String role);
 
+    boolean validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob);
+
     boolean validateEmail(String email);
 
     int updatePhone(String phone, String userId) throws SQLException;
+
+    int createAccount(String firstName, String lastName, String email, String password, int role, String gender, String phone, String dob) throws SQLException;
 
     void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException;
 
