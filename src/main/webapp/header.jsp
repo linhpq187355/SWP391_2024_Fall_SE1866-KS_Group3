@@ -186,6 +186,9 @@
                                 <a href="user-profile" class="li-acc-op">Thông tin cá nhân</a>
                             </li>
                             <li>
+                                <a href="user-wishlist" class="li-acc-op">WishList</a>
+                            </li>
+                            <li>
                                 <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
                             </li>
                             <c:if test="${cookie.roleId.value ==4}">

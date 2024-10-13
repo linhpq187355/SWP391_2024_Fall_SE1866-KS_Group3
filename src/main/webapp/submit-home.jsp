@@ -70,7 +70,7 @@
 </div>
 <!-- Body content -->
 
-<jsp:include page="header-demo.jsp"/>
+<jsp:include page="header.jsp"/>
 
 <div class="page-head">
     <div class="container">

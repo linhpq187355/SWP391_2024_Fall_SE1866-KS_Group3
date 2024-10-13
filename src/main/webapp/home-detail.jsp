@@ -353,11 +353,21 @@
                                             </button>
                                         </li>
                                         <li>
-                                            <button class="like-button"  href="#login-modal" data-toggle="modal" onclick="showConfirmPopup(homeId, userId)">
-                                                <i class="fas fa-heart"></i> Yêu thích
-                                            </button>
+                                            <form action="add-wishlist" method="POST">
+                                                <input type="hidden" name="homeId" value="${home.id}">
+                                                <button type="submit" class="like-button">
+                                                    <i class="fas fa-heart"></i> Yêu thích
+                                                </button>
+                                            </form>
                                         </li>
                                     </ul>
+                                    </div>
+                                    <div>
+                                        <c:if test="${not empty sessionScope.message}">
+                                            <div class="alert alert-info">${sessionScope.message}</div>
+                                            <%-- Xóa thông điệp sau khi hiển thị --%>
+                                            <c:remove var="message" />
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -366,30 +376,32 @@
 
 
 
-                                    <!-- Popup xác nhận -->
-                                    <div id="login-modal" class="modal fade" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Xác nhận</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Bạn có chắc chắn muốn thêm vào danh sách yêu thích không?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-primary" onclick="confirmAddToWishlist()">Xác nhận</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <!-- Success Modal -->
+                    <!-- Success Modal -->
+                    <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="success-modal-label" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="success-modal-label">Thông báo</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="success-message">
+                                    <!-- Success message will be inserted here -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 
-                                <div id="map"></div>
+
+
+                    <div id="map"></div>
                                                         <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">
                                                     <div class="panel-heading">
                                                         <h3 class="panel-title">Similar Properties</h3>
@@ -811,27 +823,11 @@
         });
     });
 
-    function showConfirmPopup(homeId, userId) {
-        // Hiển thị modal xác nhận
-        $('#login-modal').modal('show');
 
-        // Lưu các ID để sử dụng trong xác nhận
-        window.currentHomeId = homeId;
-        window.currentUserId = userId;
-    }
-
-    function confirmAddToWishlist(homeId, userId) {
-        // Tạo một yêu cầu POST tới servlet
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", "add-to-wishlist", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                alert(xhr.responseText); // Hiển thị phản hồi từ servlet
-                // $('#login-modal').modal('hide'); // Đóng modal
-            }
-        };
-        xhr.send("homeId=" + homeId + "&userId=" + userId);
+</script>
+<script>
+    function showAlert(message) {
+        alert(message);
     }
 </script>
 <script>
