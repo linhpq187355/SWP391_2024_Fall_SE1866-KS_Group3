@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="assets/css/fontello.css">
   <link href="assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
   <link href="assets/fonts/icon-7-stroke/css/helper.css" rel="stylesheet">
-  <link href="css/animate.css" rel="stylesheet" media="screen">
+  <link href="assets/css/animate.css" rel="stylesheet" media="screen">
   <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/icheck.min_all.css">

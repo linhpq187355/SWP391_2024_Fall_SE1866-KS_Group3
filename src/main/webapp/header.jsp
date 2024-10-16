@@ -21,14 +21,14 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
 
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/fontello.css">
     <link href="assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
     <link href="assets/fonts/icon-7-stroke/css/helper.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet" media="screen">
+    <link href="assets/css/animate.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/icheck.min_all.css">
@@ -188,6 +188,18 @@
                             <li>
                                 <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
                             </li>
+                            <c:if test="${cookie.roleId.value == 4}">
+                                <c:if test="${requestScope.preference.cleanliness != 100}">
+                                    <li>
+                                        <a href="update-matching-profile" class="li-acc-op">Thay đổi thông tin ghép nối</a>
+                                    </li>
+                                </c:if>
+                                <c:if test="${requestScope.preference.cleanliness == 100}">
+                                    <li>
+                                        <a href="matching" class="li-acc-op">Cài đặt thông tin ghép nối</a>
+                                    </li>
+                                </c:if>
+                            </c:if>
                             <c:if test="${cookie.roleId.value ==4}">
                                 <li>
                                     <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
@@ -220,7 +232,7 @@
                     <a href="home-page">Trang chủ</a>
                 </li>
 
-                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-page">Tất cả nhà</a></li>
+                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-list">Tất cả nhà</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
                 <c:if test="${cookie.roleId.value ==4}">

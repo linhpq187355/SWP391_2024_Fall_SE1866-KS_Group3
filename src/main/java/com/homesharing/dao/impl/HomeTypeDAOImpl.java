@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeTypeDAOImpl implements HomeTypeDAO {
-    private List<HomeType> hometypes = new ArrayList<>();
-
     @Override
     public List<HomeType> getAllHomeTypes() {
+        List<HomeType> hometypes = new ArrayList<>();
         String sql = "SELECT [id]\n" +
                 "      ,[name]\n" +
                 "      ,[description]\n" +

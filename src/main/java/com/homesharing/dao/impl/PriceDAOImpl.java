@@ -1,3 +1,15 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-10      1.0                 ManhNC            update some method
+ */
+
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -7,7 +19,6 @@ import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,7 +52,7 @@ public class PriceDAOImpl extends DBContext implements PriceDAO {
         }
 
         // Construct SQL query with placeholders for prepared statement
-        StringBuilder sql = new StringBuilder("SELECT id, price, Homesid FROM prices WHERE id IN (");
+        StringBuilder sql = new StringBuilder("SELECT id, price, Homesid FROM prices WHERE Homesid IN (");
 
         // Append placeholders for each home price ID
         for (int i = 0; i < homes.size(); i++) {
@@ -64,7 +75,7 @@ public class PriceDAOImpl extends DBContext implements PriceDAO {
 
             // Set the price ID parameters in the prepared statement
             for (int i = 0; i < homes.size(); i++) {
-                preparedStatement.setInt(i + 1, homes.get(i).getPriceId());
+                preparedStatement.setInt(i + 1, homes.get(i).getId());
             }
 
             resultSet = preparedStatement.executeQuery();
@@ -138,5 +149,91 @@ public class PriceDAOImpl extends DBContext implements PriceDAO {
             // Re-throw as runtime exception to be handled by the service layer
             throw new IllegalArgumentException("Error saving model to the database: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Retrieves the minimum price of homes from the database.
+     *
+     * @return The minimum price.
+     * @throws GeneralException If a database error occurs.
+     */
+    @Override
+    public int getMinPrice() {
+        String sql = "select top 1 price" +
+                " from Prices order by price asc;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("price");
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min price in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Retrieves the maximum price of homes from the database.
+     *
+     * @return The maximum price.
+     * @throws GeneralException If a database error occurs.
+     */
+    @Override
+    public int getMaxPrice() {
+        String sql = "select top 1 price" +
+                " from Prices order by price desc;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("price");
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get max price in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return 0;
     }
 }

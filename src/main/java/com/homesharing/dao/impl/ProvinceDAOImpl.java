@@ -13,10 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProvinceDAOImpl implements ProvinceDAO {
-    private List<Province> provinces = new ArrayList<>();
-
     @Override
     public List<Province> getAllProvinces() {
+        List<Province> provinces = new ArrayList<>();
         String sql = "SELECT [id],[name],[status] FROM [dbo].[Provinces]";
 
         Connection connection = null;

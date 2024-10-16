@@ -55,7 +55,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 home.setOrientation(resultSet.getString("orientation"));
                 home.setArea(resultSet.getBigDecimal("area"));
                 home.setLeaseDuration(resultSet.getInt("leaseDuration"));
-                home.setMoveInDate(resultSet.getTimestamp("moveInDate").toLocalDateTime());
+                home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
                 home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
                 home.setNumOfBath(resultSet.getInt("numOfBath"));
                 home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
@@ -67,6 +67,28 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                 home.setCreatedBy(resultSet.getInt("createdBy"));
             }
+        if (resultSet.next()) {
+            home = new Home();
+            home.setId(resultSet.getInt("id"));
+            home.setName(resultSet.getString("name"));
+            home.setAddress(resultSet.getString("address"));
+            home.setLongitude(resultSet.getBigDecimal("longitude"));
+            home.setLatitude(resultSet.getBigDecimal("latitude"));
+            home.setOrientation(resultSet.getString("orientation"));
+            home.setArea(resultSet.getBigDecimal("area"));
+            home.setLeaseDuration(resultSet.getInt("leaseDuration"));
+            home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
+            home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
+            home.setNumOfBath(resultSet.getInt("numOfBath"));
+            home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+            home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null
+                    ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
+            home.setHomeDescription(resultSet.getString("homeDescription"));
+            home.setTenantDescription(resultSet.getString("tenantDescription"));
+            home.setWardId(resultSet.getInt("wardsId"));
+            home.setHomeTypeId(resultSet.getInt("homeTypeId"));
+            home.setCreatedBy(resultSet.getInt("createdBy"));
+        }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error retrieving home by ID from the database: " + e.getMessage(), e);

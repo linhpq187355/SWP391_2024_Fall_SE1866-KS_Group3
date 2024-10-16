@@ -1,29 +1,25 @@
 /*
- * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  * 2024-9-18      1.0                 ManhNC         First Implement
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  */
+
 package com.homesharing.service;
 
 import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.sql.Date;
 import java.sql.SQLException;
 
 /**
- * UserService interface defines methods for user registration and validation,
- * handling login and logout processes, updating user profiles, and retrieving user details.
- * All methods are meant to manage user-related operations in the Home Sharing System.
- *
- * @version 1.0
- * @since 2024-09-18
- * @author ManhNC
+ * UserService interface defines methods for user registration and validation.
+ * It contains methods to register a user and validate user input data.
  */
 public interface UserService {
 
@@ -72,14 +68,53 @@ public interface UserService {
      */
     boolean validateUserInput(String firstName, String lastName, String email, String password, String confirmPassword, String role);
 
+    /**
+     * Validates user account information.
+     *
+     * @param firstName      The user's first name.
+     * @param lastName       The user's last name.
+     * @param email           The user's email address.
+     * @param password        The user's password.
+     * @param confirmPassword The confirmed password.
+     * @param role            The user's role ID.
+     * @param gender          The user's gender.
+     * @param phone           The user's phone number.
+     * @param dob             The user's date of birth (YYYY-MM-DD).
+     * @return {@code true} if the account information is valid, {@code false} otherwise.
+     */
     boolean validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob);
 
+    /**
+     * Validates an email address.
+     *
+     * @param email The email address to validate.
+     * @return {@code true} if the email is valid, {@code false} otherwise.
+     */
     boolean validateEmail(String email);
 
-    int updatePhone(String phone, String userId) throws SQLException;
-
+    /**
+     * Creates a new user account.
+     *
+     * @param firstName The user's first name.
+     * @param lastName  The user's last name.
+     * @param email     The user's email address.
+     * @param password  The user's password.
+     * @param role      The user's role ID.
+     * @param gender    The user's gender.
+     * @param phone     The user's phone number.
+     * @param dob       The user's date of birth (YYYY-MM-DD).
+     * @return The ID of the newly created user, or a negative value if an error occurred (e.g., -1 for duplicate phone, -2 for duplicate email).
+     * @throws SQLException If a database error occurs.
+     */
     int createAccount(String firstName, String lastName, String email, String password, int role, String gender, String phone, String dob) throws SQLException;
 
+    /**
+     * Stores user information in cookies.
+     *
+     * @param userId   The ID of the user.
+     * @param response The HttpServletResponse to add cookies to.
+     * @throws SQLException If a database error occurs.
+     */
     void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException;
 
     /**
@@ -93,6 +128,19 @@ public interface UserService {
      */
     String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException;
 
+    /**
+     * Updates a user's password.
+     *
+     * @param userId   The ID of the user.
+     * @param hadPass  Indicates if the user previously had a password (1 if yes, 0 if no).
+     * @param oldPass  The user's old password (required if hadPass is 0).
+     * @param password The new password.
+     * @return An integer indicating the result:
+     *         1: Password updated successfully.
+     *         -1: Incorrect old password.
+     *         -2: Invalid input (e.g., null or empty password).
+     * @throws SQLException If a database error occurs.
+     */
     int updatePassword(int userId, int hadPass, String oldPass, String password) throws SQLException;
 
     /**
@@ -131,7 +179,8 @@ public interface UserService {
      * @param userId The ID of the user to be retrieved.
      * @return The User object containing the user's details, or null if not found.
      */
-    User getUser(int userId) throws SQLException;
+    User getUser(int userId);
+
     /**
      * Resets the password for a user with the given ID.
      *
@@ -140,4 +189,21 @@ public interface UserService {
      * @return The number of rows affected by the password reset (1 if successful, 0 if unsuccessful).
      */
     int resetUserPassword(int userId, String newPassword);
+
+    int getNumberOfUsers();
+
+    /**
+     * Updates the matching profile for a user based on the provided criteria.
+     *
+     * @param dob              The date of birth to be updated.
+     * @param gender           The gender to be updated.
+     * @param rawHowLong      The duration of how long the user has lived at their current residence.
+     * @param emvdate         The move-in date.
+     * @param lmvdate         The last move-out date.
+     * @param rawMinBudget    The minimum budget for housing.
+     * @param rawMaxBudget    The maximum budget for housing.
+     * @param userId          The ID of the user whose profile is to be updated.
+     * @return An integer indicating the result of the update operation (e.g., number of rows affected).
+     */
+    int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId);
 }

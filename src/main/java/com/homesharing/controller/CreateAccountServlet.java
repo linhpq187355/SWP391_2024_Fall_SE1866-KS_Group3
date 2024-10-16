@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-03      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.PreferenceDAO;
@@ -20,13 +29,26 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * The {@code CreateAccountServlet} handles user registration requests.
+ * It receives user input, validates the input, and interacts with the
+ * {@link UserService} to create a new user account.
+ * <p>
+ * This servlet supports both GET (to display the registration form)
+ * and POST (to process the registration request) methods.
+ * <p>
+ * Bugs: None known.
+ *
+ * @author ManhNC
+ */
 @WebServlet("/dashboard/create-account")
 public class CreateAccountServlet extends HttpServlet {
+
     private transient UserService userService;// Mark userService as transient
+
     private static final Logger logger = LoggerFactory.getLogger(CreateAccountServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
 
@@ -36,7 +58,7 @@ public class CreateAccountServlet extends HttpServlet {
      */
     @Override
     public void init() {
-        // Create instances of UserDao and TokenDao
+        // Initialize DAOs
         UserDAO userDao = new UserDAOImpl();
         TokenDAO tokenDao = new TokenDAOImpl();
         PreferenceDAO preferenceDao = new PreferenceDAOImpl();
@@ -47,11 +69,11 @@ public class CreateAccountServlet extends HttpServlet {
     }
 
     /**
-     * Handles GET requests to display the create-account page.
-     * This method forwards the request to the sign-up JSP page.
+     * Handles GET requests to display the create account page.
+     * Forwards the request to the `create-account.jsp` page.
      *
-     * @param req  HttpServletRequest containing the client request.
-     * @param resp HttpServletResponse used to send a response to the client.
+     * @param req  The HttpServletRequest object.
+     * @param resp The HttpServletResponse object.
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
@@ -59,17 +81,20 @@ public class CreateAccountServlet extends HttpServlet {
             // Redirect to sign-up page
             req.getRequestDispatcher("/create-account.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
-            logger.error("Error forwarding to sign-up page: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");
+            logger.error("Error forwarding to create-account.jsp: {}", e.getMessage(), e);
+            ServletUtils.handleError(resp, "Error while processing your request.");// Use a generic error message for the user
         }
     }
 
     /**
-     * Handles POST requests for user registration.
-     * Validates input, registers the user, and handles potential errors.
+     * Handles POST requests for user registration. Retrieves user input,
+     * validates it using the {@link UserService}, and creates a new user account.
+     * Redirects to the appropriate page upon successful registration or displays an error message.
      *
-     * @param req  The HttpServletRequest containing the user's input.
-     * @param resp The HttpServletResponse used to send a response to the client.
+     * @param req  The HttpServletRequest object containing user input.
+     * @param resp The HttpServletResponse object.
+     * @throws ServletException If a servlet error occurs.
+     * @throws IOException      If an I/O error occurs.
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -122,14 +147,17 @@ public class CreateAccountServlet extends HttpServlet {
                     req.getRequestDispatcher("/create-account.jsp").forward(req, resp);
                 }
             } catch (RuntimeException | SQLException | IOException | ServletException e) {
-                // Handle any runtime exceptions thrown by the service
+                // Log the exception for debugging purposes
+                logger.error("Error during account creation: {}", e.getMessage(), e);
+
+                // Set a generic error message for the user
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
                 ServletUtils.forwardToErrorPage(req, resp);
             }
         } else {
             // Set error message for invalid input
             req.setAttribute(ERROR_ATTRIBUTE, "Invalid data provided.");
-            ServletUtils.forwardToErrorPage(req, resp);
+            ServletUtils.forwardToErrorPage(req, resp); // Forward to a dedicated error page
         }
     }
 

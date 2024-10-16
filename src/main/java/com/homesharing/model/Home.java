@@ -1,8 +1,19 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ */
+
 package com.homesharing.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Home {
     private int id;
@@ -13,7 +24,7 @@ public class Home {
     private String orientation;
     private BigDecimal area;
     private int leaseDuration;
-    private LocalDateTime moveInDate;
+    private LocalDate moveInDate;
     private int numOfBedroom;
     private int numOfBath;
     private LocalDateTime createdDate;
@@ -24,7 +35,14 @@ public class Home {
     private int homeTypeId; // One-to-one relationship with HomeType
     private int createdBy;
     private int priceId;
-
+    private List<String> images;
+    private int price;
+    public int getPrice() {
+        return price;
+    }
+    public void setPrice(int price) {
+        this.price = price;
+    }
     public int getId() {
         return id;
     }
@@ -89,11 +107,11 @@ public class Home {
         this.leaseDuration = leaseDuration;
     }
 
-    public LocalDateTime getMoveInDate() {
+    public LocalDate getMoveInDate() {
         return moveInDate;
     }
 
-    public void setMoveInDate(LocalDateTime moveInDate) {
+    public void setMoveInDate(LocalDate moveInDate) {
         this.moveInDate = moveInDate;
     }
 
@@ -172,4 +190,13 @@ public class Home {
     public void setPriceId(int priceId) { this.priceId = priceId; }
 
     public int getPriceId() { return priceId; }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
 }

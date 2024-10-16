@@ -35,7 +35,7 @@ public class ServletUtils {
     }
 
     private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
-    private static final String ERROR_PAGE = "/404.jsp";
+    private static final String ERROR_PAGE = "/error.jsp";
     private static final String FORWARD_ERROR_MESSAGE = "Error forwarding to error page.";
 
     /**

@@ -33,8 +33,6 @@ import java.io.IOException;
  * login form submissions. It validates credentials and communicates
  * with the UserService to authenticate staff users.
  *
- * @version 1.0
- * @since 2024-10-02
  * @author ManhNC
  */
 @WebServlet("/staff-login")

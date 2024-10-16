@@ -10,9 +10,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html  lang="vi">
 <head>
-    <title>Đăng ký</title>
+    <title>Đổi mail</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <style>
         .error-message {
@@ -30,8 +31,8 @@
             <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
-                        <h3 class="text-muted">Nhập thông tin của bạn để đăng ký</h3>
-                        <p class="text-muted">Sau khi đăng kí thành công, mã xác thực sẽ được gửi vào email của bạn.</p>
+                        <h3 class="text-muted">Nhập email mới của bạn</h3>
+                        <p class="text-muted">Sau khi thay đổi, mã xác thực sẽ được gửi về email mới của bạn.</p>
                     </div>
                     <div class="panel-body">
                         <form action="user-update-email" method="post" onsubmit="return validateForm()">

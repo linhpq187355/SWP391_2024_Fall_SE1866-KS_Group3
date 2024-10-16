@@ -275,28 +275,22 @@
                     </div>
                     <!-- End description area -->
 
-                    <div class="section property-features">
-                        <h4 class="s-property-title">Các tiện ích hiện có</h4>
-                        <ul>
-                            <c:forEach var="amenity" items="${amentities}">
+                    <div class="section additional-details">
+                        <h4 class="s-property-title">Các tiện ích</h4>
+
+                        <ul class="additional-details-list clearfix">
+                            <c:forEach var="amentity" items="${amentities}">
                                 <li>
-                                    <a href="home-detail.jsp">${amenity.name}</a>
+                                    <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">${amentity.name}</span>
+                                    <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">
+                    <img src="${amentity.icon}" alt="${amentity.name} Icon"
+                         style="width:20px; height:20px; vertical-align:middle;">
+                                        <!-- If you want to show an icon -->
+                </span>
                                 </li>
                             </c:forEach>
                         </ul>
                     </div>
-
-                    <div class="section property-features">
-                        <h4 class="s-property-title">Phương tiện phòng cháy chữa cháy </h4>
-                        <ul>
-                            <c:forEach var="fireEquipments" items="${fireEquipments}">
-                                <li>
-                                    <a href="home-detail.jsp">${fireEquipments.name}</a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                    </div>
-
 
                     <!-- End additional-details area  -->
 
@@ -355,337 +349,285 @@
                                         <h3 class="dealer-name">
                                             <a href="">${creator.firstName} ${creator.lastName}</a>
                                         </h3>
-                                    </div>
+                                        <div class="dealer-social-media">
+                                            <a class="twitter" target="_blank" href="">
+                                                <i class="fa fa-twitter"></i>
+                                            </a>
+                                            <a class="facebook" target="_blank" href="">
+                                                <i class="fa fa-facebook"></i>
+                                            </a>
+                                            <a class="gplus" target="_blank" href="">
+                                                <i class="fa fa-google-plus"></i>
+                                            </a>
+                                            <a class="linkedin" target="_blank" href="">
+                                                <i class="fa fa-linkedin"></i>
+                                            </a>
+                                            <a class="instagram" target="_blank" href="">
+                                                <i class="fa fa-instagram"></i>
+                                            </a>
+                                        </div>
 
-                                    <div class="clear">
-                                        <ul class="dealer-contacts">
-                                            <li>
-                                                <button class="phone-button">
-                                                    <i class="fas fa-phone"></i>
-                                                    ${creator.phoneNumber}
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button class="zalo-button">
-                                                    <i class="fas fa-comment"></i>
-                                                    Liên Hệ
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button class="like-button" href="#login-modal" data-toggle="modal"
-                                                        onclick="showConfirmPopup(homeId, userId)">
-                                                    <i class="fas fa-heart"></i> Yêu thích
-                                                </button>
-                                            </li>
-                                        </ul>
                                     </div>
                                 </div>
+
+                                <div class="clear">
+                                    <ul class="dealer-contacts">
+                                        <li><i class="pe-7s-map-marker strong"> </i> ${home.address}</li>
+                                        <li><i class="pe-7s-mail strong"> </i> ${creator.email}</li>
+                                        <li><i class="pe-7s-call strong"> </i> ${creator.phoneNumber}</li>
+                                    </ul>
+                                </div>
+
                             </div>
                         </div>
                     </div>
 
+                    <%--                            <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">--%>
+                    <%--                                <div class="panel-heading">--%>
+                    <%--                                    <h3 class="panel-title">Similar Properties</h3>--%>
+                    <%--                                </div>--%>
+                    <%--                                <div class="panel-body recent-property-widget">--%>
+                    <%--                                        <ul>--%>
+                    <%--                                        <li>--%>
+                    <%--                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
+                    <%--                                                <span class="property-seeker">--%>
+                    <%--                                                    <b class="b-1">A</b>--%>
+                    <%--                                                    <b class="b-2">S</b>--%>
+                    <%--                                                </span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
+                    <%--                                                <span class="property-price">3000000$</span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </li>--%>
+                    <%--                                        <li>--%>
+                    <%--                                            <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">--%>
+                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>--%>
+                    <%--                                                <span class="property-seeker">--%>
+                    <%--                                                    <b class="b-1">A</b>--%>
+                    <%--                                                    <b class="b-2">S</b>--%>
+                    <%--                                                </span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
+                    <%--                                                <span class="property-price">3000000$</span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </li>--%>
+                    <%--                                        <li>--%>
+                    <%--                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>--%>
+                    <%--                                                <span class="property-seeker">--%>
+                    <%--                                                    <b class="b-1">A</b>--%>
+                    <%--                                                    <b class="b-2">S</b>--%>
+                    <%--                                                </span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
+                    <%--                                                <span class="property-price">3000000$</span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </li>--%>
 
-                    <!-- Popup xác nhận -->
-                    <div id="login-modal" class="modal fade" tabindex="-1" role="dialog">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Xác nhận</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Bạn có chắc chắn muốn thêm vào danh sách yêu thích không?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                    <button type="button" class="btn btn-primary" onclick="confirmAddToWishlist()">Xác
-                                        nhận
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Report modal -->
-                    <div class="modal fade" id="reportModal" tabindex="-1"
-                         aria-labelledby="reportModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        &times;
-                                    </button>
-                                    <h4 class="modal-title" id="reportModalLabel">Mẫu báo cáo</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- Form Inside Modal -->
-                                    <form id="reportForm" action="report">
-                                        <div class="form-group">
-                                            <label for="reportTypeId" class="control-label">Loại báo cáo</label>
-                                            <select class="form-control" id="reportTypeId" name="reportTypeId" required>
-                                                <option value="-1" disabled selected>Chọn lí do</option>
-                                                <c:forEach items="${requestScope.reportTypes}" var="reportTypes">
-                                                    <option value="${reportTypes.id}">${reportTypes.reason}</option>
-                                                </c:forEach>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="title" class="control-label">Tiêu đề</label>
-                                            <input type="text" class="form-control" id="title" name="title" required minlength="5" maxlength="127">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="description" class="control-label">Mô tả</label>
-                                            <textarea class="form-control" id="description" name="description" rows="3"
-                                                      required></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                        Close
-                                    </button>
-                                    <button type="button" class="btn btn-primary" onclick="submitReport()">
-                                        Submit Report
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <%--                                        <li>--%>
+                    <%--                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
+                    <%--                                                <span class="property-seeker">--%>
+                    <%--                                                    <b class="b-1">A</b>--%>
+                    <%--                                                    <b class="b-2">S</b>--%>
+                    <%--                                                </span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
+                    <%--                                                <span class="property-price">3000000$</span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </li>--%>
 
-                    <div id="map"></div>
-                    <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Similar Properties</h3>
-                        </div>
-                        <div class="panel-body recent-property-widget">
-                            <ul>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                        <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>
-                                        <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>
-                                        <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
+                    <%--                                    </ul>--%>
+                    <%--                                </div>--%>
+                    <%--                            </div>                          --%>
 
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                        <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
+                    <%--                            <div class="panel panel-default sidebar-menu wow fadeInRight animated">--%>
+                    <%--                                <div class="panel-heading">--%>
+                    <%--                                    <h3 class="panel-title">Ads her  </h3>--%>
+                    <%--                                </div>--%>
+                    <%--                                <div class="panel-body recent-property-widget">--%>
+                    <%--                                    <img src="assets/img/ads.jpg">--%>
+                    <%--                                </div>--%>
+                    <%--                            </div>--%>
 
-                            </ul>
-                        </div>
-                    </div>
+                    <%--                            <div class="panel panel-default sidebar-menu wow fadeInRight animated" >--%>
+                    <%--                                <div class="panel-heading">--%>
+                    <%--                                    <h3 class="panel-title">Smart search</h3>--%>
+                    <%--                                </div>--%>
+                    <%--                                <div class="panel-body search-widget">--%>
+                    <%--                                    <form action="" class=" form-inline"> --%>
+                    <%--                                        <fieldset>--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-12">--%>
+                    <%--                                                    <input type="text" class="form-control" placeholder="Key word">--%>
+                    <%--                                                </div>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
 
+                    <%--                                        <fieldset>--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-6">--%>
 
-                    <div class="panel panel-default sidebar-menu wow fadeInRight animated">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Smart search</h3>
-                        </div>
-                        <div class="panel-body search-widget">
-                            <form action="" class=" form-inline">
-                                <fieldset>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <input type="text" class="form-control" placeholder="Key word">
-                                        </div>
-                                    </div>
-                                </fieldset>
+                    <%--                                                    <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Your City">--%>
 
-                                <fieldset>
-                                    <div class="row">
-                                        <div class="col-xs-6">
+                    <%--                                                        <option>New york, CA</option>--%>
+                    <%--                                                        <option>Paris</option>--%>
+                    <%--                                                        <option>Casablanca</option>--%>
+                    <%--                                                        <option>Tokyo</option>--%>
+                    <%--                                                        <option>Marraekch</option>--%>
+                    <%--                                                        <option>kyoto , shibua</option>--%>
+                    <%--                                                    </select>--%>
+                    <%--                                                </div>--%>
+                    <%--                                                <div class="col-xs-6">--%>
 
-                                            <select id="lunchBegins" class="selectpicker" data-live-search="true"
-                                                    data-live-search-style="begins" title="Select Your City">
+                    <%--                                                    <select id="basic" class="selectpicker show-tick form-control">--%>
+                    <%--                                                        <option> -Status- </option>--%>
+                    <%--                                                        <option>Rent </option>--%>
+                    <%--                                                        <option>Boy</option>--%>
+                    <%--                                                        <option>used</option>  --%>
 
-                                                <option>New york, CA</option>
-                                                <option>Paris</option>
-                                                <option>Casablanca</option>
-                                                <option>Tokyo</option>
-                                                <option>Marraekch</option>
-                                                <option>kyoto , shibua</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-xs-6">
+                    <%--                                                    </select>--%>
+                    <%--                                                </div>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
 
-                                            <select id="basic" class="selectpicker show-tick form-control">
-                                                <option> -Status-</option>
-                                                <option>Rent</option>
-                                                <option>Boy</option>
-                                                <option>used</option>
+                    <%--                                        <fieldset class="padding-5">--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-6">--%>
+                    <%--                                                    <label for="price-range">Price range ($):</label>--%>
+                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
+                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
+                    <%--                                                           data-slider-value="[0,450]" id="price-range" ><br />--%>
+                    <%--                                                    <b class="pull-left color">2000$</b> --%>
+                    <%--                                                    <b class="pull-right color">100000$</b>                                                --%>
+                    <%--                                                </div>--%>
+                    <%--                                                <div class="col-xs-6">--%>
+                    <%--                                                    <label for="property-geo">Property geo (m2) :</label>--%>
+                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
+                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
+                    <%--                                                           data-slider-value="[50,450]" id="property-geo" ><br />--%>
+                    <%--                                                    <b class="pull-left color">40m</b> --%>
+                    <%--                                                    <b class="pull-right color">12000m</b>                                                --%>
+                    <%--                                                </div>                                            --%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>                                --%>
 
-                                            </select>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                    <%--                                        <fieldset class="padding-5">--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-6">--%>
+                    <%--                                                    <label for="price-range">Min baths :</label>--%>
+                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
+                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
+                    <%--                                                           data-slider-value="[250,450]" id="min-baths" ><br />--%>
+                    <%--                                                    <b class="pull-left color">1</b> --%>
+                    <%--                                                    <b class="pull-right color">120</b>                                                --%>
+                    <%--                                                </div>--%>
 
-                                <fieldset class="padding-5">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <label for="price-range">Price range ($):</label>
-                                            <input type="text" class="span2" value="" data-slider-min="0"
-                                                   data-slider-max="600" data-slider-step="5"
-                                                   data-slider-value="[0,450]" id="price-range"><br/>
-                                            <b class="pull-left color">2000$</b>
-                                            <b class="pull-right color">100000$</b>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <label for="property-geo">Property geo (m2) :</label>
-                                            <input type="text" class="span2" value="" data-slider-min="0"
-                                                   data-slider-max="600" data-slider-step="5"
-                                                   data-slider-value="[50,450]" id="property-geo"><br/>
-                                            <b class="pull-left color">40m</b>
-                                            <b class="pull-right color">12000m</b>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                    <%--                                                <div class="col-xs-6">--%>
+                    <%--                                                    <label for="property-geo">Min bed :</label>--%>
+                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
+                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
+                    <%--                                                           data-slider-value="[250,450]" id="min-bed" ><br />--%>
+                    <%--                                                    <b class="pull-left color">1</b> --%>
+                    <%--                                                    <b class="pull-right color">120</b>--%>
 
-                                <fieldset class="padding-5">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <label for="price-range">Min baths :</label>
-                                            <input type="text" class="span2" value="" data-slider-min="0"
-                                                   data-slider-max="600" data-slider-step="5"
-                                                   data-slider-value="[250,450]" id="min-baths"><br/>
-                                            <b class="pull-left color">1</b>
-                                            <b class="pull-right color">120</b>
-                                        </div>
+                    <%--                                                </div>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
+<%--                                <fieldset class="padding-5">--%>
+<%--                                    <div class="row">--%>
+<%--                                        <div class="col-xs-6">--%>
+<%--                                            <div class="checkbox">--%>
+<%--                                                <label> <input type="checkbox" checked> Fire Place</label>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
 
-                                        <div class="col-xs-6">
-                                            <label for="property-geo">Min bed :</label>
-                                            <input type="text" class="span2" value="" data-slider-min="0"
-                                                   data-slider-max="600" data-slider-step="5"
-                                                   data-slider-value="[250,450]" id="min-bed"><br/>
-                                            <b class="pull-left color">1</b>
-                                            <b class="pull-right color">120</b>
+                    <%--                                        <fieldset class="padding-5">--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-6">--%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label> <input type="checkbox" checked> Fire Place</label>--%>
+                    <%--                                                    </div> --%>
+                    <%--                                                </div>--%>
 
-                                        </div>
-                                    </div>
-                                </fieldset>
+                    <%--                                                <div class="col-xs-6">--%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label> <input type="checkbox"> Dual Sinks</label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>                                            --%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
 
-                                <fieldset class="padding-5">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox" checked> Fire Place</label>
-                                            </div>
-                                        </div>
+                    <%--                                        <fieldset class="padding-5">--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-6"> --%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label> <input type="checkbox" checked> Swimming Pool</label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>  --%>
+                    <%--                                                <div class="col-xs-6"> --%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label> <input type="checkbox" checked> 2 Stories </label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>  --%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
 
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox"> Dual Sinks</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                    <%--                                        <fieldset class="padding-5">--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-6"> --%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label><input type="checkbox"> Laundry Room </label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>  --%>
+                    <%--                                                <div class="col-xs-6"> --%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label> <input type="checkbox"> Emergency Exit</label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>  --%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
 
-                                <fieldset class="padding-5">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox" checked> Swimming Pool</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox" checked> 2 Stories </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                    <%--                                        <fieldset class="padding-5">--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-6"> --%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label>  <input type="checkbox" checked> Jog Path </label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>  --%>
+                    <%--                                                <div class="col-xs-6"> --%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label>  <input type="checkbox"> 26' Ceilings </label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>  --%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
 
-                                <fieldset class="padding-5">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label><input type="checkbox"> Laundry Room </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox"> Emergency Exit</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                    <%--                                        <fieldset class="padding-5">--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-12"> --%>
+                    <%--                                                    <div class="checkbox">--%>
+                    <%--                                                        <label>  <input type="checkbox"> Hurricane Shutters </label>--%>
+                    <%--                                                    </div>--%>
+                    <%--                                                </div>  --%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>--%>
 
-                                <fieldset class="padding-5">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox" checked> Jog Path </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox"> 26' Ceilings </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <fieldset class="padding-5">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <div class="checkbox">
-                                                <label> <input type="checkbox"> Hurricane Shutters </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <fieldset>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <input class="button btn largesearch-btn" value="Search" type="submit">
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
+                    <%--                                        <fieldset >--%>
+                    <%--                                            <div class="row">--%>
+                    <%--                                                <div class="col-xs-12">  --%>
+                    <%--                                                    <input class="button btn largesearch-btn" value="Search" type="submit">--%>
+                    <%--                                                </div>  --%>
+                    <%--                                            </div>--%>
+                    <%--                                        </fieldset>                                     --%>
+                    <%--                                    </form>--%>
+                    <%--                                </div>--%>
+                    <%--                            </div>--%>
 
                 </aside>
             </div>

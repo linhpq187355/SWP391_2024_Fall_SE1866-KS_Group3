@@ -1,12 +1,15 @@
 /*
- * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
- * 2024-9-18      1.0                 ManhNC         First Implement
+ *  * 2024-9-18      1.0                 ManhNC         First Implement
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  */
+
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -26,18 +29,18 @@ import java.util.logging.Logger;
 
 /**
  * Implementation of the UserDAO interface, handling database operations for the User entity.
- * @author ManhNC
  */
 public class UserDAOImpl extends DBContext implements UserDAO {
 
     private static final Logger logger = Logger.getLogger(UserDAOImpl.class.getName());
 
     /**
-     * update the user to the database.
+     * Updates the Google ID for a user in the database.
      *
-     * @param googleId The id of user to be saved.
-     * @param email The email of user to be saved.
-     * @return rowUpdated
+     * @param googleId The Google ID to be updated.
+     * @param email    The email address of the user to update.
+     * @return The number of rows updated (should be 1 if successful).
+     * @throws SQLException If a database access error occurs.
      */
     @Override
     public int updateGoogleId(String googleId, String email) throws SQLException {
@@ -78,10 +81,11 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     }
 
     /**
-     * get the googleID of user to the database.
+     * Retrieves the Google ID associated with a given email address from the database.
      *
-     * @param email The email of user to be saved.
-     * @return googleID
+     * @param email The email address of the user.
+     * @return The Google ID if found, or {@code null} if not found.
+     * @throws SQLException if a database access error occurs or the result set is closed.
      */
     @Override
     public String getGoogleId(String email) throws SQLException {
@@ -122,6 +126,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return null; // Return null if no user is found
     }
 
+
     /**
      * Saves a user to the database by executing an INSERT SQL query.
      *
@@ -137,6 +142,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         try {
             connection = getConnection();
             preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
             // Set parameters for the prepared statement based on the user's information
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -213,6 +219,13 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return false;
     }
 
+    /**
+     * Checks if a phone number already exists in the database.
+     *
+     * @param phone The phone number to check.
+     * @return {@code true} if the phone number exists, {@code false} otherwise.
+     * @throws SQLException If a database access error occurs.
+     */
     @Override
     public boolean phoneExists(String phone) throws SQLException {
         String sql = "SELECT COUNT(*) FROM [HSS_Users] WHERE [phoneNumber] = ?";
@@ -240,12 +253,20 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return false;
     }
 
+    /**
+     * Updates the email address of a user in the database.
+     *
+     * @param email The new email address.
+     * @param id    The ID of the user to update.
+     * @return The number of rows updated.
+     * @throws SQLException If a database access error occurs.
+     */
     @Override
     public int updateEmail(String email, int id) throws SQLException {
         int rowsUpdated = 0;
         String sql = "UPDATE [dbo].[HSS_Users]\n" +
-                "   SET [email] = ?\n" +
-                " WHERE id = ?";
+                    " SET [email] = ?\n" +
+                    " WHERE id = ?";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -278,6 +299,13 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return rowsUpdated;
     }
 
+    /**
+     * Checks if a user has a password set in the database.
+     *
+     * @param userId The ID of the user.
+     * @return 1 if the password is NULL, 0 if it's not NULL, -1 if an error occurs or user not found.
+     * @throws SQLException If a database access error occurs.
+     */
     @Override
     public int passWordExists(int userId) throws SQLException {
         String sql = "SELECT CASE\n" +
@@ -288,13 +316,14 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 " WHERE id = ?;\n";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, userId);
 
             // Execute the query to check for email existence
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1); // Return true if email exists
             }
@@ -303,7 +332,15 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error checking email existence in the database", e);
         } finally {
-            closeConnection();
+            if (resultSet != null) {
+                resultSet.close(); // Đảm bảo ResultSet được đóng
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
 
         // Return false if no email match is found
@@ -319,7 +356,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public User getUser(int id) {
-        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.rolesid "
+        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.duration, u.earliestMoveIn, u.latestMoveIn, u.minBudget, u.maxBudget,u.rolesid \n"
                 + "FROM [HSS_Users] u WHERE u.id = ?";
 
         Connection connection = null;
@@ -345,7 +382,13 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setAvatar(resultSet.getString("avatar"));
                 user.setVerified(resultSet.getBoolean("isVerified"));
                 user.setEmail(resultSet.getString("email"));
+                user.setMaxBudget(resultSet.getInt("maxBudget"));
+                user.setMinBudget(resultSet.getInt("minBudget"));
+                user.setEarliestMoveIn(resultSet.getDate("earliestMoveIn") != null ? resultSet.getDate("earliestMoveIn").toLocalDate() : null);
+                user.setLatestMoveIn(resultSet.getDate("latestMoveIn") != null ? resultSet.getDate("latestMoveIn").toLocalDate() : null);
+                user.setDuration(resultSet.getString("duration"));
                 user.setPhoneNumber(resultSet.getString("phoneNumber"));
+
                 user.setDob(resultSet.getDate("dob") != null ? resultSet.getDate("dob").toLocalDate() : null);
                 user.setRolesId(resultSet.getInt("rolesid"));
                 return user;
@@ -444,44 +487,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      * @return the list of user if database has data or null if database empty
      */
     @Override
-    public int updatePhoneNumber(int userId, String phoneNumber) throws SQLException {
-        int rowsUpdated = 0;
-        String sql = "UPDATE [dbo].[HSS_Users]\n" +
-                "   SET [phoneNumber] = ?\n" +
-                " WHERE id = ?";
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            // Set the parameters for the update statement
-            preparedStatement.setString(1, phoneNumber);
-            preparedStatement.setInt(2, userId);
-
-            // Execute the update and get the number of affected rows
-            rowsUpdated = preparedStatement.executeUpdate();
-
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            logger.log(Level.SEVERE, "Error updating user profile", e);
-            throw new GeneralException("Error updating user profile: " + e.getMessage(), e);
-        } finally {
-            // Closing resources in reverse order of opening
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return rowsUpdated;
-    }
-
-    @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
         String sql = "SELECT [id]\n" +
@@ -507,7 +512,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = DBContext.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -690,7 +695,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 " WHERE [id] = ?";
 
         try (
-                Connection connection = getConnection();
+                Connection connection = DBContext.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, id);
@@ -702,7 +707,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
 
     @Override
     public User getUserById(int id) {
-        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS_Users] WHERE [id] = ?";
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -778,6 +783,162 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         }
         return rowsUpdated;
     }
+
+    @Override
+    public int getNumberUsers() {
+        String sql = "select count(id) total\n" +
+                "from HSS_Users\n" +
+                "where rolesid in (3,4)";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            // If a result is found, return the total number
+            if (resultSet.next()) {
+                return resultSet.getInt("total");
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error retrieving total user from the database", e);
+            throw new RuntimeException("Error retrieving total user from the database", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Updates the matching profile of a user in the database.
+     *
+     * @param user the User object containing updated information
+     * @return the number of rows updated in the database
+     * @throws GeneralException if there is an error while updating the user profile
+     */
+    @Override
+    public int updateMatchingProfile(User user) {
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[HSS_Users]\n" +
+                "   SET [dob] = ?" +
+                "      ,[gender] = ?" +
+                "      ,[duration] = ?" +
+                "      ,[minBudget] = ?" +
+                "      ,[maxBudget] = ?" +
+                "      ,[earliestMoveIn] = ?" +
+                "      ,[latestMoveIn] = ?" +
+                " WHERE id = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // Set the parameters for the update statement
+            preparedStatement.setDate(1, java.sql.Date.valueOf(user.getDob()));
+            preparedStatement.setString(2, user.getGender());
+            preparedStatement.setString(3, user.getDuration());
+            preparedStatement.setInt(4, user.getMinBudget());
+            preparedStatement.setInt(5, user.getMaxBudget());
+            preparedStatement.setDate(6, java.sql.Date.valueOf(user.getEarliestMoveIn()));
+            preparedStatement.setDate(7, java.sql.Date.valueOf(user.getLatestMoveIn()));
+            preparedStatement.setInt(8, user.getId());
+
+            // Execute the update and get the number of affected rows
+            rowsUpdated = preparedStatement.executeUpdate();
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error updating user matching profile", e);
+            throw new GeneralException("Error updating user matching profile: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return rowsUpdated;
+    }
+
+    /**
+     * Retrieves a user's matching profile from the database based on their ID.
+     *
+     * @param id the ID of the user to retrieve
+     * @return the User object containing the matching profile information, or null if not found
+     * @throws GeneralException if there is an error while retrieving the user profile
+     */
+    @Override
+    public User getMatchingUserProfile(int id) {
+        String sql = "SELECT [id], [minBudget], [maxBudget], [earliestMoveIn], [latestMoveIn], [duration] FROM [dbo].[HSS_Users] WHERE [id] = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setMinBudget(resultSet.getInt("minBudget"));
+                user.setMaxBudget(resultSet.getInt("maxBudget"));
+                user.setDuration(resultSet.getString("duration"));
+                if(resultSet.getDate("earliestMoveIn") != null){
+                    user.setEarliestMoveIn(resultSet.getDate("earliestMoveIn").toLocalDate());
+                } else {
+                    user.setEarliestMoveIn(null);
+                }
+                if(resultSet.getDate("latestMoveIn") != null){
+                    user.setLatestMoveIn(resultSet.getDate("latestMoveIn").toLocalDate());
+                } else {
+                    user.setLatestMoveIn(null);
+                }
+                return user;
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error getting user matching profile", e);
+            throw new GeneralException("Error gettinh user matching profile: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return null; // Return null if no user is found
+    }
+
 
     public static void main(String[] args) {
         UserDAOImpl userDAO = new UserDAOImpl();

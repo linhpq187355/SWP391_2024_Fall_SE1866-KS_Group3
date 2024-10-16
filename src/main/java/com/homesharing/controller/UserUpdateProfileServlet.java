@@ -71,11 +71,9 @@ public class UserUpdateProfileServlet extends HttpServlet {
         if (userId != null) {
             // Fetch user and preference data from the services
             User user = null;
-            try {
+
                 user = userService.getUser(Integer.parseInt(Objects.requireNonNull(userId)));
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            }
+
             Preference preference = preferenceService.getPreference(Integer.parseInt(userId));
 
             // Set the retrieved data as request attributes for displaying on the JSP page

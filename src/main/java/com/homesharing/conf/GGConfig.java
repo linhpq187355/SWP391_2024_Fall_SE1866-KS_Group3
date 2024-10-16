@@ -10,39 +10,51 @@
 package com.homesharing.conf;
 
 /**
- * The {@code GGConfig} class contains configuration constants
- * for the Google OAuth 2.0 integration.
+ * The {@code GGConfig} class contains configuration constants for Google OAuth 2.0 integration.
+ * These constants are used to interact with the Google API for user authentication and authorization.
+ * <p>
+ * This class cannot be instantiated or subclassed. All fields are {@code public static final} constants.
+ * <p>
+ * Bugs: None known.
  *
- * This class holds the following constants:
- * <ul>
- *     <li>GOOGLE_CLIENT_ID: The client ID obtained from Google Developer Console.</li>
- *     <li>GOOGLE_CLIENT_SECRET: The client secret obtained from Google Developer Console.</li>
- *     <li>GOOGLE_REDIRECT_URI: The URI to which Google redirects users after authentication.</li>
- *     <li>GOOGLE_GRANT_TYPE: The grant type for OAuth 2.0.</li>
- *     <li>GOOGLE_LINK_GET_TOKEN: The URL to get the access token from Google.</li>
- *     <li>GOOGLE_LINK_GET_USER_INFO: The URL to get user information using the access token.</li>
- * </ul>
- *
- * This class cannot be instantiated or subclassed.
- * All fields are public static final constants.
+ * @author ManhNC
  */
-public class GGConfig {
-    /** The client ID obtained from Google Developer Console. */
+public final class GGConfig {
+
+    /**
+     * The client ID obtained from the Google Developer Console.  This ID uniquely identifies your application
+     * to Google's OAuth 2.0 service.  This value is retrieved from the `GOOGLE_CLIENT_ID` environment variable.
+     */
     public static final String GOOGLE_CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
 
-    /** The client secret obtained from Google Developer Console. */
+    /**
+     * The client secret obtained from the Google Developer Console. This secret is used to authenticate your
+     * application to Google's OAuth 2.0 service.  This value is retrieved from the `GOOGLE_CLIENT_SECRET`
+     * environment variable.
+     */
     public static final String GOOGLE_CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
 
-    /** The URI to which Google redirects users after authentication. */
+    /**
+     * The redirect URI to which Google redirects users after authentication.  This URI must be registered
+     * in the Google Developer Console and must match the redirect URI configured for your application.
+     */
     public static final String GOOGLE_REDIRECT_URI = "http://localhost:9999/homeSharing/sign-up-google";
 
-    /** The grant type for OAuth 2.0. */
+    /**
+     * The grant type for OAuth 2.0. This value is typically "authorization_code" for web applications.
+     */
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
 
-    /** The URL to get the access token from Google. */
+    /**
+     * The URL to get the access token from Google.  This URL is used to exchange an authorization code
+     * for an access token, which can then be used to access Google APIs.
+     */
     public static final String GOOGLE_LINK_GET_TOKEN = "https://accounts.google.com/o/oauth2/token";
 
-    /** The URL to get user information using the access token. */
+    /**
+     * The base URL to get user information using the access token.  An access token must be appended to this
+     * URL to retrieve user information. Example: `GOOGLE_LINK_GET_USER_INFO + accessToken`.
+     */
     public static final String GOOGLE_LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
 }
