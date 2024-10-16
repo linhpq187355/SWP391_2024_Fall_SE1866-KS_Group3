@@ -635,6 +635,53 @@
 
     </div>
 </div>
+<!-- Report modal -->
+<div class="modal fade" id="reportModal" tabindex="-1"
+     aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="reportModalLabel">Mẫu báo cáo</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Form Inside Modal -->
+                <form id="reportForm" action="report">
+                    <div class="form-group">
+                        <label for="reportTypeId" class="control-label">Loại báo cáo</label>
+                        <select class="form-control" id="reportTypeId" name="reportTypeId" required>
+                            <option value="-1" disabled selected>Chọn lí do</option>
+                            <c:forEach items="${requestScope.reportTypes}" var="reportTypes">
+                                <option value="${reportTypes.id}">${reportTypes.reason}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="control-label">Tiêu đề</label>
+                        <input type="text" class="form-control" id="title" name="title" required minlength="5" maxlength="127">
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="control-label">Mô tả</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"
+                                  required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitReport()">
+                    Submit Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <!-- Footer area-->
