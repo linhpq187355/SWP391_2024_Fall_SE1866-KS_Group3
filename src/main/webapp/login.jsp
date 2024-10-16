@@ -12,6 +12,7 @@
 <head>
     <title>Đăng nhập</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <style>
         .content-section {
             margin-bottom: 40px; /* Tạo khoảng cách giữa section và footer */
@@ -138,10 +139,10 @@
                             <i class="glyphicon glyphicon-log-in"></i>
                             <span>Đăng nhập bằng Google</span>
                         </a>
-                        <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">
-                            <i class="glyphicon glyphicon-user"></i>
-                            <span>Bạn là nhân viên?</span>
-                        </a>
+<%--                        <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">--%>
+<%--                            <i class="glyphicon glyphicon-user"></i>--%>
+<%--                            <span>Bạn là nhân viên?</span>--%>
+<%--                        </a>--%>
                     </div>
                 </div>
             </div>

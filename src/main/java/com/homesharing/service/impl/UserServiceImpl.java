@@ -22,7 +22,6 @@ import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
 import com.homesharing.util.SecureRandomCode;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,9 +29,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * UserServiceImpl is an implementation of the UserService interface.
- * This class is responsible for managing user-related operations,
- * including registration, login, profile updates, and input validation.
+ * Implementation of the {@link UserService} interface. This class manages
+ * user-related operations such as registration, login, profile updates,
+ * and password management.
  *
  * @author ManhNC
  */
@@ -45,9 +44,12 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
     /**
-     * Constructor for UserServiceImpl, initializing the UserDao instance.
+     * Constructs a new UserServiceImpl with the required dependencies.
      *
-     * @param userDao The UserDao instance for database operations.
+     * @param userDao            The data access object for user operations.
+     * @param tokenDao           The data access object for token operations.
+     * @param tokenService        The service for managing tokens.
+     * @param preferenceService The service for managing user preferences.
      */
     public UserServiceImpl(UserDAO userDao, TokenDAO tokenDao, TokenService tokenService, PreferenceService preferenceService) {
         this.userDao = userDao;
@@ -231,6 +233,20 @@ public class UserServiceImpl implements UserService {
         return role != null && (role.equals("findRoommate") || role.equals("postRoom"));
     }
 
+    /**
+     * Validates the provided account information.
+     *
+     * @param firstName      The first name of the user.
+     * @param lastName       The last name of the user.
+     * @param email         The email address of the user.
+     * @param password      The password chosen by the user.
+     * @param confirmPassword The confirmed password entered by the user.
+     * @param role          The role ID of the user.
+     * @param gender        The gender of the user ("male" or "female").
+     * @param phone         The phone number of the user.
+     * @param dob           The date of birth of the user (YYYY-MM-DD format).
+     * @return {@code true} if the account information is valid, {@code false} otherwise.
+     */
     @Override
     public boolean validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob) {
         // Check if names contain only letters and spaces
@@ -261,7 +277,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-
+    /**
+     * Validates the provided email address.
+     *
+     * @param email The email address to validate.
+     * @return {@code true} if the email is valid, {@code false} otherwise.
+     */
     @Override
     public boolean validateEmail(String email) {
         // Check if the email is valid
@@ -272,30 +293,20 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    @Override
-    public int updatePhone(String phone, String userId) throws SQLException {
-        if(userId == null || userId.isEmpty()) {
-            return -1;
-        }
-        if(phone == null || phone.isEmpty()) {
-            return -2;
-        }
-
-        String phoneRegex = "^(0[3|5|7|8|9])+([0-9]{8})$";
-        if (!phone.matches(phoneRegex)) {
-            return -2;
-        }
-
-        int id = Integer.parseInt(userId);
-
-        User user = userDao.getUser(id);
-
-        if(user == null) {
-            return -1;
-        }
-        return userDao.updatePhoneNumber(id, phone);
-    }
-
+    /**
+     * Creates a new user account.
+     *
+     * @param firstName The first name of the user.
+     * @param lastName  The last name of the user.
+     * @param email     The email address of the user.
+     * @param password  The password chosen by the user.
+     * @param role      The role ID of the user.
+     * @param gender    The gender of the user.
+     * @param phone     The phone number of the user.
+     * @param dob       The date of birth of the user (YYYY-MM-DD format).
+     * @return The ID of the newly created user, -1 if the phone number already exists, -2 if the email already exists.
+     * @throws SQLException If a database error occurs.
+     */
     @Override
     public int createAccount(String firstName, String lastName, String email, String password, int role, String gender, String phone, String dob) throws SQLException {
         try {
@@ -334,6 +345,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Stores the user's information in cookies.
+     *
+     * @param userId   The ID of the user.
+     * @param response The HttpServletResponse object to add cookies to.
+     * @throws SQLException  If a database error occurs.
+     * @throws GeneralException If the user is not found.
+     */
     @Override
     public void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException {
         User user = userDao.getUser(userId);
@@ -418,6 +437,21 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Updates the password for a user.
+     *
+     * @param userId   The ID of the user.
+     * @param hadPass  Indicates whether the user has a previous password (1 if yes, 0 if no).
+     * @param oldPass  The old password of the user (required if hadPass is 0).
+     * @param password The new password for the user.
+     * @return An integer indicating the result of the operation:
+     *         <ul>
+     *         <li> 1: Password updated successfully.
+     *         <li>-1: Incorrect old password provided.
+     *         <li>-2: Invalid input (empty password or missing old password when required).
+     *         </ul>
+     * @throws SQLException If a database error occurs.
+     */
     @Override
     public int updatePassword(int userId, int hadPass, String oldPass, String password) throws SQLException {
         if(password == null || password.isEmpty()) {
@@ -456,10 +490,6 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             // User does not exist
             return "Email hoặc mật khẩu không đúng";
-        }
-        if(user.getHashedPassword() == null) {
-            // Password is incorrect
-            return "Tài khoản này chưa có mật khẩu, vui lòng đăng nhập ở trang dành cho người dùng, và cập nhật mật khẩu.";
         }
 
         // Check if the provided password matches the user's hashed password

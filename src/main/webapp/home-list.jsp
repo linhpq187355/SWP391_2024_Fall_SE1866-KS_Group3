@@ -1,11 +1,13 @@
 <%--
-  Created by IntelliJ IDEA.
+  Created by ManhNC.
   User: Admin
   Date: 9/25/2024
   Time: 11:40 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -37,6 +39,70 @@
     <link rel="stylesheet" href="assets/css/owl.transitions.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <style>
+        .pagination a {
+            text-decoration: none;
+            color: #d18e11; /* Màu mặc định cho liên kết */
+            padding: 8px 12px;
+            margin: 0 4px;
+        }
+
+        .pagination a.active {
+            background-color: #d18e11; /* Màu nền khi active */
+            color: white; /* Màu chữ khi active */
+            border-radius: 4px; /* Bo góc */
+        }
+
+        .pagination a:hover {
+            background-color: #d18e11; /* Màu nền khi hover */
+            color: white; /* Màu chữ khi hover */
+        }
+
+        .property-image {
+            width: 100%;   /* Điều chỉnh cho ảnh đầy chiều rộng của thẻ bao quanh */
+            height: 200px; /* Hoặc bạn có thể đặt kích thước cố định tùy thuộc vào yêu cầu */
+            object-fit: cover; /* Giúp cắt ảnh nếu vượt quá chiều rộng hoặc chiều cao, mà vẫn giữ tỉ lệ */
+        }
+        /* Đặt chiều rộng cho các dropdown */
+        .form-select {
+            width: 100%; /* Giúp dropdown chiếm toàn bộ chiều rộng của container */
+            max-width: 400px; /* Giới hạn chiều rộng tối đa */
+            padding: 10px; /* Thêm khoảng đệm cho dropdown */
+            border: 1px solid #ccc; /* Đường viền nhẹ nhàng */
+            border-radius: 4px; /* Bo tròn các góc */
+            font-size: 14px; /* Kích thước font chữ */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm bóng nhẹ */
+            transition: border-color 0.3s; /* Hiệu ứng chuyển đổi cho viền */
+        }
+
+        /* Thay đổi màu viền khi dropdown được chọn */
+        .form-select:focus {
+            border-color: #007bff; /* Màu viền khi đang chọn */
+            outline: none; /* Loại bỏ viền mặc định */
+        }
+
+        /* Đặt khoảng cách giữa các fieldset */
+        fieldset {
+            margin-bottom: 15px; /* Khoảng cách giữa các trường */
+            border: none; /* Bỏ đường viền fieldset */
+        }
+
+        /* Tùy chỉnh tiêu đề cho các fieldset */
+        fieldset legend {
+            font-weight: bold; /* In đậm tiêu đề */
+            margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và dropdown */
+        }
+        .home-name.two-line {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            line-height: 1.2;
+            max-height: 2.4em;
+        }
+
+    </style>
 </head>
 <body>
     <div id="preloader">
@@ -60,169 +126,227 @@
     <div class="properties-area recent-property" style="background-color: #FFF;">
         <div class="container">
             <div class="row">
-
                 <div class="col-md-3 p0 padding-top-40">
                     <div class="blog-asside-right pr0">
                         <div class="panel panel-default sidebar-menu wow fadeInRight animated" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">Smart search</h3>
+                                <h3 class="panel-title">Tìm kiếm thông minh</h3>
                             </div>
                             <div class="panel-body search-widget">
-                                <form action="" class=" form-inline">
+                                <form action="home-list" method="get" id="filterForm" class=" form-inline">
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <input type="text" class="form-control" placeholder="Key word">
+                                                <input type="text"  name="keyword"  class="form-control" placeholder="Từ khóa" value="${searchParams.keyword}">
                                             </div>
                                         </div>
                                     </fieldset>
 
                                     <fieldset>
                                         <div class="row">
-                                            <div class="col-xs-6">
-
-                                                <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Your City">
-
-                                                    <option>New york, CA</option>
-                                                    <option>Paris</option>
-                                                    <option>Casablanca</option>
-                                                    <option>Tokyo</option>
-                                                    <option>Marraekch</option>
-                                                    <option>kyoto , shibua</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-xs-6">
-
-                                                <select id="basic" class="selectpicker show-tick form-control">
-                                                    <option> -Status- </option>
-                                                    <option>Rent </option>
-                                                    <option>Boy</option>
-                                                    <option>used</option>
-
+                                            <div class="col-xs-12">
+                                                <select name="homeType" id="homeType" class="form-select form-select-sm mb-3">
+                                                    <option value="" ${searchParams.homeType == null ? 'selected' : ''}>Chọn kiểu nhà</option>
+                                                    <c:forEach var="homeType" items="${homeTypes}">
+                                                        <option value="${homeType.id}"  <c:if test="${homeType.id == searchParams.homeType}">selected</c:if>>${homeType.name}</option>
+                                                    </c:forEach>
                                                 </select>
                                             </div>
                                         </div>
                                     </fieldset>
 
-                                    <fieldset class="padding-5">
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <select name="province" id="province" class="form-select form-select-sm mb-3">
+                                                    <option value="" ${searchParams.province == null ? 'selected' : ''}>Chọn tỉnh thành</option>
+                                                    <c:forEach var="province" items="${provinces}">
+                                                        <option value="${province.id}" ${province.id == searchParams.province ? 'selected' : ''}>${province.name}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <input type="hidden" id="selectedDistrict" value="${searchParams.district}">
+                                    <input type="hidden" id="selectedWard" value="${searchParams.ward}">
+                                    <fieldset>
                                         <div class="row">
                                             <div class="col-xs-6">
-                                                <label for="price-range">Price range ($):</label>
-                                                <input type="text" class="span2" value="" data-slider-min="0"
-                                                       data-slider-max="600" data-slider-step="5"
-                                                       data-slider-value="[0,450]" id="price-range" ><br />
-                                                <b class="pull-left color">2000$</b>
-                                                <b class="pull-right color">100000$</b>
+                                                <select name="district" id="district" class="form-select form-select-sm mb-3">
+                                                    <option value="" selected>Chọn quận huyện</option>
+                                                </select>
                                             </div>
                                             <div class="col-xs-6">
-                                                <label for="property-geo">Property geo (m2) :</label>
-                                                <input type="text" class="span2" value="" data-slider-min="0"
-                                                       data-slider-max="600" data-slider-step="5"
-                                                       data-slider-value="[50,450]" id="property-geo" ><br />
-                                                <b class="pull-left color">40m</b>
-                                                <b class="pull-right color">12000m</b>
+                                                <select class="form-select form-select-sm" name="ward" id="ward">
+                                                    <option value="" selected>Chọn phường xã</option>
+                                                </select>
                                             </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="padding-5">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <label for="price-range">Giá (nghìn VND):</label>
+                                                <!-- Ép giá trị minPrice và maxPrice về số nguyên sau khi chia cho 1000 -->
+                                                <input type="hidden" name="minPrice" value="${minPrice != null ? minPrice : 0}" />
+                                                <input type="hidden" name="maxPrice" value="${maxPrice != null ? maxPrice : 10000000}" />
+                                                <input type="text" class="span2" name="priceRange"
+                                                       value="${searchParams.priceRange != null ? searchParams.priceRange : ''}"
+                                                       data-slider-min="${minPrice != null ? (minPrice / 1000).intValue() : 0}"
+                                                       data-slider-max="${maxPrice != null ? (maxPrice / 1000).intValue() : 10000}"
+                                                       data-slider-step="5"
+                                                <c:choose>
+                                                <c:when test="${searchParams.priceRange != null}">
+                                                       data-slider-value="[${searchParams.priceRange}]"
+                                                </c:when>
+                                                <c:otherwise>
+                                                       data-slider-value="[${minPrice != null ? (minPrice / 1000).intValue() : 0}, ${maxPrice != null ? (maxPrice / 1000).intValue() : 10000}]"
+                                                </c:otherwise>
+                                                </c:choose>
+                                                       id="price-range">
+                                                <br />
+                                                <b class="pull-left color">${minPrice != null ? (minPrice / 1000).intValue() : 0}</b>
+                                                <b class="pull-right color">${maxPrice != null ? (maxPrice / 1000).intValue() : 10000}</b>
+
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <label for="property-geo">Diện tích (m²) :</label>
+                                                <!-- Sử dụng phương thức setScale(1) để làm tròn đến 1 chữ số thập phân -->
+                                                <input type="text" class="span2" name="areaRange" value="${searchParams.areaRange != null ? searchParams.areaRange : ''}"
+                                                       data-slider-min="${minArea != null ? minArea.intValue() : 0}"
+                                                       data-slider-max="${maxArea != null ? maxArea.intValue() : 600}"
+                                                       data-slider-step="1"
+                                                <c:choose>
+                                                <c:when test="${searchParams.areaRange != null}">
+                                                       data-slider-value="[${searchParams.areaRange}]"
+                                                </c:when>
+                                                <c:otherwise>
+                                                       data-slider-value="[${minArea != null ? minArea.intValue() : 0}, ${maxArea != null ? maxArea.intValue() : 600}]"
+                                                </c:otherwise>
+                                                </c:choose>
+                                                        id="property-geo"><br />
+                                                <b class="pull-left color">${minArea != null ? minArea.intValue() : 0} m²</b>
+                                                <b class="pull-right color">${maxArea != null ? maxArea.intValue() : 600.0} m²</b>
+                                            </div>
+
                                         </div>
                                     </fieldset>
 
                                     <fieldset class="padding-5">
                                         <div class="row">
                                             <div class="col-xs-6">
-                                                <label for="price-range">Min baths :</label>
-                                                <input type="text" class="span2" value="" data-slider-min="0"
-                                                       data-slider-max="600" data-slider-step="5"
-                                                       data-slider-value="[250,450]" id="min-baths" ><br />
-                                                <b class="pull-left color">1</b>
-                                                <b class="pull-right color">120</b>
+                                                <label for="price-range">Bathroom :</label>
+                                                <input type="text" class="span2" name="bathRange" value="${searchParams.bathRange != null ? searchParams.bathRange : ''}"
+                                                       data-slider-min="${minBath != null ? minBath : 0}"
+                                                       data-slider-max="${maxBath != null ? maxBath : 10}"
+                                                       data-slider-step="1"
+                                                <c:choose>
+                                                <c:when test="${searchParams.bathRange != null}">
+                                                       data-slider-value="[${searchParams.bathRange}]"
+                                                </c:when>
+                                                <c:otherwise>
+                                                       data-slider-value="[${minBath != null ? minBath : 0}, ${maxBath != null ? maxBath : 10}]"
+                                                </c:otherwise>
+                                                </c:choose>
+                                                        id="min-baths" ><br />
+                                                <b class="pull-left color">${minBath != null ? minBath : 0}</b>
+                                                <b class="pull-right color">${maxBath != null ? maxBath : 10}</b>
                                             </div>
 
                                             <div class="col-xs-6">
-                                                <label for="property-geo">Min bed :</label>
-                                                <input type="text" class="span2" value="" data-slider-min="0"
-                                                       data-slider-max="600" data-slider-step="5"
-                                                       data-slider-value="[250,450]" id="min-bed" ><br />
-                                                <b class="pull-left color">1</b>
-                                                <b class="pull-right color">120</b>
-
+                                                <label for="property-geo">Bedroom :</label>
+                                                <input type="text" class="span2" name="bedRange" value="${searchParams.bedRange != null ? searchParams.bedRange : ''}"
+                                                       data-slider-min="${minBed != null ? minBed : 0}"
+                                                       data-slider-max="${maxBed != null ? maxBed : 10}"
+                                                       data-slider-step="1"
+                                                <c:choose>
+                                                <c:when test="${searchParams.bedRange != null}">
+                                                       data-slider-value="[${searchParams.bedRange}]"
+                                                </c:when>
+                                                <c:otherwise>
+                                                       data-slider-value="[${minBed != null ? minBed : 0}, ${maxBed != null ? maxBed : 10}]"
+                                                </c:otherwise>
+                                                </c:choose>
+                                                        id="min-bed" ><br />
+                                                <b class="pull-left color">${minBed != null ? minBed : 0}</b>
+                                                <b class="pull-right color">${maxBed != null ? maxBed : 10}</b>
                                             </div>
                                         </div>
                                     </fieldset>
-
                                     <fieldset class="padding-5">
                                         <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label> <input type="checkbox" checked> Fire Place</label>
-                                                </div>
+                                            <div class="col-xs-12">
+                                                <label><strong>Tiện ích:</strong></label>
                                             </div>
+                                            <c:forEach var="amentity" items="${listAmen}">
+                                                <div class="col-xs-6">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <!-- Lặp qua danh sách amenities để kiểm tra -->
+                                                            <c:set var="isChecked" value="false"/>
+                                                            <c:if test="${searchParams.amenities != null}">
+                                                                <c:forEach var="amenity" items="${searchParams.amenities}">
+                                                                    <c:if test="${amenity == amentity.id}">
+                                                                        <c:set var="isChecked" value="true"/>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </c:if>
 
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label> <input type="checkbox"> Dual Sinks</label>
+                                                            <input type="checkbox" name="amenities[]" value="${amentity.id}"
+                                                                   <c:if test="${isChecked}">checked</c:if>>
+                                                                ${amentity.name}
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
+                                            </c:forEach>
 
-                                    <fieldset class="padding-5">
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label> <input type="checkbox" checked> Swimming Pool</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label> <input type="checkbox" checked> 2 Stories </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-
-                                    <fieldset class="padding-5">
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label><input type="checkbox"> Laundry Room </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label> <input type="checkbox"> Emergency Exit</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-
-                                    <fieldset class="padding-5">
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label>  <input type="checkbox" checked> Jog Path </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="checkbox">
-                                                    <label>  <input type="checkbox"> 26' Ceilings </label>
-                                                </div>
-                                            </div>
                                         </div>
                                     </fieldset>
 
                                     <fieldset class="padding-5">
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <div class="checkbox">
-                                                    <label>  <input type="checkbox"> Hurricane Shutters </label>
-                                                </div>
+                                                <label><strong>An toàn:</strong></label>
                                             </div>
+                                            <c:forEach var="fireEquipment" items="${listFire}">
+                                                <div class="col-xs-12">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <!-- Lặp qua danh sách fireEquipments để kiểm tra -->
+                                                            <c:set var="isChecked" value="false"/>
+                                                            <c:if test="${searchParams.fireEquipments != null}">
+                                                                <c:forEach var="fireE" items="${searchParams.fireEquipments}">
+                                                                    <c:if test="${fireE == fireEquipment.id}">
+                                                                        <c:set var="isChecked" value="true"/>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </c:if>
+                                                            <input type="checkbox" name="fireEquipments[]" value="${fireEquipment.id}"
+                                                                   <c:if test="${isChecked}">checked</c:if>>
+                                                                ${fireEquipment.name}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
                                         </div>
                                     </fieldset>
-
+                                    <!-- Hidden inputs để lưu thông tin sắp xếp -->
+                                    <c:set var="orderby" value="${searchParams.orderby != null ? searchParams.orderby : 'property_date'}" />
+                                    <c:set var="order" value="${searchParams.order != null ? searchParams.order : 'ASC'}" />
+                                    <c:set var="currentPage" value="${searchParams.targetPage != null ? searchParams.targetPage : '1'}" />
+                                    <input type="hidden" name="orderby" id="orderbyInput" value="${orderby}">
+                                    <input type="hidden" name="order" id="orderInput" value="${order}">
+                                    <input type="hidden" id="currentPage" name="currentPage" value="${currentPage}">
+                                    <input type="hidden" id="targetPage" name="targetPage" value="${currentPage}">
+                                    <input type="hidden" name="per_page" id="per_page" value="${searchParams.per_page != null ? searchParams.per_page : '12'}">
+                                    <div id="paginationData"
+                                    data-total-items="${totalHomes != null ? totalHomes : '25'}"
+                                    data-items-per-page="${searchParams.per_page != null ? searchParams.per_page : '12'}">
+                                    </div>
                                     <fieldset >
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <input class="button btn largesearch-btn" value="Search" type="submit">
+                                                <input class="button btn largesearch-btn" value="Tìm kiếm" type="submit">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -232,7 +356,7 @@
 
                         <div class="panel panel-default sidebar-menu wow fadeInRight animated">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Recommended</h3>
+                                <h3 class="panel-title">Đề xuất</h3>
                             </div>
                             <div class="panel-body recent-property-widget">
                                 <ul>
@@ -242,7 +366,7 @@
                                             <span class="property-seeker">
                                                     <b class="b-1">A</b>
                                                     <b class="b-2">S</b>
-                                                </span>
+                                            </span>
                                         </div>
                                         <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
                                             <h6> <a href="single.html">Super nice villa </a></h6>
@@ -282,48 +406,49 @@
                                             <span class="property-seeker">
                                                     <b class="b-1">A</b>
                                                     <b class="b-2">S</b>
-                                                </span>
+                                            </span>
                                         </div>
                                         <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
                                             <h6> <a href="single.html">Super nice villa </a></h6>
                                             <span class="property-price">3000000$</span>
                                         </div>
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-9  pr0 padding-top-40 properties-page">
+                <div class="col-md-9 pr0 padding-top-40 properties-page">
                     <div class="col-md-12 clear">
                         <div class="col-xs-10 page-subheader sorting pl0">
                             <ul class="sort-by-list">
                                 <li class="active">
-                                    <a href="javascript:void(0);" class="order_by_date" data-orderby="property_date" data-order="ASC">
-                                        Property Date <i class="fa fa-sort-amount-asc"></i>
-                                    </a>
+                                    <button type="button" class="sort-button order_by_date ${orderby == 'property_date' ? 'active' : ''}" data-orderby="property_date" data-order="${orderby == 'property_date' ? order : 'ASC'}">
+                                        Ngày đăng <i class="fa ${orderby == 'property_date' ? (order == 'ASC' ? 'fa-up-long' : 'fa-down-long') : 'fa-sort-amount-asc'}"></i>
+                                    </button>
                                 </li>
-                                <li class="">
-                                    <a href="javascript:void(0);" class="order_by_price" data-orderby="property_price" data-order="DESC">
-                                        Property Price <i class="fa fa-sort-numeric-desc"></i>
-                                    </a>
+                                <li>
+                                    <button type="button" class="sort-button order_by_price ${orderby == 'property_price' ? 'active' : ''}" data-orderby="property_price" data-order="${orderby == 'property_price' ? order : 'DESC'}">
+                                        Giá nhà <i class="fa ${orderby == 'property_price' ? (order == 'ASC' ? 'fa-sort-numeric-asc' : 'fa-sort-numeric-desc') : 'fa-sort-numeric-desc'}"></i>
+                                    </button>
                                 </li>
-                            </ul><!--/ .sort-by-list-->
+                            </ul>
+
+                            <c:set var="per_page" value="${searchParams.per_page != null ? searchParams.per_page : '12'}" />
 
                             <div class="items-per-page">
-                                <label for="items_per_page"><b>Property per page :</b></label>
+                                <label for="items_per_page"><b>Số nhà mỗi trang :</b></label>
                                 <div class="sel">
                                     <select id="items_per_page" name="per_page">
-                                        <option value="3">3</option>
-                                        <option value="6">6</option>
-                                        <option value="9">9</option>
-                                        <option selected="selected" value="12">12</option>
-                                        <option value="15">15</option>
-                                        <option value="30">30</option>
-                                        <option value="45">45</option>
-                                        <option value="60">60</option>
+                                        <option value="3" ${per_page == 3 ? 'selected="selected"' : ''}>3</option>
+                                        <option value="6" ${per_page == 6 ? 'selected="selected"' : ''}>6</option>
+                                        <option value="9" ${per_page == 9 ? 'selected="selected"' : ''}>9</option>
+                                        <option value="12" ${per_page == 12 ? 'selected="selected"' : ''}>12</option>
+                                        <option value="15" ${per_page == 15 ? 'selected="selected"' : ''}>15</option>
+                                        <option value="30" ${per_page == 30 ? 'selected="selected"' : ''}>30</option>
+                                        <option value="45" ${per_page == 45 ? 'selected="selected"' : ''}>45</option>
+                                        <option value="60" ${per_page == 60 ? 'selected="selected"' : ''}>60</option>
                                     </select>
                                 </div><!--/ .sel-->
                             </div><!--/ .items-per-page-->
@@ -337,210 +462,30 @@
 
                     <div class="col-md-12 clear">
                         <div id="list-type" class="proerty-th">
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-3.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-2.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
+                            <c:forEach items="${requestScope.homes}" var="homes">
+                                <div class="col-sm-6 col-md-3 p0">
+                                    <div class="box-two proerty-item">
+                                        <div class="item-thumb">
+                                            <!-- Update the href to point to home detail page with home ID -->
+                                            <a href="home-detail?id=${homes.id}">
+                                                <img class="property-image" src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/demo/property-1.jpg'}">
+                                            </a>
+                                        </div>                                        <div class="item-entry overflow">
+                                            <h5><a href="home-detail?id=${homes.id}" class="home-name">${homes.name}</a></h5>
+                                            <div class="dot-hr"></div>
+                                            <span class="pull-left"><b>Area :</b> ${homes.area}</span>
+                                            <span class="proerty-price pull-right">${homes.price}</span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-1.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-3.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-1.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-2.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-3.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-2.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-md-4 p0">
-                                <div class="box-two proerty-item">
-                                    <div class="item-thumb">
-                                        <a href="property-1.html" ><img src="assets/img/demo/property-1.jpg"></a>
-                                    </div>
-
-                                    <div class="item-entry overflow">
-                                        <h5><a href="property-1.html"> Super nice villa </a></h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><b> Area :</b> 120m </span>
-                                        <span class="proerty-price pull-right"> $ 300,000</span>
-                                        <p style="display: none;">Suspendisse ultricies Suspendisse ultricies Nulla quis dapibus nisl. Suspendisse ultricies commodo arcu nec pretium ...</p>
-                                        <div class="property-icon">
-                                            <img src="assets/img/icon/bed.png">(5)|
-                                            <img src="assets/img/icon/shawer.png">(2)|
-                                            <img src="assets/img/icon/cars.png">(1)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </c:forEach>
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="pull-right">
                             <div class="pagination">
-                                <ul>
-                                    <li><a href="#">Prev</a></li>
-                                    <li><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">Next</a></li>
+                                <ul id="paginationLinks">
                                 </ul>
                             </div>
                         </div>
@@ -551,5 +496,235 @@
     </div>
 
     <jsp:include page="footer.jsp"/>
+
+    <script>
+        $(document).ready(function() {
+            function updateItemsPerPage() {
+                var selectedValue = document.getElementById('items_per_page').value;
+                document.getElementById('per_page').value = selectedValue;
+                document.querySelector('form').submit();
+            }
+            $('#items_per_page').on('change', function() {
+                updateItemsPerPage();
+            });
+            var paginationData = document.getElementById('paginationData');
+            var totalItems = parseInt(paginationData.getAttribute('data-total-items')); // Tổng số dữ liệu
+            var itemsPerPage = parseInt(paginationData.getAttribute('data-items-per-page')); // Số dữ liệu mỗi trang
+
+            // Tính tổng số trang dựa trên số lượng dữ liệu
+            var totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            // Số lượng trang tối đa hiển thị liền kề với trang hiện tại
+            var maxVisiblePages = 5;
+
+            function renderPagination(currentPage) {
+                var paginationLinks = document.getElementById('paginationLinks');
+                paginationLinks.innerHTML = ''; // Xóa các link cũ
+
+                // Tạo nút Prev
+                if (currentPage > 1) {
+                    paginationLinks.innerHTML += '<li><a href="#" data-page="prev">Prev</a></li>';
+                }
+
+                // Tính toán khoảng trang hiển thị
+                var startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                // Điều chỉnh nếu endPage chạm giới hạn
+                if (endPage - startPage < maxVisiblePages - 1) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+
+                // Tạo các link trang
+                for (var i = startPage; i <= endPage; i++) {
+                    paginationLinks.innerHTML += '<li><a href="#" data-page="' + i + '"' + (i === currentPage ? ' class="active"' : '') + '>' + i + '</a></li>';
+                }
+
+                // Tạo nút Next
+                if (currentPage < totalPages) {
+                    paginationLinks.innerHTML += '<li><a href="#" data-page="next">Next</a></li>';
+                }
+            }
+
+            // Xử lý sự kiện click pagination
+            document.getElementById('paginationLinks').addEventListener('click', function(event) {
+                event.preventDefault();
+                var clickedPage = event.target.getAttribute('data-page');
+                var currentPage = parseInt(document.getElementById('currentPage').value);
+
+                if (clickedPage === 'prev') {
+                    currentPage = currentPage > 1 ? currentPage - 1 : 1;
+                } else if (clickedPage === 'next') {
+                    currentPage = currentPage < totalPages ? currentPage + 1 : totalPages;
+                } else {
+                    currentPage = parseInt(clickedPage);
+                }
+
+                // Cập nhật hidden input và render lại pagination
+                document.getElementById('currentPage').value = currentPage;
+                document.getElementById('targetPage').value = currentPage;
+                renderPagination(currentPage);
+
+                // Submit form (nếu muốn tải lại dữ liệu mới)
+                document.querySelector('form').submit();
+            });
+
+            // Lấy currentPage từ hidden input (không khởi tạo mặc định là 1 nữa)
+            var currentPage = parseInt(document.getElementById('currentPage').value) || 1;
+
+            // Khởi tạo pagination với currentPage thực sự
+            renderPagination(currentPage);
+
+            function toggleSort(element) {
+                // Toggle the data-order attribute
+                let orderby = element.getAttribute('data-orderby');
+                let currentOrder = element.getAttribute('data-order');
+                let newOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC';
+                element.setAttribute('data-order', newOrder);
+                console.log("Current Order:", currentOrder); // Logging giá trị order cũ
+                console.log("New Order:", newOrder); // Logging giá trị order mới
+                // Update the sort icon
+                let icon = element.querySelector('i');
+                if (icon) {
+                    if (orderby === 'property_date') {
+                        // Xử lý đặc biệt cho icon ngày tháng
+                        icon.classList.toggle('fa-up-long');  // Chuyển đổi fa-up-long
+                        icon.classList.toggle('fa-down-long'); // Chuyển đổi fa-down-long (thêm dòng này)
+                    } else {
+                        // Logic trước đó cho sắp xếp giá (không thay đổi)
+                        let iconBase = 'fa-sort-numeric-';
+                        icon.classList.remove(iconBase + (newOrder === 'ASC' ? 'desc' : 'asc'));
+                        icon.classList.add(iconBase + newOrder.toLowerCase());
+                    }
+                }
+                // Cập nhật giá trị cho hidden inputs
+                let orderbyInput = document.getElementById("orderbyInput");
+                let orderInput = document.getElementById("orderInput");
+
+                if (orderbyInput && orderInput) {
+                    orderbyInput.value = orderby;
+                    orderInput.value = newOrder;
+
+                    console.log("Updated Orderby:", orderbyInput.value); // Debug giá trị orderby
+                    console.log("Updated Order:", orderInput.value);     // Debug giá trị order
+
+                } else {
+                    console.error("Hidden inputs not found"); // Lỗi nếu không tìm thấy input hidden
+                }
+
+                // Add 'active' class to the currently clicked button and remove from others
+                document.querySelectorAll('.sort-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                element.classList.add('active');
+                // Submit form sau khi đã xử lý sắp xếp
+                document.querySelector('form').submit();
+            }
+
+            document.querySelectorAll('.sort-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default action if necessary
+                    toggleSort(button);
+                });
+            });
+
+
+            function adjustNameDisplay() {
+                var isGridActive = document.querySelector('.layout-grid').classList.contains('active');
+
+                if (isGridActive) {
+                    document.querySelectorAll('.home-name').forEach(function(el) {
+                        el.classList.add('two-line'); // Thêm class giới hạn 2 dòng
+                    });
+                } else {
+                    document.querySelectorAll('.home-name').forEach(function(el) {
+                        el.classList.remove('two-line'); // Hiển thị đầy đủ tên khi ở chế độ list
+                    });
+                }
+            }
+            adjustNameDisplay();
+            document.querySelector('.layout-grid').addEventListener('click', function() {
+                this.classList.add('active');
+                document.querySelector('.layout-list').classList.remove('active');
+                adjustNameDisplay(); // Điều chỉnh hiển thị tên
+            });
+
+            document.querySelector('.layout-list').addEventListener('click', function() {
+                this.classList.add('active');
+                document.querySelector('.layout-grid').classList.remove('active');
+                adjustNameDisplay(); // Điều chỉnh hiển thị tên
+            });
+
+            // Khi tỉnh được chọn
+            $('#province').change(function() {
+                var provinceId = $(this).val();
+
+                // Gửi yêu cầu AJAX để lấy danh sách quận huyện
+                $.ajax({
+                    url: 'getDistricts', // Địa chỉ đến servlet hoặc API
+                    type: 'GET',
+                    data: { provinceId: provinceId },
+                    success: function(data) {
+                        var selectedDistrict = $('#selectedDistrict').val();
+                        $('#district').empty(); // Xóa danh sách quận huyện cũ
+                        $('#district').append('<option value="" selected>Chọn quận huyện</option>');
+                        $.each(data, function(index, district) {
+                            var selected = district.id == selectedDistrict;
+                            $('#district').append(
+                                $('<option></option>').val(district.id).text(district.name).prop('selected', selected)
+                            );
+                        });
+                        if (selectedDistrict) {
+                            $('#district').val(selectedDistrict).change(); // Cập nhật giá trị và kích hoạt sự kiện change
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Có lỗi xảy ra:', error);
+                    }
+                });
+            });
+
+            // Khi quận huyện được chọn
+            $('#district').change(function() {
+                var districtId = $(this).val();
+
+                // Gửi yêu cầu AJAX để lấy danh sách phường xã
+                $.ajax({
+                    url: 'getWards', // Địa chỉ đến servlet hoặc API
+                    type: 'GET',
+                    data: { districtId: districtId },
+                    success: function(data) {
+                        var selectedWard = $('#selectedWard').val();
+                        $('#ward').empty(); // Xóa danh sách phường xã cũ
+                        $('#ward').append('<option value="" selected>Chọn phường xã</option>');
+                        $.each(data, function(index, ward) {
+                            var selected = ward.id == selectedWard;
+                            $('#ward').append(
+                                $('<option></option>').val(ward.id).text(ward.name).attr('selected', selected)
+                            );
+                        });
+                        if (selectedWard) {
+                            $('#ward').val(selectedWard);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Có lỗi xảy ra:', error);
+                    }
+                });
+            });
+
+            // Tự động gọi thay đổi tỉnh thành nếu có giá trị sẵn
+            var selectedProvince = $('#province').val();
+            if (selectedProvince) {
+                $('#province').val(selectedProvince).trigger('change');
+            }
+
+            var selectedDistrict = $('#selectedDistrict').val();
+            if (selectedDistrict) {
+                $('#district').val(selectedDistrict).trigger('change'); // Cũng kích hoạt để cập nhật ward nếu có
+            }
+        });
+
+    </script>
 </body>
 </html>

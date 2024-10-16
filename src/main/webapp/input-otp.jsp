@@ -30,7 +30,7 @@
             <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
-                        <h3 class="text-muted">Nhập mã xác thực được gửi qua email hoặc số điện thoại của bạn.</h3>
+                        <h3 class="text-muted">Nhập mã xác thực được gửi qua email của bạn.</h3>
                     </div>
                     <div class="panel-body">
                         <form action="verify" method="post" onsubmit="return validateForm()">
@@ -53,7 +53,7 @@
                         <!-- Thêm liên kết Gửi lại OTP -->
                         <div class="text-center">
                             <p>Không nhận được OTP?</p>
-                            <a href="resend-otp?userId=${sessionScope.userId}" class="btn btn-link">Gửi lại OTP</a>
+                            <a href="resend-otp?userId=${sessionScope.userId}" class="btn btn-link" id="resendOtpLink" style="pointer-events: none; opacity: 0.5;">Gửi lại OTP (<span id="countdown">60</span>s)</a>
                         </div>
                     </div>
                 </div>
@@ -82,6 +82,26 @@
     }
 %>
 <script>
+    $(document).ready(function () {
+        var countdownElement = document.getElementById('countdown');
+        var resendOtpLink = document.getElementById('resendOtpLink');
+        var countdownTime = 60; // Thời gian đếm ngược, 60 giây
+
+        var countdownInterval = setInterval(function () {
+            countdownTime--;
+            countdownElement.textContent = countdownTime;
+
+            if (countdownTime <= 0) {
+                clearInterval(countdownInterval);
+                // Kích hoạt lại liên kết "Gửi lại OTP"
+                resendOtpLink.classList.remove('disabled');  // Loại bỏ lớp disabled
+                resendOtpLink.style.pointerEvents = 'auto';  // Bật lại sự kiện click
+                resendOtpLink.textContent = 'Gửi lại OTP';  // Thay đổi văn bản liên kết
+            }
+        }, 1000);
+    });
+
+
     function validateForm() {
         let otp = document.getElementById("otp").value;
         // Check otp length

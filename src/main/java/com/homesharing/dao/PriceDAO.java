@@ -18,4 +18,8 @@ public interface PriceDAO {
      */
     List<Price> getPrices(List<Home> homes);
     int savePrice(Price price);
+
+    int getMinPrice();
+    int getMaxPrice();
+
 }

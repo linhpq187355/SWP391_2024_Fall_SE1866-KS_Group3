@@ -11,7 +11,6 @@ package com.homesharing.service.impl;
 
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
@@ -24,34 +23,44 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
- * This class implements the TokenService interface to handle
- * email verification token-related logic, including checking
- * token validity and sending verification emails.
+ * Implementation of the {@link TokenService} interface. This class handles
+ * email verification token logic, including generation, validation, and sending
+ * verification emails.
+ *
  * @author ManhNC
  */
 public class TokenServiceImpl implements TokenService {
 
     private final TokenDAO tokenDao;
     private UserDAO userDao;
+
     /**
-     * Constructor that initializes the TokenDAO.
+     * Constructs a new TokenServiceImpl with the provided TokenDAO.
      *
-     * @param tokenDao The data access object used for token operations.
+     * @param tokenDao The data access object for token operations. Should not be null.
      */
     public TokenServiceImpl(TokenDAO tokenDao) {
         this.tokenDao = tokenDao;
     }
 
+    /**
+     * Sets the UserDAO for user-related operations.
+     *
+     * @param userDao The data access object for user operations.  Should not be null.
+     */
     public void setUserDao(UserDAO userDao) {
         this.userDao = userDao;
     }
 
     /**
-     * Checks if a given token is valid and updates the verification status if necessary.
+     * Checks if a given token is valid for a specific user within a time window.
      *
-     * @param tokenCode The token code provided by the user.
-     * @param userID    The ID of the user whose token is being checked.
-     * @return True if the token is valid, false otherwise.
+     * @param tokenCode    The token code to validate.
+     * @param userID       The ID of the user associated with the token.
+     * @param requestedTime The time the token was requested. This is used to check for expiry.
+     * @return {@code true} if the token is valid and within the time window, {@code false} otherwise.
+     * @throws RuntimeException If an unexpected error occurs.
+     * @throws SQLException If a database access error occurs during token retrieval.
      */
     @Override
     public boolean checkToken(String tokenCode, int userID, LocalDateTime requestedTime) throws RuntimeException, SQLException {
@@ -83,10 +92,14 @@ public class TokenServiceImpl implements TokenService {
     }
 
     /**
-     * Sends a verification email to the user with a token link.
+     * Sends a verification email containing a token to the specified user.
+     * Generates a new token or updates an existing one, then sends an email
+     * with the token to the user's email address.
      *
-     * @param email  The user's email address.
-     * @param userId The ID of the user receiving the email.
+     * @param email  The user's email address. Should not be null or empty.
+     * @param userId The ID of the user.
+     * @throws SQLException If a database error occurs during token operations.
+     * @throws GeneralException If sending the email fails.
      */
     @Override
     public void sendToken(String email, int userId) throws SQLException {
@@ -95,6 +108,7 @@ public class TokenServiceImpl implements TokenService {
         LocalDateTime requestedTime;
         tokenCode = SecureRandomCode.generateCode();
         requestedTime = LocalDateTime.now();
+
         if (oldToken != null) {
             tokenDao.updateToken(userId, tokenCode, requestedTime);
         } else {
@@ -102,6 +116,7 @@ public class TokenServiceImpl implements TokenService {
             Token newToken = new Token(userId, tokenCode, requestedTime, false);
             tokenDao.insertToken(newToken);
         }
+
         // Get base URL from properties
         String subject = "Xac nhan email!!!";
         String content = "<!DOCTYPE html>"

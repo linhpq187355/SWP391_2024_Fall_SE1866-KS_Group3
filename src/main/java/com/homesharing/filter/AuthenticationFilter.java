@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-10      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.filter;
 
 import com.homesharing.util.CookieUtil;
@@ -6,128 +15,91 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Authentication filter for intercepting requests and enforcing authentication.
+ * This filter checks for the presence of user ID and email in cookies to determine if a user is logged in.
+ * If not logged in, the user is redirected to the login page.
+ * @author ManhNC
+ */
 @WebFilter(urlPatterns = {"/*"})
 @Priority(1)
 public class AuthenticationFilter implements Filter {
 
+    private static final List<String> excludedUrls = Arrays.asList(
+            "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/","/set-role",
+            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google",
+            "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp","/error.jsp","/home-list",
+            "/terms.jsp", "/announce.jsp", "/about-us.jsp", "/404.jsp", "/input-otp.jsp","/input-otp-2.jsp");
+
     /**
-     * <p>
-     * Called by the web container to indicate to a filter that it is being placed into service.
-     * </p>
+     * Initializes the filter.  This method is called by the servlet container only once upon filter creation.
      *
-     * <p>
-     * The servlet container calls the init method exactly once after instantiating the filter. The init method must
-     * complete successfully before the filter is asked to do any filtering work. The container will ensure that actions
-     * performed in the <code>init</code> method will be visible to any threads that subsequently call the
-     * <code>doFilter</code> method according to the rules in JSR-133 (i.e. there is a 'happens before' relationship between
-     * <code>init</code> and <code>doFilter</code>).
-     * </p>
-     *
-     * <p>
-     * The web container cannot place the filter into service if the init method either
-     * </p>
-     * <ol>
-     * <li>Throws a ServletException
-     * <li>Does not return within a time period defined by the web container
-     * </ol>
-     *
-     * @param filterConfig a <code>FilterConfig</code> object containing the filter's configuration and initialization
-     *                     parameters
-     * @throws ServletException if an exception has occurred that interferes with the filter's normal operation
-     * @implSpec The default implementation takes no action.
+     * @param filterConfig The FilterConfig object containing configuration information.
+     * @throws ServletException If an error occurs during initialization.
      */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        Filter.super.init(filterConfig);
+        // No specific initialization needed for this filter.
     }
 
     /**
-     * The <code>doFilter</code> method of the Filter is called by the container each time a request/response pair is passed
-     * through the chain due to a client request for a resource at the end of the chain. The FilterChain passed in to this
-     * method allows the Filter to pass on the request and response to the next entity in the chain.
+     * Performs the filtering logic for each request. Checks for user authentication based on cookies.
+     * If the user is not authenticated and the request is not for an excluded URL,
+     * the user is redirected to the login page.
      *
-     * <p>
-     * A typical implementation of this method would follow the following pattern:
-     * <ol>
-     * <li>Examine the request
-     * <li>Optionally wrap the request object with a custom implementation to filter content or headers for input filtering
-     * <li>Optionally wrap the response object with a custom implementation to filter content or headers for output
-     * filtering
-     * <li>
-     * <ul>
-     * <li><strong>Either</strong> invoke the next entity in the chain using the FilterChain object
-     * (<code>chain.doFilter()</code>),
-     * <li><strong>or</strong> not pass on the request/response pair to the next entity in the filter chain to block the
-     * request processing
-     * </ul>
-     * <li>Directly set headers on the response after invocation of the next entity in the filter chain.
-     * </ol>
-     *
-     * @param request  the <code>ServletRequest</code> object contains the client's request
-     * @param response the <code>ServletResponse</code> object contains the filter's response
-     * @param chain    the <code>FilterChain</code> for invoking the next filter or the resource
-     * @throws IOException      if an I/O related error has occurred during the processing
-     * @throws ServletException if an exception occurs that interferes with the filter's normal operation
-     * @see UnavailableException
+     * @param request  The ServletRequest object.
+     * @param response The ServletResponse object.
+     * @param chain    The FilterChain object to continue the request processing.
+     * @throws IOException      If an I/O error occurs.
+     * @throws ServletException If a servlet error occurs.
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // Lấy thông tin từ URI của request
         String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
+        System.out.println("Requested URL Path: " + path);
 
-        // Danh sách các URL muốn bỏ qua (ví dụ: trang login, register, và các tài nguyên tĩnh)
-        List<String> excludedUrls = Arrays.asList("/login.jsp", "/register.jsp", "/css/", "/js/", "/images/","/home-page","/login","/logout","/signup","/staff-login","/verify","/sign-up-google", "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp", "/terms.jsp","/announce.jsp", "/about-us.jsp", "/404.jsp", "/input-otp.jsp");
-
-        // Nếu URL nằm trong danh sách bỏ qua, không thực hiện lọc
-        boolean isExcluded = excludedUrls.stream().anyMatch(path::startsWith);
-        if (isExcluded) {
-            chain.doFilter(request, response);  // Bỏ qua authen cho các URL này
+        // Check if the URL should be excluded from authentication checks
+        if (isUrlExcluded(path)) {
+            chain.doFilter(request, response);
             return;
         }
 
-        // Lấy thông tin từ cookie
+        // Check if user is logged in (based on cookies)
         String userId = CookieUtil.getCookie(httpRequest, "id");
         String email = CookieUtil.getCookie(httpRequest, "email");
 
-        // Kiểm tra xem user đã đăng nhập (dựa trên cookie 'id' và 'email')
         if (userId != null && email != null) {
-            // Người dùng đã đăng nhập, tiếp tục request
+            // User is logged in, continue request processing
             chain.doFilter(request, response);
         } else {
-            // Chưa đăng nhập, chuyển hướng về trang đăng nhập
+            // User is not logged in, redirect to login page
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
         }
     }
 
     /**
-     * <p>
-     * Called by the web container to indicate to a filter that it is being taken out of service.
-     * </p>
-     *
-     * <p>
-     * This method is only called once all threads within the filter's doFilter method have exited or after a timeout period
-     * has passed. After the web container calls this method, it will not call the doFilter method again on this instance of
-     * the filter.
-     * </p>
-     *
-     * <p>
-     * This method gives the filter an opportunity to clean up any resources that are being held (for example, memory, file
-     * handles, threads) and make sure that any persistent state is synchronized with the filter's current state in memory.
-     * </p>
-     *
-     * @implSpec The default implementation takes no action.
+     * Called by the servlet container to indicate to a filter that it is being taken out of service.
+     * This method is only called once all threads within the filter's doFilter method have exited
+     * or after a timeout period has passed.
      */
     @Override
     public void destroy() {
-        Filter.super.destroy();
+        // No specific cleanup needed for this filter.
     }
 
+    /**
+     * Checks if the given URL path should be excluded from authentication filtering.
+     * @param path The URL path to check.
+     * @return True if the URL should be excluded, false otherwise.
+     */
+    private boolean isUrlExcluded(String path) {
+        return excludedUrls.stream().anyMatch(path::startsWith);
+    }
 }
