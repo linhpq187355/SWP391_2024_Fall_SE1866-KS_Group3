@@ -38,7 +38,7 @@ public Home getHomeById(int id) {
             home.setOrientation(resultSet.getString("orientation"));
             home.setArea(resultSet.getBigDecimal("area"));
             home.setLeaseDuration(resultSet.getInt("leaseDuration"));
-            home.setMoveInDate(resultSet.getTimestamp("moveInDate").toLocalDateTime());
+            home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
             home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
             home.setNumOfBath(resultSet.getInt("numOfBath"));
             home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());

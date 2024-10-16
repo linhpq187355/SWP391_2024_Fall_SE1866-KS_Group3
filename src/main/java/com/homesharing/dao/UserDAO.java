@@ -1,3 +1,14 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ */
+
 package com.homesharing.dao;
 
 import com.homesharing.model.User;
@@ -74,4 +85,20 @@ public interface UserDAO {
      * @return The number of rows affected by the password update.
      */
     int resetPassword(String password, int id);
+
+    int getNumberUsers();
+    /**
+     * Updates the matching profile of a user in the database.
+     *
+     * @param user The {@link User} object containing updated matching profile information.
+     * @return The number of rows affected by the update operation.
+     */
+    int updateMatchingProfile(User user);
+    /**
+     * Retrieves the matching user profile based on the unique ID.
+     *
+     * @param id The unique ID of the user whose matching profile is to be retrieved.
+     * @return The {@link User} object corresponding to the matching profile ID, or {@code null} if no user is found.
+     */
+    User getMatchingUserProfile(int id);
 }

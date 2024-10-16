@@ -1,3 +1,14 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ */
+
 package com.homesharing.service;
 
 import com.homesharing.model.User;
@@ -96,4 +107,21 @@ public interface UserService {
      * @return The number of rows affected by the password reset (1 if successful, 0 if unsuccessful).
      */
     int resetUserPassword(int userId, String newPassword);
+
+    int getNumberOfUsers();
+
+    /**
+     * Updates the matching profile for a user based on the provided criteria.
+     *
+     * @param dob              The date of birth to be updated.
+     * @param gender           The gender to be updated.
+     * @param rawHowLong      The duration of how long the user has lived at their current residence.
+     * @param emvdate         The move-in date.
+     * @param lmvdate         The last move-out date.
+     * @param rawMinBudget    The minimum budget for housing.
+     * @param rawMaxBudget    The maximum budget for housing.
+     * @param userId          The ID of the user whose profile is to be updated.
+     * @return An integer indicating the result of the update operation (e.g., number of rows affected).
+     */
+    int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId);
 }

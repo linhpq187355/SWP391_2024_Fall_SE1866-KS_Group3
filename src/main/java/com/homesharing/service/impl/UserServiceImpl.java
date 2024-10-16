@@ -1,3 +1,14 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ */
+
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.TokenDAO;
@@ -334,5 +345,50 @@ public class UserServiceImpl implements UserService {
             throw new GeneralException("Error resetting password for user ID: " + userId, e);
         }
     }
+
+    @Override
+    public int getNumberOfUsers() {
+        try {
+            return userDao.getNumberUsers();
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total user: ", e);
+            throw new GeneralException("Failed to retrieve total user: ", e);
+        }
+    }
+
+    /**
+     * Updates the matching profile for a user.
+     *
+     * @param dob             The user's date of birth.
+     * @param gender          The user's gender.
+     * @param rawHowLong      The duration preference of the user.
+     * @param emvdate        The earliest move-in date preference of the user.
+     * @param lmvdate        The latest move-in date preference of the user.
+     * @param rawMinBudget   The minimum budget preference of the user.
+     * @param rawMaxBudget   The maximum budget preference of the user.
+     * @param userId         The ID of the user to update.
+     * @return The number of rows affected by the update.
+     * @throws GeneralException if an error occurs during the update.
+     */
+    @Override
+    public int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId) {
+        try {
+            User user = new User();
+            user.setDob(LocalDate.parse(dob));
+            user.setGender(gender);
+            user.setId(Integer.parseInt(userId));
+            user.setDuration(rawHowLong);
+            user.setEarliestMoveIn(LocalDate.parse(emvdate));
+            user.setLatestMoveIn(LocalDate.parse(lmvdate));
+            user.setMinBudget(Integer.parseInt(rawMinBudget));
+            user.setMaxBudget(Integer.parseInt(rawMaxBudget));
+
+            return userDao.updateMatchingProfile(user);
+
+        } catch (Exception e) {
+            throw new GeneralException("Failed to update user matching profile", e);
+        }
+    }
+
 
 }

@@ -1,3 +1,14 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ */
+
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -7,6 +18,7 @@ import com.homesharing.model.Preference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,6 +66,8 @@ public class PreferenceDAOImpl extends DBContext implements PreferenceDAO {
                         ? resultSet.getInt("interaction") : 100);
                 preference.setCooking(resultSet.getObject("cooking", Integer.class) != null
                         ? resultSet.getInt("cooking") : 100);
+                preference.setGuest(resultSet.getObject("guests", Integer.class) != null
+                        ? resultSet.getInt("guests") : 100);
                 preference.setPet(resultSet.getObject("pet", Integer.class) != null
                         ? resultSet.getInt("pet") : 100);
                 return preference;
@@ -149,6 +163,127 @@ public class PreferenceDAOImpl extends DBContext implements PreferenceDAO {
             }
         }
         return rowsUpdated;
+    }
+
+    /**
+     * Updates the preferences for a specific user based on the Preference object.
+     *
+     * @param preference the Preference object containing updated preference values
+     * @return the number of rows updated in the database
+     */
+    @Override
+    public int updatePreference(Preference preference) {
+        if (preference == null) {
+            LOGGER.warn("Preference is null. No updates will be made.");
+            return 0;
+        }
+
+        int rowsUpdated = 0;
+        String sql = "UPDATE [dbo].[Preferences]\n" +
+                "   SET [cleanliness] = ?\n" +
+                "      ,[smoking] = ?\n" +
+                "      ,[drinking] = ?\n" +
+                "      ,[interaction] = ?\n" +
+                "      ,[guests] = ?\n" +
+                "      ,[cooking] = ?\n" +
+                "      ,[pet] = ?\n" +
+                " WHERE usersId = ?";
+
+        // Add the user_id at the end
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, preference.getCleanliness());
+            preparedStatement.setInt(2,preference.getSmoking());
+            preparedStatement.setInt(3,preference.getDrinking());
+            preparedStatement.setInt(4,preference.getInteraction());
+            preparedStatement.setInt(5,preference.getGuest());
+            preparedStatement.setInt(6,preference.getCooking());
+            preparedStatement.setInt(7,preference.getPet());
+            preparedStatement.setInt(8,preference.getUserId());
+            // Execute the update and get the number of rows updated
+            rowsUpdated = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("SQL error occurred while updating user preferences: {}", e.getMessage());
+            throw new GeneralException("Error updating user preferences: " + e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error occurred: {}", e.getMessage());
+            throw new GeneralException("Error updating user preferences: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return rowsUpdated;
+    }
+
+    /**
+     * Lists all matching preferences for users, excluding the specified user ID.
+     *
+     * @param userId the ID of the user to exclude from the results
+     * @return a list of Preference objects that match the criteria
+     */
+    @Override
+    public List<Preference> listMatchingPreference(int userId) {
+        List<Preference> list = new ArrayList<>();
+        String sql = "select *\n" +
+                "from Preferences\n" +
+                "where usersId in (\n" +
+                "\tselect id\n" +
+                "\tfrom HSS_Users\n" +
+                "\twhere rolesId = 4 and id != ?\n" +
+                ")";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Preference preference = new Preference();
+                preference.setId(resultSet.getInt("id"));
+                preference.setCleanliness(resultSet.getInt("cleanliness"));
+                preference.setSmoking(resultSet.getInt("smoking"));
+                preference.setDrinking(resultSet.getInt("drinking"));
+                preference.setInteraction(resultSet.getInt("interaction"));
+                preference.setGuest(resultSet.getInt("guests"));
+                preference.setCooking(resultSet.getInt("cooking"));
+                preference.setPet(resultSet.getInt("pet"));
+                preference.setUserId(resultSet.getInt("usersId"));
+                list.add(preference);
+            }
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            throw new GeneralException("Error: ", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return list;
     }
 
     /**

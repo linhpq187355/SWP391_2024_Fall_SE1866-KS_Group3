@@ -94,6 +94,8 @@
 
 
 <!-- property area -->
+
+
 <div class="content-area recent-property" style="background-color: #FCFCFC; padding-bottom: 55px;">
     <div class="container">
         <div class="row">
@@ -140,20 +142,90 @@
             </div>
         </div>
 
-                <div class="col-sm-6 col-md-3 p0">
-                    <div class="box-tree more-proerty text-center">
-                        <div class="item-tree-icon">
-                            <i class="fa fa-th"></i>
-                        </div>
-                        <div class="more-entry overflow">
-                            <h5><a href="property-1.html" >CAN'T DECIDE ? </a></h5>
-                            <h5 class="tree-sub-ttl">Show all properties</h5>
-                            <button class="btn border-btn more-black" value="All properties">All properties</button>
-                        </div>
-                    </div>
+        <div class="col-sm-6 col-md-3 p0">
+            <div class="box-tree more-proerty text-center">
+                <div class="item-tree-icon">
+                    <i class="fa fa-th"></i>
+                </div>
+                <div class="more-entry overflow">
+                    <h5><a href="property-1.html" >Chưa ưng ý? </a></h5>
+                    <h5 class="tree-sub-ttl">Xem tất cả bài đăng</h5>
+                    <button class="btn border-btn more-black" value="All properties">Tất cả bài đăng</button>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+    <c:if test="${cookie.roleId.value ==3 || empty cookie.id}">
+        <div class="content-area recent-property" style="background-color: #FCFCFC; padding-bottom: 55px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
+                    <h2>Phù hợp với bạn</h2>
+                </div>
+            </div>
+            <c:if test="${not empty cookie.id}">
+                <c:if test="${requestScope.preference.cleanliness != 100}">
+                    <div style="position: absolute;top: 2410px;left: 1120px;border: solid 1px;border-radius: 8.5px;padding: 5px;color: darkgoldenrod;cursor: pointer;" onclick="window.location.href='update-matching-profile'">
+                        Thay đổi thông tin ghép nối
+                    </div>
+                    <c:if test="${not empty requestScope.matchingHomes}">
+                        <div class="row">
+                            <div class="proerty-th">
+                                <c:forEach items="${requestScope.matchingHomes}" var="matchingHomes">
+                                    <div class="col-sm-6 col-md-3 p0">
+                                        <div class="box-two proerty-item">
+                                            <div class="item-thumb">
+                                                <!-- Update the href to point to home detail page with home ID -->
+                                                <a href="home-detail?id=${matchingHomes.id}"><img src="assets/img/demo/property-1.jpg"></a>
+                                            </div>
+                                            <div class="item-entry overflow">
+                                                <h5><a href="home-detail?id=${matchingHomes.id}">${matchingHomes.address}</a></h5>
+                                                <div class="dot-hr"></div>
+                                                <span class="pull-left"><b>Area :</b> ${matchingHomes.area}</span>
+                                                <c:forEach items="${requestScope.matchingHomePrice}" var="matchingHomePrice">
+                                                    <c:if test="${matchingHomePrice.homesId == matchingHomes.id}">
+                                                        <span class="proerty-price pull-right">${matchingHomePrice.price}</span>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 p0">
+                            <div class="box-tree more-proerty text-center">
+                                <div class="item-tree-icon">
+                                    <i class="fa fa-th"></i>
+                                </div>
+                                <div class="more-entry overflow">
+                                    <h5><a href="property-1.html" >Chưa ưng ý? </a></h5>
+                                    <h5 class="tree-sub-ttl">Xem tất cả bài đăng</h5>
+                                    <button class="btn border-btn more-black" value="All properties">Tất cả bài đăng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${empty requestScope.matchingHomes}">
+                        <h4 style="text-align: center;">Rất tiếc! Chưa có bài đăng nào phù hợp với bạn. Bạn có thể lọc bài đăng <a>tại đây</a></h4>
+                    </c:if>
+                </c:if>
+                <c:if test="${requestScope.preference.cleanliness == 100}">
+                    <h4 style="text-align: center">Bạn chưa cài đặt thông tin ghép nối, vui lòng cài đặt <a href="matching">tại đây</a></h4>
+                </c:if>
+            </c:if>
+            <c:if test="${empty cookie.id}">
+                <h4 style="text-align: center">Bạn chưa đăng nhập, vui lòng đăng nhập <a href="login">tại đây</a></h4>
+            </c:if>
+        </div>
+    </div>
+    </c:if>
+
+
+
 
 <!--Welcome area -->
 <div class="Welcome-area">
@@ -239,7 +311,7 @@
                                 <span class="pe-7s-users"></span>
                             </div>
                             <div class="chart" data-percent="5000">
-                                <h2 class="percent" id="counter">0</h2>
+                                <h2>${requestScope.totalUser}</h2>
                                 <h5>Người dùng </h5>
                             </div>
                         </div>
@@ -250,8 +322,8 @@
                                 <span class="pe-7s-home"></span>
                             </div>
                             <div class="chart" data-percent="12000">
-                                <h2 class="percent" id="counter1">0</h2>
-                                <h5>Bài đăng</h5>
+                                <h2>${requestScope.totalHomes}</h2>
+                                <h5>Bài đăng </h5>
                             </div>
                         </div>
                     </div>

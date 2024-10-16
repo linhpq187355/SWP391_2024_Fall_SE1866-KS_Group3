@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -55,7 +56,7 @@ public class HomeDetailServlet extends HttpServlet {
         List<Amentity> amentities = homeDetailService.getHomeAmenitiesByHomeId(homeId);
         List<FireEquipment> fireEquipments = homeDetailService.getHomeFireEquipmentsByHomeId(homeId);
 
-        LocalDateTime moveInDate = home.getMoveInDate();
+        LocalDate moveInDate = home.getMoveInDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         String formattedMoveInDate = (moveInDate != null) ? moveInDate.format(formatter) : "Chưa có thông tin";

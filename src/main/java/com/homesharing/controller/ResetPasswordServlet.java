@@ -1,3 +1,13 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0             Pham Quang Linh      First Implement
+ */
+
 package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDAO;
@@ -109,7 +119,7 @@ public class ResetPasswordServlet extends HttpServlet {
                 int result = userService.resetUserPassword(userId, newPassword);
                 if (result > 0) {
                     req.setAttribute("message", "Mật khẩu đã được đặt lại thành công."); // Set success message
-                    req.getRequestDispatcher("login.jsp").forward(req, resp); // Forward to login page
+                    req.getRequestDispatcher("reset-password.jsp").forward(req, resp); // Forward to login page
                 } else {
                     req.setAttribute("userId", userIdString);
                     req.setAttribute("error", "Có lỗi xảy ra khi đặt lại mật khẩu."); // Set error message for reset failure

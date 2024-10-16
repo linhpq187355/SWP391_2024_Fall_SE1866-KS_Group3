@@ -40,4 +40,6 @@ public interface HomeDetailService {
     List<Amentity> getHomeAmenitiesByHomeId(int homeId);
 
     List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
+
+
 }

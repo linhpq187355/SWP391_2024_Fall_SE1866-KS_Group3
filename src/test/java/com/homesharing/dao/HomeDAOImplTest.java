@@ -140,6 +140,93 @@ public class HomeDAOImplTest {
         verify(preparedStatement).executeQuery();
     }
 
+    @Test
+    public void testGetMatchingHomes_Success() throws SQLException, IOException, ClassNotFoundException {
+        int[] matchingHost = {1, 2};
+        List<Home> expectedHomes = new ArrayList<>();
 
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        // Simulate resultSet with 2 records
+        when(resultSet.next()).thenReturn(true, true, false);
+        when(resultSet.getInt("id")).thenReturn(1, 2);
+        when(resultSet.getString("name")).thenReturn("Home1", "Home2");
+        when(resultSet.getString("address")).thenReturn("123 Main St", "456 Elm St");
+        when(resultSet.getBigDecimal("area")).thenReturn(BigDecimal.valueOf(100.5), BigDecimal.valueOf(150.75));
+        when(resultSet.getInt("leaseDuration")).thenReturn(12, 24);
+        when(resultSet.getDate("moveInDate")).thenReturn(
+                java.sql.Date.valueOf(LocalDateTime.now().toLocalDate())
+        );
+
+        // Call the method
+        List<Home> homes = homeDAO.getMatchingHomes(matchingHost);
+
+        // Verify the results
+        assertEquals(2, homes.size());
+        assertEquals(1, homes.get(0).getId());
+        assertEquals("Home1", homes.get(0).getName());
+        assertEquals("123 Main St", homes.get(0).getAddress());
+        assertEquals(BigDecimal.valueOf(100.5), homes.get(0).getArea());
+        assertEquals(12, homes.get(0).getLeaseDuration());
+        assertNotNull(homes.get(0).getMoveInDate());
+
+        assertEquals(2, homes.get(1).getId());
+        assertEquals("Home2", homes.get(1).getName());
+        assertEquals("456 Elm St", homes.get(1).getAddress());
+        assertEquals(BigDecimal.valueOf(150.75), homes.get(1).getArea());
+        assertEquals(24, homes.get(1).getLeaseDuration());
+        assertNotNull(homes.get(1).getMoveInDate());
+
+        verify(resultSet, times(3)).next();
+        verify(resultSet, times(2)).getInt("id");
+        verify(resultSet, times(2)).getString("name");
+        verify(resultSet, times(2)).getString("address");
+        verify(resultSet, times(2)).getBigDecimal("area");
+        verify(resultSet, times(2)).getInt("leaseDuration");
+        verify(resultSet, times(2)).getDate("moveInDate");
+    }
+
+    @Test
+    public void testGetMatchingHomes_NullInput() {
+        int[] matchingHost = null;
+
+        // Call the method
+        List<Home> homes = homeDAO.getMatchingHomes(matchingHost);
+
+        // Verify the result is null
+        assertEquals(null, homes);
+    }
+
+    @Test
+    public void testGetMatchingHomes_EmptyArray() {
+        int[] matchingHost = {};
+
+        // Call the method
+        List<Home> homes = homeDAO.getMatchingHomes(matchingHost);
+
+        // Verify the result is null
+        assertEquals(null, homes);
+    }
+
+    @Test
+    public void testGetMatchingHomes_SQLException() throws SQLException, IOException, ClassNotFoundException {
+        int[] matchingHost = {1, 2};
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+
+        // Simulate SQLException
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
+
+        // Verify that a RuntimeException is thrown
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            homeDAO.getMatchingHomes(matchingHost);
+        });
+
+        assertTrue(exception.getMessage().contains("Error retrieving homes from the database"));
+
+        // Verify that executeQuery() was called
+        verify(preparedStatement).executeQuery();
+    }
 
 }

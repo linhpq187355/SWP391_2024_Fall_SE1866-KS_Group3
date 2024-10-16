@@ -1,3 +1,13 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ */
+
 package com.homesharing.model;
 
 public class Preference {
@@ -9,6 +19,7 @@ public class Preference {
     private int interaction;
     private int cooking;
     private int pet;
+    private int guest;
 
     public int getId() {
         return id;
@@ -72,5 +83,12 @@ public class Preference {
 
     public void setPet(int pet) {
         this.pet = pet;
+    }
+
+    public int getGuest() {
+        return guest;
+    }
+    public void setGuest(int guest) {
+        this.guest = guest;
     }
 }

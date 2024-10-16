@@ -3,6 +3,7 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.service.HomePageService;
@@ -28,12 +29,13 @@ public class SearchServlet extends HttpServlet {
     private HomePageService HomePageService;
     private HomeDAO homeDAO;
     private PriceDAO priceDAO;
+    private UserDAO userDao;
     private HomePageService homePageService;
 
     @Override
     public void init() throws ServletException {
         searchService = new SearchServiceImpl();
-        HomePageService = new HomePageServiceImpl(homeDAO, priceDAO);
+        HomePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDao);
     }
 
     @Override

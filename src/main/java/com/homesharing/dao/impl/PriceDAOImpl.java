@@ -1,3 +1,14 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ */
+
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -41,7 +52,7 @@ public class PriceDAOImpl extends DBContext implements PriceDAO {
         }
 
         // Construct SQL query with placeholders for prepared statement
-        StringBuilder sql = new StringBuilder("SELECT id, price, Homesid FROM prices WHERE id IN (");
+        StringBuilder sql = new StringBuilder("SELECT id, price, Homesid FROM prices WHERE Homesid IN (");
 
         // Append placeholders for each home price ID
         for (int i = 0; i < homes.size(); i++) {
@@ -64,7 +75,7 @@ public class PriceDAOImpl extends DBContext implements PriceDAO {
 
             // Set the price ID parameters in the prepared statement
             for (int i = 0; i < homes.size(); i++) {
-                preparedStatement.setInt(i + 1, homes.get(i).getPriceId());
+                preparedStatement.setInt(i + 1, homes.get(i).getId());
             }
 
             resultSet = preparedStatement.executeQuery();

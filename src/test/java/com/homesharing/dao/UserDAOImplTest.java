@@ -287,4 +287,163 @@ class UserDAOImplTest {
         verify(preparedStatement).setString(1, "hashedPassword123");
         verify(preparedStatement).setInt(2, userId);
     }
+
+    @Test
+    public void testUpdateMatchingProfile_Success() throws SQLException {
+        // Set up user data
+        User user = new User();
+        user.setId(1);
+        user.setDob(LocalDate.of(1990, 1, 1));
+        user.setGender("Male");
+        user.setDuration("6 months");
+        user.setMinBudget(500);
+        user.setMaxBudget(1000);
+        user.setEarliestMoveIn(LocalDate.of(2024, 1, 15));
+        user.setLatestMoveIn(LocalDate.of(2024, 3, 15));
+
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+
+        // Mock the execution of the update
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        // Call the method under test
+        int rowsUpdated = userDAO.updateMatchingProfile(user);
+
+        // Verify that the statement was executed with correct parameters
+        verify(preparedStatement).setDate(1, java.sql.Date.valueOf(user.getDob()));
+        verify(preparedStatement).setString(2, user.getGender());
+        verify(preparedStatement).setString(3, user.getDuration());
+        verify(preparedStatement).setInt(4, user.getMinBudget());
+        verify(preparedStatement).setInt(5, user.getMaxBudget());
+        verify(preparedStatement).setDate(6, java.sql.Date.valueOf(user.getEarliestMoveIn()));
+        verify(preparedStatement).setDate(7, java.sql.Date.valueOf(user.getLatestMoveIn()));
+        verify(preparedStatement).setInt(8, user.getId());
+
+        // Assert that the number of rows updated is correct
+        assertEquals(1, rowsUpdated);
+    }
+
+    @Test
+    public void testUpdateMatchingProfile_SQLException() throws SQLException {
+        // Set up user data
+        User user = new User();
+        user.setId(1);
+        user.setDob(LocalDate.of(1990, 1, 1));
+        user.setGender("Male");
+        user.setDuration("6 months");
+        user.setMinBudget(500);
+        user.setMaxBudget(1000);
+        user.setEarliestMoveIn(LocalDate.of(2024, 1, 15));
+        user.setLatestMoveIn(LocalDate.of(2024, 3, 15));
+
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+
+        // Mock the behavior to throw an SQLException
+        doThrow(new SQLException("Database update error")).when(preparedStatement).executeUpdate();
+
+        // Call the method under test and verify that it throws the expected exception
+        Exception exception = assertThrows(GeneralException.class, () -> {
+            userDAO.updateMatchingProfile(user);
+        });
+
+        // Verify that the exception message is correct
+        assertEquals("Error updating user matching profile: Database update error", exception.getMessage());
+
+        // Verify that the statement was executed with correct parameters
+        verify(preparedStatement).setDate(1, java.sql.Date.valueOf(user.getDob()));
+        verify(preparedStatement).setString(2, user.getGender());
+        verify(preparedStatement).setString(3, user.getDuration());
+        verify(preparedStatement).setInt(4, user.getMinBudget());
+        verify(preparedStatement).setInt(5, user.getMaxBudget());
+        verify(preparedStatement).setDate(6, java.sql.Date.valueOf(user.getEarliestMoveIn()));
+        verify(preparedStatement).setDate(7, java.sql.Date.valueOf(user.getLatestMoveIn()));
+        verify(preparedStatement).setInt(8, user.getId());
+    }
+
+    @Test
+    public void testGetMatchingUserProfile_Success() throws SQLException {
+        // Set up the user ID and expected user data
+        int userId = 1;
+        int minBudget = 500;
+        int maxBudget = 1500;
+        String duration = "6 months";
+        LocalDate earliestMoveIn = LocalDate.of(2024, 1, 1);
+        LocalDate latestMoveIn = LocalDate.of(2024, 12, 31);
+
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        String sql = "SELECT [id], [minBudget], [maxBudget], [earliestMoveIn], [latestMoveIn], [duration] FROM [dbo].[HSS_Users] WHERE [id] = ?";
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+
+        // Mock the execution of the query
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("id")).thenReturn(userId);
+        when(resultSet.getInt("minBudget")).thenReturn(minBudget);
+        when(resultSet.getInt("maxBudget")).thenReturn(maxBudget);
+        when(resultSet.getString("duration")).thenReturn(duration);
+        when(resultSet.getDate("earliestMoveIn")).thenReturn(Date.valueOf(earliestMoveIn));
+        when(resultSet.getDate("latestMoveIn")).thenReturn(Date.valueOf(latestMoveIn));
+
+        // Call the method under test
+        User user = userDAO.getMatchingUserProfile(userId);
+
+        // Assert that the returned user is correct
+        assertNotNull(user);
+        assertEquals(userId, user.getId());
+        assertEquals(minBudget, user.getMinBudget());
+        assertEquals(maxBudget, user.getMaxBudget());
+        assertEquals(duration, user.getDuration());
+        assertEquals(earliestMoveIn, user.getEarliestMoveIn());
+        assertEquals(latestMoveIn, user.getLatestMoveIn());
+
+        // Verify that the statement was executed with the correct parameter
+        verify(preparedStatement).setInt(1, userId);
+    }
+
+    @Test
+    public void testGetMatchingUserProfile_UserNotFound() throws SQLException {
+        // Set up the user ID for which no user is found
+        int userId = 1;
+
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+
+        // Mock the execution of the query to return an empty result set
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false);
+
+        // Call the method under test
+        User user = userDAO.getMatchingUserProfile(userId);
+
+        // Assert that the returned user is null (indicating no user was found)
+        assertNull(user);
+
+        // Verify that the statement was executed with the correct parameter
+        verify(preparedStatement).setInt(1, userId);
+    }
+
+    @Test
+    public void testGetMatchingUserProfile_SQLException() throws SQLException {
+        // Set up the user ID for which an exception is thrown
+        int userId = 1;
+
+        // Mock the behavior of prepareStatement to return the preparedStatement
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+
+        // Mock the execution of the query to throw an SQLException
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database query error"));
+
+        // Call the method under test and verify that it throws the expected exception
+        Exception exception = assertThrows(GeneralException.class, () -> {
+            userDAO.getMatchingUserProfile(userId);
+        });
+
+        // Verify that the exception message is correct
+        assertEquals("Error gettinh user matching profile: Database query error", exception.getMessage());
+
+        // Verify that the statement was executed with the correct parameter
+        verify(preparedStatement).setInt(1, userId);
+    }
 }
