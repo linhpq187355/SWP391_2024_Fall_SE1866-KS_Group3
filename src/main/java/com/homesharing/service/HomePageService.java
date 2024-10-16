@@ -1,10 +1,12 @@
 /*
- * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  * 2024-10-10      1.0                 ManhNC         Implement search service
  */
 package com.homesharing.service;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Interface for the HomePageService.
+ * This interface defines the methods related to home management on the homepage.
  * This interface defines the service methods related to the home page functionality.
  * It provides methods for retrieving homes, adding new homes, searching for homes, and other related operations.
  */
@@ -82,4 +86,14 @@ public interface HomePageService {
      * @param totalHomes total homes in each searching
      */
     void updateTargetPage(Map<String, Object> searchParams, int totalHomes);
+    int getHomeCount();
+
+    /**
+     * Retrieves a list of homes that match the given host IDs for a specific user.
+     *
+     * @param matchingHostsId an array of host IDs to find matching homes.
+     * @param userId the ID of the user looking for matching homes.
+     * @return a list of {@link Home} objects that match the specified host IDs for the user.
+     */
+    List<Home> getMatchingHome(int[] matchingHostsId, int userId);
 }

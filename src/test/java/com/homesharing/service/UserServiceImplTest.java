@@ -414,4 +414,69 @@ class UserServiceImplTest {
         assertEquals("Error resetting password for user ID: 1", thrown.getMessage());
     }
 
+    @Test
+    void testUpdateMatchingProfile_success() {
+        // Arrange
+        String dob = "1990-01-01";
+        String gender = "Male";
+        String rawHowLong = "6 months";
+        String emvdate = "2024-01-01";
+        String lmvdate = "2024-06-01";
+        String rawMinBudget = "500";
+        String rawMaxBudget = "1000";
+        String userId = "1";
+
+        User user = new User();
+        user.setId(1);
+        user.setDob(LocalDate.parse(dob));
+        user.setGender(gender);
+        user.setDuration(rawHowLong);
+        user.setEarliestMoveIn(LocalDate.parse(emvdate));
+        user.setLatestMoveIn(LocalDate.parse(lmvdate));
+        user.setMinBudget(Integer.parseInt(rawMinBudget));
+        user.setMaxBudget(Integer.parseInt(rawMaxBudget));
+
+        when(userDao.updateMatchingProfile(any(User.class))).thenReturn(1);
+
+        // Act
+        int result = userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget, userId);
+
+        // Assert
+        assertEquals(1, result);
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userDao).updateMatchingProfile(userCaptor.capture());
+
+        User capturedUser = userCaptor.getValue();
+        assertEquals(1, capturedUser.getId());
+        assertEquals(LocalDate.parse(dob), capturedUser.getDob());
+        assertEquals(gender, capturedUser.getGender());
+        assertEquals(rawHowLong, capturedUser.getDuration());
+        assertEquals(LocalDate.parse(emvdate), capturedUser.getEarliestMoveIn());
+        assertEquals(LocalDate.parse(lmvdate), capturedUser.getLatestMoveIn());
+        assertEquals(Integer.parseInt(rawMinBudget), capturedUser.getMinBudget());
+        assertEquals(Integer.parseInt(rawMaxBudget), capturedUser.getMaxBudget());
+    }
+
+    @Test
+    void testUpdateMatchingProfile_generalException() {
+        // Arrange
+        String dob = "1990-01-01";
+        String gender = "Male";
+        String rawHowLong = "6 months";
+        String emvdate = "2024-01-01";
+        String lmvdate = "2024-06-01";
+        String rawMinBudget = "500";
+        String rawMaxBudget = "1000";
+        String userId = "1";
+
+        when(userDao.updateMatchingProfile(any(User.class))).thenThrow(new GeneralException("Error"));
+
+        // Act & Assert
+        GeneralException thrown = assertThrows(GeneralException.class, () -> {
+            userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget, userId);
+        });
+
+        assertEquals("Failed to update user matching profile", thrown.getMessage());
+    }
+
 }

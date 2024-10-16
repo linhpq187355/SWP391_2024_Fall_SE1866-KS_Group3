@@ -32,8 +32,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,11 +73,9 @@ public class CreateHomeServlet extends HttpServlet {
         String cookieValue = CookieUtil.getCookie(req, "id");
         if (cookieValue != null) {
             User user = null;
-            try {
+
                 user = userService.getUser(Integer.parseInt(cookieValue));
-            } catch (SQLException e) {
-                logger.error(e.getMessage());
-            }
+
             if (user.getRolesId() != 2) {
                 List<HomeType> homeTypes = submissonFormService.getHomeTypes();
                 List<Amentity> amentities = submissonFormService.getAmentities();
@@ -126,12 +122,11 @@ public class CreateHomeServlet extends HttpServlet {
 
                 int leaseDuration = Integer.parseInt(req.getParameter("leaseDuration"));
                 String moveInDateString = req.getParameter("moveInDate");
-                LocalDateTime moveInDateTime = null;
+                LocalDate moveInDate = null;
 
                 if (moveInDateString != null && !moveInDateString.isEmpty()) {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    LocalDate moveInDate = LocalDate.parse(moveInDateString, formatter);
-                    moveInDateTime = LocalDateTime.of(moveInDate, LocalTime.MIDNIGHT);
+                    moveInDate = LocalDate.parse(moveInDateString, formatter);
                 }
 
                 int numOfBedroom = Integer.parseInt(req.getParameter("numOfBedroom"));
@@ -152,7 +147,7 @@ public class CreateHomeServlet extends HttpServlet {
                 home.setArea(area);
                 home.setOrientation(direction);
                 home.setLeaseDuration(leaseDuration);
-                home.setMoveInDate(moveInDateTime);
+                home.setMoveInDate(moveInDate);
                 home.setNumOfBedroom(numOfBedroom);
                 home.setNumOfBath(numOfBath);
                 home.setWardId(wardId);

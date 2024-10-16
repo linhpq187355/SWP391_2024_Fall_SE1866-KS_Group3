@@ -36,28 +36,33 @@ public class SearchDAOimpl implements SearchDAO {
             preparedStatement.setString(1, "%" + address + "%");
             resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                Home home = new Home();
-                home.setId(resultSet.getInt("id"));
-                home.setName(resultSet.getString("name"));
-                home.setAddress(resultSet.getString("address"));
-                home.setLongitude(resultSet.getBigDecimal("longitude"));
-                home.setLatitude(resultSet.getBigDecimal("latitude"));
-                home.setOrientation(resultSet.getString("orientation"));
-                home.setArea(resultSet.getBigDecimal("area"));
-                home.setLeaseDuration(resultSet.getInt("leaseDuration"));
-                home.setMoveInDate(resultSet.getTimestamp("moveInDate").toLocalDateTime());
-                home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
-                home.setNumOfBath(resultSet.getInt("numOfBath"));
-                home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
-                home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
-                home.setHomeDescription(resultSet.getString("homeDescription"));
-                home.setTenantDescription(resultSet.getString("tenantDescription"));
-                home.setWardId(resultSet.getInt("wardsId"));
-                home.setHomeTypeId(resultSet.getInt("homeTypeId"));
-                home.setCreatedBy(resultSet.getInt("createdBy"));
-                homes.add(home);
-            }
+
+                while (resultSet.next()) {
+                    // Create a Home object for each row in the ResultSet
+                    Home home = new Home();
+                    home.setId(resultSet.getInt("id"));
+                    home.setName(resultSet.getString("name"));
+                    home.setAddress(resultSet.getString("address"));
+                    home.setLongitude(resultSet.getBigDecimal("longitude"));
+                    home.setLatitude(resultSet.getBigDecimal("latitude"));
+                    home.setOrientation(resultSet.getString("orientation"));
+                    home.setArea(resultSet.getBigDecimal("area"));
+                    home.setLeaseDuration(resultSet.getInt("leaseDuration"));
+                    home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
+                    home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
+                    home.setNumOfBath(resultSet.getInt("numOfBath"));
+                    home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                    home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
+                    home.setHomeDescription(resultSet.getString("homeDescription"));
+                    home.setTenantDescription(resultSet.getString("tenantDescription"));
+                    home.setWardId(resultSet.getInt("wardsId"));
+                    home.setHomeTypeId(resultSet.getInt("homeTypeId"));
+                    home.setCreatedBy(resultSet.getInt("createdBy"));
+
+                    // Add each home to the list
+                    homes.add(home);
+                }
+
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error searching homes by address: " + e.getMessage(), e);
         } finally {
@@ -108,28 +113,33 @@ public class SearchDAOimpl implements SearchDAO {
             preparedStatement.setInt(2, maxPrice);
             resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                Home home = new Home();
-                home.setId(resultSet.getInt("id"));
-                home.setName(resultSet.getString("name"));
-                home.setAddress(resultSet.getString("address"));
-                home.setLongitude(resultSet.getBigDecimal("longitude"));
-                home.setLatitude(resultSet.getBigDecimal("latitude"));
-                home.setOrientation(resultSet.getString("orientation"));
-                home.setArea(resultSet.getBigDecimal("area"));
-                home.setLeaseDuration(resultSet.getInt("leaseDuration"));
-                home.setMoveInDate(resultSet.getTimestamp("moveInDate").toLocalDateTime());
-                home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
-                home.setNumOfBath(resultSet.getInt("numOfBath"));
-                home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
-                home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
-                home.setHomeDescription(resultSet.getString("homeDescription"));
-                home.setTenantDescription(resultSet.getString("tenantDescription"));
-                home.setWardId(resultSet.getInt("wardsId"));
-                home.setHomeTypeId(resultSet.getInt("homeTypeId"));
-                home.setCreatedBy(resultSet.getInt("createdBy"));
-                homes.add(home);
-            }
+
+                while (resultSet.next()) {
+                    // Create a Home object for each row in the ResultSet
+                    Home home = new Home();
+                    home.setId(resultSet.getInt("id"));
+                    home.setName(resultSet.getString("name"));
+                    home.setAddress(resultSet.getString("address"));
+                    home.setLongitude(resultSet.getBigDecimal("longitude"));
+                    home.setLatitude(resultSet.getBigDecimal("latitude"));
+                    home.setOrientation(resultSet.getString("orientation"));
+                    home.setArea(resultSet.getBigDecimal("area"));
+                    home.setLeaseDuration(resultSet.getInt("leaseDuration"));
+                    home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
+                    home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
+                    home.setNumOfBath(resultSet.getInt("numOfBath"));
+                    home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                    home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
+                    home.setHomeDescription(resultSet.getString("homeDescription"));
+                    home.setTenantDescription(resultSet.getString("tenantDescription"));
+                    home.setWardId(resultSet.getInt("wardsId"));
+                    home.setHomeTypeId(resultSet.getInt("homeTypeId"));
+                    home.setCreatedBy(resultSet.getInt("createdBy"));
+
+                    // Add each home to the list
+                    homes.add(home);
+                }
+
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error searching homes by price range: " + e.getMessage(), e);
         } finally {

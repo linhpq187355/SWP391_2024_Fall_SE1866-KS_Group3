@@ -56,4 +56,6 @@ public interface HomeDetailService {
      *         If no fire equipment is found, the list will be empty.
      */
     List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
+
+
 }

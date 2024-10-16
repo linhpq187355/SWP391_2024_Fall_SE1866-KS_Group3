@@ -1,12 +1,15 @@
 /*
- * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  * 2024-9-18      1.0                 ManhNC         First Implement
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  */
+
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.TokenDAO;
@@ -29,11 +32,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Implementation of the {@link UserService} interface. This class manages
- * user-related operations such as registration, login, profile updates,
- * and password management.
- *
- * @author ManhNC
+ * Implementation of UserService interface, handling user-related business logic.
+ * This class manages user registration and input validation.
  */
 public class UserServiceImpl implements UserService {
 
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
     /**
-     * Constructs a new UserServiceImpl with the required dependencies.
+     * Constructor for UserServiceImpl, initializing the UserDao instance.
      *
      * @param userDao            The data access object for user operations.
      * @param tokenDao           The data access object for token operations.
@@ -597,7 +597,7 @@ public class UserServiceImpl implements UserService {
      * @throws GeneralException if an error occurs while accessing the database or if the user is not found.
      */
     @Override
-    public User getUser(int userId) throws SQLException {
+    public User getUser(int userId){
         try {
             // Attempt to retrieve the user from the DAO using the provided userId
             return userDao.getUser(userId);
@@ -623,5 +623,50 @@ public class UserServiceImpl implements UserService {
             throw new GeneralException("Error resetting password for user ID: " + userId, e);
         }
     }
+
+    @Override
+    public int getNumberOfUsers() {
+        try {
+            return userDao.getNumberUsers();
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total user: ", e);
+            throw new GeneralException("Failed to retrieve total user: ", e);
+        }
+    }
+
+    /**
+     * Updates the matching profile for a user.
+     *
+     * @param dob             The user's date of birth.
+     * @param gender          The user's gender.
+     * @param rawHowLong      The duration preference of the user.
+     * @param emvdate        The earliest move-in date preference of the user.
+     * @param lmvdate        The latest move-in date preference of the user.
+     * @param rawMinBudget   The minimum budget preference of the user.
+     * @param rawMaxBudget   The maximum budget preference of the user.
+     * @param userId         The ID of the user to update.
+     * @return The number of rows affected by the update.
+     * @throws GeneralException if an error occurs during the update.
+     */
+    @Override
+    public int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId) {
+        try {
+            User user = new User();
+            user.setDob(LocalDate.parse(dob));
+            user.setGender(gender);
+            user.setId(Integer.parseInt(userId));
+            user.setDuration(rawHowLong);
+            user.setEarliestMoveIn(LocalDate.parse(emvdate));
+            user.setLatestMoveIn(LocalDate.parse(lmvdate));
+            user.setMinBudget(Integer.parseInt(rawMinBudget));
+            user.setMaxBudget(Integer.parseInt(rawMaxBudget));
+
+            return userDao.updateMatchingProfile(user);
+
+        } catch (Exception e) {
+            throw new GeneralException("Failed to update user matching profile", e);
+        }
+    }
+
 
 }

@@ -1,12 +1,15 @@
 /*
- * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
-* 2024-10-10      1.0                 ManhNC            update some method
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second
+ * 2024-10-10      1.0                 ManhNC            update some method
  */
+
 package com.homesharing.dao;
 
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.homesharing.model.Home;
+
 
 /**
  * HomeDAO is an interface that defines methods for interacting with the homes data in the database.
@@ -112,7 +116,8 @@ public interface HomeDAO {
      * Retrieve new homes' info from the database.
      * @return List of Home objects.
      */
-    List<Home> getNewHomes() throws SQLException, IOException, ClassNotFoundException;
+
+    List<Home> getNewHomes();
 
     /**
      * Get home object via id
@@ -120,4 +125,19 @@ public interface HomeDAO {
      * @return the home that need to be found
      */
     Home getHomeById(int id);
+
+    /**
+     * Retrieves the total number of homes available in the database.
+     *
+     * @return the total number of homes.
+     */
+    int getNumberHomes();
+
+    /**
+     * Retrieves a list of homes that match the specified criteria.
+     *
+     * @param matchingHost an array of host IDs used for matching homes.
+     * @return a List of Home objects that match the specified criteria.
+     */
+    List<Home> getMatchingHomes(int[] matchingHost);
 }

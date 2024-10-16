@@ -141,214 +141,92 @@ public class HomeDAOImplTest {
     }
 
     @Test
-    void testGetSearchedHomes_noResults() throws Exception {
-        // Giả lập prepareStatement và executeQuery
+    public void testGetMatchingHomes_Success() throws SQLException, IOException, ClassNotFoundException {
+        int[] matchingHost = {1, 2};
+        List<Home> expectedHomes = new ArrayList<>();
+
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // Giả lập resultSet không có bản ghi nào
-        when(resultSet.next()).thenReturn(false);
+        // Simulate resultSet with 2 records
+        when(resultSet.next()).thenReturn(true, true, false);
+        when(resultSet.getInt("id")).thenReturn(1, 2);
+        when(resultSet.getString("name")).thenReturn("Home1", "Home2");
+        when(resultSet.getString("address")).thenReturn("123 Main St", "456 Elm St");
+        when(resultSet.getBigDecimal("area")).thenReturn(BigDecimal.valueOf(100.5), BigDecimal.valueOf(150.75));
+        when(resultSet.getInt("leaseDuration")).thenReturn(12, 24);
+        when(resultSet.getDate("moveInDate")).thenReturn(
+                java.sql.Date.valueOf(LocalDateTime.now().toLocalDate())
+        );
 
-        // Mock các tham số tìm kiếm
-        Map<String, Object> searchParams = new HashMap<>();
-        searchParams.put("keyword", "NonExistent");
+        // Call the method
+        List<Home> homes = homeDAO.getMatchingHomes(matchingHost);
 
-        // Gọi phương thức cần kiểm tra
-        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+        // Verify the results
+        assertEquals(2, homes.size());
+        assertEquals(1, homes.get(0).getId());
+        assertEquals("Home1", homes.get(0).getName());
+        assertEquals("123 Main St", homes.get(0).getAddress());
+        assertEquals(BigDecimal.valueOf(100.5), homes.get(0).getArea());
+        assertEquals(12, homes.get(0).getLeaseDuration());
+        assertNotNull(homes.get(0).getMoveInDate());
 
-        // Kiểm tra danh sách homes phải rỗng
-        assertTrue(homes.isEmpty());
+        assertEquals(2, homes.get(1).getId());
+        assertEquals("Home2", homes.get(1).getName());
+        assertEquals("456 Elm St", homes.get(1).getAddress());
+        assertEquals(BigDecimal.valueOf(150.75), homes.get(1).getArea());
+        assertEquals(24, homes.get(1).getLeaseDuration());
+        assertNotNull(homes.get(1).getMoveInDate());
 
-        // Xác minh rằng executeQuery() đã được gọi
-        verify(preparedStatement, times(1)).executeQuery();
-
-        // Xác minh rằng next() chỉ được gọi đúng một lần
-        verify(resultSet, times(1)).next();
+        verify(resultSet, times(3)).next();
+        verify(resultSet, times(2)).getInt("id");
+        verify(resultSet, times(2)).getString("name");
+        verify(resultSet, times(2)).getString("address");
+        verify(resultSet, times(2)).getBigDecimal("area");
+        verify(resultSet, times(2)).getInt("leaseDuration");
+        verify(resultSet, times(2)).getDate("moveInDate");
     }
 
     @Test
-    void testGetSearchedHomes_withResults() throws Exception {
-        // Giả lập prepareStatement và executeQuery
+    public void testGetMatchingHomes_NullInput() {
+        int[] matchingHost = null;
+
+        // Call the method
+        List<Home> homes = homeDAO.getMatchingHomes(matchingHost);
+
+        // Verify the result is null
+        assertEquals(null, homes);
+    }
+
+    @Test
+    public void testGetMatchingHomes_EmptyArray() {
+        int[] matchingHost = {};
+
+        // Call the method
+        List<Home> homes = homeDAO.getMatchingHomes(matchingHost);
+
+        // Verify the result is null
+        assertEquals(null, homes);
+    }
+
+    @Test
+    public void testGetMatchingHomes_SQLException() throws SQLException, IOException, ClassNotFoundException {
+        int[] matchingHost = {1, 2};
+
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // Giả lập resultSet trả về dữ liệu
-        when(resultSet.next()).thenReturn(true, false);  // Chỉ có 1 bản ghi
-        when(resultSet.getInt("id")).thenReturn(1);
-        when(resultSet.getString("name")).thenReturn("Sample Home");
-        when(resultSet.getString("address")).thenReturn("123 Main St");
-        when(resultSet.getBigDecimal("area")).thenReturn(BigDecimal.valueOf(100.5));
-        when(resultSet.getTimestamp("createdDate")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
-        when(resultSet.getInt("priceId")).thenReturn(1001);
-        when(resultSet.getInt("price")).thenReturn(1500);
+        // Simulate SQLException
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
 
-        // Mock các tham số tìm kiếm
-        Map<String, Object> searchParams = new HashMap<>();
-        searchParams.put("keyword", "Sample");
-        searchParams.put("minPrice", 1000);
-        searchParams.put("maxPrice", 2000);
-
-        // Gọi phương thức cần kiểm tra
-        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
-
-        // Kiểm tra danh sách homes có kết quả
-        assertNotNull(homes);
-        assertEquals(1, homes.size());
-
-        // Kiểm tra chi tiết của Home được trả về
-        Home home = homes.get(0);
-        assertEquals(1, home.getId());
-        assertEquals("Sample Home", home.getName());
-        assertEquals("123 Main St", home.getAddress());
-        assertEquals(BigDecimal.valueOf(100.5), home.getArea());
-        assertNotNull(home.getCreatedDate());
-        assertEquals(1001, home.getPriceId());
-        assertEquals(1500, home.getPrice());
-
-        // Xác minh rằng executeQuery() đã được gọi
-        verify(preparedStatement, times(1)).executeQuery();
-
-        // Xác minh rằng next() đã được gọi đúng hai lần (một lần true, một lần false)
-        verify(resultSet, times(2)).next();
-    }
-
-    // Test với SQLException
-    @Test
-    void testGetSearchedHomes_SQLException() throws SQLException{
-        // Given
-        Map<String, Object> searchParams = new HashMap<>();
-
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
-
-        // When / Then
-        assertThrows(SQLException.class, () -> {
-            homeDAO.getSearchedHomes(searchParams);
+        // Verify that a RuntimeException is thrown
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            homeDAO.getMatchingHomes(matchingHost);
         });
-    }
 
-    // Test với ClassNotFoundException
-    @Test
-    void testGetSearchedHomes_ClassNotFoundException() throws SQLException, IOException, ClassNotFoundException {
-        // Giả lập ClassNotFoundException khi gọi DBContext.getConnection
-        when(DBContext.getConnection()).thenThrow(new ClassNotFoundException("JDBC Driver not found"));
+        assertTrue(exception.getMessage().contains("Error retrieving homes from the database"));
 
-        // When / Then
-        assertThrows(ClassNotFoundException.class, () -> {
-            homeDAO.getSearchedHomes(new HashMap<>());
-        });
-    }
-
-    // 1. Test happy path - có hình ảnh trả về
-    @Test
-    void testFetchFirstImage_HappyPath() throws SQLException{
-        // Given
-        int homeId = 1;
-        String expectedImgUrl = "http://example.com/image1.jpg";
-
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getString("imgUrl")).thenReturn(expectedImgUrl);
-
-        // When
-        String result = homeDAO.fetchFirstImage(homeId);
-
-        // Then
-        assertNotNull(result);
-        assertEquals(expectedImgUrl, result);
-
-        // Verify SQL params were set correctly
-        verify(preparedStatement).setInt(1, homeId);
-    }
-
-    // 2. Test khi không tìm thấy hình ảnh
-    @Test
-    void testFetchFirstImage_NoImageFound() throws SQLException{
-        // Given
-        int homeId = 1;
-
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(false);  // Không có kết quả
-
-        // When
-        String result = homeDAO.fetchFirstImage(homeId);
-
-        // Then
-        assertNull(result);  // Không có ảnh nào được tìm thấy
-    }
-
-    // 3. Test với SQLException
-    @Test
-    void testFetchFirstImage_SQLException() throws SQLException{
-        // Given
-        int homeId = 1;
-
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
-
-        // When / Then
-        GeneralException exception = assertThrows(GeneralException.class, () -> {
-            homeDAO.fetchFirstImage(homeId);
-        });
-        assertEquals("Error finding image in the database: Database error", exception.getMessage());
-    }
-
-    // 4. Test với ClassNotFoundException
-    @Test
-    void testFetchFirstImage_ClassNotFoundException() throws SQLException, IOException, ClassNotFoundException {
-        // Given
-        int homeId = 1;
-
-        when(DBContext.getConnection()).thenThrow(new ClassNotFoundException("JDBC Driver not found"));
-
-        // When / Then
-        GeneralException exception = assertThrows(GeneralException.class, () -> {
-            homeDAO.fetchFirstImage(homeId);
-        });
-        assertEquals("Error finding image in the database: JDBC Driver not found", exception.getMessage());
-    }
-
-    @Test
-    void testNumOfHome_NoSearchParams() throws Exception {
-        // Given
-        Map<String, Object> searchParams = new HashMap<>();
-
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(5);
-
-        // When
-        int result = homeDAO.numOfHome(searchParams);
-
-        // Then
-        assertEquals(5, result);
-
-        verify(preparedStatement, times(1)).executeQuery();
-    }
-
-    @Test
-    void testNumOfHome_WithSearchParams() throws Exception {
-        // Given
-        Map<String, Object> searchParams = new HashMap<>();
-        searchParams.put("keyword", "cozy");
-        searchParams.put("minPrice", 100);
-        searchParams.put("maxPrice", 500);
-
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(3);
-
-        // When
-        int result = homeDAO.numOfHome(searchParams);
-
-        // Then
-        assertEquals(3, result);
-        verify(preparedStatement, times(1)).setString(1, "%cozy%");
-        verify(preparedStatement, times(1)).setInt(3, 100);
-        verify(preparedStatement, times(1)).setInt(4, 500);
-        verify(preparedStatement, times(1)).executeQuery();
+        // Verify that executeQuery() was called
+        verify(preparedStatement).executeQuery();
     }
 
     @Test
@@ -624,5 +502,215 @@ public class HomeDAOImplTest {
         // Act & Assert
         Exception exception = assertThrows(GeneralException.class, () -> homeDAO.getMaxBath());
         assertEquals("Error get max bath in the database: Database error", exception.getMessage());
+    }
+    @Test
+    void testGetSearchedHomes_noResults() throws Exception {
+        // Giả lập prepareStatement và executeQuery
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        // Giả lập resultSet không có bản ghi nào
+        when(resultSet.next()).thenReturn(false);
+
+        // Mock các tham số tìm kiếm
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("keyword", "NonExistent");
+
+        // Gọi phương thức cần kiểm tra
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        // Kiểm tra danh sách homes phải rỗng
+        assertTrue(homes.isEmpty());
+
+        // Xác minh rằng executeQuery() đã được gọi
+        verify(preparedStatement, times(1)).executeQuery();
+
+        // Xác minh rằng next() chỉ được gọi đúng một lần
+        verify(resultSet, times(1)).next();
+    }
+
+    @Test
+    void testGetSearchedHomes_withResults() throws Exception {
+        // Giả lập prepareStatement và executeQuery
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        // Giả lập resultSet trả về dữ liệu
+        when(resultSet.next()).thenReturn(true, false);  // Chỉ có 1 bản ghi
+        when(resultSet.getInt("id")).thenReturn(1);
+        when(resultSet.getString("name")).thenReturn("Sample Home");
+        when(resultSet.getString("address")).thenReturn("123 Main St");
+        when(resultSet.getBigDecimal("area")).thenReturn(BigDecimal.valueOf(100.5));
+        when(resultSet.getTimestamp("createdDate")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
+        when(resultSet.getInt("priceId")).thenReturn(1001);
+        when(resultSet.getInt("price")).thenReturn(1500);
+
+        // Mock các tham số tìm kiếm
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("keyword", "Sample");
+        searchParams.put("minPrice", 1000);
+        searchParams.put("maxPrice", 2000);
+
+        // Gọi phương thức cần kiểm tra
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        // Kiểm tra danh sách homes có kết quả
+        assertNotNull(homes);
+        assertEquals(1, homes.size());
+
+        // Kiểm tra chi tiết của Home được trả về
+        Home home = homes.get(0);
+        assertEquals(1, home.getId());
+        assertEquals("Sample Home", home.getName());
+        assertEquals("123 Main St", home.getAddress());
+        assertEquals(BigDecimal.valueOf(100.5), home.getArea());
+        assertNotNull(home.getCreatedDate());
+        assertEquals(1001, home.getPriceId());
+        assertEquals(1500, home.getPrice());
+
+        // Xác minh rằng executeQuery() đã được gọi
+        verify(preparedStatement, times(1)).executeQuery();
+
+        // Xác minh rằng next() đã được gọi đúng hai lần (một lần true, một lần false)
+        verify(resultSet, times(2)).next();
+    }
+
+    // Test với SQLException
+    @Test
+    void testGetSearchedHomes_SQLException() throws SQLException{
+        // Given
+        Map<String, Object> searchParams = new HashMap<>();
+
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // When / Then
+        assertThrows(SQLException.class, () -> {
+            homeDAO.getSearchedHomes(searchParams);
+        });
+    }
+
+    // Test với ClassNotFoundException
+    @Test
+    void testGetSearchedHomes_ClassNotFoundException() throws SQLException, IOException, ClassNotFoundException {
+        // Giả lập ClassNotFoundException khi gọi DBContext.getConnection
+        when(DBContext.getConnection()).thenThrow(new ClassNotFoundException("JDBC Driver not found"));
+
+        // When / Then
+        assertThrows(ClassNotFoundException.class, () -> {
+            homeDAO.getSearchedHomes(new HashMap<>());
+        });
+    }
+
+    // 1. Test happy path - có hình ảnh trả về
+    @Test
+    void testFetchFirstImage_HappyPath() throws SQLException{
+        // Given
+        int homeId = 1;
+        String expectedImgUrl = "http://example.com/image1.jpg";
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getString("imgUrl")).thenReturn(expectedImgUrl);
+
+        // When
+        String result = homeDAO.fetchFirstImage(homeId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(expectedImgUrl, result);
+
+        // Verify SQL params were set correctly
+        verify(preparedStatement).setInt(1, homeId);
+    }
+
+    // 2. Test khi không tìm thấy hình ảnh
+    @Test
+    void testFetchFirstImage_NoImageFound() throws SQLException{
+        // Given
+        int homeId = 1;
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false);  // Không có kết quả
+
+        // When
+        String result = homeDAO.fetchFirstImage(homeId);
+
+        // Then
+        assertNull(result);  // Không có ảnh nào được tìm thấy
+    }
+
+    // 3. Test với SQLException
+    @Test
+    void testFetchFirstImage_SQLException() throws SQLException{
+        // Given
+        int homeId = 1;
+
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // When / Then
+        GeneralException exception = assertThrows(GeneralException.class, () -> {
+            homeDAO.fetchFirstImage(homeId);
+        });
+        assertEquals("Error finding image in the database: Database error", exception.getMessage());
+    }
+
+    // 4. Test với ClassNotFoundException
+    @Test
+    void testFetchFirstImage_ClassNotFoundException() throws SQLException, IOException, ClassNotFoundException {
+        // Given
+        int homeId = 1;
+
+        when(DBContext.getConnection()).thenThrow(new ClassNotFoundException("JDBC Driver not found"));
+
+        // When / Then
+        GeneralException exception = assertThrows(GeneralException.class, () -> {
+            homeDAO.fetchFirstImage(homeId);
+        });
+        assertEquals("Error finding image in the database: JDBC Driver not found", exception.getMessage());
+    }
+
+    @Test
+    void testNumOfHome_NoSearchParams() throws Exception {
+        // Given
+        Map<String, Object> searchParams = new HashMap<>();
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt(1)).thenReturn(5);
+
+        // When
+        int result = homeDAO.numOfHome(searchParams);
+
+        // Then
+        assertEquals(5, result);
+
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
+    void testNumOfHome_WithSearchParams() throws Exception {
+        // Given
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("keyword", "cozy");
+        searchParams.put("minPrice", 100);
+        searchParams.put("maxPrice", 500);
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt(1)).thenReturn(3);
+
+        // When
+        int result = homeDAO.numOfHome(searchParams);
+
+        // Then
+        assertEquals(3, result);
+        verify(preparedStatement, times(1)).setString(1, "%cozy%");
+        verify(preparedStatement, times(1)).setInt(3, 100);
+        verify(preparedStatement, times(1)).setInt(4, 500);
+        verify(preparedStatement, times(1)).executeQuery();
     }
 }

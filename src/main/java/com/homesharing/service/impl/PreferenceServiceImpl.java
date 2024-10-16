@@ -1,3 +1,14 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ */
+
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.PreferenceDAO;
@@ -6,6 +17,7 @@ import com.homesharing.model.Preference;
 import com.homesharing.service.PreferenceService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -102,6 +114,88 @@ public class PreferenceServiceImpl implements PreferenceService {
             logger.severe("Error updating preferences for user ID: " + userId);
             throw new GeneralException("Failed to update preferences", e);
         }
+    }
+
+
+    /**
+     * Updates the user preferences based on the provided values.
+     *
+     * @param r_cleanliness the cleanliness preference as a string
+     * @param r_smoking     the smoking preference as a string
+     * @param r_drinking    the drinking preference as a string
+     * @param r_interaction the interaction preference as a string
+     * @param r_guest       the guest preference as a string
+     * @param r_cooking     the cooking preference as a string
+     * @param r_pet         the pet preference as a string
+     * @param userId        the ID of the user whose preferences are being updated
+     * @return the number of rows affected in the database
+     */
+    @Override
+    public int updateUserPreference(String r_cleanliness, String r_smoking,
+                                    String r_drinking, String r_interaction,String r_guest,
+                                    String r_cooking, String r_pet, String userId) {
+        try {
+            Preference preference = new Preference();
+            preference.setUserId(Integer.parseInt(userId));
+            preference.setCleanliness(Integer.parseInt(r_cleanliness));
+            preference.setSmoking(Integer.parseInt(r_smoking));
+            preference.setDrinking(Integer.parseInt(r_drinking));
+            preference.setInteraction(Integer.parseInt(r_interaction));
+            preference.setCooking(Integer.parseInt(r_cooking));
+            preference.setPet(Integer.parseInt(r_pet));
+            preference.setGuest(Integer.parseInt(r_guest));
+
+            // Update the preferences in the database using PreferenceDAO
+            return preferenceDAO.updatePreference(preference);
+        } catch (Exception e) {
+            // Log and throw a custom exception if any error occurs during the update
+            logger.severe("Error updating preferences for user ID: " + userId);
+            throw new GeneralException("Failed to update preferences", e);
+        }
+    }
+
+    /**
+     * Lists the matching preferences for the specified user.
+     *
+     * @param userId the ID of the user whose matching preferences are being retrieved
+     * @return an array of user IDs representing the top 10 matches based on preferences
+     */
+    @Override
+    public int[] listMatchingPreferences(int userId) {
+        List<Preference> listMatchingPreference = preferenceDAO.listMatchingPreference(userId);
+        Preference pref = preferenceDAO.getPreference(userId);
+        Map<Integer, Integer> hostScores = new HashMap<>();
+        for(int i = 0; i < listMatchingPreference.size(); i++){
+            Preference hostPref = listMatchingPreference.get(i);
+            int score = 0;
+            if (Math.abs(pref.getCleanliness() - hostPref.getCleanliness()) <= 1) {
+                score += 10;
+            }
+            if (Math.abs(pref.getSmoking() - hostPref.getSmoking()) <= 1) {
+                score += 10;
+            }
+            if (Math.abs(pref.getDrinking() - hostPref.getDrinking()) <= 1) {
+                score += 10;
+            }
+            if (Math.abs(pref.getInteraction() - hostPref.getInteraction()) <= 1) {
+                score += 10;
+            }
+            if (Math.abs(pref.getGuest() - hostPref.getGuest()) <= 1) {
+                score += 10;
+            }
+            if (Math.abs(pref.getCooking() - hostPref.getCooking()) <= 1) {
+                score += 10;
+            }
+            if (Math.abs(pref.getPet() - hostPref.getPet()) <= 1) {
+                score += 10;
+            }
+            hostScores.put(hostPref.getUserId(), score);
+        }
+        return hostScores.entrySet().stream()
+                .sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue())) // Sắp xếp giảm dần theo điểm số
+                .limit(10) // Giới hạn 10 phần tử
+                .mapToInt(Map.Entry::getKey) // Lấy ID của host (key)
+                .toArray();
     }
 
     /**

@@ -1,14 +1,18 @@
 /*
- * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  * 2024-10-10      1.0                 ManhNC         Implement search service
  */
+
 package com.homesharing.service.impl;
 import com.homesharing.dao.*;
+import com.homesharing.dao.impl.*;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.*;
 import com.homesharing.service.HomePageService;
@@ -17,6 +21,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -31,15 +36,17 @@ public class HomePageServiceImpl implements HomePageService {
     private final HomeDAO homeDAO;
     private final PriceDAO priceDAO;
     private static final int DEFAULT_NUMBER_OF_HOMES = 12;
+    private final UserDAO userDAO;
 
     /**
      * Constructor for HomePageServiceImpl.
      * @param homeDAO The Data Access Object for Home entities.
      * @param priceDAO The Data Access Object for Price entities.
      */
-    public HomePageServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO) {
+    public HomePageServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO, UserDAO userDAO) {
         this.homeDAO = homeDAO;
         this.priceDAO = priceDAO;
+        this.userDAO = userDAO;
     }
 
     /**
@@ -230,4 +237,58 @@ public class HomePageServiceImpl implements HomePageService {
 
     @Override
     public Home getHomeById(int id) { return homeDAO.getHomeById(id); }
+
+    @Override
+    public int getHomeCount() {
+        try {
+            return homeDAO.getNumberHomes();
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total homes: ", e);
+            throw new GeneralException("Failed to retrieve total homes: ", e);
+        }
+    }
+
+    /**
+     * Retrieves a list of homes that match the given host IDs for a specific user.
+     *
+     * @param matchingHostsId an array of host IDs to find matching homes.
+     * @param userId the ID of the user looking for matching homes.
+     * @return a list of {@link Home} objects that match the specified host IDs for the user.
+     */
+    @Override
+    public List<Home> getMatchingHome(int[] matchingHostsId, int userId) {
+        List<Home> homeList = homeDAO.getMatchingHomes(matchingHostsId);
+
+        if(homeList == null || homeList.isEmpty()) {
+            logger.warning("Home list is null or empty. Returning an empty home list.");
+            return null;
+        }
+        List<Price> listPrice = priceDAO.getPrices(homeList);
+        User user = userDAO.getMatchingUserProfile(userId);
+        List<Home> listMatchingHomes = new ArrayList<>();
+
+        for(int i = 0; i < homeList.size(); i++) {
+            boolean moveInCheck = false;
+            if ((homeList.get(i).getMoveInDate().isEqual(user.getEarliestMoveIn()) || homeList.get(i).getMoveInDate().isAfter(user.getEarliestMoveIn()))
+                    && (homeList.get(i).getMoveInDate().isBefore(user.getLatestMoveIn()) || homeList.get(i).getMoveInDate().isEqual(user.getLatestMoveIn()))) {
+                moveInCheck = true;
+            }
+
+            if (user.getEarliestMoveIn().isBefore(homeList.get(i).getMoveInDate())
+                    && user.getEarliestMoveIn().plusDays(7).isAfter(homeList.get(i).getMoveInDate())) {
+                moveInCheck = true;
+            }
+            Home home = homeList.get(i);
+            if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
+                if((user.getDuration().equals("short") && homeList.get(i).getLeaseDuration() <6) || (user.getDuration().equals("long") && homeList.get(i).getLeaseDuration() >=6) ){
+                    if(moveInCheck){
+                        listMatchingHomes.add(home);
+                    }
+                }
+            }
+        }
+        return listMatchingHomes;
+    }
+
+
 }

@@ -1,12 +1,15 @@
 /*
- * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  * 2024-9-18      1.0                 ManhNC         First Implement
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  */
+
 package com.homesharing.service;
 
 import com.homesharing.model.GoogleAccount;
@@ -15,10 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 
 /**
- * Provides services for managing user accounts, including registration, login, logout,
- * profile updates, and password management within the Home Sharing System.
- *
- * @author ManhNC
+ * UserService interface defines methods for user registration and validation.
+ * It contains methods to register a user and validate user input data.
  */
 public interface UserService {
 
@@ -159,7 +160,6 @@ public interface UserService {
      * @return A string indicating the result of the logout process (e.g., success, error).
      */
     String logout(HttpServletResponse response);
-
     /**
      * Updates the user's profile with the provided details.
      *
@@ -179,7 +179,7 @@ public interface UserService {
      * @param userId The ID of the user to be retrieved.
      * @return The User object containing the user's details, or null if not found.
      */
-    User getUser(int userId) throws SQLException;
+    User getUser(int userId);
 
     /**
      * Resets the password for a user with the given ID.
@@ -189,4 +189,21 @@ public interface UserService {
      * @return The number of rows affected by the password reset (1 if successful, 0 if unsuccessful).
      */
     int resetUserPassword(int userId, String newPassword);
+
+    int getNumberOfUsers();
+
+    /**
+     * Updates the matching profile for a user based on the provided criteria.
+     *
+     * @param dob              The date of birth to be updated.
+     * @param gender           The gender to be updated.
+     * @param rawHowLong      The duration of how long the user has lived at their current residence.
+     * @param emvdate         The move-in date.
+     * @param lmvdate         The last move-out date.
+     * @param rawMinBudget    The minimum budget for housing.
+     * @param rawMaxBudget    The maximum budget for housing.
+     * @param userId          The ID of the user whose profile is to be updated.
+     * @return An integer indicating the result of the update operation (e.g., number of rows affected).
+     */
+    int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId);
 }

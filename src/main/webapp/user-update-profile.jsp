@@ -39,7 +39,16 @@
     <link rel="stylesheet" href="assets/css/wizard.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
-
+    <style>
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .required{
+            color:red;
+        }
+    </style>
 </head>
 <body>
 <jsp:include page="header.jsp"/>
@@ -87,31 +96,33 @@
                         <div class="col-sm-3 padding-top-25">
 
                             <div class="form-group">
-                                <label>Họ</label>
+                                <label>Họ <span class="required">*</span></label>
                                 <input name="firstname" type="text" class="form-control" value="${requestScope.user.firstName}">
-
+                                <span class="error-message" id="error-firstname"></span>
                             </div>
 
                             <div class="form-group">
-                                <label>Tên</label>
+                                <label>Tên <span class="required">*</span></label>
                                 <input name="lastname" type="text" class="form-control" value="${requestScope.user.lastName}">
-
+                                <span class="error-message" id="error-lastname"></span>
                             </div>
 
                             <div class="form-group">
-                                <label>Địa chỉ</label>
+                                <label>Địa chỉ <span class="required">*</span></label>
                                 <input name="address" type="text" class="form-control" value="${requestScope.user.address}">
+                                <span class="error-message" id="error-address"></span>
                             </div>
 
 
                         </div>
                         <div class="col-sm-3 padding-top-25">
                             <div class="form-group">
-                                <label>Ngày sinh</label>
+                                <label>Ngày sinh <span class="required">*</span></label>
                                 <input name="dob" type="date" class="form-control" value="${requestScope.user.dob}">
+                                <span class="error-message" id="error-dob"></span>
                             </div>
                             <div class="form-group">
-                                <label>Giới tính</label>
+                                <label>Giới tính <span class="required">*</span></label>
                                 <select name="gender" class="form-control">
                                     <option value="Nam" ${requestScope.user.gender == 'Nam' ? 'selected' : ''}>Nam</option>
                                     <option value="Nữ" ${requestScope.user.gender == 'Nữ' ? 'selected' : ''}>Nữ</option>
@@ -179,8 +190,10 @@
                         <br>
                         <button type='submit' class='btn btn-finish btn-primary'>Cập nhật</button>
                     </div>
+
                     <br>
                 </form>
+                <button class='btn btn-danger' onClick="window.location.href='user-profile'">Hủy</button>
 
             </div>
         </div><!-- end row -->
@@ -222,6 +235,12 @@
         document.getElementById('petStatus').value = 'true';
     });
     function validateForm() {
+        // Clear previous error messages
+        document.getElementById("error-firstname").innerHTML = "";
+        document.getElementById("error-lastname").innerHTML = "";
+        document.getElementById("error-address").innerHTML = "";
+        document.getElementById("error-dob").innerHTML = "";
+
         const form = document.forms["preferenceForm"];
         const firstName = form["firstname"].value.trim();
         const lastName = form["lastname"].value.trim();
@@ -229,49 +248,42 @@
         const dob = new Date(form["dob"].value);
         const today = new Date();
 
-        // Check if first name is empty
+        let isValid = true;
+
+        // Validate first name
         if (firstName === "") {
-            alert("Họ không được để trống");
-            return false;
+            document.getElementById("error-firstname").innerHTML = "Họ không được để trống";
+            isValid = false;
+        } else if (firstName.length > 50) {
+            document.getElementById("error-firstname").innerHTML = "Họ không được vượt quá 50 ký tự";
+            isValid = false;
         }
 
-        // Check if first name exceeds max length
-        if (firstName.length > 50) {
-            alert("Họ không được vượt quá 50 ký tự");
-            return false;
-        }
-
-        // Check if last name is empty
+        // Validate last name
         if (lastName === "") {
-            alert("Tên không được để trống");
-            return false;
+            document.getElementById("error-lastname").innerHTML = "Tên không được để trống";
+            isValid = false;
+        } else if (lastName.length > 50) {
+            document.getElementById("error-lastname").innerHTML = "Tên không được vượt quá 50 ký tự";
+            isValid = false;
         }
 
-        // Check if last name exceeds max length
-        if (lastName.length > 50) {
-            alert("Tên không được vượt quá 50 ký tự");
-            return false;
-        }
-
-        // Check if address is empty
+        // Validate address
         if (address === "") {
-            alert("Địa chỉ không được để trống");
-            return false;
+            document.getElementById("error-address").innerHTML = "Địa chỉ không được để trống";
+            isValid = false;
+        } else if (address.length > 100) {
+            document.getElementById("error-address").innerHTML = "Địa chỉ không được vượt quá 100 ký tự";
+            isValid = false;
         }
 
-        // Check if address exceeds max length
-        if (address.length > 100) {
-            alert("Địa chỉ không được vượt quá 100 ký tự");
-            return false;
-        }
-        // Check if date of birth is not in the future
+        // Validate date of birth
         if (dob > today) {
-            alert("Ngày sinh không được trong tương lai");
-            return false;
+            document.getElementById("error-dob").innerHTML = "Ngày sinh không được trong tương lai";
+            isValid = false;
         }
 
-        // All checks passed
-        return true;
+        return isValid;
     }
 </script>
 </body>
