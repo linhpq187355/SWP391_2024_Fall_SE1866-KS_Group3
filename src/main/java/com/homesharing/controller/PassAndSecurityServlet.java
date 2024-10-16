@@ -109,6 +109,7 @@ public class PassAndSecurityServlet extends HttpServlet {
             req.setAttribute("error", error);
 
             // Forward the request to user-profile.jsp
+
             req.getRequestDispatcher("/user-security.jsp").forward(req, resp);
         } catch (SQLException e) {
             LOGGER.severe("Error retrieving user security information: {}" + e.getMessage() + e); // Log the actual exception

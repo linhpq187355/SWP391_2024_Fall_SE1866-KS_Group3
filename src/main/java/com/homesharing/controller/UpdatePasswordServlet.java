@@ -132,8 +132,9 @@ public class UpdatePasswordServlet extends HttpServlet {
         try {
             int result = userService.updatePassword(userId, hadPass, oldPassword, password);
             if(result == 1) {
-                req.setAttribute("message", "Cập nhật mật khẩu thành công.");
-                req.getRequestDispatcher("/user-security.jsp").forward(req, resp);
+                req.getSession().setAttribute("message", "Cập nhật mật khẩu thành công.");
+                req.getSession().setAttribute("messageType", "success");
+                resp.sendRedirect(req.getContextPath() + "/user-security");
             } else if (result == -1) {
                 req.setAttribute("error", "Mật khẩu cũ không khớp.");
                 req.getRequestDispatcher("/update-password.jsp").forward(req, resp);

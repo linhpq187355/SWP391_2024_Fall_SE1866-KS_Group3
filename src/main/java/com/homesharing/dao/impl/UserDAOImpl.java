@@ -6,8 +6,9 @@
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  *  * 2024-9-18      1.0                 ManhNC         First Implement
- * 2024-10-01      1.0              Pham Quang Linh     First Implement
- * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-01        1.0              Pham Quang Linh     First Implement
+ * 2024-10-10        2.0              Pham Quang Linh     Second Implement
+ * 2024-10-10        2.0              ManhNC             Second Implement
  */
 
 package com.homesharing.dao.impl;
@@ -707,7 +708,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
 
     @Override
     public User getUserById(int id) {
-        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS_Users] WHERE [id] = ?";
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

@@ -7,7 +7,7 @@
  * DATE            Version             AUTHOR           DESCRIPTION
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
- * 2024-10-10      1.0                 ManhNC         Implement search service
+ * 2024-10-10      2.0                 ManhNC         Implement search service
  */
 
 package com.homesharing.service.impl;

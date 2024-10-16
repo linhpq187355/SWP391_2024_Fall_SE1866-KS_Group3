@@ -41,7 +41,7 @@ public class ListReportHomeServlet extends HttpServlet {
         this.reportService = new ReportServiceImpl(reportDAO, reportTypeDAO);
         homeDAO = new HomeDAOImpl();
         priceDAO = new PriceDAOImpl();
-        this.homePageService = new HomePageServiceImpl(homeDAO, priceDAO);
+        this.homePageService = new HomePageServiceImpl(homeDAO, priceDAO, userDao);
         userDao = new UserDAOImpl();
         roleDao = new RoleDAOImpl();
         this.userManagementServiceService = new UserManagementServiceImpl();

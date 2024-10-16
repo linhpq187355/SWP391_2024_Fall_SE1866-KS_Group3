@@ -8,8 +8,6 @@ import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Home;
-import com.homesharing.model.Price;
-import com.homesharing.util.GsonUtil;
 import com.homesharing.model.User;
 import com.homesharing.service.HomeMgtService;
 import com.homesharing.service.UserService;
@@ -27,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/my-home")
 public class MyHomeListServlet extends HttpServlet {
@@ -58,24 +55,19 @@ public class MyHomeListServlet extends HttpServlet {
         if (cookieValue != null) {
             User user = null;
 
-            try {
-                user = userService.getUser(Integer.parseInt(cookieValue));
-                List<Home> homeList = homeMgtService.getPersonalHome(user.getId());
+            user = userService.getUser(Integer.parseInt(cookieValue));
+            List<Home> homeList = homeMgtService.getPersonalHome(user.getId());
 
-                // Convert homeList to JSON using Gson
-                Gson gson = GsonUtil.createGson();
-                String homeListJson = gson.toJson(homeList);
-                resp.setContentType("text/html");
-                resp.setCharacterEncoding("UTF-8");
+            // Convert homeList to JSON using Gson
+            Gson gson = new Gson();
+            String homeListJson = gson.toJson(homeList);
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
 
-                // Send the JSON data in response
-                req.setAttribute("homeList", homeListJson);
-                req.getRequestDispatcher("personal-homes.jsp").forward(req, resp);
+            // Send the JSON data in response
+            req.setAttribute("homeList", homeListJson);
+            req.getRequestDispatcher("personal-homes.jsp").forward(req, resp);
 
-            } catch (SQLException e) {
-                logger.error(e.getMessage());
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
-            }
         } else {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
         }
