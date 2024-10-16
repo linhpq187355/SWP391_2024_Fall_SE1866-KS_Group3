@@ -112,7 +112,6 @@ public interface HomeDAO {
      * Retrieve new homes' info from the database.
      * @return List of Home objects.
      */
-
     List<Home> getNewHomes() throws SQLException, IOException, ClassNotFoundException;
 
     /**

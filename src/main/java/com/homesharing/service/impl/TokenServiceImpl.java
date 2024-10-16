@@ -76,7 +76,7 @@ public class TokenServiceImpl implements TokenService {
         if (token.getToken().equals(tokenCode)) {
             // Calculate the time difference between time input and the requested time
             Duration duration = Duration.between(token.getRequestedTime(), requestedTime);
-            // Check if the time difference is less than 5 minutes
+            // Check if the time difference is less than 1 minutes
             if (duration.toMinutes() < 1) {
                 // If the token is not verified, update its status
                 if (!token.isVerified()) {
@@ -125,7 +125,7 @@ public class TokenServiceImpl implements TokenService {
                 + "<body>"
                 + "<h2>Xác nhận email</h2>"
                 + "<p>Xin chào,</p>"
-                + "<p>Đây là mã OTP để xác thực email của bạn. Mã này có hiệu lực trong vòng 5 phút.</p>"
+                + "<p>Đây là mã OTP để xác thực email của bạn. Mã này có hiệu lực trong vòng 1 phút.</p>"
                 + "<p><strong>Mã OTP của bạn: " + tokenCode + "</strong></p>"
                 + "<p>Lưu ý: Không chia sẻ mã này với bất kỳ ai.</p>"
                 + "<p>Trân trọng,<br>Đội ngũ hỗ trợ</p>"

@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-10      1.0                 ManhNC            update some method
+ */
 package com.homesharing.dao;
 
 import com.homesharing.model.Home;
@@ -19,7 +28,18 @@ public interface PriceDAO {
     List<Price> getPrices(List<Home> homes);
     int savePrice(Price price);
 
+    /**
+     * Retrieves the minimum price of homes from the database.
+     *
+     * @return The minimum price.
+     */
     int getMinPrice();
+
+    /**
+     * Retrieves the maximum price of homes from the database.
+     *
+     * @return The maximum price.
+     */
     int getMaxPrice();
 
 }

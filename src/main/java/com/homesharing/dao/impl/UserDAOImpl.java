@@ -312,13 +312,14 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 " WHERE id = ?;\n";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, userId);
 
             // Execute the query to check for email existence
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1); // Return true if email exists
             }
@@ -327,7 +328,15 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error checking email existence in the database", e);
         } finally {
-            closeConnection();
+            if (resultSet != null) {
+                resultSet.close(); // Đảm bảo ResultSet được đóng
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
 
         // Return false if no email match is found

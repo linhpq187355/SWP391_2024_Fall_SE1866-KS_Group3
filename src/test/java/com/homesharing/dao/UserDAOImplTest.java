@@ -209,7 +209,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    public void testGetUserAvatar_SQLException() throws SQLException {
+    void testGetUserAvatar_SQLException() throws SQLException {
         // Set up the user ID for which the avatar is to be retrieved
         int userId = 1;
 
@@ -287,4 +287,250 @@ class UserDAOImplTest {
         verify(preparedStatement).setString(1, "hashedPassword123");
         verify(preparedStatement).setInt(2, userId);
     }
+
+    @Test
+    void testUpdateGoogleId_Success() throws SQLException {
+        // Arrange
+        String googleId = "newGoogleId";
+        String email = "test@example.com";
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1); // Giả lập có một hàng được cập nhật
+
+        // Act
+        int result = userDAO.updateGoogleId(googleId, email);
+
+        // Assert
+        assertEquals(1, result); // Kiểm tra số hàng đã cập nhật
+        verify(preparedStatement).setString(1, googleId); // Kiểm tra rằng googleId đã được thiết lập đúng
+        verify(preparedStatement).setString(2, email); // Kiểm tra rằng email đã được thiết lập đúng
+        verify(preparedStatement).executeUpdate(); // Kiểm tra phương thức executeUpdate đã được gọi
+    }
+
+    @Test
+    void testUpdateGoogleId_SQLException() throws SQLException {
+        // Arrange
+        String googleId = "newGoogleId";
+        String email = "test@example.com";
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Act & Assert
+        Exception exception = assertThrows(GeneralException.class, () -> {
+            userDAO.updateGoogleId(googleId, email);
+        });
+
+        assertTrue(exception.getMessage().contains("Error updating user googleId: Database error")); // Kiểm tra thông điệp lỗi
+    }
+
+    @Test
+    void testUpdateGoogleId_ResourceClosing() throws SQLException {
+        // Arrange
+        String googleId = "newGoogleId";
+        String email = "test@example.com";
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        // Act
+        userDAO.updateGoogleId(googleId, email);
+
+        // Assert
+        verify(preparedStatement).close(); // Kiểm tra rằng preparedStatement đã được đóng
+        verify(connection).close(); // Kiểm tra rằng connection đã được đóng
+    }
+
+    @Test
+    void testGetGoogleId_Success() throws SQLException {
+        // Arrange
+        String email = "test@example.com";
+        String expectedGoogleId = "testGoogleId";
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true); // Giả lập có kết quả
+        when(resultSet.getString("googleID")).thenReturn(expectedGoogleId);
+
+        // Act
+        String googleId = userDAO.getGoogleId(email);
+
+        // Assert
+        assertEquals(expectedGoogleId, googleId); // Kiểm tra kết quả trả về
+        verify(preparedStatement).setString(1, email); // Kiểm tra rằng email đã được thiết lập đúng
+        verify(preparedStatement).executeQuery(); // Kiểm tra phương thức executeQuery đã được gọi
+    }
+
+    @Test
+    void testGetGoogleId_NoUserFound() throws SQLException {
+        // Arrange
+        String email = "test@example.com";
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false); // Giả lập không có kết quả
+
+        // Act
+        String googleId = userDAO.getGoogleId(email);
+
+        // Assert
+        assertNull(googleId); // Kiểm tra rằng kết quả là null
+    }
+
+    @Test
+    void testGetGoogleId_SQLException() throws SQLException {
+        // Arrange
+        String email = "test@example.com";
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Act & Assert
+        Exception exception = assertThrows(GeneralException.class, () -> {
+            userDAO.getGoogleId(email);
+        });
+
+        assertTrue(exception.getMessage().contains("Error finding googleID by email in the database: Database error")); // Kiểm tra thông điệp lỗi
+    }
+
+    @Test
+    void testGetGoogleId_ResourceClosing() throws SQLException {
+        // Arrange
+        String email = "test@example.com";
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true); // Giả lập có kết quả
+        when(resultSet.getString("googleID")).thenReturn("testGoogleId");
+
+        // Act
+        userDAO.getGoogleId(email);
+
+        // Assert
+        verify(resultSet).close(); // Kiểm tra rằng ResultSet đã được đóng
+        verify(preparedStatement).close(); // Kiểm tra rằng PreparedStatement đã được đóng
+        verify(connection).close(); // Kiểm tra rằng Connection đã được đóng
+    }
+
+    @Test
+    void testUpdateEmail_Success() throws SQLException {
+        // Arrange
+        String email = "newEmail@example.com";
+        int id = 1;
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1); // Giả lập có một hàng được cập nhật
+
+        // Act
+        int result = userDAO.updateEmail(email, id);
+
+        // Assert
+        assertEquals(1, result); // Kiểm tra số hàng đã cập nhật
+        verify(preparedStatement).setString(1, email); // Kiểm tra rằng email đã được thiết lập đúng
+        verify(preparedStatement).setInt(2, id); // Kiểm tra rằng id đã được thiết lập đúng
+        verify(preparedStatement).executeUpdate(); // Kiểm tra phương thức executeUpdate đã được gọi
+    }
+
+    @Test
+    void testUpdateEmail_SQLException() throws SQLException {
+        // Arrange
+        String email = "newEmail@example.com";
+        int id = 1;
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Act & Assert
+        Exception exception = assertThrows(GeneralException.class, () -> {
+            userDAO.updateEmail(email, id);
+        });
+
+        assertTrue(exception.getMessage().contains("Error updating user profile: Database error")); // Kiểm tra thông điệp lỗi
+    }
+
+    @Test
+    void testUpdateEmail_ResourceClosing() throws SQLException {
+        // Arrange
+        String email = "newEmail@example.com";
+        int id = 1;
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        // Act
+        userDAO.updateEmail(email, id);
+
+        // Assert
+        verify(preparedStatement).close(); // Kiểm tra rằng PreparedStatement đã được đóng
+        verify(connection).close(); // Kiểm tra rằng Connection đã được đóng
+    }
+
+    @Test
+    void testPassWordExists_PasswordIsNull() throws SQLException {
+        // Arrange
+        int userId = 1;
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true); // Giả lập có kết quả
+        when(resultSet.getInt(1)).thenReturn(1); // Giả lập rằng mật khẩu là null
+
+        // Act
+        int result = userDAO.passWordExists(userId);
+
+        // Assert
+        assertEquals(1, result); // Kiểm tra rằng kết quả là 1 (mật khẩu là null)
+        verify(preparedStatement).setInt(1, userId); // Kiểm tra rằng userId đã được thiết lập đúng
+        verify(preparedStatement).executeQuery(); // Kiểm tra rằng executeQuery đã được gọi
+    }
+
+    @Test
+    void testPassWordExists_PasswordExists() throws SQLException {
+        // Arrange
+        int userId = 2;
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true); // Giả lập có kết quả
+        when(resultSet.getInt(1)).thenReturn(0); // Giả lập rằng mật khẩu tồn tại
+
+        // Act
+        int result = userDAO.passWordExists(userId);
+
+        // Assert
+        assertEquals(0, result); // Kiểm tra rằng kết quả là 0 (mật khẩu tồn tại)
+    }
+
+    @Test
+    void testPassWordExists_NoUserFound() throws SQLException {
+        // Arrange
+        int userId = 3;
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false); // Giả lập không có kết quả
+
+        // Act
+        int result = userDAO.passWordExists(userId);
+
+        // Assert
+        assertEquals(-1, result); // Kiểm tra rằng kết quả là -1 (không có người dùng)
+    }
+
+    @Test
+    void testPassWordExists_SQLException() throws SQLException {
+        // Arrange
+        int userId = 4;
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Act & Assert
+        Exception exception = assertThrows(GeneralException.class, () -> {
+            userDAO.passWordExists(userId);
+        });
+
+        assertTrue(exception.getMessage().contains("Error checking email existence in the database")); // Kiểm tra thông điệp lỗi
+    }
+
+    @Test
+    void testPassWordExists_ResourceClosing() throws SQLException {
+        // Arrange
+        int userId = 5;
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true); // Giả lập có kết quả
+        when(resultSet.getInt(1)).thenReturn(-1); // Giả lập rằng mật khẩu là null
+
+        // Act
+        userDAO.passWordExists(userId);
+
+        // Assert
+        verify(resultSet).close(); // Kiểm tra rằng ResultSet đã được đóng
+        verify(preparedStatement).close(); // Kiểm tra rằng PreparedStatement đã được đóng
+        verify(connection).close(); // Kiểm tra rằng Connection đã được đóng
+    }
+
 }

@@ -17,12 +17,11 @@
     <meta name="author" content="Kimarotec">
     <meta name="keyword" content="html5, css, bootstrap, property, real-estate theme , bootstrap template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
 
     <!-- Place favicon.ico  the root directory -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
 
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
@@ -137,7 +136,7 @@
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <input type="text"  name="keyword"  class="form-control" placeholder="Từ khóa" value="${searchParams.keyword}">
+                                                <input type="text"  name="keyword"  class="form-control" placeholder="Từ khóa" value="${searchParams.keyword}" maxlength="50">
                                             </div>
                                         </div>
                                     </fieldset>
@@ -235,7 +234,7 @@
                                     <fieldset class="padding-5">
                                         <div class="row">
                                             <div class="col-xs-6">
-                                                <label for="price-range">Bathroom :</label>
+                                                <label for="price-range">Số phòng tắm :</label>
                                                 <input type="text" class="span2" name="bathRange" value="${searchParams.bathRange != null ? searchParams.bathRange : ''}"
                                                        data-slider-min="${minBath != null ? minBath : 0}"
                                                        data-slider-max="${maxBath != null ? maxBath : 10}"
@@ -254,7 +253,7 @@
                                             </div>
 
                                             <div class="col-xs-6">
-                                                <label for="property-geo">Bedroom :</label>
+                                                <label for="property-geo">Số phòng ngủ :</label>
                                                 <input type="text" class="span2" name="bedRange" value="${searchParams.bedRange != null ? searchParams.bedRange : ''}"
                                                        data-slider-min="${minBed != null ? minBed : 0}"
                                                        data-slider-max="${maxBed != null ? maxBed : 10}"

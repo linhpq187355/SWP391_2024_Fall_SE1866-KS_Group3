@@ -30,13 +30,13 @@ import java.util.logging.Logger;
  * Implementation of HomeDAO to interact with the Homes database.
  */
 public class HomeDAOImpl extends DBContext implements HomeDAO {
-    private List<Home> homes = new ArrayList<>();
     // Logger for logging errors or information
     private static final Logger logger = Logger.getLogger(HomeDAOImpl.class.getName());
 
 
     @Override
     public List<Home> getAllHomes() {
+        List<Home> homes = new ArrayList<>();
         String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [wardId], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
 
         Connection connection = null;
@@ -336,7 +336,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error finding googleID by email in the database: " + e.getMessage(), e);
+            throw new GeneralException("Error finding image in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
             try {
@@ -635,7 +635,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max area in the database: " + e.getMessage(), e);
+            throw new GeneralException("Error get min bed in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
             try {
@@ -677,7 +677,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max area in the database: " + e.getMessage(), e);
+            throw new GeneralException("Error get max bed in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
             try {
@@ -719,7 +719,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max area in the database: " + e.getMessage(), e);
+            throw new GeneralException("Error get min bath in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
             try {
@@ -761,7 +761,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max area in the database: " + e.getMessage(), e);
+            throw new GeneralException("Error get max bath in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
             try {
