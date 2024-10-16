@@ -1,15 +1,3 @@
-/*
- * Copyright(C) 2024, Homesharing Inc.
- * Homesharing:
- *  Roommate Matching and Home Sharing Service
- *
- * Record of change:
- * DATE            Version             AUTHOR           DESCRIPTION
- * 2024-10-01      1.0              Pham Quang Linh     First Implement
- * 2024-10-10      2.0              Pham Quang Linh     Second Implement
- * 2024-10-10      1.0                 ManhNC            update some method
- */
-
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -194,7 +182,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
                 home.setHomeDescription(resultSet.getString("homeDescription"));
                 home.setTenantDescription(resultSet.getString("tenantDescription"));
-                home.setWardId(resultSet.getInt("wardId"));
+                home.setWardId(resultSet.getInt("wardsId"));
                 home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                 home.setCreatedBy(resultSet.getInt("createdBy"));
 
@@ -936,7 +924,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                     home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
                     home.setHomeDescription(resultSet.getString("homeDescription"));
                     home.setTenantDescription(resultSet.getString("tenantDescription"));
-                    home.setWardId(resultSet.getInt("wardId"));
+                    home.setWardId(resultSet.getInt("wardsId"));
                     home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                     home.setCreatedBy(resultSet.getInt("createdBy"));
                     return home;

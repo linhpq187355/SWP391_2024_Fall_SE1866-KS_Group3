@@ -37,6 +37,72 @@
     <link rel="stylesheet" href="assets/css/lightslider.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .card {
+            background-color: #7f7f7f;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-size: 18px;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+        }
+
+        .phone-button {
+            background-color: #00c853;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-button i {
+            margin-right: 10px;
+        }
+
+        .zalo-button, .like-button {
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zalo-button i, .like-button i {
+            margin-right: 10px;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <jsp:include page="header.jsp"/>
 
@@ -63,9 +129,7 @@
 
 <div class="content-area single-property" style="background-color: #FCFCFC;">&nbsp;
     <div class="container">
-
         <div class="clearfix padding-top-40">
-
             <div class="col-md-8 single-property-content prp-style-1">
                 <div class="row">
                     <div class="light-slide-item">
@@ -73,6 +137,9 @@
                             <div class="favorite-and-print">
                                 <a class="add-to-fav" href="#login-modal" data-toggle="modal">
                                     <i class="fa fa-star-o"></i>
+                                </a>
+                                <a class="add-to-fav" data-toggle="modal" data-target="#reportModal">
+                                    <i class="fa fa-flag-o"></i>
                                 </a>
                                 <a class="printer-icon" href="javascript:window.print()">
                                     <i class="fa fa-print"></i>
@@ -272,7 +339,6 @@
                     <div class="dealer-widget">
                         <div class="dealer-content">
                             <div class="inner-wrapper">
-
                                 <div class="clear">
                                     <div class="col-xs-4 col-sm-4 dealer-face">
                                         <a href="">
@@ -473,6 +539,13 @@
                     <%--                                                </div>--%>
                     <%--                                            </div>--%>
                     <%--                                        </fieldset>--%>
+<%--                                <fieldset class="padding-5">--%>
+<%--                                    <div class="row">--%>
+<%--                                        <div class="col-xs-6">--%>
+<%--                                            <div class="checkbox">--%>
+<%--                                                <label> <input type="checkbox" checked> Fire Place</label>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
 
                     <%--                                        <fieldset class="padding-5">--%>
                     <%--                                            <div class="row">--%>
@@ -562,6 +635,53 @@
 
     </div>
 </div>
+<!-- Report modal -->
+<div class="modal fade" id="reportModal" tabindex="-1"
+     aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="reportModalLabel">Mẫu báo cáo</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Form Inside Modal -->
+                <form id="reportForm" action="report">
+                    <div class="form-group">
+                        <label for="reportTypeId" class="control-label">Loại báo cáo</label>
+                        <select class="form-control" id="reportTypeId" name="reportTypeId" required>
+                            <option value="-1" disabled selected>Chọn lí do</option>
+                            <c:forEach items="${requestScope.reportTypes}" var="reportTypes">
+                                <option value="${reportTypes.id}">${reportTypes.reason}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="control-label">Tiêu đề</label>
+                        <input type="text" class="form-control" id="title" name="title" required minlength="5" maxlength="127">
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="control-label">Mô tả</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"
+                                  required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitReport()">
+                    Submit Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <!-- Footer area-->
@@ -712,7 +832,8 @@
 
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="assets/js/jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -726,7 +847,55 @@
 <script src="assets/js/price-range.js"></script>
 <script type="text/javascript" src="assets/js/lightslider.min.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<script>
+    function submitReport() {
+        // Get form data
+        let reportTypeId = $('#reportTypeId').val();
+        let title = $('#title').val();
+        let description = $('#description').val();
+        let homeId = ${requestScope.home.id};
+
+        // Perform validation (if needed)
+        if (reportTypeId === '-1') {
+            alert("Please select a valid report type.");
+            return;
+        }
+
+        if (title.length < 5 || title.length > 127) {
+            alert("Title must be between 5 and 127 characters.");
+            return;
+        }
+
+        if (description.trim() === "") {
+            alert("Description is required.");
+            return;
+        }
+
+        // Submit the form via AJAX
+        $.ajax({
+            type: "POST",
+            url: "report",  // URL of the servlet that handles the form submission
+            data: {
+                reportTypeId: reportTypeId,
+                title: title,
+                description: description,
+                homeId: homeId
+            },
+            success: function(response) {
+                // Handle success - perhaps close the modal and show a success message
+                alert("Report submitted successfully.");
+                $('#reportModal').modal('hide');  // Close modal
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                alert("There was an error submitting the report: " + xhr.responseText);
+            }
+        });
+    }
+
+</script>
 <script>
     $(document).ready(function () {
 
@@ -742,6 +911,48 @@
                 $('#image-gallery').removeClass('cS-hidden');
             }
         });
+    });
+
+    function showConfirmPopup(homeId, userId) {
+        // Hiển thị modal xác nhận
+        $('#login-modal').modal('show');
+
+        // Lưu các ID để sử dụng trong xác nhận
+        window.currentHomeId = homeId;
+        window.currentUserId = userId;
+    }
+
+    function confirmAddToWishlist(homeId, userId) {
+        // Tạo một yêu cầu POST tới servlet
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "add-to-wishlist", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                alert(xhr.responseText); // Hiển thị phản hồi từ servlet
+                // $('#login-modal').modal('hide'); // Đóng modal
+            }
+        };
+        xhr.send("homeId=" + homeId + "&userId=" + userId);
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        var mapObj = null;
+        var defaultCoord = [21.0819, 105.6363]; // coord mặc định, Hà Nội
+        var zoomLevel = 15; // Mức phóng to bản đồ
+        var mapConfig = {
+            attributionControl: false, // để ko hiện watermark nữa, nếu bị liên hệ đòi thì nhớ open nha
+            center: defaultCoord, // vị trí map mặc định hiện tại
+            zoom: zoomLevel,
+        };
+
+        mapObj = L.map('map', mapConfig);
+
+        // thêm tile để map có thể hoạt động, xài free từ OSM
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mapObj);
     });
 </script>
 
