@@ -12,8 +12,10 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.*;
 import com.homesharing.service.impl.HomePageServiceImpl;
 import com.homesharing.service.impl.SubmissonFormServiceImpl;
@@ -49,6 +51,7 @@ public class HomeListServlet extends HttpServlet {
     private HomePageService homePageService;  // Service layer for home page logic
     private HomeDAO homeDAO;  // Data Access Object for accessing home data
     private PriceDAO priceDAO;  // Data Access Object for accessing price data
+    private UserDAO userDAO;
 
     /**
      * Initializes the servlet by instantiating the required DAOs and services.
@@ -58,9 +61,10 @@ public class HomeListServlet extends HttpServlet {
         // Initialize the DAOs
         homeDAO = new HomeDAOImpl();
         priceDAO = new PriceDAOImpl();
+        userDAO = new UserDAOImpl();
         submissonFormService = new SubmissonFormServiceImpl();
         // Initialize the home page service with the required DAOs
-        homePageService = new HomePageServiceImpl(homeDAO, priceDAO);
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
     }
 
     /**

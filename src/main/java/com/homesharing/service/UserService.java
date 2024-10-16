@@ -179,7 +179,7 @@ public interface UserService {
      * @param userId The ID of the user to be retrieved.
      * @return The User object containing the user's details, or null if not found.
      */
-    User getUser(int userId) throws SQLException;
+    User getUser(int userId);
 
     /**
      * Resets the password for a user with the given ID.

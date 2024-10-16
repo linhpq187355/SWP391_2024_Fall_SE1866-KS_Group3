@@ -73,11 +73,9 @@ public class CreateHomeServlet extends HttpServlet {
         String cookieValue = CookieUtil.getCookie(req, "id");
         if (cookieValue != null) {
             User user = null;
-            try {
+
                 user = userService.getUser(Integer.parseInt(cookieValue));
-            } catch (SQLException e) {
-                logger.error(e.getMessage());
-            }
+
             if (user.getRolesId() != 2) {
                 List<HomeType> homeTypes = submissonFormService.getHomeTypes();
                 List<Amentity> amentities = submissonFormService.getAmentities();

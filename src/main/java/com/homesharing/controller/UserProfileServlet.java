@@ -59,11 +59,9 @@ public class UserProfileServlet extends HttpServlet {
 
         // Fetch user information and preferences using the services
         User user = null;
-        try {
+
             user = userService.getUser(userId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
         Preference preference = preferenceService.getPreference(userId);
 
         // Get message and error from request parameters

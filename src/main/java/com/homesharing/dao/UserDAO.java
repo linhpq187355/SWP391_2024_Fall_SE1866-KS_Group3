@@ -95,7 +95,7 @@ public interface UserDAO {
      * @param userId The unique ID of the user to retrieve.
      * @return The {@link User} object corresponding to the user ID, or {@code null} if no user is found.
      */
-    User getUser(int userId) throws SQLException;
+    User getUser(int userId);
     /**
      * Finds a user from the database by their email address.
      *

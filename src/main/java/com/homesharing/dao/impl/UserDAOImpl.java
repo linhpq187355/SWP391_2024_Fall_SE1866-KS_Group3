@@ -135,7 +135,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      * @throws GeneralException if there is an error saving the user to the database.
      */
     @Override
-    public int saveUser(User user) {
+    public int saveUser(User user) throws SQLException {
         String sql = "INSERT INTO [HSS_Users] ([firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [googleID], [createdAt], [gender], [dob], [phoneNumber]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -356,7 +356,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public User getUser(int id) {
-        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber "
+        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.duration, u.earliestMoveIn, u.latestMoveIn, u.minBudget, u.maxBudget,u.rolesid \n"
                 + "FROM [HSS_Users] u WHERE u.id = ?";
 
         Connection connection = null;
@@ -939,8 +939,8 @@ public class UserDAOImpl extends DBContext implements UserDAO {
 
     public static void main(String[] args) {
         UserDAOImpl userDAO = new UserDAOImpl();
-        User user = userDAO.getMatchingUserProfile(4);
-        System.out.println(user.getLatestMoveIn());
+        User user = userDAO.getUser(1);
+        System.out.println(user.getFirstName());
     }
 
 }

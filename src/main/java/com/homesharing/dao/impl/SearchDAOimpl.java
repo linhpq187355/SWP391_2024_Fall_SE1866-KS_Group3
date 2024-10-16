@@ -36,7 +36,7 @@ public class SearchDAOimpl implements SearchDAO {
             preparedStatement.setString(1, "%" + address + "%");
             resultSet = preparedStatement.executeQuery();
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
                 while (resultSet.next()) {
                     // Create a Home object for each row in the ResultSet
                     Home home = new Home();
@@ -62,7 +62,7 @@ public class SearchDAOimpl implements SearchDAO {
                     // Add each home to the list
                     homes.add(home);
                 }
-            }
+
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error searching homes by address: " + e.getMessage(), e);
         } finally {
@@ -113,7 +113,7 @@ public class SearchDAOimpl implements SearchDAO {
             preparedStatement.setInt(2, maxPrice);
             resultSet = preparedStatement.executeQuery();
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
                 while (resultSet.next()) {
                     // Create a Home object for each row in the ResultSet
                     Home home = new Home();
@@ -139,7 +139,7 @@ public class SearchDAOimpl implements SearchDAO {
                     // Add each home to the list
                     homes.add(home);
                 }
-            }
+
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error searching homes by price range: " + e.getMessage(), e);
         } finally {

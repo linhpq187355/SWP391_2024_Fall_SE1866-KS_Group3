@@ -597,7 +597,7 @@ public class UserServiceImpl implements UserService {
      * @throws GeneralException if an error occurs while accessing the database or if the user is not found.
      */
     @Override
-    public User getUser(int userId) throws SQLException {
+    public User getUser(int userId){
         try {
             // Attempt to retrieve the user from the DAO using the provided userId
             return userDao.getUser(userId);

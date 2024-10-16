@@ -88,7 +88,7 @@ public class UpdateEmailServlet extends HttpServlet {
 
         // Fetch user information and preferences using the services
         User user = null;
-        try {
+
             user = userService.getUser(userId);
             if (user == null) {
                 ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
@@ -96,9 +96,7 @@ public class UpdateEmailServlet extends HttpServlet {
             }
             req.getSession().setAttribute("userId", user.getId());
             req.getSession().setAttribute("oldEmail", user.getEmail());
-        } catch (SQLException e) {
-            ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
-        }
+
 
         // Get message and error from request parameters
         String message = req.getParameter("message");
