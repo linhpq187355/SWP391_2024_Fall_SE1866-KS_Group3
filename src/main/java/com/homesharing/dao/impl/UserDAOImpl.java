@@ -323,7 +323,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             preparedStatement.setInt(1, userId);
 
             // Execute the query to check for email existence
-            resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();                    
             if (resultSet.next()) {
                 return resultSet.getInt(1); // Return true if email exists
             }
@@ -707,7 +707,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
 
     @Override
     public User getUserById(int id) {
-        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS_Users] WHERE [id] = ?";
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
