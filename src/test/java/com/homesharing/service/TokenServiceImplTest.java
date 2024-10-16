@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.MockedStatic;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,37 +39,37 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void testCheckTokenSuccess() {
+    void testCheckTokenSuccess() throws SQLException {
         when(tokenDao.findToken(1)).thenReturn(token);
 
-        boolean result = tokenService.checkToken("123456", 1);
+        boolean result = tokenService.checkToken("123456", 1, LocalDateTime.now());
 
         assertTrue(result);
         verify(tokenDao, times(1)).updateTokenVerification(1);
     }
 
     @Test
-    void testCheckTokenTokenNotFound() {
+    void testCheckTokenTokenNotFound() throws SQLException {
         when(tokenDao.findToken(1)).thenReturn(null);
 
-        boolean result = tokenService.checkToken("123456", 1);
+        boolean result = tokenService.checkToken("123456", 1, LocalDateTime.now());
 
         assertFalse(result);
         verify(tokenDao, never()).updateTokenVerification(anyInt());
     }
 
     @Test
-    void testCheckTokenTokenMismatch() {
+    void testCheckTokenTokenMismatch() throws SQLException {
         when(tokenDao.findToken(1)).thenReturn(token);
 
-        boolean result = tokenService.checkToken("654321", 1);
+        boolean result = tokenService.checkToken("654321", 1, LocalDateTime.now());
 
         assertFalse(result);
         verify(tokenDao, never()).updateTokenVerification(anyInt());
     }
 
     @Test
-    void testSendTokenNewToken() {
+    void testSendTokenNewToken() throws SQLException {
         // Mock static methods
         try (MockedStatic<SecureRandomCode> mockedSecureRandomCode = Mockito.mockStatic(SecureRandomCode.class);
              MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
@@ -84,7 +85,7 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void testSendTokenExistingToken() {
+    void testSendTokenExistingToken() throws SQLException {
         // Mock static method for SendingEmail.sendMail
         try (MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
 
@@ -98,7 +99,7 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void testSendTokenThrowsExceptionWhenEmailFails() {
+    void testSendTokenThrowsExceptionWhenEmailFails() throws SQLException {
         // Mock static method for SendingEmail.sendMail
         try (MockedStatic<SendingEmail> mockedSendingEmail = Mockito.mockStatic(SendingEmail.class)) {
 

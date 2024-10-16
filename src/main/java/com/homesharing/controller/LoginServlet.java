@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-02      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDAO;
@@ -20,31 +29,30 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * LoginServlet handles user login requests, managing both GET and POST
- * requests for the "/login" URL. This servlet interacts with the UserService
- * to perform login operations, and handles forwarding and redirection based
- * on the login result.
+ * The {@code LoginServlet} handles user login requests.  It processes login attempts,
+ * validates credentials, and manages session information upon successful login.  It handles both GET
+ * requests (to display the login form) and POST requests (to process login submissions).
+ * <p>
+ * Bugs: None known.
  *
- * @version 1.0
- * @since 2024-10-02
+ * @author ManhNC
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class); // Logger instance
 
+    private transient UserDAO userDao;
+    private transient UserService userService;// Mark userService as transient
+
     /**
-     * Initializes the LoginServlet by creating instances of necessary services.
-     * This method is called once when the servlet is first loaded.
+     * Initializes the servlet by instantiating the required DAOs and services.
      */
     @Override
     public void init() {
-        // Create instances of UserDao and TokenDao
-        UserDAO userDao = new UserDAOImpl();
+        userDao = new UserDAOImpl();
         TokenDAO tokenDao = new TokenDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
-        // Inject UserDao into UserServiceImpl
         userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);
     }
 
@@ -97,6 +105,10 @@ public class LoginServlet extends HttpServlet {
                 req.getSession().setAttribute("message", "Đăng nhập thành công.");
                 req.getSession().setAttribute("messageType", "success");
                 resp.sendRedirect(req.getContextPath() + "/home-page");
+            } else if (result.equals("not-verify")) {
+                int userId = userDao.findUserByEmail(email).getId();
+                req.getSession().setAttribute("userId",userId);
+                req.getRequestDispatcher("/input-otp.jsp").forward(req, resp);
             } else {
                 req.setAttribute("error", result);
                 if(result.equals("Email hoặc mật khẩu không đúng")) {

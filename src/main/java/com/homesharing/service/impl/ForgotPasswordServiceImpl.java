@@ -10,6 +10,8 @@ import com.homesharing.service.ForgotPasswordService;
 import com.homesharing.util.SendingEmail;
 import jakarta.mail.MessagingException;
 
+import java.sql.SQLException;
+
 /**
  * Implementation of the ForgotPasswordService.
  * This class handles the logic for sending password reset tokens via email.
@@ -39,8 +41,10 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
      * @throws GeneralException if there is an error sending the email
      */
     @Override
-    public boolean sendResetPasswordToken(String email) {
-        User user = userDao.findUserByEmail(email);  // Find user by email
+    public boolean sendResetPasswordToken(String email) throws SQLException {
+        User user = null;  // Find user by email
+        user = userDao.findUserByEmail(email);
+
         if (user != null) {
             Token oldToken = tokenDao.findToken(user.getId());  // Retrieve the existing token for the user
             String tokenCode = oldToken.getToken();  // Get the token code

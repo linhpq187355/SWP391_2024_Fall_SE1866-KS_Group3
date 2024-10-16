@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.util;
 
 import jakarta.servlet.http.Cookie;
@@ -10,7 +19,13 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Utility class for handling cookie operations.
+ * Utility class for handling cookie operations in the Home Sharing System.
+ * This class provides methods to add, retrieve, and remove cookies in HTTP responses
+ * and requests. All methods are static, and the class cannot be instantiated.
+ *
+ * @version 1.0
+ * @since 2024-10-03
+ * @author ManhNC
  */
 public class CookieUtil {
 
@@ -31,6 +46,7 @@ public class CookieUtil {
             String encodedValue = URLEncoder.encode(value, StandardCharsets.UTF_8);
             Cookie cookie = new Cookie(name, encodedValue);
             cookie.setPath("/");
+            cookie.setHttpOnly(true);
             cookie.setMaxAge(cookieAge);
             response.addCookie(cookie);
         } catch (Exception e) {

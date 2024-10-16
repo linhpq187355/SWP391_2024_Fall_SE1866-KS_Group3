@@ -12,6 +12,8 @@
 <head>
     <title>Đăng nhập</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
     <style>
         .content-section {
             margin-bottom: 40px; /* Tạo khoảng cách giữa section và footer */
@@ -130,14 +132,18 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-lg-5">
-<%--                        <a href="#!" class="btn btn-lg btn-danger btn-block">--%>
-<%--                            <i class="glyphicon glyphicon-log-in"></i>--%>
-<%--                            <span>Đăng nhập bằng Google</span>--%>
-<%--                        </a>--%>
-                        <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">
-                            <i class="glyphicon glyphicon-user"></i>
-                            <span>Bạn là nhân viên?</span>
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
+&redirect_uri=http://localhost:9999/homeSharing/sign-up-google
+&response_type=code
+&client_id=66002425643-qfqed6dbl9lj6nbhv8ejd5qci14bv4ks.apps.googleusercontent.com
+&approval_prompt=force" class="btn btn-lg btn-danger btn-block">
+                            <i class="glyphicon glyphicon-log-in"></i>
+                            <span>Đăng nhập bằng Google</span>
                         </a>
+<%--                        <a href="staff-login.jsp" class="btn btn-lg btn-primary btn-block">--%>
+<%--                            <i class="glyphicon glyphicon-user"></i>--%>
+<%--                            <span>Bạn là nhân viên?</span>--%>
+<%--                        </a>--%>
                     </div>
                 </div>
             </div>

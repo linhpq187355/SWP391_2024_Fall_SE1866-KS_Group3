@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>Datatables - Kaiadmin Bootstrap 5 Admin Dashboard</title>
+    <title>DashBoard - HomeSharing</title>
     <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
             name="viewport"
@@ -21,7 +21,7 @@
             href="./assets/img/kaiadmin/favicon.ico"
             type="image/x-icon"
     />
-
+    <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
@@ -737,8 +737,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header" style="display: flex; justify-content: space-between">
                                 <h4 class="card-title">Danh sách người dùng</h4>
+                                <button class="btn btn-secondary" onclick="window.location.href='dashboard/create-account'">
+                        <span class="btn-label">
+                          <i class="fa fa-plus"></i>
+                        </span>
+                                    Tạo tài khoản
+                                </button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -770,7 +776,6 @@
                                         </tfoot>
                                         <tbody>
                                         <c:forEach items="${requestScope.userList}" var="user">
-                                            <c:if test="${user.rolesId!=1}">
                                                 <tr>
                                                     <td>${user.id}</td>
                                                     <td>${user.email}</td>
@@ -804,7 +809,6 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-                                            </c:if>
                                         </c:forEach>
                                         </tbody>
                                     </table>

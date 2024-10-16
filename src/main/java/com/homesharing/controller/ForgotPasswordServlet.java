@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,8 +52,11 @@ public class ForgotPasswordServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         // Initialize UserDAO and TokenDAO, inject into ForgotPasswordService
-        UserDAO userDao = new UserDAOImpl();
-        TokenDAO tokenDao = new TokenDAOImpl();
+        UserDAO userDao = null;
+        userDao = new UserDAOImpl();
+        TokenDAO tokenDao = null;
+        tokenDao = new TokenDAOImpl();
+
         forgotPasswordService = new ForgotPasswordServiceImpl(userDao, tokenDao);
     }
 

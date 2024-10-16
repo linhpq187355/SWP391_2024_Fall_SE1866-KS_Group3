@@ -19,8 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class DistrictDAOImplTest {
     @Mock
@@ -35,12 +34,8 @@ class DistrictDAOImplTest {
     @BeforeEach
     void setUp() throws SQLException, IOException, ClassNotFoundException {
         MockitoAnnotations.openMocks(this);
+        mockConnection = mock(Connection.class);
         districtDAO = new DistrictDAOImpl();
-
-        // Mock DBContext.getConnection()
-        try (MockedStatic<DBContext> mockedDBContext = mockStatic(DBContext.class)) {
-            mockedDBContext.when(DBContext::getConnection).thenReturn(mockConnection);
-        }
 
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);

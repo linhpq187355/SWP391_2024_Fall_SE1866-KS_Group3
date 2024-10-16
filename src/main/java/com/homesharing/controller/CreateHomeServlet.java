@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -71,7 +72,12 @@ public class CreateHomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String cookieValue = CookieUtil.getCookie(req, "id");
         if (cookieValue != null) {
-            User user = userService.getUser(Integer.parseInt(cookieValue));
+            User user = null;
+            try {
+                user = userService.getUser(Integer.parseInt(cookieValue));
+            } catch (SQLException e) {
+                logger.error(e.getMessage());
+            }
             if (user.getRolesId() != 2) {
                 List<HomeType> homeTypes = submissonFormService.getHomeTypes();
                 List<Amentity> amentities = submissonFormService.getAmentities();

@@ -15,16 +15,29 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@WebServlet("/home-detail")
+@WebServlet("/home-detail") // Annotation to map this servlet to the specified URL
 public class HomeDetailServlet extends HttpServlet {
 
     private HomeDetailService homeDetailService;
 
+    /**
+     * Initializes the HomeDetailServlet by creating an instance of the HomeDetailService.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() throws ServletException {
         this.homeDetailService = new HomeDetailServiceImpl();
     }
 
+    /**
+     * Handles GET requests to retrieve home details based on the provided home ID.
+     * Fetches associated details such as prices, creator, home types, amenities, and fire equipment.
+     *
+     * @param req The HttpServletRequest object containing the request data.
+     * @param resp The HttpServletResponse object for sending responses to the client.
+     * @throws ServletException if the request cannot be handled.
+     * @throws IOException if an input or output error occurs during the handling of the request.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String homeIdParam = req.getParameter("id");

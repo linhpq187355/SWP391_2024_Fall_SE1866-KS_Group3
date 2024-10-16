@@ -3,7 +3,8 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.PriceDAO;
-import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.service.HomePageService;
@@ -17,8 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.List;
 
 // URL pattern mapped to this servlet
@@ -26,18 +26,35 @@ import java.util.List;
 public class SearchServlet extends HttpServlet {
 
     private SearchSevice searchService;
-    private HomePageService HomePageService;
-    private HomeDAO homeDAO;
-    private PriceDAO priceDAO;
-    private UserDAO userDao;
     private HomePageService homePageService;
+    private HomeDAO homeDAO;  // Data Access Object for accessing home data
+    private PriceDAO priceDAO;  // Data Access Object for accessing price data
 
+    /**
+     * Initializes the SearchServlet by creating instances of necessary DAOs and services.
+     * This method is called once when the servlet is first loaded.
+     */
     @Override
     public void init() throws ServletException {
-        searchService = new SearchServiceImpl();
-        HomePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDao);
+        homeDAO = new HomeDAOImpl();
+        priceDAO = new PriceDAOImpl();
+        try {
+            searchService = new SearchServiceImpl();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO);
     }
 
+    /**
+     * Handles GET requests to search for homes based on provided parameters.
+     * Retrieves search parameters, performs search, and forwards results to the JSP.
+     *
+     * @param req The HttpServletRequest object containing the request data.
+     * @param resp The HttpServletResponse object for sending responses to the client.
+     * @throws ServletException if the request cannot be handled.
+     * @throws IOException if an input or output error occurs during the handling of the request.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Retrieve search parameters from the request
@@ -49,31 +66,23 @@ public class SearchServlet extends HttpServlet {
         List<Price> prices = homePageService.getHomePrice(homes);
         int minPrice = 0; // Default minimum price
         int maxPrice = 1000000; // Variable to hold the maximum price
-
-        try {
-            // Parse the minimum price from the request parameter if provided
+            try {
             if (minPriceStr != null && !minPriceStr.trim().isEmpty()) {
                 minPrice = Integer.parseInt(minPriceStr);
             }
-
-            // Parse the maximum price from the request parameter if provided
             if (maxPriceStr != null && !maxPriceStr.trim().isEmpty()) {
                 maxPrice = Integer.parseInt(maxPriceStr);
             }
-            // Perform search based on the provided name or price range
             if (name != null && !name.trim().isEmpty()) {
                 homes = searchService.searchHomesByAdress(name); // Search by name
             } else {
                 homes = searchService.searchByPriceRange(minPrice, maxPrice); // Search by price range
             }
         } catch (NumberFormatException e) {
-            // Handle case wh   ere price parameters cannot be parsed
             req.setAttribute("error", "error"); // Set error attribute for the request
             homes = homePageService.getNewHomes(); // Retrieve all homes as a fallback
-            // Handle SQL or class not found exceptions
             throw new RuntimeException("error: " + e.getMessage(), e);
         }
-
         // Set the search results and parameters as attributes for the request
         req.setAttribute("homes", homes);
         req.setAttribute("searchName", name);

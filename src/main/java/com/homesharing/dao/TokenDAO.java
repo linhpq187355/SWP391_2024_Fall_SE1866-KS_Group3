@@ -1,6 +1,18 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.dao;
 
 import com.homesharing.model.Token;
+
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 /**
  * TokenDAO is an interface that defines the operations for managing tokens in the system.
@@ -8,6 +20,7 @@ import com.homesharing.model.Token;
  *
  * @version 1.0
  * @since 2024-10-02
+ * @author ManhNC
  */
 public interface TokenDAO {
 
@@ -17,7 +30,7 @@ public interface TokenDAO {
      *
      * @param token The Token object to be inserted.
      */
-    void insertToken(Token token);
+    void insertToken(Token token) throws SQLException;
 
     /**
      * Finds and retrieves a token based on the user ID.
@@ -26,7 +39,7 @@ public interface TokenDAO {
      * @param userId The ID of the user whose token needs to be retrieved.
      * @return The Token object associated with the given user ID.
      */
-    Token findToken(int userId);
+    Token findToken(int userId) throws SQLException;
 
     /**
      * Updates the token verification status for a user.
@@ -34,5 +47,13 @@ public interface TokenDAO {
      *
      * @param userId The ID of the user whose token verification status is being updated.
      */
-    void updateTokenVerification(int userId);
+    void updateTokenVerification(int userId) throws SQLException;
+
+    /**
+     * Updates the token code and time for a user.
+     * This method update token code and time instead of create a new token
+     *
+     * @param userId The ID of the user whose token verification status is being updated.
+     */
+    void updateToken(int userId, String otp, LocalDateTime time) throws SQLException;
 }

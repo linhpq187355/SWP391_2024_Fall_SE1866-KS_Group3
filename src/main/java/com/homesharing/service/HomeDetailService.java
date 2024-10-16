@@ -37,8 +37,24 @@ public interface HomeDetailService {
      */
     List<HomeType> getHomeTypesByHomeId(int homeId);
 
+    /**
+     * Retrieves the amenities associated with a specific home by its ID.
+     * These are the features or facilities available for that home.
+     *
+     * @param homeId The ID of the home for which you want to retrieve associated amenities.
+     * @return A list of Amenity objects representing the amenities of the home.
+     *         If no amenities are found, the list will be empty.
+     */
     List<Amentity> getHomeAmenitiesByHomeId(int homeId);
 
+    /**
+     * Retrieves the fire safety equipment associated with a specific home by its ID.
+     * This includes fire extinguishers, smoke detectors, or other related equipment.
+     *
+     * @param homeId The ID of the home for which you want to retrieve fire equipment.
+     * @return A list of FireEquipment objects representing the fire safety equipment of the home.
+     *         If no fire equipment is found, the list will be empty.
+     */
     List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
 
 

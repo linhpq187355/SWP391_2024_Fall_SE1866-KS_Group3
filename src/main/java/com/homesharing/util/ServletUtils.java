@@ -1,5 +1,15 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.util;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,8 +19,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * Utility class for handling common servlet operations.
- * This class cannot be instantiated.
+ * Utility class for handling common servlet operations in the Home Sharing System.
+ * This class provides methods for forwarding requests to error pages and handling error responses.
+ * All methods are static, and the class cannot be instantiated.
+ *
+ * @version 1.0
+ * @since 2024-09-18
+ * @author ManhNC
  */
 public class ServletUtils {
 
@@ -20,7 +35,7 @@ public class ServletUtils {
     }
 
     private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
-    private static final String ERROR_PAGE = "/404.jsp";
+    private static final String ERROR_PAGE = "/error.jsp";
     private static final String FORWARD_ERROR_MESSAGE = "Error forwarding to error page.";
 
     /**
@@ -51,4 +66,23 @@ public class ServletUtils {
             logger.error("An error occurred while sending error response: {}", e.getMessage(), e);
         }
     }
+
+    /**
+     * Helper method to forward the request to the announcement page with a message.
+     * The message is displayed on the target page.
+     *
+     * @param request  HttpServletRequest containing the client request.
+     * @param response HttpServletResponse used to send a response to the client.
+     * @param message  The message to be displayed to the user.
+     */
+    public static void forwardWithMessage(HttpServletRequest request, HttpServletResponse response, String message) {
+        request.setAttribute("notificationMessage", message);
+        try {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/announce.jsp");
+            dispatcher.forward(request, response);
+        } catch (IOException | ServletException e) {
+            logger.error("Error forwarding to announce page: {}", e.getMessage(), e); // Log the exception for debugging
+        }
+    }
+
 }

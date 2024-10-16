@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-02      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.PreferenceDAO;
@@ -22,14 +31,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * SignUpServlet handles user registration requests and processes
  * form submissions for account creation. It validates the input
  * and communicates with the UserService to register new users.
  *
- * @version 1.0
- * @since 2024-10-02
+ * @author ManhNC
  */
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
@@ -94,18 +103,21 @@ public class SignUpServlet extends HttpServlet {
         if (isValid) {
             try {
                 // Attempt to register the user
-                String result = userService.registerUser(firstName, lastName, email, password, role);
-                if ("success".equals(result)) {
-                    // Redirect to home page on success
-                    req.getSession().setAttribute("message", "Đăng kí thành công. Vui lòng kiểm tra email để xác thực tài khoản.");
-                    req.getSession().setAttribute("messageType", "success");
-                    resp.sendRedirect(req.getContextPath() + "/home-page");
+                int result = userService.registerUser(firstName, lastName, email, password, role);
+                if (result > 0) {
+                    //redirect to verify email
+                    req.getSession().setAttribute("userId", result);
+                    resp.sendRedirect(req.getContextPath() + "/verify");
+                } else if (result == 0) {
+                    req.setAttribute("error", "Email này đã được sử dụng, vui lòng nhập email khác.");
+                    req.setAttribute("firstName", firstName);
+                    req.setAttribute("lastName", lastName);
+                    req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
                 } else {
-                    // Set error message if registration fails
-                    req.setAttribute(ERROR_ATTRIBUTE, result);
-                    ServletUtils.forwardToErrorPage(req, resp);
+                    req.setAttribute("error", "Có lỗi xảy ra, vui lòng đăng kí lại.");
+                    req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
                 }
-            } catch (RuntimeException | IOException e) {
+            } catch (RuntimeException | SQLException | IOException | ServletException e) {
                 // Handle any runtime exceptions thrown by the service
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
                 ServletUtils.forwardToErrorPage(req, resp);

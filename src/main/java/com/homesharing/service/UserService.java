@@ -5,17 +5,17 @@
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  */
 
 package com.homesharing.service;
 
+import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
-
-
-import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 
 /**
  * UserService interface defines methods for user registration and validation.
@@ -31,9 +31,26 @@ public interface UserService {
      * @param email     The user's email address.
      * @param password  The user's password.
      * @param role      The role of the user (e.g., findRoommate, postRoom).
-     * @return A string indicating the result of the registration (e.g., success message, error).
+     * @return An integer indicate userID of new user.
      */
-    String registerUser(String firstName, String lastName, String email, String password, String role);
+    int registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException;
+
+    /**
+     * Registers a new user using their Google account information.
+     * If the user already exists, updates their Google ID and sets the cookie values accordingly.
+     *
+     * @param googleAccount The GoogleAccount object containing user information.
+     * @param role The role to assign to the user.
+     *             If the role is null, it indicates that the user needs to set their role again.
+     * @param response The HttpServletResponse object used to set cookies for the user.
+     * @return An integer indicating the result of the registration process:
+     *         1 if the user was successfully logged in,
+     *         2 if a new user was registered successfully,
+     *         -1 if the role is null, and
+     *         0 if the role is invalid.
+     * @throws SQLException if a database access error occurs.
+     */
+    int registerByGoogle(GoogleAccount googleAccount, String role, HttpServletResponse response) throws SQLException;
 
     /**
      * Validates the user input for registration.
@@ -52,6 +69,55 @@ public interface UserService {
     boolean validateUserInput(String firstName, String lastName, String email, String password, String confirmPassword, String role);
 
     /**
+     * Validates user account information.
+     *
+     * @param firstName      The user's first name.
+     * @param lastName       The user's last name.
+     * @param email           The user's email address.
+     * @param password        The user's password.
+     * @param confirmPassword The confirmed password.
+     * @param role            The user's role ID.
+     * @param gender          The user's gender.
+     * @param phone           The user's phone number.
+     * @param dob             The user's date of birth (YYYY-MM-DD).
+     * @return {@code true} if the account information is valid, {@code false} otherwise.
+     */
+    boolean validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob);
+
+    /**
+     * Validates an email address.
+     *
+     * @param email The email address to validate.
+     * @return {@code true} if the email is valid, {@code false} otherwise.
+     */
+    boolean validateEmail(String email);
+
+    /**
+     * Creates a new user account.
+     *
+     * @param firstName The user's first name.
+     * @param lastName  The user's last name.
+     * @param email     The user's email address.
+     * @param password  The user's password.
+     * @param role      The user's role ID.
+     * @param gender    The user's gender.
+     * @param phone     The user's phone number.
+     * @param dob       The user's date of birth (YYYY-MM-DD).
+     * @return The ID of the newly created user, or a negative value if an error occurred (e.g., -1 for duplicate phone, -2 for duplicate email).
+     * @throws SQLException If a database error occurs.
+     */
+    int createAccount(String firstName, String lastName, String email, String password, int role, String gender, String phone, String dob) throws SQLException;
+
+    /**
+     * Stores user information in cookies.
+     *
+     * @param userId   The ID of the user.
+     * @param response The HttpServletResponse to add cookies to.
+     * @throws SQLException If a database error occurs.
+     */
+    void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException;
+
+    /**
      * Handles user login by verifying credentials and optionally remembering the user.
      *
      * @param email      The user's email address.
@@ -60,7 +126,22 @@ public interface UserService {
      * @param response   The HttpServletResponse used for managing cookies (if rememberMe is true).
      * @return A string indicating the result of the login attempt (e.g., success, error).
      */
-    String login(String email, String password, boolean rememberMe, HttpServletResponse response);
+    String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException;
+
+    /**
+     * Updates a user's password.
+     *
+     * @param userId   The ID of the user.
+     * @param hadPass  Indicates if the user previously had a password (1 if yes, 0 if no).
+     * @param oldPass  The user's old password (required if hadPass is 0).
+     * @param password The new password.
+     * @return An integer indicating the result:
+     *         1: Password updated successfully.
+     *         -1: Incorrect old password.
+     *         -2: Invalid input (e.g., null or empty password).
+     * @throws SQLException If a database error occurs.
+     */
+    int updatePassword(int userId, int hadPass, String oldPass, String password) throws SQLException;
 
     /**
      * Handles staff member login by verifying credentials.
@@ -70,7 +151,7 @@ public interface UserService {
      * @param response The HttpServletResponse used for handling cookies or redirects.
      * @return A string indicating the result of the login attempt (e.g., success, error).
      */
-    String loginStaff(String email, String password, HttpServletResponse response);
+    String loginStaff(String email, String password, HttpServletResponse response) throws SQLException;
 
     /**
      * Logs the user out by clearing session and relevant cookies.
@@ -98,7 +179,8 @@ public interface UserService {
      * @param userId The ID of the user to be retrieved.
      * @return The User object containing the user's details, or null if not found.
      */
-    User getUser(int userId);
+    User getUser(int userId) throws SQLException;
+
     /**
      * Resets the password for a user with the given ID.
      *

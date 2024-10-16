@@ -7,11 +7,13 @@
 --%>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html  lang="vi">
 <head>
     <title>Đăng ký</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <style>
         .error-message {
@@ -30,17 +32,33 @@
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
                         <h3 class="text-muted">Nhập thông tin của bạn để đăng ký</h3>
-                        <p class="text-muted">Sau khi đăng kí thành công, hãy click vào đường link được gửi trong email để xác thực tài khoản.</p>
+                        <p class="text-muted">Sau khi đăng kí thành công, mã xác thực sẽ được gửi vào email của bạn.</p>
                     </div>
                     <div class="panel-body">
                         <form action="signup" method="post" onsubmit="return validateForm()">
+                            <c:if test="${requestScope.error != null}">
+                                <div class="col-xs-12">
+                                    <div class="alert alert-danger">
+                                            ${requestScope.error}
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${requestScope.message != null}">
+                                <div class="col-xs-12">
+                                    <div class="alert alert-success">
+                                            ${requestScope.message}
+                                    </div>
+                                </div>
+                            </c:if>
                             <div class="form-group">
                                 <label for="firstName">Họ <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Họ" required maxlength="50">
+                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Họ"
+                                       value="<%= request.getAttribute("firstName") != null ? request.getAttribute("firstName") : "" %>" required maxlength="50">
                             </div>
                             <div class="form-group">
                                 <label for="lastName">Tên <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Tên" required maxlength="50">
+                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Tên"
+                                       value="<%= request.getAttribute("lastName") != null ? request.getAttribute("lastName") : "" %>" required maxlength="50">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email <span class="text-danger">*</span></label>
@@ -89,18 +107,22 @@
                         </form>
                         <hr>
                            <p class="text-center">Đã có tài khoản? <a href="login.jsp" class="text-primary">Đăng nhập</a></p>
-<%--                        <p class="text-center">Hoặc đăng nhập với</p>--%>
-<%--                        <div class="text-center">--%>
-<%--                            <a href="#!" class="btn btn-default">--%>
-<%--                                <i class="glyphicon glyphicon-google"></i> Google--%>
-<%--                            </a>--%>
+                        <p class="text-center">Hoặc đăng kí với</p>
+                        <div class="text-center">
+                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
+&redirect_uri=http://localhost:9999/homeSharing/sign-up-google
+&response_type=code
+&client_id=66002425643-qfqed6dbl9lj6nbhv8ejd5qci14bv4ks.apps.googleusercontent.com
+&approval_prompt=force" class="btn btn-default">
+                                <i class="glyphicon glyphicon-google"></i> Google
+                            </a>
 <%--                            <a href="#!" class="btn btn-default">--%>
 <%--                                <i class="glyphicon glyphicon-facebook"></i> Facebook--%>
 <%--                            </a>--%>
 <%--                            <a href="#!" class="btn btn-default">--%>
 <%--                                <i class="glyphicon glyphicon-twitter"></i> Twitter--%>
 <%--                            </a>--%>
-<%--                        </div>--%>
+                        </div>
                     </div>
                 </div>
             </div>

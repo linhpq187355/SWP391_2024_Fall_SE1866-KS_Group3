@@ -5,6 +5,7 @@
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-9-18      1.0                 ManhNC         First Implement
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  */
@@ -14,6 +15,7 @@ package com.homesharing.service.impl;
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
+import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
 import com.homesharing.service.PreferenceService;
@@ -21,9 +23,11 @@ import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
 import com.homesharing.util.CookieUtil;
 import com.homesharing.util.PasswordUtil;
+import com.homesharing.util.SecureRandomCode;
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +46,10 @@ public class UserServiceImpl implements UserService {
     /**
      * Constructor for UserServiceImpl, initializing the UserDao instance.
      *
-     * @param userDao The UserDao instance for database operations.
+     * @param userDao            The data access object for user operations.
+     * @param tokenDao           The data access object for token operations.
+     * @param tokenService        The service for managing tokens.
+     * @param preferenceService The service for managing user preferences.
      */
     public UserServiceImpl(UserDAO userDao, TokenDAO tokenDao, TokenService tokenService, PreferenceService preferenceService) {
         this.userDao = userDao;
@@ -63,16 +70,16 @@ public class UserServiceImpl implements UserService {
      * @return A success message or an error message.
      */
     @Override
-    public String registerUser(String firstName, String lastName, String email, String password, String role) {
+    public int registerUser(String firstName, String lastName, String email, String password, String role) throws SQLException {
         // Validate user input
         if (!validateUserInput(firstName, lastName, email, password, password, role)) {
-            return "Invalid input!";
+            return -1;
         }
 
         try {
             // Check if the email already exists
             if (userDao.emailExists(email)) {
-                return "Email đã được sử dụng!";
+                return 0;
             }
 
             // Create a new user and set its properties
@@ -83,26 +90,114 @@ public class UserServiceImpl implements UserService {
             user.setLastName(lastName);
             user.setEmail(email);
             user.setStatus("active");
+            user.setGoogleId(null);
 
             // Determine role value based on input role
             int roleValue;
             if ("findRoommate".equals(role)) {
-                roleValue = 4;
-            } else if ("postRoom".equals(role)) {
                 roleValue = 3;
+            } else if ("postRoom".equals(role)) {
+                roleValue = 4;
             } else {
-                return "Invalid role: " + role;
+                return -1;
             }
             user.setRolesId(roleValue);
             // Insert new user into the database
             int userId = userDao.saveUser(user);
             tokenService.sendToken(email, userId);
             preferenceService.addPreference(userId);
-            return "success";
+            return userId;
         } catch (GeneralException e) {
-            // Handle runtime exceptions thrown by the UserDao
-            return "Error during registration: " + e.getMessage();
+            throw new GeneralException(e.getMessage());
         }
+    }
+
+    /**
+     * Registers a new user using their Google account information.
+     * If the user already exists, updates their Google ID and sets the cookie values accordingly.
+     *
+     * @param googleAccount The GoogleAccount object containing user information.
+     * @param role The role to assign to the user.
+     *             If the role is null, it indicates that the user needs to set their role again.
+     * @param response The HttpServletResponse object used to set cookies for the user.
+     * @return An integer indicating the result of the registration process:
+     *         1 if the user was successfully logged in,
+     *         2 if a new user was registered successfully,
+     *         -1 if the role is null, and
+     *         0 if the role is invalid.
+     * @throws SQLException if a database access error occurs.
+     */
+    @Override
+    public int registerByGoogle(GoogleAccount googleAccount, String role, HttpServletResponse response) throws SQLException {
+        // Check if the email already exists in the database
+        if(userDao.emailExists(googleAccount.getEmail())) {
+            String ggID = userDao.getGoogleId(googleAccount.getEmail());
+
+            // Update Google ID if it's different or empty
+            if(ggID == null || ggID.isEmpty() || !ggID.equalsIgnoreCase(googleAccount.getId())) {
+                if(userDao.updateGoogleId(googleAccount.getId(), googleAccount.getEmail()) == 0){
+                    throw new GeneralException("Error when updating google account");
+                }
+            }
+
+            // identity max age
+            int cookieAge = 7 * 24 * 60 * 60; // 1 week
+            User user = userDao.findUserByEmail(googleAccount.getEmail());
+
+            // Save user's information to cookies
+            CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
+            CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
+            CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
+            CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
+            CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
+            return 1; // User successfully logged in
+        }
+
+        // Check if the role is null
+        if(role == null) {
+            return -1; // Role is null
+        }
+
+        // Create a new user object
+        User user = new User();
+        user.setGoogleId(googleAccount.getId());
+        user.setEmail(googleAccount.getEmail());
+        user.setStatus("active");
+        user.setHashedPassword(null); // No password needed for Google sign up
+        user.setFirstName(googleAccount.getFamily_name());
+        user.setLastName(googleAccount.getGiven_name());
+
+        // Determine role value based on input role
+        int roleValue;
+        if ("findRoommate".equals(role)) {
+            roleValue = 3; // Role ID for finding a roommate
+        } else if ("postRoom".equals(role)) {
+            roleValue = 4; // Role ID for posting a room
+        } else {
+            return 0; // Invalid role
+        }
+        user.setRolesId(roleValue);
+
+        // Insert new user into the database
+        int userId = userDao.saveUser(user);
+
+        // Create a new token
+        String tokenCode = SecureRandomCode.generateCode();
+        LocalDateTime requestedTime = LocalDateTime.now();
+        Token newToken = new Token(userId, tokenCode, requestedTime, true);
+        tokenDao.insertToken(newToken);
+        preferenceService.addPreference(userId);
+
+        // identity max age
+        int cookieAge = 7 * 24 * 60 * 60; // 1 week or 1 month
+        // Save user's information to cookies
+        CookieUtil.addCookie(response, "id", String.valueOf(userId), cookieAge);
+        CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
+        CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
+        CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
+
+        return 2; // New user successfully registered
     }
 
     /**
@@ -139,6 +234,142 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Validates the provided account information.
+     *
+     * @param firstName      The first name of the user.
+     * @param lastName       The last name of the user.
+     * @param email         The email address of the user.
+     * @param password      The password chosen by the user.
+     * @param confirmPassword The confirmed password entered by the user.
+     * @param role          The role ID of the user.
+     * @param gender        The gender of the user ("male" or "female").
+     * @param phone         The phone number of the user.
+     * @param dob           The date of birth of the user (YYYY-MM-DD format).
+     * @return {@code true} if the account information is valid, {@code false} otherwise.
+     */
+    @Override
+    public boolean validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob) {
+        // Check if names contain only letters and spaces
+        if (!firstName.matches("[\\p{L}\\s]+") || !lastName.matches("[\\p{L}\\s]+")) {
+            return false;
+        }
+
+        // Check if the email is valid
+        String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        if (!email.matches(emailRegex)) {
+            return false;
+        }
+
+        // Check password length and confirmation
+        if (password.length() < 8 || !password.equals(confirmPassword)) {
+            return false;
+        }
+
+        // Validate the new fields (dob and gender)
+        if (dob == null || dob.isEmpty()) {
+            return false;
+        }
+
+        if (gender == null || (!gender.equals("male") && !gender.equals("female"))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates the provided email address.
+     *
+     * @param email The email address to validate.
+     * @return {@code true} if the email is valid, {@code false} otherwise.
+     */
+    @Override
+    public boolean validateEmail(String email) {
+        // Check if the email is valid
+        String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        if (!email.matches(emailRegex)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Creates a new user account.
+     *
+     * @param firstName The first name of the user.
+     * @param lastName  The last name of the user.
+     * @param email     The email address of the user.
+     * @param password  The password chosen by the user.
+     * @param role      The role ID of the user.
+     * @param gender    The gender of the user.
+     * @param phone     The phone number of the user.
+     * @param dob       The date of birth of the user (YYYY-MM-DD format).
+     * @return The ID of the newly created user, -1 if the phone number already exists, -2 if the email already exists.
+     * @throws SQLException If a database error occurs.
+     */
+    @Override
+    public int createAccount(String firstName, String lastName, String email, String password, int role, String gender, String phone, String dob) throws SQLException {
+        try {
+            // Check if the email already exists
+            if (userDao.emailExists(email)) {
+                return -2;
+            }
+
+            // Check if the phone number already exists
+            if (phone != null && !phone.isEmpty() && userDao.phoneExists(phone)) {
+                return -1;
+            }
+
+            // Create a new user and set its properties
+            User user = new User();
+            String hashedPassword = PasswordUtil.hashPassword(password);
+            user.setHashedPassword(hashedPassword);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setStatus("active");
+            user.setDob(dob.isEmpty() ? null : LocalDate.parse(dob));
+            user.setGoogleId(null);
+            user.setPhoneNumber(phone);
+            user.setGender(gender);
+            user.setRolesId(role);
+            // Insert new user into the database
+            int userId = userDao.saveUser(user);
+            String code = SecureRandomCode.generateCode();
+            Token token = new Token(userId, code, LocalDateTime.now(), true);
+            tokenDao.insertToken(token);
+            preferenceService.addPreference(userId);
+            return userId;
+        } catch (GeneralException e) {
+            throw new GeneralException(e.getMessage());
+        }
+    }
+
+    /**
+     * Stores the user's information in cookies.
+     *
+     * @param userId   The ID of the user.
+     * @param response The HttpServletResponse object to add cookies to.
+     * @throws SQLException  If a database error occurs.
+     * @throws GeneralException If the user is not found.
+     */
+    @Override
+    public void putAccountOnCookie(int userId, HttpServletResponse response) throws SQLException {
+        User user = userDao.getUser(userId);
+        if(user == null) {
+            throw new GeneralException("User not found");
+        }
+        // identity max age
+        int cookieAge = 7 * 24 * 60 * 60; // 1 week
+        // Save user's information to cookies
+        CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
+        CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
+        CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
+        CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
+        CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
+    }
+
+    /**
      * Logs a user into the system.
      *
      * @param email the email address of the user
@@ -148,7 +379,8 @@ public class UserServiceImpl implements UserService {
      * @return a message indicating the result of the login attempt, either success or an error message
      */
     @Override
-    public String login(String email, String password, boolean rememberMe, HttpServletResponse response) {
+    public String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException {
+        try{
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
@@ -156,6 +388,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             // User does not exist
             return "Email hoặc mật khẩu không đúng";
+        }
+
+        if(user.getHashedPassword() == null) {
+            return "Tài khoản này chưa có mật khẩu, vui lòng đăng nhập bằng Google và cập nhật mật khẩu.";
         }
 
         // Check if the provided password matches the user's hashed password
@@ -182,7 +418,7 @@ public class UserServiceImpl implements UserService {
         // If the token does not exist, create a new one
         if (token == null || !token.isVerified()) {
             tokenService.sendToken(email, user.getId());
-            return "Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.";
+            return "not-verify";
         }
 
         // identity max age
@@ -196,6 +432,44 @@ public class UserServiceImpl implements UserService {
 
         // Return true to indicate a successful login
         return "success";
+        } catch (GeneralException e) {
+            throw new GeneralException("Error:" ,e);
+        }
+    }
+
+    /**
+     * Updates the password for a user.
+     *
+     * @param userId   The ID of the user.
+     * @param hadPass  Indicates whether the user has a previous password (1 if yes, 0 if no).
+     * @param oldPass  The old password of the user (required if hadPass is 0).
+     * @param password The new password for the user.
+     * @return An integer indicating the result of the operation:
+     *         <ul>
+     *         <li> 1: Password updated successfully.
+     *         <li>-1: Incorrect old password provided.
+     *         <li>-2: Invalid input (empty password or missing old password when required).
+     *         </ul>
+     * @throws SQLException If a database error occurs.
+     */
+    @Override
+    public int updatePassword(int userId, int hadPass, String oldPass, String password) throws SQLException {
+        if(password == null || password.isEmpty()) {
+            return -2;
+        }
+        if(hadPass == 0) {
+            if(oldPass == null || oldPass.isEmpty()) {
+                return -2;
+            }
+            User user = userDao.getUserById(userId);
+            if(user.getHashedPassword() == null || user.getHashedPassword().isEmpty()) {
+                return -2;
+            }
+            if(!user.getHashedPassword().equals(PasswordUtil.hashPassword(oldPass))) {
+                return -1;
+            }
+        }
+        return userDao.resetPassword(password, userId);
     }
 
     /**
@@ -207,7 +481,8 @@ public class UserServiceImpl implements UserService {
      * @return a message indicating the result of the login attempt, either success or an error message
      */
     @Override
-    public String loginStaff(String email, String password, HttpServletResponse response){
+    public String loginStaff(String email, String password, HttpServletResponse response) throws SQLException {
+        try{
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
@@ -255,6 +530,9 @@ public class UserServiceImpl implements UserService {
 
         // Return true to indicate a successful login
         return "success";
+        } catch (GeneralException e) {
+            throw new GeneralException("Error",e);
+        }
     }
 
     /**
@@ -319,7 +597,7 @@ public class UserServiceImpl implements UserService {
      * @throws GeneralException if an error occurs while accessing the database or if the user is not found.
      */
     @Override
-    public User getUser(int userId) {
+    public User getUser(int userId) throws SQLException {
         try {
             // Attempt to retrieve the user from the DAO using the provided userId
             return userDao.getUser(userId);

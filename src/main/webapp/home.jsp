@@ -38,6 +38,13 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
+    <style>
+        .property-image {
+            width: 100%;   /* Điều chỉnh cho ảnh đầy chiều rộng của thẻ bao quanh */
+            height: 200px; /* Hoặc bạn có thể đặt kích thước cố định tùy thuộc vào yêu cầu */
+            object-fit: cover; /* Giúp cắt ảnh nếu vượt quá chiều rộng hoặc chiều cao, mà vẫn giữ tỉ lệ */
+        }
+    </style>
 </head>
 
 <body>
@@ -124,7 +131,10 @@
                         <div class="box-two proerty-item">
                             <div class="item-thumb">
                                 <!-- Update the href to point to home detail page with home ID -->
-                                <a href="home-detail?id=${homes.id}"><img src="assets/img/demo/property-1.jpg"></a>
+                                <a href="home-detail?id=${homes.id}">
+                                    <img class="property-image" src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/demo/property-1.jpg'}">
+                                </a>
+
                             </div>
                             <div class="item-entry overflow">
                                 <h5><a href="home-detail?id=${homes.id}">${homes.address}</a></h5>
@@ -434,10 +444,6 @@
             let errorMessage = document.getElementById("error-message");
 
             errorMessage.textContent = "";
-
-            if (searchInput === "") {
-                return true;
-            }
 
             if (searchInput.length > 100) {
                 errorMessage.textContent = "Đầu vào không được vượt quá 100 ký tự.";

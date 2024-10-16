@@ -3,6 +3,7 @@ package com.homesharing.dao;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.impl.PriceDAOImpl;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,15 +32,13 @@ public class PriceDAOImplTest {
     private MockedStatic<DBContext> mockedDBContext;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws SQLException, IOException, ClassNotFoundException {
         connection = mock(Connection.class);
         preparedStatement = mock(PreparedStatement.class);
         resultSet = mock(ResultSet.class);
-
         // Mock DBContext.getConnection() to return the mock connection
         mockedDBContext = Mockito.mockStatic(DBContext.class);
         mockedDBContext.when(DBContext::getConnection).thenReturn(connection);
-
         priceDAO = new PriceDAOImpl();
     }
 
@@ -119,4 +119,98 @@ public class PriceDAOImplTest {
         // Verify that the statement was executed with the correct parameter
         verify(preparedStatement).setInt(1, home1.getPriceId());
     }
+
+    @Test
+    void testGetMinPrice_ReturnsMinPrice() throws Exception {
+        // Arrange
+        int expectedMinPrice = 2;
+
+        // Mock result set to return the expected value
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("price")).thenReturn(expectedMinPrice);
+
+        // Act
+        int actualMinPrice = priceDAO.getMinPrice();
+
+        // Assert
+        assertEquals(expectedMinPrice, actualMinPrice);
+
+        // Verify interactions
+        verify(preparedStatement).executeQuery();
+        verify(resultSet).next();
+        verify(resultSet).getInt("price");
+    }
+
+    @Test
+    void testGetMinPrice_ReturnZero_WhenNoResult() throws Exception {
+        int expectedMinPrice = 0;
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false);
+
+        int actualMinPrice = priceDAO.getMinPrice();
+        assertEquals(expectedMinPrice, actualMinPrice);
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
+    void testGetMinPrice_ThrowsGeneralException_WhenSQLException() throws Exception {
+        // Arrange
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Act & Assert
+        Exception exception = assertThrows(GeneralException.class, () -> priceDAO.getMinPrice());
+        assertEquals("Error get min price in the database: Database error", exception.getMessage());
+    }
+
+    @Test
+    void testGetMaxPrice_ReturnsMaxPrice() throws Exception {
+        // Arrange
+        int expectedMaxPrice = 2;
+
+        // Mock result set to return the expected value
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("price")).thenReturn(expectedMaxPrice);
+
+        // Act
+        int actualMinPrice = priceDAO.getMaxPrice();
+
+        // Assert
+        assertEquals(expectedMaxPrice, actualMinPrice);
+
+        // Verify interactions
+        verify(preparedStatement).executeQuery();
+        verify(resultSet).next();
+        verify(resultSet).getInt("price");
+    }
+
+    @Test
+    void testGetMaxPrice_ReturnZero_WhenNoResult() throws Exception {
+        int expectedMaxPrice = 0;
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false);
+
+        int actualMinPrice = priceDAO.getMaxPrice();
+        assertEquals(expectedMaxPrice, actualMinPrice);
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
+    void testGetMaxPrice_ThrowsGeneralException_WhenSQLException() throws Exception {
+        // Arrange
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Act & Assert
+        Exception exception = assertThrows(GeneralException.class, () -> priceDAO.getMaxPrice());
+        assertEquals("Error get max price in the database: Database error", exception.getMessage());
+    }
+
+
 }

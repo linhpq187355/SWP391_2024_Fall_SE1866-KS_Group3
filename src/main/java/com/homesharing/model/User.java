@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 
 public class User {
     private int id;
+    private String googleId;
     private int rolesId;
     private String email;
     private String hashedPassword;
@@ -258,5 +259,13 @@ public class User {
                 ", lastModified=" + lastModified +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 }

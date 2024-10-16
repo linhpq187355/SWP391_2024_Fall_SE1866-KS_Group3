@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-02      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.TokenDAO;
@@ -26,11 +35,14 @@ import java.io.IOException;
  *
  * @version 1.0
  * @since 2024-10-02
+ * @author ManhNC
  */
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
-    private transient UserService userService;// Mark userService as transient
+
     private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class); // Logger instance
+
+    private transient UserService userService;
 
     /**
      * Initializes the LogoutServlet by creating instances of necessary services.
