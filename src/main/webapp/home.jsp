@@ -68,29 +68,77 @@
         </div>
     </div>
 </div>
-
 <div class="home-lager-shearch" style="background-color: rgb(252, 252, 252); padding-top: 25px; margin-top: -125px;">
     <div class="container">
         <div class="col-md-12 large-search">
             <div class="search-form wow pulse">
-                <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline" onsubmit="return validateSearchInput()">
+                <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline">
                     <div class="col-md-12">
-                        <div class="col-md-12">
-                            <input id="searchInput" type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
+                        <div class="col-md-6">
+                            <input type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
                         </div>
+                        <div class="col-md-6">
+                            <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select your city">
+                            </select>
+                        </div>
+
                     </div>
-                    <div class="col-md-12" style="color: red;">
-                        <span id="error-message"></span>
+                    <div class="col-md-12 ">
+                        <div class="search-row">
+
+                            <div class="col-sm-3">
+                                <label for="price-range">Price range ($):</label>
+                                <input type="text" class="span2" value="" data-slider-min="2000"
+                                       data-slider-max="100000" data-slider-step="5"
+                                       data-slider-value="[${param.minPrice != null ? param.minPrice : 2000}, ${param.maxPrice != null ? param.maxPrice : 100000}]" id="price-range"><br />
+                                <b class="pull-left color">0$</b>
+                                <b class="pull-right color">100000$</b>
+                            </div>
+                            <!-- End of  -->
+
+                            <div class="col-sm-3">
+                                <label for="property-geo">Property geo (m2) :</label>
+                                <input type="text" class="span2" value="" data-slider-min="0"
+                                       data-slider-max="600" data-slider-step="5"
+                                       data-slider-value="[50,450]" id="property-geo" ><br />
+                                <b class="pull-left color">40m</b>
+                                <b class="pull-right color">12000m</b>
+                            </div>
+                            <!-- End of  -->
+
+                            <div class="col-sm-3">
+                                <label for="price-range">Min baths :</label>
+                                <input type="text" class="span2" value="" data-slider-min="0"
+                                       data-slider-max="600" data-slider-step="5"
+                                       data-slider-value="[250,450]" id="min-baths" ><br />
+                                <b class="pull-left color">1</b>
+                                <b class="pull-right color">120</b>
+                            </div>
+                            <!-- End of  -->
+
+                            <div class="col-sm-3">
+                                <label for="property-geo">Min bed :</label>
+                                <input type="text" class="span2" value="" data-slider-min="0"
+                                       data-slider-max="600" data-slider-step="5"
+                                       data-slider-value="[250,450]" id="min-bed" ><br />
+                                <b class="pull-left color">1</b>
+                                <b class="pull-right color">120</b>
+                            </div>
+                            <!-- End of  -->
+
+                        </div>
+
+                        <!-- End of  -->
+
                     </div>
                     <div class="center">
-                        <input type="submit" value="Tìm kiếm" class="btn btn-default btn-lg-sheach">
+                        <input type="submit" value="" class="btn btn-default btn-lg-sheach">
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
-
+</div>
 
 
 <!-- property area -->
@@ -379,6 +427,15 @@
             return true;
         }
     </script>
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Khởi tạo thanh trượt giá
+        $('#price-range').slider({
+            formatter: function(value) {
+                return 'Current value: ' + value;
+            }
+        });
+    });
+</script>
 </body>
 </html>

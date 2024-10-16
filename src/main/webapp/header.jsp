@@ -95,28 +95,8 @@
                             <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                                class="fa-regular fa-heart dropdown-toggle" style="font-size: 2em"></i>
                             <div class="dropdown-menu navbar-nav" style="right: 20em; width: 27em; padding: 1rem 2rem">
-                                <div class="dropdown-cart-products">
-                                    <div class="product">
-                                        <div class="product-cart-details">
-                                            <h4 class="product-title">
-                                                <a href="product.html">ok</a>
-                                            </h4>
-                                            <span class="cart-product-info">
-                                              <span class="cart-product-qty">12</span>
-                                                okok
-                                        </span>
-                                        </div><!-- End .product-cart-details -->
-
-                                        <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
-                                                <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png"
-                                                     alt="product">
-                                            </a>
-                                        </figure>
-                                    </div>
-                                </div>
                                 <div class="dropdown-cart-action">
-                                    <a href="showcart" class="btn btn-primary">Xem wishlist</a>
+                                    <a href="user-wishlist" class="btn btn-primary">Xem wishlist</a>
                                 </div>
                             </div>
                         </div>
@@ -185,9 +165,11 @@
                             <li>
                                 <a href="user-profile" class="li-acc-op">Thông tin cá nhân</a>
                             </li>
+                       <c:if test="${cookie.roleId.value ==3}">
                             <li>
-                                <a href="user-wishlist" class="li-acc-op">WishList</a>
+                                <a href="user-wishlist" class="li-acc-op">Danh sách yêu thích</a>
                             </li>
+                       </c:if>
                             <li>
                                 <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
                             </li>
@@ -213,7 +195,7 @@
                             onclick=" window.location.href='login'" data-wow-delay="0.4s">Đăng nhập
                     </button>
                     <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.location.href='signup'"
-                            data-wow-delay="0.5s">Đăng kí
+                            data-wow-dela   y="0.5s">Đăng kí
                     </button>
                 </div>
             </c:if>

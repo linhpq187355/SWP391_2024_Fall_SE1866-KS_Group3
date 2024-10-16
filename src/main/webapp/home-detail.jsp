@@ -352,14 +352,16 @@
                                                 Liên Hệ
                                             </button>
                                         </li>
+                                        <c:if test="${cookie.roleId.value ==3}">
                                         <li>
                                             <form action="add-wishlist" method="POST">
                                                 <input type="hidden" name="homeId" value="${home.id}">
-                                                <button type="submit" class="like-button">
+                                                    <button type="submit" class="like-button" >
                                                     <i class="fas fa-heart"></i> Yêu thích
                                                 </button>
                                             </form>
                                         </li>
+                                        </c:if>
                                     </ul>
                                     </div>
                                     <div>
@@ -849,6 +851,8 @@
         }).addTo(mapObj);
     });
 </script>
+
+
 
 </body>
 </html>
