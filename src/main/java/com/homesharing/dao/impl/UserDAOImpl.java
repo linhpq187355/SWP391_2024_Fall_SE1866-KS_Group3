@@ -324,7 +324,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             preparedStatement.setInt(1, userId);
 
             // Execute the query to check for email existence
-            resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();                    
             if (resultSet.next()) {
                 return resultSet.getInt(1); // Return true if email exists
             }
