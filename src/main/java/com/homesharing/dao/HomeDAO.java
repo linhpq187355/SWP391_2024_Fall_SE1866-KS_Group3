@@ -140,4 +140,8 @@ public interface HomeDAO {
      * @return a List of Home objects that match the specified criteria.
      */
     List<Home> getMatchingHomes(int[] matchingHost);
+
+    List<Home> getHomesByUserId(int userId);
+    int updateHome(Home home);
+    int changeStatus(int homeId, String status);
 }
