@@ -1,8 +1,14 @@
 package com.homesharing.controller;
 
+import com.homesharing.dao.ReportDAO;
+import com.homesharing.dao.ReportTypeDAO;
+import com.homesharing.dao.impl.ReportDAOImpl;
+import com.homesharing.dao.impl.ReportTypeDAOImpl;
 import com.homesharing.model.*;
 import com.homesharing.service.HomeDetailService;
+import com.homesharing.service.ReportService;
 import com.homesharing.service.impl.HomeDetailServiceImpl;
+import com.homesharing.service.impl.ReportServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,6 +23,9 @@ import java.util.List;
 public class HomeDetailServlet extends HttpServlet {
 
     private HomeDetailService homeDetailService;
+    private ReportService reportService;
+    private ReportDAO reportDAO;
+    private ReportTypeDAO reportTypeDAO;
 
     /**
      * Initializes the HomeDetailServlet by creating an instance of the HomeDetailService.
@@ -25,6 +34,9 @@ public class HomeDetailServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         this.homeDetailService = new HomeDetailServiceImpl();
+        this.reportDAO = new ReportDAOImpl();
+        this.reportTypeDAO = new ReportTypeDAOImpl();
+        this.reportService = new ReportServiceImpl(reportDAO, reportTypeDAO);
     }
 
     /**
@@ -80,7 +92,8 @@ public class HomeDetailServlet extends HttpServlet {
         req.setAttribute("fireEquipments", fireEquipments);
         req.setAttribute("formattedMoveInDate", formattedMoveInDate);
 
-
+        List<ReportType> reportTypes = reportTypeDAO.getAllReportTypes();
+        req.setAttribute("reportTypes", reportTypes);
         //Forward the request to the JSP
         req.getRequestDispatcher("home-detail.jsp").forward(req, resp);
     }

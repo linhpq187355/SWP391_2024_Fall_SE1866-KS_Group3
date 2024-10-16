@@ -28,6 +28,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      */
     @Override
     public List<Home> getAllHomes() {
+        List<Home> homeList = new ArrayList<>();
         String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [wardsId], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
 
         Connection connection = null;
@@ -56,11 +57,11 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
                 home.setHomeDescription(resultSet.getString("homeDescription"));
                 home.setTenantDescription(resultSet.getString("tenantDescription"));
-                home.setWardId(resultSet.getInt("wardId"));
+                home.setWardId(resultSet.getInt("wardsId"));
                 home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                 home.setCreatedBy(resultSet.getInt("createdBy"));
 
-                homes.add(home);
+                homeList.add(home);
             }
 
         } catch (SQLException | IOException | ClassNotFoundException e) {
@@ -82,7 +83,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
             }
         }
-        return homes;
+        return homeList;
     }
 
     /**

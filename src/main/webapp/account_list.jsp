@@ -24,7 +24,7 @@
     <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+<%--    <script src="https://cdn.tailwindcss.com"></script>--%>
     <script>
         WebFont.load({
             google: {families: ["Public Sans:300,400,500,600,700"]},
@@ -217,6 +217,11 @@
                                 <li class="active">
                                     <a href="../tables/datatables.html">
                                         <span class="sub-item">Datatables</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="report-home-manage">
+                                        <span class="sub-item">Report Home List</span>
                                     </a>
                                 </li>
                             </ul>

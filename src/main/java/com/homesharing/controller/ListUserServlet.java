@@ -29,7 +29,7 @@ public class ListUserServlet extends HttpServlet {
         List<Role> roleList = userManagementServie.getAllRoles();
         request.setAttribute("userList", userList);
         request.setAttribute("roleList", roleList);
-        request.getRequestDispatcher("/account-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/account_list.jsp").forward(request, response);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ListUserServlet extends HttpServlet {
         List<Role> roleList = userManagementServie.getAllRoles();
         request.setAttribute("userList", userList);
         request.setAttribute("roleList", roleList);
-        request.getRequestDispatcher("/account-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/account_list.jsp").forward(request, response);
     }
 
 }

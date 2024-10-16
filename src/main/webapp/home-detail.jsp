@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="assets/css/lightslider.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <style>
         .card {
@@ -47,17 +48,20 @@
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .profile-img {
             width: 80px;
             height: 80px;
             border-radius: 50%;
             margin-bottom: 10px;
         }
+
         .name {
             font-size: 18px;
             color: #a0a0a0;
             margin-bottom: 20px;
         }
+
         .phone-button {
             background-color: #00c853;
             color: white;
@@ -71,9 +75,11 @@
             align-items: center;
             justify-content: center;
         }
+
         .phone-button i {
             margin-right: 10px;
         }
+
         .zalo-button, .like-button {
             background-color: white;
             color: black;
@@ -87,10 +93,12 @@
             align-items: center;
             justify-content: center;
         }
+
         .zalo-button i, .like-button i {
             margin-right: 10px;
-            }
-        #map{
+        }
+
+        #map {
             width: 100%;
             height: 100%;
         }
@@ -130,45 +138,9 @@
                                 <a class="add-to-fav" href="#login-modal" data-toggle="modal">
                                     <i class="fa fa-star-o"></i>
                                 </a>
-                                <a class="add-to-fav" href="#" data-toggle="modal" data-target="#reportModal">
+                                <a class="add-to-fav" data-toggle="modal" data-target="#reportModal">
                                     <i class="fa fa-flag-o"></i>
                                 </a>
-                                <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="reportModalLabel">Report Form</h5>
-                                                <button type="button" class="btn-close" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- Form Inside Modal -->
-                                                <form id="reportForm">
-                                                    <div class="mb-3">
-                                                        <label for="title" class="form-label">Title</label>
-                                                        <input type="text" class="form-control" id="title" name="title" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="description" class="form-label">Description</label>
-                                                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="reportTypeId" class="form-label">Report Type</label>
-                                                        <select class="form-select" id="reportTypeId" name="reportTypeId">
-                                                            <option value="1">Bug</option>
-                                                            <option value="2">Feedback</option>
-                                                            <option value="3">Complaint</option>
-                                                        </select>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="">Close</button>
-                                                <button type="button" class="btn btn-primary" onclick="submitReport()">Submit Report</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <a class="printer-icon" href="javascript:window.print()">
                                     <i class="fa fa-print"></i>
                                 </a>
@@ -309,7 +281,8 @@
                             <c:forEach var="amenity" items="${amentities}">
                                 <li>
                                     <a href="home-detail.jsp">${amenity.name}</a>
-                                </li>                            </c:forEach>
+                                </li>
+                            </c:forEach>
                         </ul>
                     </div>
 
@@ -319,7 +292,8 @@
                             <c:forEach var="fireEquipments" items="${fireEquipments}">
                                 <li>
                                     <a href="home-detail.jsp">${fireEquipments.name}</a>
-                                </li>                            </c:forEach>
+                                </li>
+                            </c:forEach>
                         </ul>
                     </div>
 
@@ -381,30 +355,29 @@
                                         <h3 class="dealer-name">
                                             <a href="">${creator.firstName} ${creator.lastName}</a>
                                         </h3>
-
                                     </div>
 
-
-                                <div class="clear">
-                                    <ul class="dealer-contacts">
-                                        <li>
-                                            <button class="phone-button">
-                                                <i class="fas fa-phone"></i>
-                                                ${creator.phoneNumber}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button class="zalo-button">
-                                                <i class="fas fa-comment"></i>
-                                                Liên Hệ
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button class="like-button"  href="#login-modal" data-toggle="modal" onclick="showConfirmPopup(homeId, userId)">
-                                                <i class="fas fa-heart"></i> Yêu thích
-                                            </button>
-                                        </li>
-                                    </ul>
+                                    <div class="clear">
+                                        <ul class="dealer-contacts">
+                                            <li>
+                                                <button class="phone-button">
+                                                    <i class="fas fa-phone"></i>
+                                                    ${creator.phoneNumber}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="zalo-button">
+                                                    <i class="fas fa-comment"></i>
+                                                    Liên Hệ
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="like-button" href="#login-modal" data-toggle="modal"
+                                                        onclick="showConfirmPopup(homeId, userId)">
+                                                    <i class="fas fa-heart"></i> Yêu thích
+                                                </button>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -412,262 +385,307 @@
                     </div>
 
 
+                    <!-- Popup xác nhận -->
+                    <div id="login-modal" class="modal fade" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Xác nhận</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Bạn có chắc chắn muốn thêm vào danh sách yêu thích không?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <button type="button" class="btn btn-primary" onclick="confirmAddToWishlist()">Xác
+                                        nhận
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Report modal -->
+                    <div class="modal fade" id="reportModal" tabindex="-1"
+                         aria-labelledby="reportModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title" id="reportModalLabel">Mẫu báo cáo</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Form Inside Modal -->
+                                    <form id="reportForm" action="report">
+                                        <div class="form-group">
+                                            <label for="reportTypeId" class="control-label">Loại báo cáo</label>
+                                            <select class="form-control" id="reportTypeId" name="reportTypeId" required>
+                                                <option value="-1" disabled selected>Chọn lí do</option>
+                                                <c:forEach items="${requestScope.reportTypes}" var="reportTypes">
+                                                    <option value="${reportTypes.id}">${reportTypes.reason}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="title" class="control-label">Tiêu đề</label>
+                                            <input type="text" class="form-control" id="title" name="title" required minlength="5" maxlength="127">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description" class="control-label">Mô tả</label>
+                                            <textarea class="form-control" id="description" name="description" rows="3"
+                                                      required></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                        Close
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="submitReport()">
+                                        Submit Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                    <!-- Popup xác nhận -->
-                                    <div id="login-modal" class="modal fade" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Xác nhận</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Bạn có chắc chắn muốn thêm vào danh sách yêu thích không?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-primary" onclick="confirmAddToWishlist()">Xác nhận</button>
-                                                </div>
+                    <div id="map"></div>
+                    <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Similar Properties</h3>
+                        </div>
+                        <div class="panel-body recent-property-widget">
+                            <ul>
+                                <li>
+                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
+                                        <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
+                                        <span class="property-seeker">
+                                                                        <b class="b-1">A</b>
+                                                                        <b class="b-2">S</b>
+                                                                    </span>
+                                    </div>
+                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
+                                        <h6><a href="single.html">Super nice villa </a></h6>
+                                        <span class="property-price">3000000$</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">
+                                        <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>
+                                        <span class="property-seeker">
+                                                                        <b class="b-1">A</b>
+                                                                        <b class="b-2">S</b>
+                                                                    </span>
+                                    </div>
+                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
+                                        <h6><a href="single.html">Super nice villa </a></h6>
+                                        <span class="property-price">3000000$</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
+                                        <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>
+                                        <span class="property-seeker">
+                                                                        <b class="b-1">A</b>
+                                                                        <b class="b-2">S</b>
+                                                                    </span>
+                                    </div>
+                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
+                                        <h6><a href="single.html">Super nice villa </a></h6>
+                                        <span class="property-price">3000000$</span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
+                                        <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
+                                        <span class="property-seeker">
+                                                                        <b class="b-1">A</b>
+                                                                        <b class="b-2">S</b>
+                                                                    </span>
+                                    </div>
+                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
+                                        <h6><a href="single.html">Super nice villa </a></h6>
+                                        <span class="property-price">3000000$</span>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="panel panel-default sidebar-menu wow fadeInRight animated">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Smart search</h3>
+                        </div>
+                        <div class="panel-body search-widget">
+                            <form action="" class=" form-inline">
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <input type="text" class="form-control" placeholder="Key word">
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-xs-6">
+
+                                            <select id="lunchBegins" class="selectpicker" data-live-search="true"
+                                                    data-live-search-style="begins" title="Select Your City">
+
+                                                <option>New york, CA</option>
+                                                <option>Paris</option>
+                                                <option>Casablanca</option>
+                                                <option>Tokyo</option>
+                                                <option>Marraekch</option>
+                                                <option>kyoto , shibua</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-6">
+
+                                            <select id="basic" class="selectpicker show-tick form-control">
+                                                <option> -Status-</option>
+                                                <option>Rent</option>
+                                                <option>Boy</option>
+                                                <option>used</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="padding-5">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <label for="price-range">Price range ($):</label>
+                                            <input type="text" class="span2" value="" data-slider-min="0"
+                                                   data-slider-max="600" data-slider-step="5"
+                                                   data-slider-value="[0,450]" id="price-range"><br/>
+                                            <b class="pull-left color">2000$</b>
+                                            <b class="pull-right color">100000$</b>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <label for="property-geo">Property geo (m2) :</label>
+                                            <input type="text" class="span2" value="" data-slider-min="0"
+                                                   data-slider-max="600" data-slider-step="5"
+                                                   data-slider-value="[50,450]" id="property-geo"><br/>
+                                            <b class="pull-left color">40m</b>
+                                            <b class="pull-right color">12000m</b>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="padding-5">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <label for="price-range">Min baths :</label>
+                                            <input type="text" class="span2" value="" data-slider-min="0"
+                                                   data-slider-max="600" data-slider-step="5"
+                                                   data-slider-value="[250,450]" id="min-baths"><br/>
+                                            <b class="pull-left color">1</b>
+                                            <b class="pull-right color">120</b>
+                                        </div>
+
+                                        <div class="col-xs-6">
+                                            <label for="property-geo">Min bed :</label>
+                                            <input type="text" class="span2" value="" data-slider-min="0"
+                                                   data-slider-max="600" data-slider-step="5"
+                                                   data-slider-value="[250,450]" id="min-bed"><br/>
+                                            <b class="pull-left color">1</b>
+                                            <b class="pull-right color">120</b>
+
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="padding-5">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox" checked> Fire Place</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox"> Dual Sinks</label>
                                             </div>
                                         </div>
                                     </div>
+                                </fieldset>
 
+                                <fieldset class="padding-5">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox" checked> Swimming Pool</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox" checked> 2 Stories </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
 
+                                <fieldset class="padding-5">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label><input type="checkbox"> Laundry Room </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox"> Emergency Exit</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
 
-                                <div id="map"></div>
-                                                        <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">
-                                                    <div class="panel-heading">
-                                                        <h3 class="panel-title">Similar Properties</h3>
-                                                    </div>
-                                                    <div class="panel-body recent-property-widget">
-                                                            <ul>
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
+                                <fieldset class="padding-5">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox" checked> Jog Path </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox"> 26' Ceilings </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
 
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
+                                <fieldset class="padding-5">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="checkbox">
+                                                <label> <input type="checkbox"> Hurricane Shutters </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
 
-                                                        </ul>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="panel panel-default sidebar-menu wow fadeInRight animated" >
-                                                    <div class="panel-heading">
-                                                        <h3 class="panel-title">Smart search</h3>
-                                                    </div>
-                                                    <div class="panel-body search-widget">
-                                                        <form action="" class=" form-inline">
-                                                            <fieldset>
-                                                                <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                        <input type="text" class="form-control" placeholder="Key word">
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset>
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-
-                                                                        <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Your City">
-
-                                                                            <option>New york, CA</option>
-                                                                            <option>Paris</option>
-                                                                            <option>Casablanca</option>
-                                                                            <option>Tokyo</option>
-                                                                            <option>Marraekch</option>
-                                                                            <option>kyoto , shibua</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-
-                                                                        <select id="basic" class="selectpicker show-tick form-control">
-                                                                            <option> -Status- </option>
-                                                                            <option>Rent </option>
-                                                                            <option>Boy</option>
-                                                                            <option>used</option>
-
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <label for="price-range">Price range ($):</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[0,450]" id="price-range" ><br />
-                                                                        <b class="pull-left color">2000$</b>
-                                                                        <b class="pull-right color">100000$</b>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <label for="property-geo">Property geo (m2) :</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[50,450]" id="property-geo" ><br />
-                                                                        <b class="pull-left color">40m</b>
-                                                                        <b class="pull-right color">12000m</b>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <label for="price-range">Min baths :</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[250,450]" id="min-baths" ><br />
-                                                                        <b class="pull-left color">1</b>
-                                                                        <b class="pull-right color">120</b>
-                                                                    </div>
-
-                                                                    <div class="col-xs-6">
-                                                                        <label for="property-geo">Min bed :</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[250,450]" id="min-bed" ><br />
-                                                                        <b class="pull-left color">1</b>
-                                                                        <b class="pull-right color">120</b>
-
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox" checked> Fire Place</label>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox"> Dual Sinks</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox" checked> Swimming Pool</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox" checked> 2 Stories </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label><input type="checkbox"> Laundry Room </label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox"> Emergency Exit</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label>  <input type="checkbox" checked> Jog Path </label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label>  <input type="checkbox"> 26' Ceilings </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                        <div class="checkbox">
-                                                                            <label>  <input type="checkbox"> Hurricane Shutters </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset >
-                                                                <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                        <input class="button btn largesearch-btn" value="Search" type="submit">
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-                                                        </form>
-                                                    </div>
-                                                </div>
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <input class="button btn largesearch-btn" value="Search" type="submit">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
 
                 </aside>
             </div>
@@ -825,7 +843,7 @@
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="assets/js/jquery-1.10.2.min.js"></script>
@@ -840,7 +858,55 @@
 <script src="assets/js/price-range.js"></script>
 <script type="text/javascript" src="assets/js/lightslider.min.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<script>
+    function submitReport() {
+        // Get form data
+        let reportTypeId = $('#reportTypeId').val();
+        let title = $('#title').val();
+        let description = $('#description').val();
+        let homeId = ${requestScope.home.id};
+
+        // Perform validation (if needed)
+        if (reportTypeId === '-1') {
+            alert("Please select a valid report type.");
+            return;
+        }
+
+        if (title.length < 5 || title.length > 127) {
+            alert("Title must be between 5 and 127 characters.");
+            return;
+        }
+
+        if (description.trim() === "") {
+            alert("Description is required.");
+            return;
+        }
+
+        // Submit the form via AJAX
+        $.ajax({
+            type: "POST",
+            url: "report",  // URL of the servlet that handles the form submission
+            data: {
+                reportTypeId: reportTypeId,
+                title: title,
+                description: description,
+                homeId: homeId
+            },
+            success: function(response) {
+                // Handle success - perhaps close the modal and show a success message
+                alert("Report submitted successfully.");
+                $('#reportModal').modal('hide');  // Close modal
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                alert("There was an error submitting the report: " + xhr.responseText);
+            }
+        });
+    }
+
+</script>
 <script>
     $(document).ready(function () {
 
@@ -872,7 +938,7 @@
         const xhr = new XMLHttpRequest();
         xhr.open("GET", "add-to-wishlist", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 alert(xhr.responseText); // Hiển thị phản hồi từ servlet
                 // $('#login-modal').modal('hide'); // Đóng modal
