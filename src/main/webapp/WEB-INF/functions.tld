@@ -1,0 +1,16 @@
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                            http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>myFunctions</short-name>
+    <uri>http://example.com/functions</uri>
+
+    <function>
+        <name>convertPriceToVND</name>
+        <function-class>com.homesharing.util.PriceConverter</function-class>
+        <function-signature>java.lang.String convertPriceToVND(long)</function-signature>
+    </function>
+</taglib>
