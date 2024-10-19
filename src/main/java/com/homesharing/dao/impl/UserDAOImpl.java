@@ -505,7 +505,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[createdAt]\n" +
                 "      ,[status]\n" +
                 "      ,[isVerified]\n" +
-                "      ,[lastModified]\n" +
+                "      ,[modifiedDate]\n" +
                 "      ,[rolesid]\n" +
                 "  FROM [dbo].[HSS_Users]";
 
@@ -542,7 +542,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setStatus(resultSet.getString("status"));
                 user.setVerified(resultSet.getBoolean("isVerified"));
                 // Check null before call toLocalDateTime()
-                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("lastModified");
+                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("modifiedDate");
                 if (lastModifiedTimestamp != null) {
                     user.setLastModified(lastModifiedTimestamp.toLocalDateTime());
                 } else {

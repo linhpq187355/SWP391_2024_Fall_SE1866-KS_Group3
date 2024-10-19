@@ -109,6 +109,14 @@ public class TokenServiceImpl implements TokenService {
         tokenCode = SecureRandomCode.generateCode();
         requestedTime = LocalDateTime.now();
 
+        if(email == null || email.isEmpty()) {
+            throw new GeneralException("Please enter a valid email address");
+        }
+
+        if (userId <= 0) {
+            throw new GeneralException("Invalid user ID");
+        }
+
         if (oldToken != null) {
             tokenDao.updateToken(userId, tokenCode, requestedTime);
         } else {
@@ -133,7 +141,7 @@ public class TokenServiceImpl implements TokenService {
                 + "</html>";
         try {
             SendingEmail.sendMail(email, subject, content);
-        } catch (MessagingException e) {
+        } catch (MessagingException | GeneralException e) {
             throw new GeneralException("Error while sending email");
         }
     }
