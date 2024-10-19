@@ -8,7 +8,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="ex" uri="http://example.com/functions" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -26,7 +25,6 @@
 
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
-<%--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>--%>
     <link rel="stylesheet" href="assets/css/fontello.css">
     <link href="assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
     <link href="assets/fonts/icon-7-stroke/css/helper.css" rel="stylesheet">
@@ -58,13 +56,16 @@
             background-color: #d18e11; /* Màu nền khi hover */
             color: white; /* Màu chữ khi hover */
         }
-
+        .item-thumb {
+            width: 100%;
+            height: 250px; /* Chiều cao cố định của khung chứa */
+            position: relative;
+        }
         .property-image {
-            width: 100%; /* Điều chỉnh cho ảnh đầy chiều rộng của thẻ bao quanh */
-            height: 200px; /* Hoặc bạn có thể đặt kích thước cố định tùy thuộc vào yêu cầu */
+            width: 100%;   /* Điều chỉnh cho ảnh đầy chiều rộng của thẻ bao quanh */
+            height: 100%; /* Hoặc bạn có thể đặt kích thước cố định tùy thuộc vào yêu cầu */
             object-fit: cover; /* Giúp cắt ảnh nếu vượt quá chiều rộng hoặc chiều cao, mà vẫn giữ tỉ lệ */
         }
-
         /* Đặt chiều rộng cho các dropdown */
         .form-select {
             width: 100%; /* Giúp dropdown chiếm toàn bộ chiều rộng của container */
@@ -94,7 +95,6 @@
             font-weight: bold; /* In đậm tiêu đề */
             margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và dropdown */
         }
-
         .home-name.two-line {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -102,7 +102,10 @@
             text-overflow: ellipsis;
             -webkit-line-clamp: 2;
             line-height: 1.2;
-            max-height: 2.4em;
+            height: 2.4em;
+        }
+        .home-name.one-line {
+            min-height: 2.4em; /* Đảm bảo rằng tên chỉ chiếm 1 dòng sẽ có thêm 1 dòng trống */
         }
 
     </style>
@@ -378,70 +381,70 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-default sidebar-menu wow fadeInRight animated">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Đề xuất</h3>
-                        </div>
-                        <div class="panel-body recent-property-widget">
-                            <ul>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                        <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                            </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>
-                                        <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                                </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>
-                                        <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                                </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
+<%--                        <div class="panel panel-default sidebar-menu wow fadeInRight animated">--%>
+<%--                            <div class="panel-heading">--%>
+<%--                                <h3 class="panel-title">Đề xuất</h3>--%>
+<%--                            </div>--%>
+<%--                            <div class="panel-body recent-property-widget">--%>
+<%--                                <ul>--%>
+<%--                                    <li>--%>
+<%--                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+<%--                                            <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
+<%--                                            <span class="property-seeker">--%>
+<%--                                                    <b class="b-1">A</b>--%>
+<%--                                                    <b class="b-2">S</b>--%>
+<%--                                            </span>--%>
+<%--                                        </div>--%>
+<%--                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+<%--                                            <h6> <a href="single.html">Super nice villa </a></h6>--%>
+<%--                                            <span class="property-price">3000000$</span>--%>
+<%--                                        </div>--%>
+<%--                                    </li>--%>
+<%--                                    <li>--%>
+<%--                                        <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">--%>
+<%--                                            <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>--%>
+<%--                                            <span class="property-seeker">--%>
+<%--                                                    <b class="b-1">A</b>--%>
+<%--                                                    <b class="b-2">S</b>--%>
+<%--                                                </span>--%>
+<%--                                        </div>--%>
+<%--                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+<%--                                            <h6> <a href="single.html">Super nice villa </a></h6>--%>
+<%--                                            <span class="property-price">3000000$</span>--%>
+<%--                                        </div>--%>
+<%--                                    </li>--%>
+<%--                                    <li>--%>
+<%--                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+<%--                                            <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>--%>
+<%--                                            <span class="property-seeker">--%>
+<%--                                                    <b class="b-1">A</b>--%>
+<%--                                                    <b class="b-2">S</b>--%>
+<%--                                                </span>--%>
+<%--                                        </div>--%>
+<%--                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+<%--                                            <h6> <a href="single.html">Super nice villa </a></h6>--%>
+<%--                                            <span class="property-price">3000000$</span>--%>
+<%--                                        </div>--%>
+<%--                                    </li>--%>
 
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                        <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                        <span class="property-seeker">
-                                                    <b class="b-1">A</b>
-                                                    <b class="b-2">S</b>
-                                            </span>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="single.html">Super nice villa </a></h6>
-                                        <span class="property-price">3000000$</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+<%--                                    <li>--%>
+<%--                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+<%--                                            <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
+<%--                                            <span class="property-seeker">--%>
+<%--                                                    <b class="b-1">A</b>--%>
+<%--                                                    <b class="b-2">S</b>--%>
+<%--                                            </span>--%>
+<%--                                        </div>--%>
+<%--                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+<%--                                            <h6> <a href="single.html">Super nice villa </a></h6>--%>
+<%--                                            <span class="property-price">3000000$</span>--%>
+<%--                                        </div>--%>
+<%--                                    </li>--%>
+<%--                                </ul>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
                     </div>
                 </div>
-            </div>
 
             <div class="col-md-9 pr0 padding-top-40 properties-page">
                 <div class="col-md-12 clear">
@@ -668,23 +671,30 @@
         function adjustNameDisplay() {
             var isGridActive = document.querySelector('.layout-grid').classList.contains('active');
 
-            if (isGridActive) {
-                document.querySelectorAll('.home-name').forEach(function (el) {
-                    el.classList.add('two-line'); // Thêm class giới hạn 2 dòng
-                });
-            } else {
-                document.querySelectorAll('.home-name').forEach(function (el) {
-                    el.classList.remove('two-line'); // Hiển thị đầy đủ tên khi ở chế độ list
+                document.querySelectorAll('.home-name').forEach(function(el) {
+                    // Kiểm tra chiều cao để xác định xem tên có bao nhiêu dòng
+                    var lineHeight = parseFloat(window.getComputedStyle(el).lineHeight);
+                    var lines = Math.round(el.offsetHeight / lineHeight);
+
+                    if (isGridActive) {
+                        el.classList.add('two-line'); // Giới hạn hiển thị 2 dòng
+                        if (lines === 1) {
+                            el.classList.add('one-line'); // Thêm class nếu chỉ có một dòng
+                        } else {
+                            el.classList.remove('one-line'); // Xóa class nếu có nhiều dòng hơn
+                        }
+                    } else {
+                        el.classList.remove('two-line'); // Hiển thị đầy đủ khi không phải chế độ grid
+                        el.classList.remove('one-line');
+                    }
                 });
             }
-        }
-
-        adjustNameDisplay();
-        document.querySelector('.layout-grid').addEventListener('click', function () {
-            this.classList.add('active');
-            document.querySelector('.layout-list').classList.remove('active');
-            adjustNameDisplay(); // Điều chỉnh hiển thị tên
-        });
+            adjustNameDisplay();
+            document.querySelector('.layout-grid').addEventListener('click', function() {
+                this.classList.add('active');
+                document.querySelector('.layout-list').classList.remove('active');
+                adjustNameDisplay(); // Điều chỉnh hiển thị tên
+            });
 
         document.querySelector('.layout-list').addEventListener('click', function () {
             this.classList.add('active');

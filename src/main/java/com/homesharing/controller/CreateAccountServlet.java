@@ -115,9 +115,9 @@ public class CreateAccountServlet extends HttpServlet {
 
 
         // Validate user input
-        boolean isValid = userService.validateAccount(firstName, lastName, email, password, confirmPassword, roleId, gender, phone, dob);
+        String isValid = userService.validateAccount(firstName, lastName, email, password, confirmPassword, roleId, gender, phone, dob);
 
-        if (isValid) {
+        if (isValid.equalsIgnoreCase("Valid")) {
             try {
                 // Attempt to register the user
                 int result = userService.createAccount(firstName, lastName, email, password, roleId, gender, phone, dob);

@@ -46,6 +46,9 @@ public class SendingEmail {
      */
     public static void sendMail(String to, String subject, String content) throws MessagingException {
         Properties configProps = new Properties();
+        if(to == null || to.isEmpty()) {
+            throw new GeneralException("Invalid email address");
+        }
         try (InputStream input = SendingEmail.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {
                 throw new GeneralException("Unable to find config.properties");

@@ -154,7 +154,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
     @Override
     public List<Home> getAllHomes() {
         List<Home> homes = new ArrayList<>();
-        String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [wardId], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
+        String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [wardsId], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -420,7 +420,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 ps.setInt(paramIndex++, offset);
                 ps.setInt(paramIndex, perPage);
             }
-
+            logger.info(sql.toString());
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
