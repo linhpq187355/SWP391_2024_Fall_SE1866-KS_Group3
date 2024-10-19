@@ -293,6 +293,15 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             sql.append(")) = ").append(fireEquipments.length);
         }
 
+        // Condition for createdBy
+        if (searchParams.containsKey("createdBy")) {
+            sql.append(" AND h.createdBy = ?");
+        }
+
+        if(searchParams.containsKey("status")) {
+            sql.append(" AND h.status = ?");
+        }
+
         if (searchParams.containsKey("orderby")) {
             String orderby = (String) searchParams.get("orderby");
             String order = (String) searchParams.get("order");
@@ -391,6 +400,16 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 }
             }
 
+            if (searchParams.containsKey("createdBy")) {
+                int createdBy = Integer.parseInt(searchParams.get("createdBy").toString());
+                ps.setInt(paramIndex++, createdBy);
+            }
+
+            if(searchParams.containsKey("status")) {
+                String status = searchParams.get("status").toString();
+                ps.setString(paramIndex++,status);
+            }
+
             if (searchParams.containsKey("per_page")) {
                 int perPage = Integer.parseInt(searchParams.get("per_page").toString());
                 int targetPage = searchParams.containsKey("targetPage")
@@ -410,6 +429,11 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setName(resultSet.getString("name"));
                 home.setAddress(resultSet.getString("address"));
                 home.setArea(resultSet.getBigDecimal("area"));
+                home.setHomeDescription(resultSet.getString("homeDescription"));
+                home.setTenantDescription(resultSet.getString("tenantDescription"));
+                home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                home.setNumOfBath(resultSet.getInt("numOfBath"));
+                home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
                 home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
                 home.setPriceId(resultSet.getInt("priceId"));
                 home.setPrice(resultSet.getInt("price"));
@@ -1206,13 +1230,5 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             throw new IllegalArgumentException("Error saving home to the database: " + e.getMessage(), e);
         }
         return homes;
-    }
-
-
-    public static void main(String[] args) {
-        HomeDAOImpl dao = new HomeDAOImpl();
-        List<Home> homes = dao.getHomesByUserId(3);
-        System.out.println();
-
     }
 }
