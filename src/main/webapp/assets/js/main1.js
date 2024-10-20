@@ -71,6 +71,7 @@ function validateForm() {
     const roleId = parseInt(document.querySelector('input[name="roleId"]').value);
     if( roleId === 3){
         const howLong = document.querySelector('select[name="howLong"]').value;
+        const prefProv = document.querySelector('select[name="prefProvince"]').value;
         const emvdate = new Date(document.querySelector('input[name="emvdate"]').value);
         const lmvdate = new Date(document.querySelector('input[name="lmvdate"]').value);
         const minBudget = parseFloat(document.querySelector('input[name="minBudget"]').value);
@@ -124,10 +125,19 @@ function validateForm() {
             document.getElementById('budgetError').textContent = 'Giá phòng tối thiểu không được lớn hơn giá phòng tối đa.';
             isValid = false;
             if (firstErrorSection === null) firstErrorSection = 0;
+        } else if (minBudget <= 0 || maxBudget <= 0) {
+            document.getElementById('budgetError').textContent = 'Giá phòng phải lớn hơn 0. ';
+            isValid = false;
+            if (firstErrorSection === null) firstErrorSection = 0;
         } else if (minBudget.toString().length > 9 || maxBudget.toString().length > 9) {
             document.getElementById('budgetError').textContent = 'Giá phòng tối thiểu và tối đa không được vượt quá 9 chữ số.';
             isValid = false;
             if (firstErrorSection === null) firstErrorSection = 0;
+        }
+        if (prefProv === '') {
+            document.getElementById('provinceError').textContent = 'Vui lòng chọn khu vực bạn muốn tìm bạn cùng phòng.';
+            isValid = false;
+            if (firstErrorSection === null) firstErrorSection = 0; // Chuyển đến section 0
         }
         if (isNaN(dob.getTime()) || dob > today) {
             document.getElementById('dobError').textContent = 'Ngày sinh không được trong tương lai.';

@@ -132,9 +132,8 @@
                             <div class="item-thumb">
                                 <!-- Update the href to point to home detail page with home ID -->
                                 <a href="home-detail?id=${homes.id}">
-                                    <img class="property-image" src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/demo/property-1.jpg'}">
+                                    <img class="property-image" src="${(homes.images != null && !homes.images.isEmpty()) ? homes.images[0] : 'assets/img/demo/property-1.jpg'}">
                                 </a>
-
                             </div>
                             <div class="item-entry overflow">
                                 <h5><a href="home-detail?id=${homes.id}">${homes.address}</a></h5>

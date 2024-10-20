@@ -11,11 +11,14 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.PreferenceDAO;
+import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.PreferenceDAOImpl;
+import com.homesharing.dao.impl.ProvinceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Preference;
+import com.homesharing.model.Province;
 import com.homesharing.service.PreferenceService;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.PreferenceServiceImpl;
@@ -30,6 +33,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +49,7 @@ public class MatchingServlet extends HttpServlet {
 
     private UserService userService;
     private PreferenceService preferenceService;
+    private ProvinceDAO provinceDAO;
 
     private static final Logger LOGGER = Logger.getLogger(UserUpdateProfileServlet.class.getName());
 
@@ -63,6 +68,7 @@ public class MatchingServlet extends HttpServlet {
         // Initialize services with corresponding DAOs
         this.userService = new UserServiceImpl(userDAO, null, null, null);
         this.preferenceService = new PreferenceServiceImpl(preferenceDAO);
+        this.provinceDAO = new ProvinceDAOImpl();
     }
 
     /**
@@ -80,9 +86,11 @@ public class MatchingServlet extends HttpServlet {
         String userId = CookieUtil.getCookie(req, "id");
         String error = req.getParameter("error");
         String message = req.getParameter("message");
+        List<Province> provinceList = provinceDAO.getAllProvinces();
 
         req.setAttribute("error", error);
         req.setAttribute("message", message);
+        req.setAttribute("provinceList", provinceList);
         req.getRequestDispatcher("/matching-profile.jsp").forward(req, resp);
     }
 
@@ -107,6 +115,7 @@ public class MatchingServlet extends HttpServlet {
         String lmvdate = req.getParameter("lmvdate");
         String rawMinBudget = req.getParameter("minBudget");
         String rawMaxBudget = req.getParameter("maxBudget");
+        String prefProv = req.getParameter("prefProvince");
 
         String dob = req.getParameter("dob");
         String gender = req.getParameter("gender");
@@ -124,7 +133,7 @@ public class MatchingServlet extends HttpServlet {
         // Check if the user is a tenant and update their matching profile
         if ("3".equals(roleId)) {
             try {
-                int rowsUpdated = userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget, userId);
+                int rowsUpdated = userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget,prefProv, userId);
                 if (rowsUpdated < 0) {
                     LOGGER.warning("Failed to update user matching profile.");
                     updateSuccessful = false;

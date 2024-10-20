@@ -101,6 +101,19 @@
                                     <span class="error" id="budgetError"></span>
                                 </div>
                             </div>
+                            <div class="form-row">
+                                <div class="form-holder">
+                                    <label>Khu vực bạn muốn tìm phòng?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <select class="form-control" name="prefProvince" required>
+                                        <option value="">Chọn khu vực</option>
+                                        <c:forEach items="${requestScope.provinceList}" var="provinceList">
+                                            <option value="${provinceList.id}">${provinceList.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <span class="error" id="provinceError"></span>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -148,7 +161,7 @@
                                     </div>
                                 </div>
                                 <div class="form-holder">
-                                    <label><i class="fa-solid fa-smoking"></i></i> Mức độ hút thuốc của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-smoking"></i> Mức độ hút thuốc của bạn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="smokingSlider" name="smoking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" required>
                                         <div class="ano-slider">
@@ -265,7 +278,7 @@
                             </c:if>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Mức độ sạch sẽ bạn mong muốn?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-broom"></i> Mức độ sạch sẽ bạn mong muốn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cleanlinessSlider1" name="cleanliness" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" >
                                         <div class="ano-slider">
@@ -276,7 +289,7 @@
                                     </div>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Mức độ hút thuốc của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-smoking"></i> Mức độ hút thuốc của bạn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="smokingSlider1" name="smoking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
@@ -289,7 +302,7 @@
                             </div>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Mức độ uống rượu/bia của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-beer-mug-empty"></i> Mức độ uống rượu/bia của bạn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="drinkingSlider1" name="drinking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" >
                                         <div class="ano-slider">
@@ -300,7 +313,7 @@
                                     </div>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Bạn sẽ hòa đồng với bạn cùng phòng?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-user-group"></i> Bạn sẽ hòa đồng với bạn cùng phòng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="interactionSlider1" name="interaction" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
@@ -313,7 +326,7 @@
                             </div>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-person-booth"></i> Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="guestSlider1" name="guest" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
@@ -324,7 +337,7 @@
                                     </div>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-fire-burner"></i> Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cookingSlider1" name="cooking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
@@ -337,7 +350,7 @@
                             </div>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label><i class="fa-solid fa-dog"></i> Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="petSlider1" name="pet" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
@@ -367,6 +380,24 @@
 
 <!-- JQUERY -->
 <script src="assets/js/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%
+    String message = (String) session.getAttribute("message");
+    String messageType = (String) session.getAttribute("messageType");
+    if (message != null && messageType != null) {
+%>
+<script type="text/javascript">
+    Swal.fire({
+        icon: '<%= messageType %>',
+        title: '<%= message %>'
+    });
+</script>
+<%
+        // Sau khi hiển thị thông báo, xóa nó khỏi session để tránh hiển thị lại khi trang được làm mới
+        session.removeAttribute("message");
+        session.removeAttribute("messageType");
+    }
+%>
 
 <!-- JQUERY STEP -->
 <script src="assets/js/jquery.steps.js"></script>

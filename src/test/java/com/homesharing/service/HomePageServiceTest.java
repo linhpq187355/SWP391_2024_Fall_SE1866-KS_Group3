@@ -3,6 +3,7 @@ package com.homesharing.service;
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.PriceDAO;
 import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.WardDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
@@ -34,11 +35,13 @@ class HomePageServiceTest {
     private PriceDAO priceDAO;
     @Mock
     private UserDAO userDAO;
+    @Mock
+    private WardDAO wardDAO;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO,wardDAO);
     }
 
     @Test

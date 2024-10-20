@@ -136,7 +136,7 @@ public class VerifyEmailServlet extends HttpServlet {
                 // Login successful, redirect to home page
                 request.getSession().setAttribute("message", "Xác thực thành công.");
                 request.getSession().setAttribute("messageType", "success");
-                response.sendRedirect(request.getContextPath() + "/home-page");
+                response.sendRedirect(request.getContextPath() + "/matching");
             } else {
                 otpAttempts++;
                 otpAttemptsMap.put(userId, otpAttempts);

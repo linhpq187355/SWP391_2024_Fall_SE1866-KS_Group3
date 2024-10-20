@@ -205,5 +205,5 @@ public interface UserService {
      * @param userId          The ID of the user whose profile is to be updated.
      * @return An integer indicating the result of the update operation (e.g., number of rows affected).
      */
-    int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId);
+    int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget,String prefProv, String userId);
 }

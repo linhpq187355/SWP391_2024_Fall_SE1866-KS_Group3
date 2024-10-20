@@ -37,6 +37,7 @@ public class User {
     private int maxBudget;
     private LocalDate earliestMoveIn;
     private LocalDate latestMoveIn;
+    private int prefProv;
 
     // Constructors
     public User() {}
@@ -236,6 +237,14 @@ public class User {
 
     public void setLatestMoveIn(LocalDate latestMoveIn) {
         this.latestMoveIn = latestMoveIn;
+    }
+
+    public int getPrefProv() {
+        return prefProv;
+    }
+
+    public void setPrefProv(int prefProv) {
+        this.prefProv = prefProv;
     }
 
     @Override

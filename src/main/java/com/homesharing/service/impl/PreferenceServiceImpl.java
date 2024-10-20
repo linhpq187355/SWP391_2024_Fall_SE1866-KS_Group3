@@ -12,6 +12,7 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.PreferenceDAO;
+import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Preference;
 import com.homesharing.service.PreferenceService;
@@ -164,6 +165,11 @@ public class PreferenceServiceImpl implements PreferenceService {
     public int[] listMatchingPreferences(int userId) {
         List<Preference> listMatchingPreference = preferenceDAO.listMatchingPreference(userId);
         Preference pref = preferenceDAO.getPreference(userId);
+        boolean checkNull = false;
+        if(pref.getCleanliness() == 100 || pref.getSmoking() == 100 || pref.getDrinking() == 100 || pref.getInteraction() == 100 || pref.getCooking() == 100 || pref.getPet() == 100 || pref.getGuest() == 100) {checkNull = true;};
+        if(checkNull) {
+            return null;
+        }
         Map<Integer, Integer> hostScores = new HashMap<>();
         for(int i = 0; i < listMatchingPreference.size(); i++){
             Preference hostPref = listMatchingPreference.get(i);
@@ -213,5 +219,11 @@ public class PreferenceServiceImpl implements PreferenceService {
             logger.severe("Error fetching preferences for user ID: " + userId);
             throw new GeneralException("Failed to retrieve preferences", e);
         }
+    }
+
+    public static void main(String[] args) {
+        PreferenceDAO pd = new PreferenceDAOImpl();
+        PreferenceServiceImpl p = new PreferenceServiceImpl(pd);
+        System.out.println(p.getPreference(16).getCleanliness());
     }
 }

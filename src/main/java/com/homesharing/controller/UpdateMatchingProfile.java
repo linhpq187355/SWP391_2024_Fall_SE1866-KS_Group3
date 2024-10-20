@@ -11,11 +11,14 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.PreferenceDAO;
+import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.PreferenceDAOImpl;
+import com.homesharing.dao.impl.ProvinceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Preference;
+import com.homesharing.model.Province;
 import com.homesharing.model.User;
 import com.homesharing.service.PreferenceService;
 import com.homesharing.service.UserService;
@@ -30,6 +33,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +51,7 @@ public class UpdateMatchingProfile extends HttpServlet {
     private UserService userService;
     // Service for preference-related operations
     private PreferenceService preferenceService;
+    private ProvinceDAO provinceDAO;
 
     // Logger for logging events and errors
     private static final Logger LOGGER = Logger.getLogger(UserUpdateProfileServlet.class.getName());
@@ -65,6 +70,7 @@ public class UpdateMatchingProfile extends HttpServlet {
         // Initialize services with the corresponding DAOs
         this.userService = new UserServiceImpl(userDAO, null, null, null);
         this.preferenceService = new PreferenceServiceImpl(preferenceDAO);
+        this.provinceDAO = new ProvinceDAOImpl();
     }
 
     /**
@@ -89,11 +95,14 @@ public class UpdateMatchingProfile extends HttpServlet {
             // Fetch user and preference data from the services
             User user = userService.getUser(Integer.parseInt(Objects.requireNonNull(userId)));
             Preference preference = preferenceService.getPreference(Integer.parseInt(userId));
+            List<Province> provinceList = provinceDAO.getAllProvinces();
+
 
             // Set retrieved data as request attributes for JSP display
             req.setAttribute("user", user);
             req.setAttribute("preference", preference);
             req.setAttribute("error", error);
+            req.setAttribute("provinceList", provinceList);
             req.setAttribute("message", message);
 
             // Forward to the update profile JSP page
@@ -127,6 +136,7 @@ public class UpdateMatchingProfile extends HttpServlet {
         String lmvdate = req.getParameter("lmvdate");
         String rawMinBudget = req.getParameter("minBudget");
         String rawMaxBudget = req.getParameter("maxBudget");
+        String prefProv = req.getParameter("prefProvince");
 
         String dob = req.getParameter("dob");
         String gender = req.getParameter("gender");
@@ -144,7 +154,7 @@ public class UpdateMatchingProfile extends HttpServlet {
         // Check if the user is a tenant and update their matching profile
         if ("3".equals(roleId)) {
             try {
-                int rowsUpdated = userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget, userId);
+                int rowsUpdated = userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget,prefProv, userId);
                 if (rowsUpdated < 0) {
                     LOGGER.warning("Failed to update user matching profile.");
                     updateSuccessful = false;

@@ -10,14 +10,8 @@
 
 package com.homesharing.controller;
 
-import com.homesharing.dao.HomeDAO;
-import com.homesharing.dao.PreferenceDAO;
-import com.homesharing.dao.PriceDAO;
-import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.PreferenceDAOImpl;
-import com.homesharing.dao.impl.PriceDAOImpl;
-import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.dao.*;
+import com.homesharing.dao.impl.*;
 import com.homesharing.model.Home;
 import com.homesharing.model.Preference;
 import com.homesharing.model.Price;
@@ -52,6 +46,7 @@ public class HomePageServlet extends HttpServlet {
     private HomeDAO homeDAO;  // Data Access Object for accessing home data
     private PriceDAO priceDAO;  // Data Access Object for accessing price data
     private UserDAO userDAO;
+    private WardDAO wardDAO;
     private UserService userService;
     private PreferenceService preferenceService;
 
@@ -67,9 +62,10 @@ public class HomePageServlet extends HttpServlet {
         homeDAO = new HomeDAOImpl();
         priceDAO = new PriceDAOImpl();
         userDAO = new UserDAOImpl();
+        wardDAO = new WardDAOImpl();
         PreferenceDAO preferenceDAO = new PreferenceDAOImpl();
         // Initialize the home page service with the required DAOs
-        homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO,wardDAO);
         this.preferenceService = new PreferenceServiceImpl(preferenceDAO);
         userService = new UserServiceImpl(userDAO,null,null,null);
     }
@@ -102,8 +98,10 @@ public class HomePageServlet extends HttpServlet {
             if(user.getRolesId() == 3){
                 preference = preferenceService.getPreference(Integer.parseInt(userId));
                 matchingHost = preferenceService.listMatchingPreferences(Integer.parseInt(userId));
-                matchingHomes = homePageService.getMatchingHome(matchingHost, Integer.parseInt(userId));
-                matchingHomePrice = homePageService.getHomePrice(matchingHomes);
+                if(matchingHost != null){
+                    matchingHomes = homePageService.getMatchingHome(matchingHost, Integer.parseInt(userId));
+                    matchingHomePrice = homePageService.getHomePrice(matchingHomes);
+                }
             }
 
         }

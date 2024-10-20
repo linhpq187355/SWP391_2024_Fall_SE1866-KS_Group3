@@ -20,4 +20,6 @@ public interface WardDAO {
      * @return ward that you want to find
      */
     Ward getWardById(int id);
+
+    int getProvinceIdByWardId(int wardId);
 }

@@ -356,7 +356,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public User getUser(int id) {
-        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.duration, u.earliestMoveIn, u.latestMoveIn, u.minBudget, u.maxBudget,u.rolesid \n"
+        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.duration, u.earliestMoveIn, u.latestMoveIn, u.minBudget, u.maxBudget,u.rolesid,u.preferredCity \n"
                 + "FROM [HSS_Users] u WHERE u.id = ?";
 
         Connection connection = null;
@@ -388,6 +388,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setLatestMoveIn(resultSet.getDate("latestMoveIn") != null ? resultSet.getDate("latestMoveIn").toLocalDate() : null);
                 user.setDuration(resultSet.getString("duration"));
                 user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                user.setPrefProv(resultSet.getInt("preferredCity"));
 
                 user.setDob(resultSet.getDate("dob") != null ? resultSet.getDate("dob").toLocalDate() : null);
                 user.setRolesId(resultSet.getInt("rolesid"));
@@ -838,6 +839,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[minBudget] = ?" +
                 "      ,[maxBudget] = ?" +
                 "      ,[earliestMoveIn] = ?" +
+                "      ,[preferredCity] = ?" +
                 "      ,[latestMoveIn] = ?" +
                 " WHERE id = ?";
 
@@ -853,8 +855,9 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             preparedStatement.setInt(4, user.getMinBudget());
             preparedStatement.setInt(5, user.getMaxBudget());
             preparedStatement.setDate(6, java.sql.Date.valueOf(user.getEarliestMoveIn()));
-            preparedStatement.setDate(7, java.sql.Date.valueOf(user.getLatestMoveIn()));
-            preparedStatement.setInt(8, user.getId());
+            preparedStatement.setInt(7, user.getPrefProv());
+            preparedStatement.setDate(8, java.sql.Date.valueOf(user.getLatestMoveIn()));
+            preparedStatement.setInt(9, user.getId());
 
             // Execute the update and get the number of affected rows
             rowsUpdated = preparedStatement.executeUpdate();
@@ -887,7 +890,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public User getMatchingUserProfile(int id) {
-        String sql = "SELECT [id], [minBudget], [maxBudget], [earliestMoveIn], [latestMoveIn], [duration] FROM [dbo].[HSS_Users] WHERE [id] = ?";
+        String sql = "SELECT [id], [minBudget], [maxBudget], [earliestMoveIn], [latestMoveIn], [duration], [preferredCity] FROM [dbo].[HSS_Users] WHERE [id] = ?";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -903,6 +906,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setMinBudget(resultSet.getInt("minBudget"));
                 user.setMaxBudget(resultSet.getInt("maxBudget"));
                 user.setDuration(resultSet.getString("duration"));
+                user.setPrefProv(resultSet.getInt("preferredCity"));
                 if(resultSet.getDate("earliestMoveIn") != null){
                     user.setEarliestMoveIn(resultSet.getDate("earliestMoveIn").toLocalDate());
                 } else {

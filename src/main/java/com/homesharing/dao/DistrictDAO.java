@@ -23,4 +23,5 @@ public interface DistrictDAO {
      * @return district list belong to a certain province
      */
     List<District> getDistrictByProvinceId(int provinceId);
+
 }

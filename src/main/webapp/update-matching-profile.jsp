@@ -27,7 +27,7 @@
 <jsp:include page="header.jsp"/>
 <div class="wrapper">
     <form action="update-matching-profile" method="post" id="wizard" style="height: 100%;width: 75em">
-        <button type="button" class="btn btn-danger" style="position: absolute;right: 26px;top: 40px;" onclick="window.location.href='home-page'">Bỏ qua</button>
+        <button type="button" class="btn btn-danger" style="position: absolute;right: 910px;top: 810px;" onclick="window.location.href='home-page'">Hủy</button>
         <c:if test="${not empty cookie.id}">
             <c:if test="${cookie.roleId.value == 3}">
                 <!-- SECTION 1 -->
@@ -99,6 +99,19 @@
                                     </div>
                                     <span class="error" id="budgetError"></span>
                                 </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-holder">
+                                    <label>Khu vực bạn muốn tìm phòng?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <select class="form-control" name="prefProvince" required>
+                                        <option value="">Chọn khu vực</option>
+                                        <c:forEach items="${requestScope.provinceList}" var="provinceList">
+                                            <option value="${provinceList.id}" <c:if test="${provinceList.id == requestScope.user.prefProv}">selected</c:if>>${provinceList.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <span class="error" id="provinceError"></span>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -262,7 +275,7 @@
                             </c:if>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Mức độ sạch sẽ bạn mong muốn?</label>
+                                    <label><i class="fa-solid fa-broom"></i> Mức độ sạch sẽ bạn mong muốn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cleanlinessSlider1" name="cleanliness" readonly type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness != 100 ? requestScope.preference.cleanliness : ''}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cleanliness != 100 ? requestScope.preference.cleanliness : ''}">
                                         <div class="ano-slider">
@@ -273,7 +286,7 @@
                                     <span id="cleanlinessError1" class="error"></span>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Mức độ hút thuốc của bạn?</label>
+                                    <label><i class="fa-solid fa-smoking"></i> Mức độ hút thuốc của bạn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="smokingSlider1" name="smoking" readonly type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking != 100 ? requestScope.preference.smoking : ''}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.smoking != 100 ? requestScope.preference.smoking : ''}">
                                         <div class="ano-slider">
@@ -286,7 +299,7 @@
                             </div>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Mức độ uống rượu/bia của bạn?</label>
+                                    <label><i class="fa-solid fa-beer-mug-empty"></i> Mức độ uống rượu/bia của bạn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="drinkingSlider1" name="drinking" readonly type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking != 100 ? requestScope.preference.drinking : ''}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.drinking != 100 ? requestScope.preference.drinking : ''}">
                                         <div class="ano-slider">
@@ -297,7 +310,7 @@
                                     </div>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Bạn sẽ hòa đồng với bạn cùng phòng?</label>
+                                    <label><i class="fa-solid fa-user-group"></i> Bạn sẽ hòa đồng với bạn cùng phòng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="interactionSlider1" name="interaction" readonly type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction != 100 ? requestScope.preference.interaction : ''}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.interaction != 100 ? requestScope.preference.interaction : ''}">
                                         <div class="ano-slider">
@@ -310,7 +323,7 @@
                             </div>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?</label>
+                                    <label><i class="fa-solid fa-person-booth"></i> Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="guestSlider1" name="guest" readonly type="range" min="1" max="5" step="1" value="${requestScope.preference.guest != 100 ? requestScope.preference.guest : ''}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.guest != 100 ? requestScope.preference.guest : ''}">
                                         <div class="ano-slider">
@@ -321,7 +334,7 @@
                                     </div>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Bạn có thích nấu ăn không?</label>
+                                    <label><i class="fa-solid fa-fire-burner"></i> Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cookingSlider1"  name="cooking" readonly type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking != 100 ? requestScope.preference.cooking : ''}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.cooking != 100 ? requestScope.preference.cooking : ''}">
                                         <div class="ano-slider">
@@ -334,7 +347,7 @@
                             </div>
                             <div class="form-row" style="margin-bottom: 70px">
                                 <div class="form-holder">
-                                    <label>Bạn có thoải mái nếu trong phòng nuôi thú cưng?</label>
+                                    <label><i class="fa-solid fa-dog"></i> Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="petSlider1" name="pet" readonly type="range" min="1" max="5" step="1" value="${requestScope.preference.pet != 100 ? requestScope.preference.pet : ''}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.pet != 100 ? requestScope.preference.pet : ''}">
                                         <div class="ano-slider">

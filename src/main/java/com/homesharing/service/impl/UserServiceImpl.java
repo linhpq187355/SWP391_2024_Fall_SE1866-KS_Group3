@@ -649,7 +649,7 @@ public class UserServiceImpl implements UserService {
      * @throws GeneralException if an error occurs during the update.
      */
     @Override
-    public int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId) {
+    public int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget,String prefProv, String userId) {
         try {
             User user = new User();
             user.setDob(LocalDate.parse(dob));
@@ -660,6 +660,7 @@ public class UserServiceImpl implements UserService {
             user.setLatestMoveIn(LocalDate.parse(lmvdate));
             user.setMinBudget(Integer.parseInt(rawMinBudget));
             user.setMaxBudget(Integer.parseInt(rawMaxBudget));
+            user.setPrefProv(Integer.parseInt(prefProv));
 
             return userDao.updateMatchingProfile(user);
 

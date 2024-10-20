@@ -37,16 +37,18 @@ public class HomePageServiceImpl implements HomePageService {
     private final PriceDAO priceDAO;
     private static final int DEFAULT_NUMBER_OF_HOMES = 12;
     private final UserDAO userDAO;
+    private final WardDAO wardDAO;
 
     /**
      * Constructor for HomePageServiceImpl.
      * @param homeDAO The Data Access Object for Home entities.
      * @param priceDAO The Data Access Object for Price entities.
      */
-    public HomePageServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO, UserDAO userDAO) {
+    public HomePageServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO, UserDAO userDAO, WardDAO wardDAO) {
         this.homeDAO = homeDAO;
         this.priceDAO = priceDAO;
         this.userDAO = userDAO;
+        this.wardDAO = wardDAO;
     }
 
     /**
@@ -279,10 +281,12 @@ public class HomePageServiceImpl implements HomePageService {
                 moveInCheck = true;
             }
             Home home = homeList.get(i);
-            if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
-                if((user.getDuration().equals("short") && homeList.get(i).getLeaseDuration() <6) || (user.getDuration().equals("long") && homeList.get(i).getLeaseDuration() >=6) ){
-                    if(moveInCheck){
-                        listMatchingHomes.add(home);
+            if(user.getPrefProv() == wardDAO.getProvinceIdByWardId(home.getWardId())) {
+                if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
+                    if((user.getDuration().equals("short") && homeList.get(i).getLeaseDuration() <6) || (user.getDuration().equals("long") && homeList.get(i).getLeaseDuration() >=6) ){
+                        if(moveInCheck){
+                            listMatchingHomes.add(home);
+                        }
                     }
                 }
             }
