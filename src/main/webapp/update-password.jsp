@@ -122,6 +122,12 @@
             alert("Mật khẩu phải có ít nhất 8 ký tự!");
             return false;
         }
+
+        // Check if passwords match
+        if (password === oldPassword) {
+            alert("Mật khẩu mới phải khác mật khẩu cũ!");
+            return false;
+        }
         // Check if passwords match
         if (password !== confirmPassword) {
             alert("Mật khẩu không khớp!");

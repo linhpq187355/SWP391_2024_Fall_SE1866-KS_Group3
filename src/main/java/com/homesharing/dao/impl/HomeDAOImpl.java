@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -231,7 +228,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                         "JOIN Districts d ON w.Districtsid = d.id " +
                         "JOIN Provinces p ON d.provincesId = p.id " +
                         "LEFT JOIN Prices pri ON h.id = pri.Homesid " +
-                        "WHERE 1=1"
+                        "WHERE 1=1 AND h.status = 'active' "
         );
 
         // Condition for keyword
@@ -493,7 +490,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                         "JOIN Districts d ON w.Districtsid = d.id " +
                         "JOIN Provinces p ON d.provincesId = p.id " +
                         "LEFT JOIN Prices pri ON h.id = pri.Homesid " +
-                        "WHERE 1=1"
+                        "WHERE 1=1 AND h.status = 'active' "
         );
 
         // Condition for keyword
@@ -1051,14 +1048,14 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
     }
 
     @Override
-    public int saveHome(Home home) {
-        String sql = "INSERT INTO Homes (name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardId, homeTypeId, createdBy) " +
+    public int saveHome(Home home) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "INSERT INTO Homes (name, address, longitude, latitude, orientation, area, leaseDuration, moveInDate, numOfBedroom, numOfBath, createdDate, modifiedDate, homeDescription, tenantDescription, wardsId, homeTypeId, createdBy) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Using try-with-resources to manage the database connection and resources
         try (Connection connection = DBContext.getConnection();
              // PreparedStatement with RETURN_GENERATED_KEYS to capture the inserted Home ID
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             // Setting parameters for the PreparedStatement using the Home object
             preparedStatement.setString(1, home.getName());

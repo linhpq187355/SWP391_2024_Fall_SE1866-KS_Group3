@@ -11,6 +11,7 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.UserServiceImpl;
@@ -141,7 +142,7 @@ public class UpdatePasswordServlet extends HttpServlet {
             } else {
                 ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
             }
-        } catch (SQLException e) {
+        } catch (GeneralException e) {
             ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
         }
     }

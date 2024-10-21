@@ -233,7 +233,7 @@ public class HomePageServiceImpl implements HomePageService {
     }
 
     @Override
-    public void addHome(Home home) { homeDAO.saveHome(home);}
+    public void addHome(Home home) throws SQLException, IOException, ClassNotFoundException { homeDAO.saveHome(home);}
 
     @Override
     public Home getHomeById(int id) { return homeDAO.getHomeById(id); }
