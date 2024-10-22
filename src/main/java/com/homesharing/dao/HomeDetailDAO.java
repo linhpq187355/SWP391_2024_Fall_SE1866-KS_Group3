@@ -55,4 +55,10 @@ public interface HomeDetailDAO {
      *         If no fire equipment is found, the list will be empty.
      */
     List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
+
+    List<Home> getSimilarHomes(int homeId);
+
+    List<Home> getHomesByWard(int homeId, int priceDifference);
+
+    List<Home> getHomesByDistrict(int homeId, int priceDifference);
 }

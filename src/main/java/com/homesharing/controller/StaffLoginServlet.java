@@ -33,8 +33,6 @@ import java.io.IOException;
  * login form submissions. It validates credentials and communicates
  * with the UserService to authenticate staff users.
  *
- * @version 1.0
- * @since 2024-10-02
  * @author ManhNC
  */
 @WebServlet("/staff-login")
@@ -97,7 +95,7 @@ public class StaffLoginServlet extends HttpServlet {
                 // Login successful, redirect to home page
                 req.getSession().setAttribute("message", "Đăng nhập thành công.");
                 req.getSession().setAttribute("messageType", "success");
-                resp.sendRedirect(req.getContextPath() + "/account-manage");
+                resp.sendRedirect(req.getContextPath() + "/dashboard/account-manage");
             } else {
                 // Login failed, display error message
                 req.setAttribute("error", result);

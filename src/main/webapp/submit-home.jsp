@@ -334,7 +334,7 @@
     </div>
 </div>
 
-<jsp:include page="footer-demo.jsp"/>
+<jsp:include page="footer.jsp"/>
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="assets/js//jquery-1.10.2.min.js"></script>

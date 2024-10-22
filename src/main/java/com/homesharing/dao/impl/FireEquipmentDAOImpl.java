@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FireEquipmentDAOImpl implements FireEquipmentDAO {
-    private List<FireEquipment> fireEquipments = new ArrayList<>();
 
     @Override
     public List<FireEquipment> getAllFireEquipments() {
+        List<FireEquipment> fireEquipments = new ArrayList<>();
         String sql = "SELECT [id],[name],[icon],[status] FROM [dbo].[FireEquipments]";
         Connection connection = null;
         PreparedStatement preparedStatement = null;

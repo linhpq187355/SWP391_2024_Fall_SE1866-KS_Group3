@@ -38,8 +38,6 @@ import java.sql.SQLException;
  * form submissions for account creation. It validates the input
  * and communicates with the UserService to register new users.
  *
- * @version 1.0
- * @since 2024-10-02
  * @author ManhNC
  */
 @WebServlet("/signup")

@@ -28,20 +28,21 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * VerifyEmailServlet handles the email verification process for users.
  * It retrieves the verification code and user ID from the request, verifies
  * the token, and provides feedback on whether the verification was successful.
  *
- * @version 1.0
- * @since 2024-10-02
  * @author ManhNC
  */
 @WebServlet("/verify")
@@ -82,6 +83,13 @@ public class VerifyEmailServlet extends HttpServlet {
             forwardWithMessage(request, response, "Có lỗi xảy ra, vui lòng đăng nhập lại để xác thực.");
             return; // Exit the method if the user ID is invalid
         }
+        HttpSession session = request.getSession();
+        Map<Integer, Integer> otpAttemptsMap = (Map<Integer, Integer>) session.getAttribute("otpAttemptsMap");
+        if (otpAttemptsMap == null) {
+            otpAttemptsMap = new HashMap<>();
+            session.setAttribute("otpAttemptsMap", otpAttemptsMap);
+        }
+        request.getSession().setMaxInactiveInterval(5 * 60);
         try {
             request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -112,10 +120,17 @@ public class VerifyEmailServlet extends HttpServlet {
             return; // Exit the method if the user ID is invalid
         }
 
+        Map<Integer, Integer> otpAttemptsMap = (Map<Integer, Integer>) request.getSession().getAttribute("otpAttemptsMap");
+        if (otpAttemptsMap == null) {
+            otpAttemptsMap = new HashMap<>();
+            request.getSession().setAttribute("otpAttemptsMap", otpAttemptsMap);
+        }
+        int otpAttempts = otpAttemptsMap.getOrDefault(userId, 0);
         //Check the token using the email service
         try {
             boolean check = tokenService.checkToken(verificationCode, userId, LocalDateTime.now());
             if (check) {
+                otpAttemptsMap.put(userId, 0);
                 userService.putAccountOnCookie(userId, response);
                 request.getSession().removeAttribute("userId");
                 // Login successful, redirect to home page
@@ -123,8 +138,15 @@ public class VerifyEmailServlet extends HttpServlet {
                 request.getSession().setAttribute("messageType", "success");
                 response.sendRedirect(request.getContextPath() + "/home-page");
             } else {
-                request.setAttribute("error", "OTP không hợp lệ.");
-                request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
+                otpAttempts++;
+                otpAttemptsMap.put(userId, otpAttempts);
+                if (otpAttempts >= 5) {
+                    request.setAttribute("error", "Bạn đã nhập sai OTP quá 5 lần. Vui lòng thử lại sau.");
+                    request.getRequestDispatcher("/error.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("error", "OTP không hợp lệ. Bạn đã nhập sai " + otpAttempts + " lần.");
+                    request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
+                }
             }
         } catch (RuntimeException | SQLException | IOException | ServletException e) {
             // Handle any errors that occur during token verification
@@ -141,9 +163,9 @@ public class VerifyEmailServlet extends HttpServlet {
      * @param message  The message to be displayed to the user.
      */
     private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response, String message) {
-        request.setAttribute("notificationMessage", message);
+        request.setAttribute("error", message);
         try {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/announce.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
             dispatcher.forward(request, response);
         } catch (IOException | ServletException e) {
             logger.error("Error forwarding to announce page: {}", e.getMessage(), e); // Log the exception for debugging

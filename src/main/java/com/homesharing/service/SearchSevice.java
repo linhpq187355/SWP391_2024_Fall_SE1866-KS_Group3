@@ -45,4 +45,9 @@ public interface SearchSevice {
      */
     Price getPriceByHomeId(int homeId) throws SQLException, ClassNotFoundException;
 
+    List<Home> searchByBedroomCount(int minBedrooms, int maxBedrooms);
+
+    List<Home> searchByBathroomCount(int minBathrooms, int maxBathrooms);
+
+    List<Home> searchByAreaRange(int minArea, int maxArea);
 }

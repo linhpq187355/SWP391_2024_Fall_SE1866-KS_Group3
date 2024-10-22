@@ -3,6 +3,7 @@ package com.homesharing.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Home {
     private int id;
@@ -24,7 +25,14 @@ public class Home {
     private int homeTypeId; // One-to-one relationship with HomeType
     private int createdBy;
     private int priceId;
-
+    private List<String> images;
+    private int price;
+    public int getPrice() {
+        return price;
+    }
+    public void setPrice(int price) {
+        this.price = price;
+    }
     public int getId() {
         return id;
     }
@@ -172,4 +180,13 @@ public class Home {
     public void setPriceId(int priceId) { this.priceId = priceId; }
 
     public int getPriceId() { return priceId; }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
 }

@@ -11,9 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 public class AmentityDAOImpl implements AmentityDAO {
-    private List<Amentity> amentities = new ArrayList<>();
+
     @Override
     public List<Amentity> getAllAmentities() {
+        List<Amentity> amentities = new ArrayList<>();
         String sql = "SELECT [id],[name],[icon],[status] FROM [dbo].[Amenities]";
         Connection connection = null;
         PreparedStatement preparedStatement = null;

@@ -39,8 +39,10 @@ import java.io.IOException;
  */
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
-    private transient UserService userService;// Mark userService as transient
+
     private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class); // Logger instance
+
+    private transient UserService userService;
 
     /**
      * Initializes the LogoutServlet by creating instances of necessary services.

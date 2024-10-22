@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="assets/css/fontello.css">
     <link href="assets/fonts/icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
     <link href="assets/fonts/icon-7-stroke/css/helper.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet" media="screen">
+    <link href="assets/css/animate.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/icheck.min_all.css">
@@ -170,6 +170,11 @@
                                 <a href="user-wishlist" class="li-acc-op">Danh sách yêu thích</a>
                             </li>
                        </c:if>
+                            <c:if test="${cookie.roleId.value ==4}">
+                                <li>
+                                    <a href="user-wishlist" class="li-acc-op">Quản lý yêu thích</a>
+                                </li>
+                            </c:if>
                             <li>
                                 <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
                             </li>
@@ -205,7 +210,7 @@
                     <a href="home-page">Trang chủ</a>
                 </li>
 
-                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-page">Tất cả nhà</a></li>
+                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-list">Tất cả nhà</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
                 <c:if test="${cookie.roleId.value ==4}">

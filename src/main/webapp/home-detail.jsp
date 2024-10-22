@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -58,6 +59,14 @@
             color: #a0a0a0;
             margin-bottom: 20px;
         }
+        .similar-post-section .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .similar-post-section .col-md-3 {
+            margin-right: 10px; /* Optional spacing between homes */
+        }
         .phone-button {
             background-color: #00c853;
             color: white;
@@ -90,10 +99,10 @@
         .zalo-button i, .like-button i {
             margin-right: 10px;
             }
-        #map{
-            width: 100%;
-            height: 100%;
-        }
+        /*#map{*/
+        /*    width: 100%;*/
+        /*    height: 100%;*/
+        /*}*/
     </style>
 </head>
 <jsp:include page="header.jsp"/>
@@ -126,6 +135,14 @@
                 <div class="row">
                     <div class="light-slide-item">
                         <div class="clearfix">
+                            <div class="favorite-and-print">
+                                <a class="add-to-fav" href="#login-modal" data-toggle="modal">
+                                    <i class="fa fa-star-o"></i>
+                                </a>
+                                <a class="printer-icon" href="javascript:window.print()">
+                                    <i class="fa fa-print"></i>
+                                </a>
+                            </div>
 
                             <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
                                 <li data-thumb="assets/img/property-1/property1.jpg">
@@ -148,8 +165,9 @@
                 <div class="single-property-wrapper">
                     <div class="single-property-header">
                         <h1 class="property-title pull-left">${home.name}</h1>
-                        <span class="property-price pull-right"> Giá Thuê:  ${prices[0].price}VND/tháng</span>
+                        <span class="property-price pull-right"><fmt:formatNumber value="${prices[0].price}" type="number" groupingUsed="true"/> VND/tháng</span>
                     </div>
+
 
                     <div class="property-meta entry-meta clearfix">
 
@@ -159,7 +177,7 @@
                             </span>
                             <span class="property-info-entry">
                                 <span class="property-info-label">Trạng thái</span>
-                                <span class="property-info-value">${hometypes[0].status}</span>
+                                <span class="property-info-value">${homeTypes[0].status}</span>
                             </span>
                         </div>
                         <div class="col-xs-6 col-sm-3 col-md-3 p-b-15">
@@ -168,7 +186,7 @@
                             </span>
                             <span class="property-info-entry">
                                 <span class="property-info-label"> Loại Hình Nhà </span>
-                                <span class="property-info-value">${hometypes[0].name}</span>
+                                <span class="property-info-value">${homeTypes[0].name}</span>
                             </span>
                         </div>
                         <div class="col-xs-6 col-sm-3 col-md-3 p-b-15">
@@ -259,7 +277,7 @@
                     <div class="section property-features">
                         <h4 class="s-property-title">Các tiện ích hiện có</h4>
                         <ul>
-                            <c:forEach var="amenity" items="${amentities}">
+                            <c:forEach var="amenity" items="${amenities}">
                                 <li>
                                     <a href="home-detail.jsp">${amenity.name}</a>
                                 </li>                            </c:forEach>
@@ -313,6 +331,48 @@
                             </ul>
                         </div>
                     </div>
+<%--                    <div class="similar-post-section padding-top-40">--%>
+<%--                        <div class="row"> <!-- Ensure row class is used -->--%>
+<%--                            <c:forEach var="similarHome" items="${similarHomes}">--%>
+<%--                                <div class="col-md-3 col-sm-6 col-xs-12"> <!-- Adjust column size based on your needs -->--%>
+<%--                                    <div id="prop-smlr-slide_0">--%>
+<%--                                        <div class="box-two proerty-item">--%>
+<%--                                            <div class="item-thumb">--%>
+<%--                                                <a href="home-detail?id=${similarHome.id}">--%>
+<%--                                                    <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}">--%>
+<%--                                                </a>--%>
+<%--                                            </div>--%>
+<%--                                            <div class="item-entry overflow">--%>
+<%--                                                <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
+<%--                                                <div class="dot-hr"></div>--%>
+<%--                                                <span class="pull-left"><b> Area :</b> ${similarHome.area}m </span>--%>
+<%--                                                <span class="proerty-price pull-right">${prices[0].price} VND/month</span>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                    </div>--%>
+<%--                                </div>--%>
+<%--                            </c:forEach>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                    <div class="similar-post-section padding-top-40">--%>
+<%--                        <c:forEach var="similarHome" items="${similarHomes}">--%>
+<%--                            <div id="prop-smlr-slide_0">--%>
+<%--                                <div class="box-two proerty-item">--%>
+<%--                                    <div class="item-thumb">--%>
+<%--                                        <a href="home-detail?id=${similarHome.id}">--%>
+<%--                                            <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}"> <!-- Replace with actual image -->--%>
+<%--                                        </a>--%>
+<%--                                    </div>--%>
+<%--                                    <div class="item-entry overflow">--%>
+<%--                                        <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
+<%--                                        <div class="dot-hr"></div>--%>
+<%--                                        <span class="pull-left"><b> Area :</b> ${similarHome.area}m</span> <!-- Replace with actual area -->--%>
+<%--                                        <span class="proerty-price pull-right">${prices[0].price} VND/month</span> <!-- Adjust price as necessary -->--%>
+<%--                                    </div>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </c:forEach>--%>
+<%--                    </div>--%>
                     <!-- End video area  -->
 
                 </div>
@@ -320,8 +380,11 @@
 
 
             <div class="col-md-4 p0">
-                <aside class="sidebar sidebar-property blog-asside-right">
-                    <div class="dealer-widget">
+                <aside class="sidebar sidebar-property blog-asside-right" style="background-color: #fff">
+                    <div class="dealer-widget" style="background-color: #fff;
+    border-radius: 10px;
+    border: solid 3px #ccc;
+    margin: -5px;">
                         <div class="dealer-content">
                             <div class="inner-wrapper">
                                 <div class="clear">
@@ -352,15 +415,16 @@
                                                 Liên Hệ
                                             </button>
                                         </li>
-                                        <c:if test="${cookie.roleId.value ==3}">
-                                        <li>
-                                            <form action="add-wishlist" method="POST">
-                                                <input type="hidden" name="homeId" value="${home.id}">
-                                                    <button type="submit" class="like-button" >
-                                                    <i class="fas fa-heart"></i> Yêu thích
-                                                </button>
-                                            </form>
-                                        </li>
+                                        <c:if test="${cookie.roleId.value == 3}">
+                                            <li>
+                                                <form action="${sessionScope.isInWishlist ? 'delete-wishlist' : 'add-wishlist'}" method="POST"
+                                                      onsubmit="return confirm('${sessionScope.isInWishlist ? 'Bạn có chắc chắn muốn xóa không?' : 'Bạn có chắc chắn muốn thêm vào danh sách yêu thích?'}');">
+                                                    <input type="hidden" name="homeId" value="${home.id}">
+                                                    <button type="submit" class="like-button">
+                                                        <i class="fas fa-heart"></i> ${sessionScope.isInWishlist ? 'Đã thêm' : 'Yêu thích'}
+                                                    </button>
+                                                </form>
+                                            </li>
                                         </c:if>
                                     </ul>
                                     </div>
@@ -403,238 +467,82 @@
 
 
 
-                    <div id="map"></div>
-                                                        <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">
-                                                    <div class="panel-heading">
-                                                        <h3 class="panel-title">Similar Properties</h3>
-                                                    </div>
-                                                    <div class="panel-body recent-property-widget">
-                                                            <ul>
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
-
-                                                            <li>
-                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                                                    <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>
-                                                                    <span class="property-seeker">
-                                                                        <b class="b-1">A</b>
-                                                                        <b class="b-2">S</b>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                                                    <h6> <a href="single.html">Super nice villa </a></h6>
-                                                                    <span class="property-price">3000000$</span>
-                                                                </div>
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="panel panel-default sidebar-menu wow fadeInRight animated" >
-                                                    <div class="panel-heading">
-                                                        <h3 class="panel-title">Smart search</h3>
-                                                    </div>
-                                                    <div class="panel-body search-widget">
-                                                        <form action="" class=" form-inline">
-                                                            <fieldset>
-                                                                <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                        <input type="text" class="form-control" placeholder="Key word">
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset>
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-
-                                                                        <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Your City">
-
-                                                                            <option>New york, CA</option>
-                                                                            <option>Paris</option>
-                                                                            <option>Casablanca</option>
-                                                                            <option>Tokyo</option>
-                                                                            <option>Marraekch</option>
-                                                                            <option>kyoto , shibua</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-
-                                                                        <select id="basic" class="selectpicker show-tick form-control">
-                                                                            <option> -Status- </option>
-                                                                            <option>Rent </option>
-                                                                            <option>Boy</option>
-                                                                            <option>used</option>
-
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <label for="price-range">Price range ($):</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[0,450]" id="price-range" ><br />
-                                                                        <b class="pull-left color">2000$</b>
-                                                                        <b class="pull-right color">100000$</b>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <label for="property-geo">Property geo (m2) :</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[50,450]" id="property-geo" ><br />
-                                                                        <b class="pull-left color">40m</b>
-                                                                        <b class="pull-right color">12000m</b>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <label for="price-range">Min baths :</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[250,450]" id="min-baths" ><br />
-                                                                        <b class="pull-left color">1</b>
-                                                                        <b class="pull-right color">120</b>
-                                                                    </div>
-
-                                                                    <div class="col-xs-6">
-                                                                        <label for="property-geo">Min bed :</label>
-                                                                        <input type="text" class="span2" value="" data-slider-min="0"
-                                                                               data-slider-max="600" data-slider-step="5"
-                                                                               data-slider-value="[250,450]" id="min-bed" ><br />
-                                                                        <b class="pull-left color">1</b>
-                                                                        <b class="pull-right color">120</b>
-
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox" checked> Fire Place</label>
+<%--                    <div id="map"></div>--%>
+                    <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated" style="    margin: 25px 9px 9px 9px">
+                                                                        <div class="panel-heading">
+                                                                            <h3 class="panel-title">Bạn cũng có thể thích</h3>
                                                                         </div>
-                                                                    </div>
+                    <div class="panel-body recent-property-widget">
+                        <ul>
+                            <!-- Lặp qua danh sách các nhà tương tự -->
+                            <c:forEach var="similarHome" items="${similarHomes}">
+                                <li>
+                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
+                                        <a href="home-detail?id=${similarHome.id}">
+                                            <img src="assets/img/demo/small-property-2.jpg" alt="${similarHome.address}"> <!-- Hình ảnh mẫu, bạn có thể thay đổi -->
+                                        </a>
+                                    </div>
+                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
+                                        <h6><a href="home-detail?id=${similarHome.id}">${similarHome.address}</a></h6>
+                                        <c:forEach items="${requestScope.priceSimilarHomes}" var="priceSimilarHomes">
+                                            <c:if test="${similarHome.id == priceSimilarHomes.homesId}">
+                                                <span class="property-price"><fmt:formatNumber value="${priceSimilarHomes.price}" type="number" groupingUsed="true"/> VND/tháng</span>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                    </div>
 
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox"> Dual Sinks</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
+<%--                                                        <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">--%>
+<%--                                                    <div class="panel-heading">--%>
+<%--                                                        <h3 class="panel-title">Bạn cũng có thể thích</h3>--%>
+<%--                                                    </div>--%>
+<%--                                                    <div class="panel-body recent-property-widget">--%>
+<%--                                                            <ul>--%>
+<%--                                                            <li>--%>
+<%--                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+<%--                                                                    <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
+<%--                                                                </div>--%>
+<%--                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+<%--                                                                    <h6> <a href="home-detail?id=19">long bien ha noi</a></h6>--%>
+<%--                                                                    <span class="property-price">30000VND/tháng</span>--%>
+<%--                                                                </div>--%>
+<%--                                                            </li>--%>
+<%--                                                        </ul>--%>
+<%--                                                    </div>--%>
+<%--                                                            <div class="panel-body recent-property-widget">--%>
+<%--                                                                <ul>--%>
+<%--                                                                    <li>--%>
+<%--                                                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+<%--                                                                            <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
+<%--                                                                        </div>--%>
+<%--                                                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+<%--                                                                            <h6> <a href="single.html">ha dong ha noi</a></h6>--%>
+<%--                                                                            <span class="property-price">200000VND/tháng</span>--%>
+<%--                                                                        </div>--%>
+<%--                                                                    </li>--%>
+<%--                                                                </ul>--%>
+<%--                                                            </div>--%>
+<%--                                                            <div class="panel-body recent-property-widget">--%>
+<%--                                                                <ul>--%>
+<%--                                                                    <li>--%>
+<%--                                                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
+<%--                                                                            <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
+<%--                                                                        </div>--%>
+<%--                                                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
+<%--                                                                            <h6> <a href="single.html">thanh oai ha noi </a></h6>--%>
+<%--                                                                            <span class="property-price">100000VND/tháng</span>--%>
+<%--                                                                        </div>--%>
+<%--                                                                    </li>--%>
+<%--                                                                </ul>--%>
+<%--                                                            </div>--%>
+<%--                                                </div>--%>
 
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox" checked> Swimming Pool</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox" checked> 2 Stories </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
 
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label><input type="checkbox"> Laundry Room </label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label> <input type="checkbox"> Emergency Exit</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
 
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label>  <input type="checkbox" checked> Jog Path </label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <div class="checkbox">
-                                                                            <label>  <input type="checkbox"> 26' Ceilings </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset class="padding-5">
-                                                                <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                        <div class="checkbox">
-                                                                            <label>  <input type="checkbox"> Hurricane Shutters </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-
-                                                            <fieldset >
-                                                                <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                        <input class="button btn largesearch-btn" value="Search" type="submit">
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
-                                                        </form>
-                                                    </div>
-                                                </div>
 
                 </aside>
             </div>
@@ -807,6 +715,8 @@
 <script src="assets/js/price-range.js"></script>
 <script type="text/javascript" src="assets/js/lightslider.min.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+
 
 <script>
     $(document).ready(function () {
@@ -825,34 +735,59 @@
         });
     });
 
+    function showConfirmPopup(homeId, userId) {
+        // Hiển thị modal xác nhận
+        $('#login-modal').modal('show');
 
-</script>
-<script>
-    function showAlert(message) {
-        alert(message);
+        // Lưu các ID để sử dụng trong xác nhận
+        window.currentHomeId = homeId;
+        window.currentUserId = userId;
+    }
+
+    function confirmAddToWishlist(homeId, userId) {
+        // Tạo một yêu cầu POST tới servlet
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "add-to-wishlist", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                alert(xhr.responseText);
+            }
+        };
+        xhr.send("homeId=" + homeId + "&userId=" + userId);
     }
 </script>
 <script>
     $(document).ready(function () {
         var mapObj = null;
-        var defaultCoord = [21.0819, 105.6363]; // coord mặc định, Hà Nội
-        var zoomLevel = 15; // Mức phóng to bản đồ
+        var defaultCoord = [21.0819, 105.6363];
+        var zoomLevel = 15;
         var mapConfig = {
-            attributionControl: false, // để ko hiện watermark nữa, nếu bị liên hệ đòi thì nhớ open nha
-            center: defaultCoord, // vị trí map mặc định hiện tại
+            attributionControl: false,
+            center: defaultCoord,
             zoom: zoomLevel,
         };
 
         mapObj = L.map('map', mapConfig);
 
-        // thêm tile để map có thể hoạt động, xài free từ OSM
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(mapObj);
     });
 </script>
-
-
+<script>
+    function confirmDelete() {
+        if (confirm('Bạn có chắc chắn muốn xóa không?')) {
+            // Nếu người dùng xác nhận, gửi form
+            document.getElementById('delete-form').submit();
+        }
+    }
+</script>
+<script>
+    function confirmAdd() {
+        return confirm('Bạn có chắc chắn muốn thêm vào danh sách yêu thích?');
+    }
+</script>
 
 </body>
 </html>

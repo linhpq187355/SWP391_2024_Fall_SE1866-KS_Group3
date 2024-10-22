@@ -49,12 +49,12 @@ import java.sql.SQLException;
 public class GoogleSignUpServlet extends HttpServlet {
 
     private transient UserService userService; // Service for managing user-related operations
+
     private static final Logger logger = LoggerFactory.getLogger(GoogleSignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
 
     /**
-     * Initializes the SignUpServlet by creating instances of required services.
-     * This method is called once when the servlet is first loaded.
+     * Initializes the servlet by instantiating the required DAOs and services.
      */
     @Override
     public void init() {
@@ -78,32 +78,39 @@ public class GoogleSignUpServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs.
      * @throws IOException if an I/O error occurs during the request.
      */
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String code = request.getParameter("code");
-        String accessToken = GoogleUtil.getToken(code);
-        GoogleAccount acc = GoogleUtil.getUserInfo(accessToken);
         try {
-            int result = userService.registerByGoogle(acc, null, response);
-            if(result != 0) {
-                if(result == 1) {
-                    // Login successful, redirect to home page
+            String code = request.getParameter("code");
+            if (code == null) {
+                request.setAttribute("error", "Quá trình xác thực bị hủy. Vui lòng thử lại.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+            String accessToken = GoogleUtil.getToken(code);
+            GoogleAccount googleAccount = GoogleUtil.getUserInfo(accessToken);
+
+            int result = userService.registerByGoogle(googleAccount, null, response);
+
+            switch (result) {
+                case 1: // Login successful
                     request.getSession().setAttribute("message", "Đăng nhập thành công.");
                     request.getSession().setAttribute("messageType", "success");
                     response.sendRedirect(request.getContextPath() + "/home-page");
-                } else if(result == -1) {
+                    break;
+                case -1: // Account needs role assignment
                     HttpSession session = request.getSession();
-                    session.setAttribute("googleAccount", acc);
+                    session.setAttribute("googleAccount", googleAccount);
                     response.sendRedirect(request.getContextPath() + "/set-role");
-                } else {
-                    // Set error message if registration fails
+                    break;
+                default: // Registration/Login failed
                     request.setAttribute(ERROR_ATTRIBUTE, "Có lỗi xảy ra ở phía server.");
                     ServletUtils.forwardToErrorPage(request, response);
-                }
-
             }
+
         } catch (SQLException e) {
-            logger.error("Error forwarding to set-role page: {}", e.getMessage(), e);
-            ServletUtils.handleError(response, "Error while processing your request.");
+            logger.error("Error during Google sign-up/login: {}", e.getMessage(), e);
+            ServletUtils.handleError(response, "Error while processing your request."); // Generic error message for the user.
         }
     }
 }

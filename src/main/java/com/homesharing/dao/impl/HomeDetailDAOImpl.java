@@ -358,6 +358,172 @@ public User getCreatorByHomeId(int homeId) {
 
         return fireEquipments;
     }
+    @Override
+    public List<Home> getHomesByWard(int homeId, int priceDifference) {
+        String sql = "SELECT TOP 4 h.id, h.name, h.address, p.price, h.area " +
+                "FROM Homes h " +
+                "JOIN Prices p ON h.id = p.Homesid " +
+                "JOIN Wards w ON h.wardsId = w.id " +
+                "WHERE h.wardsId = (SELECT h2.wardsId FROM Homes h2 WHERE h2.id = ?) " +
+                "AND p.price BETWEEN " +
+                "      (SELECT p2.price - ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "  AND " +
+                "      (SELECT p2.price + ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "ORDER BY h.createdDate";
+
+        List<Home> homes = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, homeId);
+            preparedStatement.setInt(2, priceDifference);
+            preparedStatement.setInt(3, homeId);
+            preparedStatement.setInt(4, priceDifference);
+            preparedStatement.setInt(5, homeId);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setName(resultSet.getString("name")); // Lấy tên nhà
+                home.setAddress(resultSet.getString("address")); // Lấy địa chỉ
+                home.setArea(resultSet.getBigDecimal("area")); // Lấy diện tích
+                homes.add(home);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error retrieving homes by ward from the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return homes;
+    }
+    @Override
+    public List<Home> getHomesByDistrict(int homeId, int priceDifference) {
+        String sql = "SELECT TOP 4 h.id, h.name, h.address, p.price, h.area " +
+                "FROM Homes h " +
+                "JOIN Prices p ON h.id = p.Homesid " +
+                "JOIN Wards w ON h.wardsId = w.id " +
+                "JOIN Districts d ON w.Districtsid = d.id " +
+                "WHERE d.id = (SELECT d2.id FROM Homes h2 " +
+                "               JOIN Wards w2 ON h2.wardsId = w2.id " +
+                "               JOIN Districts d2 ON w2.Districtsid = d2.id " +
+                "               WHERE h2.id = ?) " +
+                "AND p.price BETWEEN " +
+                "      (SELECT p2.price - ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "  AND " +
+                "      (SELECT p2.price + ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "ORDER BY h.createdDate";
+
+        List<Home> homes = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, homeId);
+            preparedStatement.setInt(2, priceDifference);
+            preparedStatement.setInt(3, homeId);
+            preparedStatement.setInt(4, priceDifference);
+            preparedStatement.setInt(5, homeId);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setName(resultSet.getString("name")); // Lấy tên nhà
+                home.setAddress(resultSet.getString("address")); // Lấy địa chỉ
+                home.setArea(resultSet.getBigDecimal("area")); // Lấy diện tích
+                homes.add(home);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error retrieving homes by district from the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return homes;
+    }
+    @Override
+    public List<Home> getSimilarHomes(int homeId) {
+        String sql = "SELECT top 4 h2.id, h2.address " +
+                "FROM Homes h1 " +
+                "JOIN Homes h2 ON h1.wardsId = h2.wardsId " +
+                "WHERE h1.id = ? AND h2.id != h1.id";
+        List<Home> similarHomes = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, homeId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setAddress(resultSet.getString("address"));  // Chỉ lấy địa chỉ
+                similarHomes.add(home);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error retrieving similar homes from the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return similarHomes;
+    }
+
 
 
 }

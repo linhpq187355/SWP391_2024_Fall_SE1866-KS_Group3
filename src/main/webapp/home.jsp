@@ -38,6 +38,13 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
+    <style>
+        .property-image {
+            width: 100%;   /* Điều chỉnh cho ảnh đầy chiều rộng của thẻ bao quanh */
+            height: 200px; /* Hoặc bạn có thể đặt kích thước cố định tùy thuộc vào yêu cầu */
+            object-fit: cover; /* Giúp cắt ảnh nếu vượt quá chiều rộng hoặc chiều cao, mà vẫn giữ tỉ lệ */
+        }
+    </style>
 </head>
 
 <body>
@@ -72,14 +79,10 @@
     <div class="container">
         <div class="col-md-12 large-search">
             <div class="search-form wow pulse">
-                <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline">
+                <form action="searchHomes" method="GET" class="form-inline">
                     <div class="col-md-12">
-                        <div class="col-md-6">
-                            <input type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
-                        </div>
-                        <div class="col-md-6">
-                            <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select your city">
-                            </select>
+                        <div class="col-md-12">
+                            <input  id="searchInput" type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
                         </div>
 
                     </div>
@@ -88,12 +91,15 @@
 
                             <div class="col-sm-3">
                                 <label for="price-range">Price range ($):</label>
-                                <input type="text" class="span2" value="" data-slider-min="2000"
+                                <input type="text" class="span2" value="" data-slider-min="0"
                                        data-slider-max="100000" data-slider-step="5"
-                                       data-slider-value="[${param.minPrice != null ? param.minPrice : 2000}, ${param.maxPrice != null ? param.maxPrice : 100000}]" id="price-range"><br />
+                                       data-slider-value="[${param.minPrice != null ? param.minPrice : 0}, ${param.maxPrice != null ? param.maxPrice : 100000}]"
+                                       id="price-range" name="price-range" onchange="updatePriceValues()"><br />
                                 <b class="pull-left color">0$</b>
                                 <b class="pull-right color">100000$</b>
                             </div>
+                            <input type="hidden" name="minPrice" id="minPrice" value="${param.minPrice != null ? param.minPrice : 0}">
+                            <input type="hidden" name="maxPrice" id="maxPrice" value="${param.maxPrice != null ? param.maxPrice : 100000}">
                             <!-- End of  -->
 
                             <div class="col-sm-3">
@@ -127,7 +133,6 @@
                             <!-- End of  -->
 
                         </div>
-
                         <!-- End of  -->
 
                     </div>
@@ -169,8 +174,11 @@
                     <div class="col-sm-6 col-md-3 p0">
                         <div class="box-two proerty-item">
                             <div class="item-thumb">
-                                <!-- Update the href to point to home detail page with home ID -->
-                                <a href="home-detail?id=${homes.id}"><img src="assets/img/demo/property-1.jpg"></a>
+                                <a href="home-detail?id=${homes.id}">
+                                    <img class="property-image"
+                                         src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/social_big/dribbble_grey.png'}"
+                                         alt="Property Image">
+                                </a>
                             </div>
                             <div class="item-entry overflow">
                                 <h5><a href="home-detail?id=${homes.id}">${homes.address}</a></h5>
@@ -427,15 +435,16 @@
             return true;
         }
     </script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        // Khởi tạo thanh trượt giá
-        $('#price-range').slider({
-            formatter: function(value) {
-                return 'Current value: ' + value;
-            }
-        });
-    });
+<script>
+    function updatePriceValues() {
+        // Lấy giá trị từ slider
+        var priceRange = document.getElementById('price-range').value;
+        var values = priceRange.split(','); // Tách giá trị
+
+        // Cập nhật các input ẩn
+        document.getElementById('minPrice').value = values[0];
+        document.getElementById('maxPrice').value = values[1];
+    }
 </script>
 </body>
 </html>

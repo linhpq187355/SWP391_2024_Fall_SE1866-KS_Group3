@@ -37,8 +37,6 @@ import java.sql.SQLException;
  * It provides functionality for directing users to the role selection page
  * and processes the submitted role information.
  *
- * @version 1.0
- * @since 2024-10-02
  * @author ManhNC
  */
 @WebServlet("/set-role")
