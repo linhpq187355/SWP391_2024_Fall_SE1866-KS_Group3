@@ -141,7 +141,7 @@ public class UpdatePasswordServlet extends HttpServlet {
             } else {
                 ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
         }
     }

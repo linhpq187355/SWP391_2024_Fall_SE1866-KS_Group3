@@ -75,49 +75,6 @@ import java.util.List;
             return wishlist;
         }
 
-        @Override
-        public List<Price> getHomePricesByHomeId(int homeId) {
-            String sql = "SELECT [id], [price], [createdDate] FROM [Prices] WHERE [Homesid] = ?";
-            List<Price> prices = new ArrayList<>();
-
-            Connection connection = null;
-            PreparedStatement preparedStatement = null;
-            ResultSet resultSet = null;
-
-            try {
-                connection = DBContext.getConnection();
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setInt(1, homeId);
-                resultSet = preparedStatement.executeQuery();
-
-                while (resultSet.next()) {
-                    Price price = new Price();
-                    price.setId(resultSet.getInt("id"));
-                    price.setPrice(resultSet.getInt("price"));
-                    price.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
-                    prices.add(price);
-                }
-
-            } catch (SQLException | IOException | ClassNotFoundException e) {
-                throw new GeneralException("Error retrieving home prices from the database: " + e.getMessage(), e);
-            } finally {
-                try {
-                    if (resultSet != null) {
-                        resultSet.close();
-                    }
-                    if (preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    if (connection != null) {
-                        connection.close();
-                    }
-                } catch (SQLException e) {
-                    throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-                }
-            }
-
-            return prices;
-        }
 
 
         @Override

@@ -1,9 +1,6 @@
     package com.homesharing.controller;
     
-    import com.homesharing.dao.HomeDAO;
-    import com.homesharing.dao.HomeDetailDAO;
-    import com.homesharing.dao.PriceDAO;
-    import com.homesharing.dao.WishListDAO;
+    import com.homesharing.dao.*;
     import com.homesharing.dao.impl.HomeDAOImpl;
     import com.homesharing.dao.impl.PriceDAOImpl;
     import com.homesharing.dao.impl.WishListDAOImpl;
@@ -22,6 +19,7 @@
     import jakarta.servlet.http.HttpServletResponse;
 
     import java.io.PrintWriter;
+    import java.time.LocalDate;
     import java.time.LocalDateTime;
     import java.io.IOException;
     import java.time.format.DateTimeFormatter;
@@ -33,6 +31,7 @@
         private HomePageService homePageService;  // Service layer for home page logic
         private HomeDAO homeDAO;  // Data Access Object for accessing home data
         private PriceDAO priceDAO;
+        private UserDAO userDAO;
         private HomeDetailService homeDetailService;
         private WishListService wishListService;
 
@@ -44,7 +43,7 @@
         public void init() throws ServletException {
             homeDAO = new HomeDAOImpl();
             priceDAO = new PriceDAOImpl();
-            homePageService = new HomePageServiceImpl(homeDAO, priceDAO);
+            homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
             this.homeDetailService = new HomeDetailServiceImpl();
             this.wishListService = new WishListServiceImpl();
         }
@@ -101,7 +100,7 @@
             // Get pricing data for similar homes
 
             // Format the move-in date
-            LocalDateTime moveInDate = home.getMoveInDate();
+            LocalDate moveInDate = home.getMoveInDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             String formattedMoveInDate = (moveInDate != null) ? moveInDate.format(formatter) : "No information available";
             if (userIdStr != null && !userIdStr.isEmpty()) {

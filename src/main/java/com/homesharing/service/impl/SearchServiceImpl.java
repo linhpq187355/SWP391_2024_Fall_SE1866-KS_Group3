@@ -62,23 +62,6 @@ public class SearchServiceImpl implements SearchSevice {
      * @throws SQLException           If there’s an issue with the database access.
      * @throws ClassNotFoundException If the database driver class isn’t found.
      */
-    @Override
-    public Price getPriceByHomeId(int homeId) throws SQLException, ClassNotFoundException {
-        return searchDAO.getPriceByHomeId(homeId);
-    }
-    @Override
-    public List<Home> searchByBedroomCount(int minBedrooms, int maxBedrooms) {
-        return searchDAO.searchByBedroomCount(minBedrooms, maxBedrooms);
-    }
 
-    @Override
-    public List<Home> searchByBathroomCount(int minBathrooms, int maxBathrooms) {
-        return searchDAO.searchByBathroomCount(minBathrooms, maxBathrooms);
-    }
-
-    @Override
-    public List<Home> searchByAreaRange(int minArea, int maxArea) {
-        return searchDAO.searchByArea(minArea, maxArea);
-    }
 }
 

@@ -35,11 +35,7 @@ public class WishListServiceImpl implements WishListService {
     public List<Home> getWishlistByUserId(int userId) {
         return wishListDAO.getWishlistByUserId(userId); // Gọi phương thức DAO
     }
-
-    @Override
-    public List<Price> getHomePricesByHomeId(int homeId) {
-        return wishListDAO.getHomePricesByHomeId(homeId);
-    }
+    
     @Override
     public boolean isAlreadyInWishlist(int userId, int homeId, String status) {
         return wishListDAO.isAlreadyInWishlist(userId, homeId,status); // Kiểm tra xem nhà có trong danh sách yêu thích chưa

@@ -36,7 +36,6 @@ public interface SearchDAO {
      */
     int getMaxPrice() throws SQLException, IOException, ClassNotFoundException;
 
-    List<Home> searchByArea(int minArea, int maxArea);
 
     /**
      * Retrieves the price of a specific home using its ID.
@@ -47,9 +46,5 @@ public interface SearchDAO {
      * @throws ClassNotFoundException If the database driver class isn’t found.
      */
     Price getPriceByHomeId(int homeId) throws SQLException, ClassNotFoundException;
-
-    List<Home> searchByBedroomCount(int minBedrooms, int maxBedrooms);
-
-    List<Home> searchByBathroomCount(int minBathrooms, int maxBathrooms);
 
 }
