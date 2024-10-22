@@ -21,7 +21,7 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
 
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
@@ -178,6 +178,18 @@
                             <li>
                                 <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
                             </li>
+                            <c:if test="${cookie.roleId.value == 4}">
+                                <c:if test="${requestScope.preference.cleanliness != 100}">
+                                    <li>
+                                        <a href="update-matching-profile" class="li-acc-op">Thay đổi thông tin ghép nối</a>
+                                    </li>
+                                </c:if>
+                                <c:if test="${requestScope.preference.cleanliness == 100}">
+                                    <li>
+                                        <a href="matching" class="li-acc-op">Cài đặt thông tin ghép nối</a>
+                                    </li>
+                                </c:if>
+                            </c:if>
                             <c:if test="${cookie.roleId.value ==4}">
                                 <li>
                                     <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>

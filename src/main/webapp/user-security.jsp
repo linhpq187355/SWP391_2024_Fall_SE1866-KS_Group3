@@ -11,6 +11,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title>Bảo mật</title>
     <meta name="description" content="GARO is a real-estate template">
     <meta name="author" content="ManhNC">
@@ -20,9 +21,8 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-
+    <link rel="shortcut icon" href="assets/img/logo-web.jpg" type="image/x-icon">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/fontello.css">

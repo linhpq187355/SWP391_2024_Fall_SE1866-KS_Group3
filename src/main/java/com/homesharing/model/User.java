@@ -1,3 +1,13 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ */
+
 package com.homesharing.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +32,11 @@ public class User {
     private LocalDateTime lastModified;
     private LocalDateTime createdAt;
     private String wardsId;
+    private String duration;
+    private int minBudget;
+    private int maxBudget;
+    private LocalDate earliestMoveIn;
+    private LocalDate latestMoveIn;
 
     // Constructors
     public User() {}
@@ -181,6 +196,46 @@ public class User {
 
     public void setWardsId(String wardsId) {
         this.wardsId = wardsId;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public int getMinBudget() {
+        return minBudget;
+    }
+
+    public void setMinBudget(int minBudget) {
+        this.minBudget = minBudget;
+    }
+
+    public int getMaxBudget() {
+        return maxBudget;
+    }
+
+    public void setMaxBudget(int maxBudget) {
+        this.maxBudget = maxBudget;
+    }
+
+    public LocalDate getEarliestMoveIn() {
+        return earliestMoveIn;
+    }
+
+    public void setEarliestMoveIn(LocalDate earliestMoveIn) {
+        this.earliestMoveIn = earliestMoveIn;
+    }
+
+    public LocalDate getLatestMoveIn() {
+        return latestMoveIn;
+    }
+
+    public void setLatestMoveIn(LocalDate latestMoveIn) {
+        this.latestMoveIn = latestMoveIn;
     }
 
     @Override

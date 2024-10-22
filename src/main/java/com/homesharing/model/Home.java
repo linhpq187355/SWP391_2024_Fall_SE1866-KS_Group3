@@ -1,3 +1,13 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ */
+
 package com.homesharing.model;
 
 import java.math.BigDecimal;
@@ -14,7 +24,7 @@ public class Home {
     private String orientation;
     private BigDecimal area;
     private int leaseDuration;
-    private LocalDateTime moveInDate;
+    private LocalDate moveInDate;
     private int numOfBedroom;
     private int numOfBath;
     private LocalDateTime createdDate;
@@ -97,11 +107,11 @@ public class Home {
         this.leaseDuration = leaseDuration;
     }
 
-    public LocalDateTime getMoveInDate() {
+    public LocalDate getMoveInDate() {
         return moveInDate;
     }
 
-    public void setMoveInDate(LocalDateTime moveInDate) {
+    public void setMoveInDate(LocalDate moveInDate) {
         this.moveInDate = moveInDate;
     }
 

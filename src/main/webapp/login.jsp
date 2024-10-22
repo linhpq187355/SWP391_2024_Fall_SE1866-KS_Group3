@@ -13,6 +13,7 @@
     <title>Đăng nhập</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/logo-web.jpg" type="image/x-icon">
     <style>
         .content-section {
             margin-bottom: 40px; /* Tạo khoảng cách giữa section và footer */

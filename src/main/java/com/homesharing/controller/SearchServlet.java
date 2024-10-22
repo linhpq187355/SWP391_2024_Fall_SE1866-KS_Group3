@@ -3,8 +3,10 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.service.HomePageService;
@@ -29,6 +31,7 @@ public class SearchServlet extends HttpServlet {
     private HomePageService homePageService;
     private HomeDAO homeDAO;  // Data Access Object for accessing home data
     private PriceDAO priceDAO;  // Data Access Object for accessing price data
+    private UserDAO userDAO;
 
     /**
      * Initializes the SearchServlet by creating instances of necessary DAOs and services.
@@ -38,12 +41,13 @@ public class SearchServlet extends HttpServlet {
     public void init() throws ServletException {
         homeDAO = new HomeDAOImpl();
         priceDAO = new PriceDAOImpl();
+        userDAO = new UserDAOImpl();
         try {
             searchService = new SearchServiceImpl();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        homePageService = new HomePageServiceImpl(homeDAO, priceDAO);
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO, userDAO);
     }
 
     /**

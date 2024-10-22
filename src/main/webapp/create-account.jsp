@@ -786,8 +786,6 @@
                                             >
                                                 <option value="1">admin</option>
                                                 <option value="2">moderator</option>
-                                                <option value="3">tenant</option>
-                                                <option value="4">host</option>
                                             </select>
                                         </div>
                                     </div>
