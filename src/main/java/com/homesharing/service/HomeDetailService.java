@@ -58,4 +58,13 @@ public interface HomeDetailService {
     List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
 
 
+    List<Home> getSimilarHomes(int homeId);
+
+    List<Home> getHomesByWard(int homeId, int priceDifference);
+
+    List<Home> getHomesByDistrict(int homeId, int priceDifference);
+
+    List<Home> getSimilarHomess(int homeId, int priceDifference);
+
+    List<Price> getSimilarHomePrices(List<Home> similarHomes);
 }

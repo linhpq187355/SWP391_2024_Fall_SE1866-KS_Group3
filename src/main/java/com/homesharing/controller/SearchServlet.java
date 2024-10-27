@@ -54,47 +54,55 @@ public class SearchServlet extends HttpServlet {
      * Handles GET requests to search for homes based on provided parameters.
      * Retrieves search parameters, performs search, and forwards results to the JSP.
      *
-     * @param req The HttpServletRequest object containing the request data.
+     * @param req  The HttpServletRequest object containing the request data.
      * @param resp The HttpServletResponse object for sending responses to the client.
      * @throws ServletException if the request cannot be handled.
-     * @throws IOException if an input or output error occurs during the handling of the request.
+     * @throws IOException      if an input or output error occurs during the handling of the request.
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Retrieve search parameters from the request
+        // Lấy tham số tìm kiếm từ request
         String name = req.getParameter("name") != null ? req.getParameter("name").trim().replaceAll("\\s+", " ").replaceAll("[^a-zA-Z0-9\\s]", "") : null;
-        String minPriceStr = req.getParameter("minPrice") != null ? req.getParameter("minPrice").trim() : null;
-        String maxPriceStr = req.getParameter("maxPrice") != null ? req.getParameter("maxPrice").trim() : null;
+
+        // Lấy giá trị minPrice và maxPrice từ thanh trượt giá
+        String minPriceStr = req.getParameter("minPrice");
+        String maxPriceStr = req.getParameter("maxPrice");
+
+        // Giá tối thiểu và tối đa mặc định
+        int minPrice = (minPriceStr != null && !minPriceStr.isEmpty()) ? Integer.parseInt(minPriceStr) : 0;
+        int maxPrice = (maxPriceStr != null && !maxPriceStr.isEmpty()) ? Integer.parseInt(maxPriceStr) : 100000;
+
+        if (minPriceStr != null && !minPriceStr.isEmpty()) {
+            minPrice = Integer.parseInt(minPriceStr);
+        }
+        if (maxPriceStr != null && !maxPriceStr.isEmpty()) {
+            maxPrice = Integer.parseInt(maxPriceStr);
+        }
 
         List<Home> homes = homePageService.getNewHomes();
-        List<Price> prices = homePageService.getHomePrice(homes);
-        int minPrice = 0; // Default minimum price
-        int maxPrice = 1000000; // Variable to hold the maximum price
-            try {
-            if (minPriceStr != null && !minPriceStr.trim().isEmpty()) {
-                minPrice = Integer.parseInt(minPriceStr);
-            }
-            if (maxPriceStr != null && !maxPriceStr.trim().isEmpty()) {
-                maxPrice = Integer.parseInt(maxPriceStr);
-            }
+
+        try {
+            // Tìm kiếm theo tên hoặc khoảng giá
             if (name != null && !name.trim().isEmpty()) {
-                homes = searchService.searchHomesByAdress(name); // Search by name
+                homes = searchService.searchHomesByAdress(name); // Tìm kiếm theo tên
             } else {
-                homes = searchService.searchByPriceRange(minPrice, maxPrice); // Search by price range
+                homes = searchService.searchByPriceRange(minPrice, maxPrice); // Tìm kiếm theo khoảng giá
             }
         } catch (NumberFormatException e) {
-            req.setAttribute("error", "error"); // Set error attribute for the request
-            homes = homePageService.getNewHomes(); // Retrieve all homes as a fallback
-            throw new RuntimeException("error: " + e.getMessage(), e);
+            req.setAttribute("error", "Lỗi định dạng giá!"); // Thông báo lỗi khi định dạng số không hợp lệ
+            homes = homePageService.getNewHomes(); // Trả về danh sách tất cả nhà nếu xảy ra lỗi
+            throw new RuntimeException("Lỗi: " + e.getMessage(), e);
         }
-        // Set the search results and parameters as attributes for the request
+
+        // Đặt các thuộc tính cho request để chuyển tới JSP
         req.setAttribute("homes", homes);
         req.setAttribute("searchName", name);
-        req.setAttribute("minPrice", minPriceStr);
-        req.setAttribute("maxPrice", maxPriceStr);
-        req.setAttribute("prices", prices);
-        //Forward the request to the home.jsp page to display results
+        req.setAttribute("minPrice", minPrice);  // Gửi giá trị minPrice lên JSP
+        req.setAttribute("maxPrice", maxPrice);  // Gửi giá trị maxPrice lên JSP
+
+        // Chuyển tiếp request tới trang JSP để hiển thị kết quả
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
+
 }
 
