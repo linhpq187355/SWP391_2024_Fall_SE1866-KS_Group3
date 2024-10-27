@@ -36,12 +36,6 @@ public class DBContext {
     protected DBContext(){ } // Private constructor
 
     /**
-     * Static connection object that holds the single connection to the database.  Initialized to null
-     * and established on the first call to `getConnection()`.
-     */
-    private static Connection connection = null;
-
-    /**
      * Retrieves a Connection object to the database. If the connection is not
      * already established or is closed, it loads the properties from the `dbconfig.properties` file,
      * initializes the database connection using the JDBC DriverManager, and returns the connection.
@@ -60,31 +54,26 @@ public class DBContext {
      * @throws ClassNotFoundException if the JDBC driver class cannot be found.
      */
     public static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
-        if (connection == null || connection.isClosed()) {
-            Properties props = new Properties();
+        Properties props = new Properties();
 
-            // Attempt to load properties from the dbconfig.properties file.
-            try(InputStream in = DBContext.class.getClassLoader().getResourceAsStream("dbconfig.properties")) {
-                if(in == null) {
-                    throw new IOException("dbconfig.properties not found");
-                }
-                props.load(in);
+        try (InputStream in = DBContext.class.getClassLoader().getResourceAsStream("dbconfig.properties")) {
+            if (in == null) {
+                throw new IOException("dbconfig.properties not found");
             }
 
-            // Retrieve database connection details from the properties file
-            String url = props.getProperty("db.url");
-            String username = props.getProperty("db.username");
-            String password = props.getProperty("db.password");
-            String driverClassName = props.getProperty("db.driverClassName");
-
-            // Load the JDBC driver and establish the connection
-            Class.forName(driverClassName);
-
-            // Establish the connection.
-            connection = DriverManager.getConnection(url, username, password);
+            props.load(in);
         }
-        return connection;
+
+        String url = props.getProperty("db.url");
+        String username = props.getProperty("db.username");
+        String password = props.getProperty("db.password");
+        String driverClassName = props.getProperty("db.driverClassName");
+
+        Class.forName(driverClassName);
+        return DriverManager.getConnection(url, username, password); // Trả về Connection mới
     }
+
+
 
     /**
      * Closes the database connection if it is open.  This method checks if the connection is not null and
@@ -92,7 +81,7 @@ public class DBContext {
      *
      * @throws SQLException if an error occurs while closing the connection.
      */
-    public static void closeConnection() throws SQLException {
+    public static void closeConnection(Connection connection) throws SQLException {
         if((connection != null) && !connection.isClosed()) {
             connection.close();
         }

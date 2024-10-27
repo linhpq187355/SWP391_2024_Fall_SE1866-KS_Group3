@@ -267,6 +267,9 @@ public class HomePageServiceImpl implements HomePageService {
         User user = userDAO.getMatchingUserProfile(userId);
         List<Home> listMatchingHomes = new ArrayList<>();
 
+        logger.info(String.valueOf(homeList.size()));
+        logger.info(String.valueOf(listPrice.size()));
+
         for(int i = 0; i < homeList.size(); i++) {
             boolean moveInCheck = false;
             if ((homeList.get(i).getMoveInDate().isEqual(user.getEarliestMoveIn()) || homeList.get(i).getMoveInDate().isAfter(user.getEarliestMoveIn()))

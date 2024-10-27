@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <div class="header-connect">
@@ -127,40 +128,30 @@
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-message dropdown-toggle" style="font-size: 2em"></i>
                         <div class="dropdown-menu navbar-nav" style="top: 4.4em; right: -3em; width: 23em">
-                            <div class="chat-list">
-                                <figure class="chat-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png"
-                                             alt="product">
-                                    </a>
-                                </figure>
-                                <div class="chat-info">
-                                    <h4 class="user-name">
-                                        <a href="product.html">Pham Quang Linh</a>
-                                    </h4>
-                                    <span class="recent-chat">
-                                             Ok chốt vậy nhé
-                                        </span>
-                                </div>
-                            </div>
+                            <c:if test="${not empty requestScope.listUserConversation}">
+                                <c:forEach items="${requestScope.listUserConversation.entrySet()}" var="entry">
+                                    <c:set var="user" value="${entry.key}" /> <!-- Lấy User từ entry -->
+                                    <c:set var="reply" value="${entry.value}" /> <!-- Lấy Reply từ entry -->
 
+                                    <div class="chat-list">
+                                        <figure class="chat-image-container">
+                                            <a href="chat-box?userId=${user.id}" class="product-image">
+                                                <img src="${user.avatar != null ? user.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
+                                                     alt="product">
+                                            </a>
+                                        </figure>
+                                        <div class="chat-info">
+                                            <h4 class="user-name">
+                                                <a href="chat-box?userId=${user.id}">${user.firstName} ${user.lastName}</a>
+                                            </h4>
+                                            <span class="recent-chat">
+                                            ${reply.text} <!-- Hiển thị nội dung tin nhắn gần nhất -->
+                                            </span>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </c:if>
 
-                            <div class="chat-list">
-                                <figure class="chat-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png"
-                                             alt="product">
-                                    </a>
-                                </figure>
-                                <div class="chat-info">
-                                    <h4 class="user-name">
-                                        <a href="product.html">Pham Quang Linh</a>
-                                    </h4>
-                                    <span class="recent-chat">
-                                             Bạn đã tìm được người chưa?
-                                        </span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="dropdown ymm-sw" style="position: relative">
@@ -243,6 +234,7 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+
 <!-- End of nav bar -->
 <script src="assets/js/modernizr-2.6.2.min.js"></script>
 <script src="assets/js/jquery-1.10.2.min.js"></script>
@@ -256,5 +248,6 @@
 <script src="assets/js/icheck.min.js"></script>
 <script src="assets/js/price-range.js"></script>
 <script src="assets/js/main.js"></script>
+
 </body>
 </html>

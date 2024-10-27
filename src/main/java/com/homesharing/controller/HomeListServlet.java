@@ -78,7 +78,7 @@ public class HomeListServlet extends HttpServlet {
      * @throws IOException      if the request for the GET could not be handled
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> searchParams0 = new HashMap<>();
         // Process request parameters
         String orderBy = req.getParameter("orderby");

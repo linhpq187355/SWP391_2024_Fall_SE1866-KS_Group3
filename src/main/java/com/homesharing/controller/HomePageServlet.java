@@ -10,35 +10,33 @@
 
 package com.homesharing.controller;
 
-import com.homesharing.dao.HomeDAO;
-import com.homesharing.dao.PreferenceDAO;
-import com.homesharing.dao.PriceDAO;
-import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.PreferenceDAOImpl;
-import com.homesharing.dao.impl.PriceDAOImpl;
-import com.homesharing.dao.impl.UserDAOImpl;
-import com.homesharing.model.Home;
-import com.homesharing.model.Preference;
-import com.homesharing.model.Price;
-import com.homesharing.model.User;
+import com.homesharing.dao.*;
+import com.homesharing.dao.impl.*;
+import com.homesharing.model.*;
+import com.homesharing.service.ConversationService;
 import com.homesharing.service.PreferenceService;
 import com.homesharing.service.UserService;
+import com.homesharing.service.impl.ConversationServiceImpl;
 import com.homesharing.service.impl.HomePageServiceImpl;
 import com.homesharing.service.impl.PreferenceServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.CookieUtil;
+import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.homesharing.service.HomePageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * HomePageServlet class handles HTTP requests to the "/home-page" endpoint.
@@ -48,12 +46,17 @@ import java.util.List;
 @WebServlet("/home-page")
 public class HomePageServlet extends HttpServlet {
 
+    private static final Logger logger = LoggerFactory.getLogger(HomePageServlet.class); // Logger instance
+
     private HomePageService homePageService;  // Service layer for home page logic
     private HomeDAO homeDAO;  // Data Access Object for accessing home data
     private PriceDAO priceDAO;  // Data Access Object for accessing price data
     private UserDAO userDAO;
     private UserService userService;
+    private ReplyDAO replyDAO;
     private PreferenceService preferenceService;
+    private ConversationDAO conversationDAO;
+    private ConversationService conversationService;
 
     /**
      * Initializes the servlet by creating an instance of HomePageService.
@@ -67,6 +70,9 @@ public class HomePageServlet extends HttpServlet {
         homeDAO = new HomeDAOImpl();
         priceDAO = new PriceDAOImpl();
         userDAO = new UserDAOImpl();
+        replyDAO = new ReplyDAOImpl();
+        conversationDAO = new ConversationDAOImpl();
+        conversationService = new ConversationServiceImpl(userDAO, conversationDAO, replyDAO);
         PreferenceDAO preferenceDAO = new PreferenceDAOImpl();
         // Initialize the home page service with the required DAOs
         homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
@@ -99,6 +105,16 @@ public class HomePageServlet extends HttpServlet {
         Preference preference = new Preference();
         if(userId!=null){
             User user = userDAO.getUser(Integer.parseInt(userId));
+            try {
+                int uId = Integer.parseInt(userId);
+                Map<User, Reply> listUserConversation = conversationService.getListUserConversation(uId);
+                req.setAttribute("listUserConversation", listUserConversation);
+            } catch (SQLException e) {
+                logger.error("Error home-page: {}", e.getMessage(), e); // Log the exception with stack trace
+                // Handle invalid user ID format
+                ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra, vui lòng đăng nhập lại.");
+
+            }
             if(user.getRolesId() == 3){
                 preference = preferenceService.getPreference(Integer.parseInt(userId));
                 matchingHost = preferenceService.listMatchingPreferences(Integer.parseInt(userId));

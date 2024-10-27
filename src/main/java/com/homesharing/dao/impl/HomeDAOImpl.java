@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-10      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -416,7 +425,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             try {
                 if (resultSet != null) resultSet.close();
                 if (ps != null) ps.close();
-                if (connection != null) closeConnection();
+                if (connection != null) closeConnection(connection);
             } catch (SQLException e) {
                 logger.warning("Failed to close resources: " + e.getMessage());
             }
@@ -1118,6 +1127,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                         GROUP BY p.Homesid
                     )
                 ) tb1 ON tb1.Homesid = h.id
+                WHERE status = 'active'
                 ORDER BY h.createdDate DESC
                 """;
 
@@ -1152,7 +1162,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             try {
                 if (resultSet != null) resultSet.close();
                 if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) closeConnection(); // close the connection using DBContext's method
+                if (connection != null) closeConnection(connection); // close the connection using DBContext's method
             } catch (SQLException e) {
                 logger.warning("Failed to close resources: " + e.getMessage());
             }

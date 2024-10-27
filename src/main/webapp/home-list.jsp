@@ -249,14 +249,13 @@
                                             <b class="pull-right color">${maxArea != null ? maxArea.intValue() : 600.0}
                                                 m²</b>
                                         </div>
-
                                     </div>
                                 </fieldset>
 
                                 <fieldset class="padding-5">
                                     <div class="row">
                                         <div class="col-xs-6">
-                                            <label for="price-range">Số phòng tắm :</label>
+                                            <label for="min-baths">Số phòng tắm :</label>
                                             <input type="text" class="span2" name="bathRange"
                                                    value="${searchParams.bathRange != null ? searchParams.bathRange : ''}"
                                                    data-slider-min="${minBath != null ? minBath : 0}"
@@ -276,7 +275,7 @@
                                         </div>
 
                                         <div class="col-xs-6">
-                                            <label for="property-geo">Số phòng ngủ :</label>
+                                            <label for="min-bed">Số phòng ngủ :</label>
                                             <input type="text" class="span2" name="bedRange"
                                                    value="${searchParams.bedRange != null ? searchParams.bedRange : ''}"
                                                    data-slider-min="${minBed != null ? minBed : 0}"

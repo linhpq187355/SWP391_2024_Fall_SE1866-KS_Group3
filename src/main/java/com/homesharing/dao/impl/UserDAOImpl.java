@@ -181,7 +181,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error saving user to the database: " + e.getMessage(), e);
         } finally {
-            closeConnection();
+            closeConnection(connection);
         }
     }
 
@@ -213,7 +213,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error checking email existence in the database", e);
         } finally {
-            closeConnection();
+            closeConnection(connection);
         }
 
         // Return false if no email match is found
@@ -247,7 +247,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             // Re-throw exceptions as runtime to be handled by the service layer
             throw new GeneralException("Error checking email existence in the database", e);
         } finally {
-            closeConnection();
+            closeConnection(connection);
         }
 
         // Return false if no email match is found
