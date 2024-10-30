@@ -146,7 +146,7 @@ public class SetRoleServlet extends HttpServlet {
             // Register successful, redirect to home page
             request.getSession().setAttribute("message", "Đăng ký thành công.");
             request.getSession().setAttribute("messageType", "success");
-            response.sendRedirect(request.getContextPath() + "/home-page");
+            response.sendRedirect(request.getContextPath() + "/matching");
         } else if (result == 1) {
             // Login successful, redirect to home page
             request.getSession().setAttribute("message", "Đăng nhập thành công.");

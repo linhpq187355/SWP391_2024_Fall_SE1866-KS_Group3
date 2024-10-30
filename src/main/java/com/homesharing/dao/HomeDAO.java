@@ -110,7 +110,7 @@ public interface HomeDAO {
      * @param home Home object that need to be saved
      * @return home id
      */
-    int saveHome(Home home);
+    int saveHome(Home home) throws SQLException, IOException, ClassNotFoundException;
 
     /**
      * Retrieve new homes' info from the database.

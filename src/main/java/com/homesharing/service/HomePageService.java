@@ -46,6 +46,8 @@ public interface HomePageService {
      * @return A list of {@link Price} objects corresponding to the provided homes.
      */
     List<Price> getHomePrice(List<Home> homes);
+    void addHome(Home home) throws SQLException, IOException, ClassNotFoundException;
+    Home getHomeById(int id);
 
     /**
      * Adds a range to a map, using the provided range parameter, minimum key, and maximum key.

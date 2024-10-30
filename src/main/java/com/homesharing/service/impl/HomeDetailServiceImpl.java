@@ -1,18 +1,23 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.HomeDetailDAO;
+import com.homesharing.dao.PriceDAO;
 import com.homesharing.dao.impl.HomeDetailDAOImpl;
+import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.model.*;
 import com.homesharing.service.HomeDetailService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomeDetailServiceImpl implements HomeDetailService {
     private final HomeDetailDAO homeDetailDAO;
+    private final PriceDAO priceDAO;
 
     // Constructor that initializes the HomeDetailDAO implementation.
     public HomeDetailServiceImpl() {
         this.homeDetailDAO = new HomeDetailDAOImpl();
+        this.priceDAO = new PriceDAOImpl();
     }
 
     /**
@@ -80,4 +85,35 @@ public class HomeDetailServiceImpl implements HomeDetailService {
     public List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId) {
         return homeDetailDAO.getHomeFireEquipmentsByHomeId(homeId);
     }
+
+    @Override
+    public List<Home> getSimilarHomes(int homeId) {
+        return homeDetailDAO.getSimilarHomes(homeId);
+    }
+    @Override
+    public List<Home> getHomesByWard(int homeId, int priceDifference) {
+        return homeDetailDAO.getHomesByWard(homeId, priceDifference);
+    }
+    @Override
+    public List<Home> getHomesByDistrict(int homeId, int priceDifference) {
+        return homeDetailDAO.getHomesByDistrict(homeId, priceDifference);
+    }
+    @Override
+    public List<Home> getSimilarHomess(int homeId, int priceDifference) {
+        List<Home> similarHomes = getHomesByWard(homeId, priceDifference);
+
+        // Kiểm tra xem có đủ nhà hay không, nếu không thì tìm nhà cùng quận
+        if (similarHomes.size() < 4) {
+            List<Home> districtHomes = getHomesByDistrict(homeId, priceDifference);
+            similarHomes.addAll(districtHomes);
+        }
+
+        return similarHomes.stream().distinct().limit(4).collect(Collectors.toList()); // Lấy tối đa 4 nhà
+    }
+
+    @Override
+    public List<Price> getSimilarHomePrices(List<Home> similarHomes) {
+        return priceDAO.getPrices(similarHomes);
+    }
+
 }

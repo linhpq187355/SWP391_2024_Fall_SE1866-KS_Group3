@@ -57,7 +57,7 @@ public class TokenDAOImpl extends DBContext implements TokenDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error inserting token into the database", e);
         } finally {
-            closeConnection();
+            closeConnection(connection);
         }
     }
 
@@ -97,7 +97,7 @@ public class TokenDAOImpl extends DBContext implements TokenDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error finding token in the database", e);
         } finally {
-            closeConnection();
+            closeConnection(connection);
         }
     }
 
@@ -131,7 +131,7 @@ public class TokenDAOImpl extends DBContext implements TokenDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error updating token verification in the database", e);
         } finally {
-            closeConnection();
+            closeConnection(connection);
         }
     }
 
@@ -166,7 +166,7 @@ public class TokenDAOImpl extends DBContext implements TokenDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error updating token code in the database", e);
         } finally {
-            closeConnection();
+            closeConnection(connection);
         }
     }
 
