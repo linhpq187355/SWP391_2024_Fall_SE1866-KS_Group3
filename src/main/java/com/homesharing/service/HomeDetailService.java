@@ -38,6 +38,14 @@ public interface HomeDetailService {
     List<HomeType> getHomeTypesByHomeId(int homeId);
 
     /**
+     * Retrieves a home type associated with a specific home, identified by its ID.
+     *
+     * @param homeId The ID of the home for which you want to get the types.
+     * @return A list of HomeType objects linked to the specified home ID.
+     */
+    public HomeType getHomeTypeByHomeId(int homeId);
+
+    /**
      * Retrieves the amenities associated with a specific home by its ID.
      * These are the features or facilities available for that home.
      *
@@ -56,6 +64,13 @@ public interface HomeDetailService {
      *         If no fire equipment is found, the list will be empty.
      */
     List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
+
+    /**
+     * Retrieves the home image via home id
+     * @param homeId The ID of the home which you wanna retrieve its image
+     * @return A list of home image of house you wanna retrieve
+     */
+    List<HomeImage> getHomeImagesByHomeId(int homeId);
 
 
     List<Home> getSimilarHomes(int homeId);

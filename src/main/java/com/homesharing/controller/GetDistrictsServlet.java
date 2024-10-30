@@ -1,11 +1,10 @@
 /*
  * Copyright(C) 2024, HomeSharing Project.
- * H.SYS:
- *  Home Sharing System
+ * Roomify: Home Sharing System
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
- * 2024-10-27      1.1                 AI Assistant     Improved code and comments
+ * 2024-10-20      1.1                 AI Assistant     Improved code and comments
  */
 package com.homesharing.controller;
 

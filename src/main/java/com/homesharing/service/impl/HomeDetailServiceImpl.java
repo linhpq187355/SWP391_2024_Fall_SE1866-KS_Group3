@@ -1,8 +1,10 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.HomeDetailDAO;
+import com.homesharing.dao.HomeImageDAO;
 import com.homesharing.dao.PriceDAO;
 import com.homesharing.dao.impl.HomeDetailDAOImpl;
+import com.homesharing.dao.impl.HomeImageDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.model.*;
 import com.homesharing.service.HomeDetailService;
@@ -13,11 +15,13 @@ import java.util.stream.Collectors;
 public class HomeDetailServiceImpl implements HomeDetailService {
     private final HomeDetailDAO homeDetailDAO;
     private final PriceDAO priceDAO;
+    private final HomeImageDAO homeImageDAO;
 
     // Constructor that initializes the HomeDetailDAO implementation.
     public HomeDetailServiceImpl() {
         this.homeDetailDAO = new HomeDetailDAOImpl();
         this.priceDAO = new PriceDAOImpl();
+        this.homeImageDAO = new HomeImageDAOImpl();
     }
 
     /**
@@ -62,6 +66,22 @@ public class HomeDetailServiceImpl implements HomeDetailService {
     @Override
     public List<HomeType> getHomeTypesByHomeId(int homeId) {
         return homeDetailDAO.getHomeTypesByHomeId(homeId);
+    }
+
+    @Override
+    public HomeType getHomeTypeByHomeId(int homeId) {
+        return homeDetailDAO.getHomeTypeByHomeId(homeId);
+    }
+
+    /**
+     * Retrieves the home image via home id
+     *
+     * @param homeId The ID of the home which you wanna retrieve its image
+     * @return A list of home image of house you wanna retrieve
+     */
+    @Override
+    public List<HomeImage> getHomeImagesByHomeId(int homeId) {
+        return homeImageDAO.getImgByHomeId(homeId);
     }
 
     /**

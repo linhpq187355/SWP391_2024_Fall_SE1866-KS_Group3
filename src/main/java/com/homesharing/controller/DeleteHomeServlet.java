@@ -13,7 +13,7 @@ import com.homesharing.dao.impl.AmentityHomeDAOImpl;
 import com.homesharing.dao.DistrictDAOImpl;
 import com.homesharing.dao.impl.FireEquipHomeImpl;
 import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.HomeImageDAOImp;
+import com.homesharing.dao.impl.HomeImageDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.dao.impl.ProvinceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
@@ -62,7 +62,7 @@ public class DeleteHomeServlet extends HttpServlet {
         DistrictDAO districtDAO = new DistrictDAOImpl();
         WardDAO wardDAO = new WardDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
-        HomeImageDAO homeImgDAO = new HomeImageDAOImp();
+        HomeImageDAO homeImgDAO = new HomeImageDAOImpl();
         AmentityHomeDAO amentityDAO = new AmentityHomeDAOImpl();
         FireEquipHomeDAO fireEquipDAO = new FireEquipHomeImpl();
         this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO, homeImgDAO, amentityDAO, fireEquipDAO);
