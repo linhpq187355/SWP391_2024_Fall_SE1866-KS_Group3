@@ -36,7 +36,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.homesharing.service.HomePageService;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 

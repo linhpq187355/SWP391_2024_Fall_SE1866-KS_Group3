@@ -1,0 +1,57 @@
+.pagination a {
+    text-decoration: none;
+    color: #ffa500;
+    padding: 8px 12px;
+    margin: 0 4px;
+}
+.pagination a.active {
+    background-color: #ffa500;
+    color: white;
+    border-radius: 4px;
+}
+.pagination a:hover {
+    background-color: #ff7800;
+    color: white;
+}
+
+.property-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.form-select {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s;
+}
+.form-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Đặt khoảng cách giữa các fieldset */
+fieldset {
+    margin-bottom: 15px; /* Khoảng cách giữa các trường */
+    border: none; /* Bỏ đường viền fieldset */
+}
+
+/* Tùy chỉnh tiêu đề cho các fieldset */
+fieldset legend {
+    font-weight: bold; /* In đậm tiêu đề */
+    margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và dropdown */
+}
+
+.home-name.two-line {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    line-height: 1.2;
+    max-height: 2.4em;
+}

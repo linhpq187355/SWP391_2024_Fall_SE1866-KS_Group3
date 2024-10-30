@@ -11,18 +11,22 @@
  */
 
 package com.homesharing.service.impl;
-import com.homesharing.dao.*;
-import com.homesharing.dao.impl.*;
+
+import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
-import com.homesharing.model.*;
+import com.homesharing.model.Home;
+import com.homesharing.model.Price;
+import com.homesharing.model.User;
 import com.homesharing.service.HomePageService;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -232,11 +236,6 @@ public class HomePageServiceImpl implements HomePageService {
         return prices;
     }
 
-    @Override
-    public void addHome(Home home) { homeDAO.saveHome(home);}
-
-    @Override
-    public Home getHomeById(int id) { return homeDAO.getHomeById(id); }
 
     @Override
     public int getHomeCount() {
@@ -289,6 +288,4 @@ public class HomePageServiceImpl implements HomePageService {
         }
         return listMatchingHomes;
     }
-
-
 }
