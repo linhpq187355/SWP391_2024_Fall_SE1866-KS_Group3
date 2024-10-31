@@ -1,9 +1,22 @@
 package com.homesharing.service.impl;
 
+import com.homesharing.dao.AmentityDAO;
+import com.homesharing.dao.AmentityHomeDAO;
+import com.homesharing.dao.DistrictDAO;
+import com.homesharing.dao.FireEquipHomeDAO;
+import com.homesharing.dao.FireEquipmentDAO;
 import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.HomeImageDAO;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.ProvinceDAO;
+import com.homesharing.dao.WardDAO;
+import com.homesharing.model.District;
+import com.homesharing.model.FireEquipment;
 import com.homesharing.model.Home;
+import com.homesharing.model.HomeImage;
 import com.homesharing.model.Price;
+import com.homesharing.model.Province;
+import com.homesharing.model.Ward;
 import com.homesharing.service.HomeMgtService;
 
 import java.util.ArrayList;
@@ -16,10 +29,16 @@ public class HomeMgtServiceImpl implements HomeMgtService {
     private static final Logger logger = Logger.getLogger(HomePageServiceImpl.class.getName());
     private final HomeDAO homeDAO;
     private final PriceDAO priceDAO;
+    private final HomeImageDAO homeImgDAO;
+    private final AmentityHomeDAO amentityDAO;
+    private final FireEquipHomeDAO fireEquipDAO;
 
-    public HomeMgtServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO) {
+    public HomeMgtServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO, HomeImageDAO homeImgDAO, AmentityHomeDAO amentityDAO, FireEquipHomeDAO fireEquipDAO) {
         this.homeDAO = homeDAO;
         this.priceDAO = priceDAO;
+        this.homeImgDAO = homeImgDAO;
+        this.amentityDAO = amentityDAO;
+        this.fireEquipDAO = fireEquipDAO;
     }
 
     @Override
@@ -33,8 +52,23 @@ public class HomeMgtServiceImpl implements HomeMgtService {
     }
 
     @Override
-    public int deletePersonalHome(Home home) {
-        return homeDAO.changeStatus(home.getId(),"inactive");
+    public int deletePersonalHome(int id) {
+        return homeDAO.changeStatus(id,"inactive");
+    }
+
+    @Override
+    public int clearImageByHomeId(int homeId) {
+        return homeImgDAO.clear(homeId);
+    }
+
+    @Override
+    public int clearAmentityByHomeId(int homeId) {
+        return amentityDAO.clear(homeId);
+    }
+
+    @Override
+    public int clearFireEquipByHomeId(int homeId) {
+        return fireEquipDAO.clear(homeId);
     }
 
     /**

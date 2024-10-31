@@ -105,7 +105,7 @@ public class WardDAOImpl implements WardDAO {
 
     @Override
     public Ward getWardById(int id) {
-        String sql = "SELECT [id],[name],[status] FROM [dbo].[Wards] WHERE id=?";
+        String sql = "SELECT * FROM [dbo].[Wards] WHERE id=?";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -120,6 +120,7 @@ public class WardDAOImpl implements WardDAO {
                 ward.setId(resultSet.getInt("id"));
                 ward.setName(resultSet.getString("name"));
                 ward.setStatus(resultSet.getString("status"));
+                ward.setDistrictId(resultSet.getInt("Districtsid"));
                 return ward;
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
