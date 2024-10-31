@@ -10,7 +10,7 @@ package com.homesharing.controller;
 
 import com.google.gson.Gson;
 import com.homesharing.dao.DistrictDAO;
-import com.homesharing.dao.DistrictDAOImpl;
+import com.homesharing.dao.impl.DistrictDAOImpl;
 import com.homesharing.model.District;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

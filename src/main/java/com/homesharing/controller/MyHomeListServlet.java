@@ -1,12 +1,8 @@
 package com.homesharing.controller;
 
 import com.google.gson.Gson;
-import com.homesharing.dao.HomeDAO;
-import com.homesharing.dao.PriceDAO;
-import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.PriceDAOImpl;
-import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.dao.*;
+import com.homesharing.dao.impl.*;
 import com.homesharing.model.Home;
 import com.homesharing.model.User;
 import com.homesharing.service.HomeMgtService;
@@ -37,7 +33,10 @@ public class MyHomeListServlet extends HttpServlet {
         HomeDAO homeDAO = new HomeDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
         PriceDAO priceDAO = new PriceDAOImpl();
-        this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO);
+        HomeImageDAO homeImgDAO = new HomeImageDAOImpl();
+        AmentityHomeDAO amentityDAO = new AmentityHomeDAOImpl();
+        FireEquipHomeDAO fireEquipDAO = new FireEquipHomeImpl();
+        this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO, homeImgDAO, amentityDAO, fireEquipDAO);
         this.userService = new UserServiceImpl(userDAO, null, null, null);
     }
 
