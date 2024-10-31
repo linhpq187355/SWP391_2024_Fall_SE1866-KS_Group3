@@ -82,7 +82,7 @@ public class CreateAccountServlet extends HttpServlet {
             req.getRequestDispatcher("/create-account.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             logger.error("Error forwarding to create-account.jsp: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");// Use a generic error message for the user
+            ServletUtils.handleError(req, resp, 404);// Use a generic error message for the user
         }
     }
 

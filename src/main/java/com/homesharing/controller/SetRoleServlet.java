@@ -9,19 +9,26 @@
  */
 package com.homesharing.controller;
 
+import com.homesharing.conf.Config;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.PreferenceDAO;
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.GoogleAccount;
+import com.homesharing.model.User;
+import com.homesharing.service.NotificationService;
 import com.homesharing.service.PreferenceService;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
+import com.homesharing.service.impl.NotificationServiceImpl;
 import com.homesharing.service.impl.PreferenceServiceImpl;
 import com.homesharing.service.impl.TokenServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
+import com.homesharing.util.AddNotificationUtil;
 import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -42,7 +49,7 @@ import java.sql.SQLException;
 @WebServlet("/set-role")
 public class SetRoleServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(SetRoleServlet.class); // Logger instance
-
+    private UserDAO userDao;
     private transient UserService userService;// Mark userService as transient
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
 
@@ -53,7 +60,7 @@ public class SetRoleServlet extends HttpServlet {
     @Override
     public void init() {
         // Create instances of UserDao and TokenDao
-        UserDAO userDao = new UserDAOImpl();
+        userDao = new UserDAOImpl();
         TokenDAO tokenDao = new TokenDAOImpl();
         PreferenceDAO preferenceDao = new PreferenceDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
@@ -76,7 +83,7 @@ public class SetRoleServlet extends HttpServlet {
             request.getRequestDispatcher("/set-role.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("Error forwarding to set-role page: {}", e.getMessage(), e);
-            ServletUtils.handleError(response, "Error while processing your request.");
+            ServletUtils.handleError(request, response, 404);
         }
     }
 
@@ -128,7 +135,7 @@ public class SetRoleServlet extends HttpServlet {
             request.getRequestDispatcher("/set-role.jsp").forward(request, response);
         } catch (ServletException e) {
             logger.error("Error forwarding to set-role page: {}", e.getMessage(), e);
-            ServletUtils.handleError(response, "Error while processing your request.");
+            ServletUtils.handleError(request, response, 404);
         }
     }
 
@@ -141,9 +148,12 @@ public class SetRoleServlet extends HttpServlet {
      * @param acc     The Google account associated with the registration.
      * @throws IOException if an I/O error occurs during the request.
      */
-    private void handleRegistrationResult(int result, HttpServletRequest request, HttpServletResponse response, GoogleAccount acc) throws IOException {
+    private void handleRegistrationResult(int result, HttpServletRequest request, HttpServletResponse response, GoogleAccount acc) throws IOException, SQLException {
         if (result == 2) {
-            // Register successful, redirect to home page
+            User user = userDao.findUserByEmail(acc.getEmail());
+            String url = Config.getBaseUrl();
+            AddNotificationUtil.getInstance().addNotification(user.getId(),"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.","System",url);
+            AddNotificationUtil.getInstance().addNotification(user.getId(),"Bạn chưa có mật khẩu, vui lòng click vào đường dẫn này để cài đặt mật khẩu.","System",url + "/user-update-password");
             request.getSession().setAttribute("message", "Đăng ký thành công.");
             request.getSession().setAttribute("messageType", "success");
             response.sendRedirect(request.getContextPath() + "/matching");

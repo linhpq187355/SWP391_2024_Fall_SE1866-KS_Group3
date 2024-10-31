@@ -19,6 +19,7 @@ import com.homesharing.service.HomePageService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -272,14 +273,21 @@ public class HomePageServiceImpl implements HomePageService {
 
         for(int i = 0; i < homeList.size(); i++) {
             boolean moveInCheck = false;
-            if ((homeList.get(i).getMoveInDate().isEqual(user.getEarliestMoveIn()) || homeList.get(i).getMoveInDate().isAfter(user.getEarliestMoveIn()))
-                    && (homeList.get(i).getMoveInDate().isBefore(user.getLatestMoveIn()) || homeList.get(i).getMoveInDate().isEqual(user.getLatestMoveIn()))) {
-                moveInCheck = true;
+            LocalDate moveInDate = homeList.get(i).getMoveInDate();
+            LocalDate earliestMoveIn = user.getEarliestMoveIn();
+            LocalDate latestMoveIn = user.getLatestMoveIn();
+
+            if (moveInDate != null && earliestMoveIn != null && latestMoveIn != null) {
+                if ((moveInDate.isEqual(earliestMoveIn) || moveInDate.isAfter(earliestMoveIn))
+                        && (moveInDate.isBefore(latestMoveIn) || moveInDate.isEqual(latestMoveIn))) {
+                    moveInCheck = true;
+                }
             }
 
-            if (user.getEarliestMoveIn().isBefore(homeList.get(i).getMoveInDate())
-                    && user.getEarliestMoveIn().plusDays(7).isAfter(homeList.get(i).getMoveInDate())) {
-                moveInCheck = true;
+            if (moveInDate != null && earliestMoveIn != null) {
+                if (earliestMoveIn.isBefore(moveInDate) && earliestMoveIn.plusDays(7).isAfter(moveInDate)) {
+                    moveInCheck = true;
+                }
             }
             Home home = homeList.get(i);
             if(user.getMaxBudget() >= listPrice.get(i).getPrice()){

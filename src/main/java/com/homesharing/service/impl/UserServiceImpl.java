@@ -388,16 +388,25 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException {
+        // Validate input parameters
+        if (email == null || email.isEmpty() || !validateEmail(email)) {
+            return "Địa chỉ email không hợp lệ"; // Invalid email address
+        }
+        if (password == null || password.isEmpty()) {
+            return "Mật khẩu không được để trống"; // Password cannot be empty
+        }
+
         try{
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
-        // If the user does not exist, return false
+        // If the user does not exist, return an error message
         if (user == null) {
             // User does not exist
             return "Email hoặc mật khẩu không đúng";
         }
 
+        // Check if the user has a hashed password
         if(user.getHashedPassword() == null) {
             return "Tài khoản này chưa có mật khẩu, vui lòng đăng nhập bằng Google và cập nhật mật khẩu.";
         }
@@ -410,27 +419,21 @@ public class UserServiceImpl implements UserService {
 
         // Check if the user's status is active
         if (!user.getStatus().equals("active")) {
-            // User's status is not active
-            return "Tài khoản này đã bị khóa";
+            return "Tài khoản này đã bị khóa"; // User's account is locked
         }
 
-        int roleValue = user.getRolesId();
-        //check if user is not a host or tenant
-        if (roleValue == 1 || roleValue == 2) {
-            return "Bạn không có quyền đăng nhập ở đây.";
-        }
-
-        // Find token for user
+        // Find the token associated with the user
         Token token = tokenDao.findToken(user.getId());
 
-        // If the token does not exist, create a new one
+            // If the token does not exist or is not verified, send a new verification token
         if (token == null || !token.isVerified()) {
             tokenService.sendToken(email, user.getId());
-            return "not-verify";
+            return "not-verify"; // User not verified
         }
 
-        // identity max age
-        int cookieAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 1 week or 1 month
+        // Determine the max age for the cookies based on the 'remember me' option
+        int cookieAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 1 month or 1 week
+
         // Save user's information to cookies
         CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
         CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
@@ -438,9 +441,10 @@ public class UserServiceImpl implements UserService {
         CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
         CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
 
-        // Return true to indicate a successful login
+        // Return success message to indicate a successful login
         return "success";
         } catch (GeneralException e) {
+            // Handle any unexpected exceptions and rethrow with a custom message
             throw new GeneralException("Error:" ,e);
         }
     }

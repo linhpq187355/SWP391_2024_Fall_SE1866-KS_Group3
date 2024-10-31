@@ -13,6 +13,7 @@ public class Reply {
     private String timeAgo;
     private String contentType;
     private String contentUrl;
+
     public String getTimeAgo() {
         return timeAgo;
     }

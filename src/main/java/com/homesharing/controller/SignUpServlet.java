@@ -9,15 +9,20 @@
  */
 package com.homesharing.controller;
 
+import com.homesharing.conf.Config;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.PreferenceDAO;
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.service.NotificationService;
 import com.homesharing.service.PreferenceService;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
+import com.homesharing.service.impl.NotificationServiceImpl;
 import com.homesharing.service.impl.PreferenceServiceImpl;
 import com.homesharing.service.impl.TokenServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
@@ -45,7 +50,8 @@ public class SignUpServlet extends HttpServlet {
     private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(SignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
-
+    private NotificationDAO notificationDAO;
+    private NotificationService notificationService;
     /**
      * Initializes the SignUpServlet by creating instances of required services.
      * This method is called once when the servlet is first loaded.
@@ -55,6 +61,8 @@ public class SignUpServlet extends HttpServlet {
         // Create instances of UserDao and TokenDao
         UserDAO userDao = new UserDAOImpl();
         TokenDAO tokenDao = new TokenDAOImpl();
+        notificationDAO = new NotificationDAOImpl();
+        notificationService = new NotificationServiceImpl(notificationDAO);
         PreferenceDAO preferenceDao = new PreferenceDAOImpl();
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         PreferenceService preferenceService = new PreferenceServiceImpl(preferenceDao);
@@ -76,7 +84,7 @@ public class SignUpServlet extends HttpServlet {
             req.getRequestDispatcher("/sign-up.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             logger.error("Error forwarding to sign-up page: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");
+            ServletUtils.handleError(req, resp, 404);
         }
     }
 
@@ -106,6 +114,8 @@ public class SignUpServlet extends HttpServlet {
                 int result = userService.registerUser(firstName, lastName, email, password, role);
                 if (result > 0) {
                     //redirect to verify email
+                    String url = Config.getBaseUrl();
+                    notificationService.addNotification(result,"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.","System",url);
                     req.getSession().setAttribute("userId", result);
                     resp.sendRedirect(req.getContextPath() + "/verify");
                 } else if (result == 0) {

@@ -410,10 +410,10 @@
                                             </button>
                                         </li>
                                         <li>
-                                            <button class="zalo-button">
+                                            <a class="zalo-button" href="chat-box?userId=${creator.id}">
                                                 <i class="fas fa-comment"></i>
                                                 Liên Hệ
-                                            </button>
+                                            </a>
                                         </li>
                                         <c:if test="${cookie.roleId.value == 3}">
                                             <li>

@@ -427,19 +427,20 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      * @throws GeneralException if there is an error finding the user by email in the database.
      */
     @Override
-    public User findUserByEmail(String email) {
+    public User findUserByEmail(String email) throws GeneralException, SQLException {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [HSS_Users] WHERE [email] = ?";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try{
+            // Establish connection to the database
             connection = DBContext.getConnection();
             preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, email); // Set the email parameter in the query
+            resultSet = preparedStatement.executeQuery(); // Execute the query
 
-
-            preparedStatement.setString(1, email);
-            resultSet = preparedStatement.executeQuery();
+            // Check if a user was found
             if (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getInt("id"));
@@ -450,7 +451,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setStatus(resultSet.getString("status"));
                 user.setHashedPassword(resultSet.getString("hashedPassword"));
 
-                // Check null before call toLocalDateTime()
+                // Convert timestamp to LocalDateTime, checking for null
                 Timestamp createdAtTimestamp = resultSet.getTimestamp("createdAt");
                 if (createdAtTimestamp != null) {
                     user.setCreatedAt(createdAtTimestamp.toLocalDateTime());
@@ -458,14 +459,17 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                     user.setCreatedAt(null);
                 }
 
-                return user;
+                return user; // Return the found user
             }
 
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error finding user by email in the database: " + e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new GeneralException("SQL error while finding user with email " + email + ": " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new GeneralException("I/O error while finding user with email " + email + ": " + e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            throw new GeneralException("Class not found error while finding user with email " + email + ": " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
-            try {
                 if (resultSet != null) {
                     resultSet.close();
                 }
@@ -473,13 +477,9 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                     preparedStatement.close();
                 }
                 if (connection != null) {
-                    connection.close();
+                    closeConnection(connection);
                 }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
         }
-
         return null; // Return null if no user is found
     }
 

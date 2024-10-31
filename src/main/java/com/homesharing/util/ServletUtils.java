@@ -36,7 +36,6 @@ public class ServletUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
     private static final String ERROR_PAGE = "/error.jsp";
-    private static final String FORWARD_ERROR_MESSAGE = "Error forwarding to error page.";
 
     /**
      * Forwards the request to the error page.
@@ -48,24 +47,50 @@ public class ServletUtils {
         try {
             req.getRequestDispatcher(ERROR_PAGE).forward(req, resp);
         } catch (ServletException | IOException e) {
-            handleError(resp, FORWARD_ERROR_MESSAGE);
+            handleError(req, resp, 404);
         }
     }
 
     /**
-     * Sends an error response to the client with the specified message.
+     * Handles error responses by redirecting to an appropriate error page based on the error code.
      *
      * @param resp the HttpServletResponse object for the response
-     * @param message the error message to be sent
+     * @param errorCode the HTTP status code for the error
      */
-    public static void handleError(HttpServletResponse resp, String message) {
+    public static void handleError(HttpServletRequest req, HttpServletResponse resp, int errorCode) {
+        String redirectPage;
+
+        // Determine the redirect page based on the error code
+        switch (errorCode) {
+            case HttpServletResponse.SC_NOT_FOUND: // 404
+                redirectPage = "/404.jsp";
+                break;
+            case HttpServletResponse.SC_BAD_REQUEST: // 400
+                redirectPage = "/400.jsp";
+                break;
+            case HttpServletResponse.SC_FORBIDDEN: // 403
+                redirectPage = "/403.jsp";
+                break;
+            case HttpServletResponse.SC_INTERNAL_SERVER_ERROR: // 500
+                redirectPage = "/500.jsp";
+                break;
+            case HttpServletResponse.SC_UNAUTHORIZED: // 401
+                redirectPage = "/401.jsp";
+                break;
+            // Add more error codes and corresponding pages as needed
+            default:
+                redirectPage = "/404.jsp"; // Fallback for unknown errors
+                break;
+        }
+
         try {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
+            // Redirect to the corresponding error page
+            resp.sendRedirect(req.getContextPath() + redirectPage);
         } catch (IOException e) {
-            // Log the error (assuming logger is available)
-            logger.error("An error occurred while sending error response: {}", e.getMessage(), e);
+            logger.error("An error occurred while redirecting to error page: {}", e.getMessage(), e);
         }
     }
+
 
     /**
      * Helper method to forward the request to the announcement page with a message.
