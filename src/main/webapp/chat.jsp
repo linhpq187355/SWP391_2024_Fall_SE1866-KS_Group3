@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: LNV
+  User: ManhNC
   Date: 22/09/2024
   Time: 22:39
   To change this template use File | Settings | File Templates.
@@ -228,11 +228,13 @@
         /* Hiển thị details bên trái nếu tin nhắn là received */
         .message.received .details {
             text-align: left;
+            margin-left: 10px;
         }
 
         /* Hiển thị details bên phải nếu tin nhắn là sent */
         .message.sent .details {
             text-align: right;
+            margin-right: 10px;
         }
         @media (max-width: 768px) {
             .cchat-container {
@@ -407,22 +409,25 @@
         </c:forEach>
     </c:if>
             </div>
-
-
         </div>
-        <div class="cchat-window">
-                <div class="header">
-                <img alt="User profile" height="50"
-                     src="${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
-                     width="50"/>
-                <div>
-                    <div class="name">
-                        ${User.firstName} ${User.lastName}
-                    </div>
-                    <div class="status">
-                        Đang hoạt động
-                    </div>
-                </div>
+        <div class="cchat-window" data-user-id="${User.id}">
+                <div class="header" style="justify-content: space-between;">
+<div style="display: flex;">
+    <img alt="User profile" height="50"
+         src="${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
+         width="50"/>
+    <div>
+        <div class="name">
+            ${User.firstName} ${User.lastName}
+        </div>
+        <div class="status" id="status-chat">
+            Đang offline
+        </div>
+    </div>
+</div>
+                    <a href="chat-information?userId=${User.id}">
+                        <i class="fas fa-info-circle" style="font-size: xx-large;"></i>
+                    </a>
             </div>
             <div class="messages" id="messages">
                 <c:if test="${not empty requestScope.replies}">
@@ -438,7 +443,7 @@
                                     <c:if test="${not empty reply.contentType and not empty reply.contentUrl}">
                                         <c:choose>
                                             <c:when test="${reply.contentType == 'image'}">
-                                                <img src="${reply.contentUrl}" alt="Attached Image" class="message-image">
+                                                <img src="${reply.contentUrl}" alt="Attached Image" class="message-image" onclick="showImage('${reply.contentUrl}')">
                                             </c:when>
                                             <c:when test="${reply.contentType == 'video'}">
                                                 <video src="${reply.contentUrl}" controls style="max-width: 200px;"></video>
@@ -463,8 +468,8 @@
                             </div>
                         </div>
                     </c:forEach>
-                    <div class="seen-status" id="seen-status" style="display: none;">Đã xem</div>
                 </c:if>
+                <div class="seen-status" id="seen-status" style="display: none;">Đã xem</div>
             </div>
             <!-- Thanh chứa câu hỏi gợi ý -->
             <div id="suggestions-container" class="suggestions-container">
@@ -497,7 +502,7 @@
                     <input id="replyText" placeholder="Aa" type="text" required/>
                     <input type="hidden" id="userId" value="${User.id}"/> <!-- ID của người gửi -->
                     <input type="hidden" id="sendId" value="${sendId}" />
-                    <input type="hidden" id="messageStatus" value="${requestScope.messageStatus}" />
+                    <input type="hidden" id="messageStatus" value="${requestScope.messageStatus != null ? requestScope.messageStatus : 'sent'}" />
                     <input type="hidden" id="conversationId" value="${requestScope.conversationId}"/> <!-- ID của cuộc trò chuyện -->
                     <button onclick="sendMessage()">
                         <i class="fas fa-paper-plane"></i>
@@ -526,7 +531,7 @@
     }
 %>
 <script type="text/javascript">
-    var ws;
+    let ws;
     let autoReplySent = false;
     let conversationId = document.getElementById("conversationId").value;
     let receivedId = document.getElementById("userId").value;
@@ -534,6 +539,7 @@
     let messagesContainer = document.getElementById("messages");
 
     function connect() {
+        let intervalId;
         ws = new WebSocket("ws://localhost:9999/homeSharing/chat");
         const seenStatus = document.getElementById("seen-status");
         ws.onmessage = function(event) {
@@ -544,77 +550,145 @@
                 if(data.received === sendId){
                     seenStatus.style.display = 'flex';
                 }
+            } else if (data.type === "start") {
+                if(data.send === receivedId) {
+                    updateStatus("Đang hoạt động");
+                }
+            } else if (data.type === "no") {
+                updateStatus("Đang offline");
+            } else if (data.type === "yes") {
+                updateStatus("Đang hoạt động");
             } else {
                 // Hiển thị tin nhắn nhận được hoặc gửi đi
                 if(data.conversationId === conversationId) {
-                    let messages = document.createElement("div");
-                    messages.classList.add("message");
-                    messages.classList.add(data.received === receivedId ? "sent" : "received");
-                    if(data.received !== receivedId) {
-                        let image = document.createElement("img");
-                        image.height = 40;
-                        image.width = 40;
-                        image.classList.add("avatar");
-                        image.src = "${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}";
-                        messages.appendChild(image);
-                        console.log("received: at 1: " + receivedId);
-                        ws.send(JSON.stringify({ received: receivedId, send: sendId, conversationId: conversationId,message: "", type: "seen" }));
-                        document.getElementById("seen-status").style.display = 'none';
-                    }
-                    // Hiển thị nội dung tin nhắn
-                    if (data.message && data.message.trim() !== "") {
-                        let textDiv = document.createElement("div");
-                        textDiv.classList.add("text");
-                        textDiv.textContent = data.message;
-                        messages.appendChild(textDiv);
-                    }
-                    if (data.files && data.files.length > 0) {
-                        data.files.forEach(file => {
-                            let fileDiv = document.createElement("div");
-                            if (file.type === "image") {
-                                // Hiển thị ảnh
-                                let img = document.createElement("img");
-                                img.src = file.url; // URL của file
-                                img.alt = "image"; // Tên file
-                                img.style.maxWidth = "200px"; // Giới hạn kích thước
-                                img.style.maxHeight = "200px"; // Giới hạn kích thước
-                                img.onload = function() {
-                                    // Xử lý sau khi ảnh tải xong (ví dụ: thêm vào DOM)
-                                    fileDiv.appendChild(img);
-                                };
-                                fileDiv.appendChild(img);
-                            } else if (file.type === "video") {
-                                // Hiển thị video
-                                let video = document.createElement("video");
-                                video.src = file.url; // URL của video
-                                video.controls = true; // Hiển thị các điều khiển video
-                                video.style.maxWidth = "200px"; // Giới hạn kích thước
-                                video.onload = function() {
-                                    fileDiv.appendChild(video);
-                                };
-                            } else {
-                                // Hiển thị tên file cho các loại file khác
-                                let fileLink = document.createElement("a");
-                                fileLink.href = file.url; // URL của file
-                                let nameFile = file.url.substring(file.url.lastIndexOf('/') + 1);
-                                fileLink.textContent = nameFile;
-                                fileLink.target = "_blank"; // Mở trong tab mới
-                                fileDiv.appendChild(fileLink);
+                    if (data.replies && data.replies.length > 0) {
+                        data.replies.forEach(reply => {
+                            let messages = document.createElement("div");
+                            messages.classList.add("message");
+                            messages.classList.add(data.received === receivedId ? "sent" : "received");
+                            messages.setAttribute("onclick", "toggleDetails(this)");
+                            // Kiểm tra và xử lý avatar nếu là người nhận
+                            if (data.received !== receivedId) {
+                                updateStatus("Đang hoạt động");
+                                let avatar = document.createElement("img");
+                                avatar.height = 40;
+                                avatar.width = 40;
+                                avatar.classList.add("avatar");
+                                avatar.src = "${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}";
+                                messages.appendChild(avatar);
+                                ws.send(JSON.stringify({ received: receivedId, send: sendId, conversationId: conversationId, message: "", type: "seen" }));
+                                document.getElementById("seen-status").style.display = 'none';
                             }
-                            messages.appendChild(fileDiv);
-                        });
-                    }
-                    if (messagesContainer) {
-                        messagesContainer.appendChild(messages);
-                        document.getElementById('messages').appendChild(seenStatus);
-                    } else {
-                        console.error("messagesContainer không tìm thấy!");
-                    }
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }
-                // Cập nhật danh sách chat
-                updateChatList(data);
+                            // Nếu là tin nhắn văn bản
+                            if (reply.text && reply.text.trim() !== "") {
+                                let textDiv = document.createElement("div");
+                                textDiv.classList.add("text");
+                                textDiv.textContent = reply.text;
+                                messages.appendChild(textDiv);
+                                // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
+                                let detailsDiv = document.createElement("div");
+                                detailsDiv.classList.add("details");
+                                detailsDiv.style.display = "none";
 
+                                let timeDiv = document.createElement("div");
+                                timeDiv.classList.add("time");
+                                timeDiv.textContent = reply.time;
+                                detailsDiv.appendChild(timeDiv);
+
+                                messages.appendChild(detailsDiv);
+                                // Thêm tin nhắn vào khung chat
+                                if (messagesContainer) {
+                                    messagesContainer.appendChild(messages);
+                                    document.getElementById('messages').appendChild(seenStatus);
+                                } else {
+                                    console.error("messagesContainer không tìm thấy!");
+                                }
+                            } else if (reply.contentType && reply.contentUrl) {
+                                let fileDiv = document.createElement("div");
+                                if (reply.contentType === "image") {
+                                    let img = document.createElement("img");
+                                    img.src = reply.contentUrl;
+                                    img.alt = "image";
+                                    img.style.maxWidth = "200px";
+                                    img.style.maxHeight = "200px";
+                                    img.onclick = function() { showImage(reply.contentUrl); };
+                                    // Đợi ảnh tải xong trước khi thêm vào khung chat
+                                    img.onload = function() {
+                                        fileDiv.appendChild(img);
+                                        messages.appendChild(fileDiv);
+                                        // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
+                                        let detailsDiv = document.createElement("div");
+                                        detailsDiv.classList.add("details");
+                                        detailsDiv.style.display = "none";
+
+                                        let timeDiv = document.createElement("div");
+                                        timeDiv.classList.add("time");
+                                        timeDiv.textContent = reply.time;
+                                        detailsDiv.appendChild(timeDiv);
+
+                                        messages.appendChild(detailsDiv);
+                                        if (messagesContainer) {
+                                            messagesContainer.appendChild(messages);
+                                            document.getElementById('messages').appendChild(seenStatus);
+                                        }
+                                    };
+                                } else if (reply.contentType === "video") {
+                                    let video = document.createElement("video");
+                                    video.src = reply.contentUrl;
+                                    video.controls = true;
+                                    video.style.maxWidth = "200px";
+                                    // Đợi video tải xong trước khi thêm vào khung chat
+                                    video.onloadeddata = function() {
+                                        fileDiv.appendChild(video);
+                                        messages.appendChild(fileDiv);
+                                        // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
+                                        let detailsDiv = document.createElement("div");
+                                        detailsDiv.classList.add("details");
+                                        detailsDiv.style.display = "none";
+
+                                        let timeDiv = document.createElement("div");
+                                        timeDiv.classList.add("time");
+                                        timeDiv.textContent = reply.time;
+                                        detailsDiv.appendChild(timeDiv);
+
+                                        messages.appendChild(detailsDiv);
+                                        if (messagesContainer) {
+                                            messagesContainer.appendChild(messages);
+                                            document.getElementById('messages').appendChild(seenStatus);
+                                        }
+                                    };
+                                } else {
+                                    let fileLink = document.createElement("a");
+                                    fileLink.href = reply.contentUrl;
+                                    let nameFile = reply.contentUrl.substring(reply.contentUrl.lastIndexOf('/') + 1);
+                                    fileLink.textContent = nameFile;
+                                    fileLink.classList.add("file-link");
+                                    fileLink.target = "_blank";
+                                    fileDiv.appendChild(fileLink);
+                                    messages.appendChild(fileDiv);
+                                    // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
+                                    let detailsDiv = document.createElement("div");
+                                    detailsDiv.classList.add("details");
+                                    detailsDiv.style.display = "none";
+
+                                    let timeDiv = document.createElement("div");
+                                    timeDiv.classList.add("time");
+                                    timeDiv.textContent = reply.time;
+                                    detailsDiv.appendChild(timeDiv);
+
+                                    messages.appendChild(detailsDiv);
+                                    if (messagesContainer) {
+                                        messagesContainer.appendChild(messages);
+                                        document.getElementById('messages').appendChild(seenStatus);
+                                    }
+                                }
+                            }
+                        });
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                    // Cập nhật danh sách chat
+                    updateChatList(data);
+                }
             }
         };
 
@@ -628,6 +702,22 @@
         ws.onclose = function() {
             console.log("connection close");
         };
+    }
+
+    function checkOnline() {
+        console.log("This function runs every 30 seconds.");
+        ws.send(JSON.stringify({ received: receivedId,send: sendId, conversationId: conversationId, message: "", type: "ask" }));
+    }
+
+    // Gọi hàm myFunction mỗi 30 giây (30000 milliseconds)
+    setInterval(checkOnline, 30000);
+
+    function updateStatus(status) {
+        // Tìm phần tử hiển thị trạng thái của userId và cập nhật
+        let statusElement = document.getElementById("status-chat");
+        if (statusElement) {
+            statusElement.textContent = status;
+        }
     }
 
     function previewFiles(files) {
@@ -941,6 +1031,7 @@
             }
         });
     });
+
     const fileLinks = document.querySelectorAll('.file-link');
     fileLinks.forEach(link => {
         // Cắt chuỗi bằng JavaScript
@@ -948,11 +1039,34 @@
         let fileName = url.substring(url.lastIndexOf('/') + 1);
         // Giải mã URL
         fileName = decodeURIComponent(fileName); // Hoặc decodeURI(fileName)
-
         link.textContent = fileName;
-
-
     });
+    function showImage(imageUrl) {
+        const modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Nền mờ
+        modal.style.display = 'flex';
+        modal.style.justifyContent = 'center';
+        modal.style.alignItems = 'center';
+        modal.style.zIndex = '1000'; // Đảm bảo popup nằm trên cùng
+
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.style.maxWidth = '90%';
+        img.style.maxHeight = '90%';
+
+        modal.appendChild(img);
+        document.body.appendChild(modal);
+
+        // Đóng popup khi click vào nền mờ hoặc ảnh
+        modal.addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+    }
 </script>
 </body>
 </html>

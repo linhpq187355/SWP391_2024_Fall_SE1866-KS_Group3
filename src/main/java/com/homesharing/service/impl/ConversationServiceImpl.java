@@ -20,9 +20,7 @@ import com.homesharing.service.ConversationService;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class ConversationServiceImpl implements ConversationService {
@@ -40,30 +38,58 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Map<User, Reply> getListUserConversation(int userId) throws SQLException {
-        Map<User, Reply> map = new HashMap<>();
+        Map<User, Reply> unsortedMap = new HashMap<>(); // Temporary HashMap
         List<Conversation> listConversation = conversationDao.getAllConversationsByUserId(userId);
+
         for (Conversation conversation : listConversation) {
-            if(conversation.getUserOne() == userId) {
-                User user = userDao.getUser(conversation.getUserTwo());
-                map.put(user,replyDao.getLastestReply(conversation.getId()));
-            } else if(conversation.getUserTwo() == userId) {
-                User user = userDao.getUser(conversation.getUserOne());
-                map.put(user,replyDao.getLastestReply(conversation.getId()));
-            }
+            int otherUserId = (conversation.getUserOne() == userId) ? conversation.getUserTwo() : conversation.getUserOne();
+            User user = userDao.getUser(otherUserId);
+            unsortedMap.put(user, replyDao.getLastestReply(conversation.getId()));
         }
-        return map;
+
+        // Sort the map entries by Reply time in descending order
+        List<Map.Entry<User, Reply>> sortedEntries = new ArrayList<>(unsortedMap.entrySet());
+        sortedEntries.sort((entry1, entry2) -> entry2.getValue().getTime().compareTo(entry1.getValue().getTime()));
+
+
+        Map<User, Reply> sortedMap = new LinkedHashMap<>(); // Use a LinkedHashMap to preserve order
+        for (Map.Entry<User, Reply> entry : sortedEntries) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
+    }
+
+    @Override
+    public List<Reply> getRepliesByConversationIdAndContentType(int conversationId, String contentType) throws SQLException {
+        return replyDao.getRepliesByConversationIdAndContentType(conversationId, contentType);
     }
 
     @Override
     public int getConversationId(int userOne, int userTwo) throws SQLException {
-        List<Conversation> listConversation = conversationDao.getAllConversationsByUserId(userOne);
-        for (Conversation conversation : listConversation) {
-            if(conversation.getUserOne() == userOne && conversation.getUserTwo() == userTwo
-              || conversation.getUserTwo() == userOne && conversation.getUserOne() == userTwo) {
-                return conversation.getId();
+        // Kiểm tra nếu tồn tại cuộc trò chuyện từ userOne đến userTwo
+        int id = conversationDao.getConversationId(userOne, userTwo);
+
+        // Nếu không có, kiểm tra theo hướng ngược lại
+        if (id == 0) {
+            id = conversationDao.getConversationId(userTwo, userOne);
+        }
+
+        // Nếu vẫn không tìm thấy, tạo mới cuộc trò chuyện
+        if (id == 0) {
+            Conversation conversation = new Conversation();
+            conversation.setUserOne(userOne);
+            conversation.setUserTwo(userTwo);
+            conversation.setTime(LocalDateTime.now());
+            conversation.setStatus("active");
+            id = conversationDao.addConversation(conversation);
+            if (id > 0) {
+                return id; // Trả về ID của cuộc trò chuyện mới
+            } else {
+                return 0; // Nếu có lỗi khi tạo cuộc trò chuyện mới, trả về 0
             }
         }
-        return 0;
+
+        return id; // Trả về ID của cuộc trò chuyện đã tồn tại
     }
 
     @Override
@@ -72,7 +98,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public boolean addReply(String text, int conversationId, int userId, String contentType, String contentUrl) throws SQLException {
+    public Reply addReply(String text, int conversationId, int userId, String contentType, String contentUrl) throws SQLException {
         Reply reply = new Reply();
         reply.setText(text);
         reply.setUserId(userId);
@@ -81,8 +107,11 @@ public class ConversationServiceImpl implements ConversationService {
         reply.setTime(LocalDateTime.now());
         reply.setContentType(contentType);
         reply.setContentUrl(contentUrl);
-        replyDao.addReply(reply);
-        return true;
+        reply.setId(replyDao.addReply(reply));
+        if (reply.getId() == 0) {
+            return null;
+        }
+        return reply;
     }
 
     @Override

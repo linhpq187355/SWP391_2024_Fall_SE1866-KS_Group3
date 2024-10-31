@@ -1,6 +1,6 @@
 /*
- * Copyright(C) 2024, Homesharing Inc.
- * Homesharing:
+ * Copyright(C) 2024, Home sharing Inc.
+ * Home sharing:
  *  Roommate Matching and Home Sharing Service
  *
  * Record of change:
@@ -21,11 +21,13 @@ public interface ConversationService {
 
     Map<User, Reply> getListUserConversation(int userId) throws SQLException;
 
+    List<Reply> getRepliesByConversationIdAndContentType(int conversationId, String contentType) throws SQLException;
+
     int getConversationId(int userOne, int userTwo) throws SQLException;
 
     List<Reply> getListReplyConversation(int conversationId) throws SQLException;
 
-    boolean addReply(String text, int conversationId, int userId, String contentType, String contentUrl) throws SQLException;
+    Reply addReply(String text, int conversationId, int userId, String contentType, String contentUrl) throws SQLException;
 
     User getMatchedUser(List<User> listUserConversation, int userTwo) throws SQLException;
 

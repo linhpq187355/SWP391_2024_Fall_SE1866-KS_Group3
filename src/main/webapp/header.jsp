@@ -40,7 +40,14 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
-
+    <style>
+        .chat-info{
+            max-width: 250px; /* Đặt chiều rộng tối đa cho tin nhắn */
+            overflow: hidden; /* Ẩn phần nội dung vượt quá chiều rộng */
+            white-space: nowrap; /* Không xuống dòng */
+            text-overflow: ellipsis; /* Thêm dấu ... cho nội dung cắt ngắn */
+        }
+    </style>
 </head>
 <body>
 <div class="header-connect">
@@ -104,7 +111,9 @@
                     </c:if>
 
                     <div class="dropdown ymm-sw" style="position: relative">
-                        <div style="border-radius: 5px;width: 10px;height: 10px;position: absolute;background-color: #FDC600;left: 20px;bottom: 22px;"></div>
+                        <c:if test="${requestScope.countNewMessage > 0}">
+                            <span id = "new-message-count" style="width: 15px; height: 15px; position: absolute; left: 25px; bottom: 25px; color: #ffffff; font-size: 12px; font-weight: bold; line-height: 15px; text-align: center; border-radius: 7.5px; background-color: #FDC600;">${requestScope.countNewMessage}</span>
+                        </c:if>
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-message dropdown-toggle" style="font-size: 2em"></i>
                         <div class="dropdown-menu navbar-nav" style="top: 4.4em; right: -3em; width: 23em">
@@ -124,8 +133,28 @@
                                             <h4 class="user-name">
                                                 <a href="chat-box?userId=${user.id}">${user.firstName} ${user.lastName}</a>
                                             </h4>
-                                            <span class="recent-chat">
-                                            ${reply.text} <!-- Hiển thị nội dung tin nhắn gần nhất -->
+                                            <span class="recent-chat" style="${reply.status == 'sent' ? 'font-weight: bold;' : ''}"> <%-- Add font-weight-bold class if status is 'sent' --%>
+                                            <c:choose>
+                                                <c:when test="${not empty reply.contentType}">
+                                                    <c:if test="${reply.userId == userIdFromCookie}">
+                                                        Bạn:
+                                                    </c:if>
+                                                    <c:choose>
+                                                        <c:when test="${reply.contentType == 'image'}">
+                                                            Đã gửi ảnh
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            Đã gửi ${reply.contentType}
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:if test="${reply.userId == userIdFromCookie}">
+                                                        Bạn:
+                                                    </c:if>
+                                                    ${reply.text}
+                                                </c:otherwise>
+                                            </c:choose>
                                             </span>
                                         </div>
                                     </div>
@@ -135,18 +164,24 @@
                         </div>
                     </div>
                     <div class="dropdown ymm-sw" style="position: relative">
-                        <div style="border-radius: 5px;width: 10px;height: 10px;position: absolute;background-color: #FDC600;left: 20px;bottom: 22px;"></div>
+                        <c:if test="${unreadCount > 0}">
+                            <span id = "new-notification-count" style="width: 15px; height: 15px; position: absolute; left: 25px; bottom: 25px; color: #ffffff; font-size: 12px; font-weight: bold; line-height: 15px; text-align: center; border-radius: 7.5px; background-color: #FDC600;">${unreadCount}</span>
+                        </c:if>
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-bell dropdown-toggle" style="font-size: 2em"></i>
-                        <ul class="dropdown-menu navbar-nav"
-                            style="top: 4.4em; right: -1.5em; width: 27em; padding-bottom: 1em">
-                            <li>
-                                <a href="index-2.html" class="li-no">Thông tin nhà của bạn đã được xác thực</a>
-                            </li>
-                            <li>
-                                <a href="index-3.html" class="li-no">ABC đã bình luận trên bài viết của bạn
-                                    shcakshka</a>
-                            </li>
+                        <!-- Dropdown danh sách thông báo -->
+                        <ul class="dropdown-menu navbar-nav" style="top: 4.4em; right: -1.5em; width: 27em; padding-bottom: 1em">
+                            <c:forEach var="notification" items="${notifications}">
+                                <li>
+                                    <a href="notification?type=${notification.type}" class="li-no" style="<c:if test='${notification.status == "sent"}'>font-weight: bold;</c:if>">
+                                            ${notification.content}
+                                    </a>
+                                </li>
+                            </c:forEach>
+                            <c:if test="${notifications.isEmpty()}">
+                                <li><a class="li-no">Không có thông báo mới</a></li>
+                            </c:if>
+                            <li><a href="notification" class="li-no" style="font-weight: normal;">Tất cả thông báo</a></li>
                         </ul>
                     </div>
                     <div class="dropdown ymm-sw">
@@ -193,8 +228,6 @@
 
                         </ul>
                     </div>
-
-
                 </div>
             </c:if>
             <c:if test="${empty cookie.id}">
@@ -238,6 +271,5 @@
 <script src="assets/js/icheck.min.js"></script>
 <script src="assets/js/price-range.js"></script>
 <script src="assets/js/main.js"></script>
-
 </body>
 </html>

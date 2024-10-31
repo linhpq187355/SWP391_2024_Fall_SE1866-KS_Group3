@@ -1,42 +1,65 @@
 <%--
   Created by IntelliJ IDEA.
-  User: LNV
+  User: ManhNC
   Date: 25/09/2024
   Time: 20:27
   To change this template use File | Settings | File Templates.
 --%>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html lang="vi" xml:lang="vi">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-    <title>Error</title>
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/error-404s/error-404-1/assets/css/error-404-1.css">
+    <meta charset="UTF-8">
+    <title>404 Not Found</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #fa8c0f;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .container h1 {
+            font-size: 10em;
+            margin: 0;
+        }
+        .container h2 {
+            font-size: 2em;
+            margin: 0;
+        }
+        .container p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        .container a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.2em;
+            border: 2px solid #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container a:hover {
+            background-color: #333;
+            color: #FFD700;
+        }
+    </style>
 </head>
 <body>
-<!-- Error 404 Template 1 - Bootstrap Brain Component -->
-<section class="py-3 py-md-5 min-vh-100 d-flex justify-content-center align-items-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="text-center">
-                    <h2 class="d-flex justify-content-center align-items-center gap-2 mb-4">
-                        <span class="display-1 fw-bold">4</span>
-                        <i class="bi bi-exclamation-circle-fill text-danger display-4"></i>
-                        <span class="display-1 fw-bold bsb-flip-h">4</span>
-                    </h2>
-                    <h3 class="h2 mb-2">Oops! You're lost.</h3>
-                    <p class="mb-5">The page you are looking for was not found.</p>
-                    <c:if test="${not empty requestScope.error}">
-                        <div class="alert alert-danger">${requestScope.error}</div>
-                    </c:if>
-                    <button class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" onclick="location.href='/home.jsp'">Back to Home</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="container">
+    <h1>404</h1>
+    <p>Xin lỗi, trang bạn tìm kiếm không tồn tại.</p>
+    <p>Vui lòng kiểm tra lại địa chỉ URL hoặc quay lại trang chính.</p>
+    <a href="<%= request.getContextPath() %>/home-page">Quay lại trang chính</a>
+</div>
 </body>
 </html>

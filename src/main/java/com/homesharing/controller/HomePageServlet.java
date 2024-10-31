@@ -12,14 +12,10 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.*;
 import com.homesharing.dao.impl.*;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.*;
-import com.homesharing.service.ConversationService;
-import com.homesharing.service.PreferenceService;
-import com.homesharing.service.UserService;
-import com.homesharing.service.impl.ConversationServiceImpl;
-import com.homesharing.service.impl.HomePageServiceImpl;
-import com.homesharing.service.impl.PreferenceServiceImpl;
-import com.homesharing.service.impl.UserServiceImpl;
+import com.homesharing.service.*;
+import com.homesharing.service.impl.*;
 import com.homesharing.util.CookieUtil;
 import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
@@ -27,7 +23,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.homesharing.service.HomePageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,9 +49,11 @@ public class HomePageServlet extends HttpServlet {
     private UserDAO userDAO;
     private UserService userService;
     private ReplyDAO replyDAO;
+    private NotificationDAO notificationDAO;
     private PreferenceService preferenceService;
     private ConversationDAO conversationDAO;
     private ConversationService conversationService;
+    private NotificationService notificationService;
 
     /**
      * Initializes the servlet by creating an instance of HomePageService.
@@ -71,7 +68,9 @@ public class HomePageServlet extends HttpServlet {
         priceDAO = new PriceDAOImpl();
         userDAO = new UserDAOImpl();
         replyDAO = new ReplyDAOImpl();
+        notificationDAO = new NotificationDAOImpl();
         conversationDAO = new ConversationDAOImpl();
+        notificationService = new NotificationServiceImpl(notificationDAO);
         conversationService = new ConversationServiceImpl(userDAO, conversationDAO, replyDAO);
         PreferenceDAO preferenceDAO = new PreferenceDAOImpl();
         // Initialize the home page service with the required DAOs
@@ -107,9 +106,15 @@ public class HomePageServlet extends HttpServlet {
             User user = userDAO.getUser(Integer.parseInt(userId));
             try {
                 int uId = Integer.parseInt(userId);
+                int countNewMessage = replyDAO.countNewMessages(uId);
                 Map<User, Reply> listUserConversation = conversationService.getListUserConversation(uId);
                 req.setAttribute("listUserConversation", listUserConversation);
-            } catch (SQLException e) {
+                req.setAttribute("countNewMessage", countNewMessage);
+                List<Notification> notifications = notificationService.getUnReadNotifications(uId);
+                int unreadCount = notifications.size();
+                req.setAttribute("unreadCount", unreadCount);
+                req.setAttribute("notifications", notifications);
+            } catch (SQLException | GeneralException e) {
                 logger.error("Error home-page: {}", e.getMessage(), e); // Log the exception with stack trace
                 // Handle invalid user ID format
                 ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra, vui lòng đăng nhập lại.");
@@ -123,7 +128,6 @@ public class HomePageServlet extends HttpServlet {
             }
 
         }
-
 
         // Set the home and price data as request attributes for use in the JSP
         req.setAttribute("homes", homes);

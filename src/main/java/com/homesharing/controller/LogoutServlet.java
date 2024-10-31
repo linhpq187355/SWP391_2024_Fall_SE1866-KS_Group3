@@ -79,10 +79,9 @@ public class LogoutServlet extends HttpServlet {
             req.getSession().setAttribute("message", "Đăng xuất thành công.");
             req.getSession().setAttribute("messageType", "success");
             resp.sendRedirect(req.getContextPath() + "/home-page");
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.error("Error processing logout request: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your logout request.");
+            ServletUtils.handleError(req, resp, 500);
         }
 
     }

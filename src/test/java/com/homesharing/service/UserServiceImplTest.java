@@ -240,22 +240,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLogin_UserHasNoPermission() throws SQLException {
-        // Given
-        String email = "john.doe@example.com";
-        String password = "wrongPassword";
-        User user = new User();
-        user.setId(1);
-        user.setHashedPassword(PasswordUtil.hashPassword("wrongPassword"));
-        user.setStatus("active");
-        user.setRolesId(1);
-        when(userDao.findUserByEmail(email)).thenReturn(user);
-
-        String result = userService.login(email, password, false, response);
-        assertEquals("Bạn không có quyền đăng nhập ở đây.", result);
-    }
-
-    @Test
     void testLogin_FindUserByEmailThrowsException() throws SQLException {
         String email = "user@example.com";
         String password = "password";

@@ -1,17 +1,18 @@
 package com.homesharing.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Conversation {
     private int id;
     private int userOne;
     private int userTwo;
-    private Date time;
+    private LocalDateTime time;
     private String status;
     public Conversation() {
 
     }
-    public Conversation(int id, int userOne, int userTwo, Date time, String status) {
+    public Conversation(int id, int userOne, int userTwo, LocalDateTime time, String status) {
         this.id = id;
         this.userOne = userOne;
         this.userTwo = userTwo;
@@ -37,10 +38,10 @@ public class Conversation {
     public void setUserTwo(int userTwo) {
         this.userTwo = userTwo;
     }
-    public Date getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
-    public void setTime(Date time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
     public String getStatus() {

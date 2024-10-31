@@ -36,8 +36,8 @@ public class AuthenticationFilter implements Filter {
 
     private static final List<String> excludedUrls = Arrays.asList(
             "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/","/set-role","/getDistricts","/getWards",
-            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google",
-            "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp","/error.jsp","/home-list",
+            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google","/500.jsp","/403.jsp", "/400.jsp",
+            "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp","/error.jsp","/home-list", "/401.jsp",
             "/terms.jsp", "/announce.jsp", "/about-us.jsp", "/404.jsp", "/input-otp.jsp","/input-otp-2.jsp");
 
     /**

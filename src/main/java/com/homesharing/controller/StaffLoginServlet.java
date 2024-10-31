@@ -68,7 +68,7 @@ public class StaffLoginServlet extends HttpServlet {
             req.getRequestDispatcher("/staff-login.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             logger.error("Error forwarding to login page: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");
+            ServletUtils.handleError(req, resp, 404);
         }
     }
 
@@ -106,7 +106,7 @@ public class StaffLoginServlet extends HttpServlet {
             }
         } catch (Exception e) {
             logger.error("Error processing login request: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");
+            ServletUtils.handleError(req, resp, 404);
         }
     }
 }
