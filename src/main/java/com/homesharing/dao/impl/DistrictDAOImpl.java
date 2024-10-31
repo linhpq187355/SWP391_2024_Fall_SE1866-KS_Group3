@@ -65,7 +65,7 @@ public class DistrictDAOImpl implements DistrictDAO {
      */
     @Override
     public District getDistrictById(int id) {
-        String sql = "SELECT [id],[name],[status] FROM [dbo].[Districts] WHERE id=?";
+        String sql = "SELECT * FROM [dbo].[Districts] WHERE id=?";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -80,6 +80,7 @@ public class DistrictDAOImpl implements DistrictDAO {
                 district.setId(resultSet.getInt("id"));
                 district.setName(resultSet.getString("name"));
                 district.setStatus(resultSet.getString("status"));
+                district.setProvinceId(resultSet.getInt("provincesId"));
                 return district;
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
