@@ -1,13 +1,13 @@
 package com.homesharing.model;
 
-public class UserPermisson {
+public class UserPermission {
     private int userId;
     private int permissonId;
 
-    public UserPermisson() {
+    public UserPermission() {
     }
 
-    public UserPermisson(int userId, int permissonId) {
+    public UserPermission(int userId, int permissonId) {
         this.userId = userId;
         this.permissonId = permissonId;
     }
