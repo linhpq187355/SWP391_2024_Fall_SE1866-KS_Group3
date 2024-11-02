@@ -151,9 +151,4 @@ public class PermissionDAOImpl extends DBContext implements PermissionDAO {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-//        PermissionDAOImpl dao = new PermissionDAOImpl();
-//        System.out.println(dao.fetchByName("PERMISSION_VIEW_ACCOUNTS").getDescription());
-    }
 }

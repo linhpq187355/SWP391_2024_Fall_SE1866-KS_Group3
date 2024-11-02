@@ -8,6 +8,7 @@
 
 package com.homesharing.controller;
 
+import com.homesharing.model.Permission;
 import com.homesharing.model.Role;
 import com.homesharing.model.User;
 import com.homesharing.service.UserManagementService;
@@ -33,6 +34,10 @@ public class ListPermissionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> userList = userMgtService.getAllUsers();
+        for (int i=0; i<userList.size(); i++) {
+            List<Permission> permissions = userMgtService.fetchUserPermissions(userList.get(i).getId());
+            userList.get(i).setPermissions(permissions);
+        }
         List<Role> roleList = userMgtService.getAllRoles();
         request.setAttribute("userList", userList);
         request.setAttribute("roleList", roleList);

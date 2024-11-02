@@ -657,74 +657,56 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header" style="display: flex; justify-content: space-between">
-                                <h4 class="card-title">Danh sách người dùng</h4>
-                                <button class="btn btn-secondary"
-                                        onclick="window.location.href='dashboard/create-account'">
-                        <span class="btn-label">
-                          <i class="fa fa-plus"></i>
-                        </span>
-                                    Tạo tài khoản
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="basic-datatables" class="display table table-striped">
-
-                                        <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Email</th>
-                                            <th>Vai trò</th>
-                                            <th>Trạng thái</th>
-                                            <th>Thao tác</th>
-                                        </tr>
-                                        </thead>
-                                        <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                        </tfoot>
-
-                                        <tbody>
-                                        <c:forEach items="${requestScope.userList}" var="user">
-                                            <tr>
-                                                <td>${user.id}</td>
-                                                <td>${user.email}</td>
-                                                <td class="text-capitalize">${user.roleName}</td>
-                                                <c:if test="${user.status=='active'}">
-                                                    <td class="text-success text-capitalize">${user.status}</td>
-                                                </c:if>
-                                                <c:if test="${user.status!='active'}">
-                                                    <td class="text-danger text-capitalize">Inactive</td>
-                                                </c:if>
-                                                <td class="space-y-4 text-center">
-                                                    <a href="#" class="user-detail"
-                                                       data-id="${user.id}"
-                                                       data-full-name="${user.firstName} +' ' + ${user.lastName}"
-                                                       data-email="${user.email}"
-                                                       data-role="${user.roleName}"
-                                                       data-status="${user.status}"
-                                                       data-phone-num="${user.phoneNumber}"
-                                                       data-dob="${user.dob}"
-                                                       data-address="${user.address}"
-                                                    >
-                                                        <i class="fas fa-eye fa-lg" style="color: #fa8650;"></i>
-                                                    </a>
-                                                    <a href="dashboard/permission-update?userId=${user.id}">
-                                                        <i class="fas fa-key fa-lg" style="color: #fa8650;"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
+                            <form action="${pageContext.request.contextPath}/dashboard/permission-update" method="post">
+                                <input type="hidden" name="userId" value="${requestScope.selectedUser.id}" />
+                                <div class="card-header" style="display: flex; justify-content: space-between">
+                                    <h4 class="card-title">Cấp quyền</h4>
+                                    <button class="btn btn-secondary" type="submit">
+                                    <span class="btn-label">
+                                      <i class="fas fa-floppy-disk"></i>
+                                    </span>
+                                        Lưu thông tin
+                                    </button>
                                 </div>
-                            </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="basic-datatables" class="display table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Mã cấp quyền</th>
+                                                <th>Mô tả</th>
+                                                <th class="text-center">Cho phép</th>
+                                                <th class="text-center">Từ chối</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach items="${requestScope.permissionList}" var="perm">
+                                                <tr>
+                                                    <td>${perm.id}</td>
+                                                    <td>${perm.name}</td>
+                                                    <td class="text-capitalize">${perm.description}</td>
+                                                    <td class="text-center">
+                                                        <c:set var="isChecked" value="false"/>
+                                                        <c:if test="${not empty requestScope.userPermission}">
+                                                            <c:forEach items="${requestScope.userPermission}" var="userPerm">
+                                                                <c:if test="${userPerm.name == perm.name}">
+                                                                    <c:set var="isChecked" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <input type="radio" name="${perm.name}" value="allow" <c:if test="${isChecked}">checked</c:if> >
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="radio" name="${perm.name}" value="reject" <c:if test="${!isChecked}">checked</c:if> >
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -756,41 +738,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="userDetailModal" tabindex="-1" aria-labelledby="userDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="userDetailModalLabel">Chi tiết tài khoản</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-hashtag"></i> <strong>UID:</strong> <span id="userId"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-envelope"></i> <strong>Email:</strong> <span id="userEmail"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-id-badge"></i> <strong>Vai trò:</strong> <span id="userRole"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span id="userStatus"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-phone"></i> <strong>SĐT:</strong> <span id="userPhoneNum"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-map"></i> <strong>Địa chỉ:</strong> <span id="userAddress"></span></h6>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!--   Core JS Files   -->
 <script src="./assets/js/core/jquery-3.7.1.min.js"></script>
