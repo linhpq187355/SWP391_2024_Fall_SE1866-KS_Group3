@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -169,8 +170,133 @@ class UserServiceImplTest {
 
         String result = userService.login("user@example.com", "Password123",false, response);
 
-        assertEquals("Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.", result);
+        assertEquals("not-verify", result);
         verify(tokenService).sendToken("user@example.com", 1); // Should send token
+    }
+
+    @Test
+    void testLoginUserNotFound() throws SQLException {
+        // Given
+        String email = "unknown@example.com";
+        String password = "password123";
+
+        when(userDao.findUserByEmail(email)).thenReturn(null);
+
+        // When
+        String result = userService.login(email, password, false, response);
+
+        // Then
+        assertEquals("Email hoặc mật khẩu không đúng", result);
+    }
+
+    @Test
+    void testLogin_UserHasNoPassword() throws SQLException {
+        String email = "john.doe@example.com";
+        String password = null;
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(null);
+        user.setStatus("active");
+        when(userDao.findUserByEmail(email)).thenReturn(user);
+
+        String result = userService.login(email, password, false, response);
+        assertEquals("Tài khoản này chưa có mật khẩu, vui lòng đăng nhập bằng Google và cập nhật mật khẩu.", result);
+    }
+
+    @Test
+    void testLoginInvalidPassword() throws SQLException {
+        // Given
+        String email = "john.doe@example.com";
+        String password = "wrongPassword";
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword("password123"));
+        user.setStatus("active");
+        when(userDao.findUserByEmail(email)).thenReturn(user);
+
+        // When
+        String result = userService.login(email, password, false, response);
+
+        // Then
+        assertEquals("Email hoặc mật khẩu không đúng", result);
+    }
+
+    @Test
+    void testLoginUserNotActive() throws SQLException {
+        // Given
+        String email = "john.doe@example.com";
+        String password = "password123";
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword(password));
+        user.setStatus("inactive");
+        when(userDao.findUserByEmail(email)).thenReturn(user);
+
+        // When
+        String result = userService.login(email, password, false, response);
+
+        // Then
+        assertEquals("Tài khoản này đã bị khóa", result);
+    }
+
+    @Test
+    void testLogin_FindUserByEmailThrowsException() throws SQLException {
+        String email = "user@example.com";
+        String password = "password";
+
+        when(userDao.findUserByEmail(email)).thenThrow(new SQLException("Database error"));
+
+        assertThrows(SQLException.class, () -> {
+            userService.login(email, password, false, response);
+        });
+    }
+
+    @Test
+    void testLogin_FindTokenThrowsException() throws SQLException {
+        // Given
+        String email = "john.doe@example.com";
+        String password = "wrongPassword";
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword("wrongPassword"));
+        user.setStatus("active");
+        when(userDao.findUserByEmail(email)).thenReturn(user);
+        when(tokenDao.findToken(user.getId())).thenThrow(new SQLException("Database error"));
+
+        assertThrows(SQLException.class, () -> {
+            userService.login(email, password, false, response);
+        });
+    }
+
+    @Test
+    void testLogin_SendTokenThrowsException() throws SQLException {
+        // Given
+        String email = "john.doe@example.com";
+        String password = "wrongPassword";
+        User user = new User();
+        user.setId(1);
+        user.setHashedPassword(PasswordUtil.hashPassword("wrongPassword"));
+        user.setStatus("active");
+        when(userDao.findUserByEmail(email)).thenReturn(user);
+        Token mockToken = new Token(1,"123456", LocalDateTime.now(),false);
+        when(tokenDao.findToken(user.getId())).thenReturn(mockToken);
+        doThrow(new GeneralException("Token error")).when(tokenService).sendToken(email, user.getId());
+
+        assertThrows(GeneralException.class, () -> {
+            userService.login(email, password, false, response);
+        });
+    }
+
+    @Test
+    void testLogout_Success() {
+        // Test the logout method
+        String result = userService.logout(response);
+
+        // Verify the expected outcome
+        assertEquals("logout success", result);
+
+        // Verify that cookies were removed
+        verify(response, times(5)).addCookie(any());
     }
 
     @Test
@@ -194,21 +320,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testLoginUserNotFound() throws SQLException {
-        // Given
-        String email = "unknown@example.com";
-        String password = "password123";
-
-        when(userDao.findUserByEmail(email)).thenReturn(null);
-
-        // When
-        String result = userService.login(email, password, false, response);
-
-        // Then
-        assertEquals("Email hoặc mật khẩu không đúng", result);
-    }
-
-    @Test
     void testLoginStaff_UserNotFound() throws SQLException {
         when(userDao.findUserByEmail("unknown@example.com")).thenReturn(null);
 
@@ -217,23 +328,6 @@ class UserServiceImplTest {
         assertEquals("Email hoặc mật khẩu không đúng", result);
     }
 
-    @Test
-    void testLoginInvalidPassword() throws SQLException {
-        // Given
-        String email = "john.doe@example.com";
-        String password = "wrongPassword";
-        User user = new User();
-        user.setId(1);
-        user.setHashedPassword(PasswordUtil.hashPassword("password123"));
-        user.setStatus("active");
-        when(userDao.findUserByEmail(email)).thenReturn(user);
-
-        // When
-        String result = userService.login(email, password, false, response);
-
-        // Then
-        assertEquals("Email hoặc mật khẩu không đúng", result);
-    }
 
     @Test
     void testLoginStaff_IncorrectPassword() throws SQLException {
@@ -299,39 +393,10 @@ class UserServiceImplTest {
 
         String result = userService.loginStaff("admin@example.com", "Password123", response);
 
-        assertEquals("Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.", result);
+        assertEquals("Tài khoản này chưa được xác thực, liên hệ với quản trị viên để xác thực lại tài khoản.", result);
         verify(tokenService).sendToken("admin@example.com", 1); // Should send token
     }
 
-    @Test
-    void testLoginUserNotActive() throws SQLException {
-        // Given
-        String email = "john.doe@example.com";
-        String password = "password123";
-        User user = new User();
-        user.setId(1);
-        user.setHashedPassword(PasswordUtil.hashPassword(password));
-        user.setStatus("inactive");
-        when(userDao.findUserByEmail(email)).thenReturn(user);
-
-        // When
-        String result = userService.login(email, password, false, response);
-
-        // Then
-        assertEquals("Tài khoản này đã bị khóa", result);
-    }
-
-    @Test
-    void testLogout_Success() {
-        // Test the logout method
-        String result = userService.logout(response);
-
-        // Verify the expected outcome
-        assertEquals("logout success", result);
-
-        // Verify that cookies were removed
-        verify(response, times(5)).addCookie(any());
-    }
 
     @Test
     void testUpdateUserProfile_success() {
@@ -480,6 +545,165 @@ class UserServiceImplTest {
         });
 
         assertEquals("Failed to update user matching profile", thrown.getMessage());
+    }
+
+    @Test
+    void testAccountValidation_ValidInput() {
+        String result = userService.validateAccount("John", "Doe", "john.doe@example.com", "password123", "password123", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("Valid", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidFirstName_Numbers() {
+        String result = userService.validateAccount("John123", "Doe", "john.doe@example.com", "password123", "password123", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("First name can only contain letters and spaces.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidFirstName_Empty() {
+        String result = userService.validateAccount("", "Doe", "john.doe@example.com", "password123", "password123", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("First name can only contain letters and spaces.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidLastName_Numbers() {
+        String result = userService.validateAccount("John", "Doe123", "john.doe@example.com", "password123", "password123", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("Last name can only contain letters and spaces.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidLastName_Empty() {
+        String result = userService.validateAccount("John", "", "john.doe@example.com", "password123", "password123", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("Last name can only contain letters and spaces.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidEmail() {
+        String result = userService.validateAccount("John", "Doe", "invalidEmail@", "password123", "password123", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("Invalid email format.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidPassword_Length() {
+        String result = userService.validateAccount("John", "Doe", "john.doe@example.com", "pass", "pass", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("Password must be at least 8 characters long.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidPassword_Mismatch() {
+        String result = userService.validateAccount("John", "Doe", "john.doe@example.com", "password123", "password321", 1, "male", "1234567890", "2000-01-01");
+        assertEquals("Password and confirm password do not match.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidDob_Empty() {
+        String result = userService.validateAccount("John", "Doe", "john.doe@example.com", "password123", "password123", 1, "male", "1234567890", "");
+        assertEquals("Date of birth cannot be empty.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidGender_Null() {
+        String result = userService.validateAccount("John", "Doe", "john.doe@example.com", "password123", "password123", 1, null, "1234567890", "2000-01-01");
+        assertEquals("Gender must be either 'male' or 'female'.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidGender_InvalidValue() {
+        String result = userService.validateAccount("John", "Doe", "john.doe@example.com", "password123", "password123", 1, "other", "1234567890", "2000-01-01");
+        assertEquals("Gender must be either 'male' or 'female'.", result);
+    }
+
+    @Test
+    void testAccountValidation_InvalidGender_Empty() {
+        String result = userService.validateAccount("John", "Doe", "john.doe@example.com", "password123", "password123", 1, "", "1234567890", "2000-01-01");
+        assertEquals("Gender must be either 'male' or 'female'.", result);
+    }
+
+    @Test
+    void testUpdatePassword_passwordIsNull() throws GeneralException {
+        int result = userService.updatePassword(1, 1, "oldPass", null);
+        assertEquals(-2, result);
+    }
+
+    @Test
+    void testUpdatePassword_passwordIsEmpty() throws GeneralException {
+        int result = userService.updatePassword(1, 1, "oldPass", "");
+        assertEquals(-2, result);
+    }
+
+    @Test
+    void testUpdatePassword_hadPassIsZero_oldPassIsNull() throws GeneralException {
+        int result = userService.updatePassword(1, 0, null, "newPass");
+        assertEquals(-2, result);
+    }
+
+    @Test
+    void testUpdatePassword_hadPassIsZero_oldPassIsEmpty() throws GeneralException {
+        int result = userService.updatePassword(1, 0, "", "newPass");
+        assertEquals(-2, result);
+    }
+
+    @Test
+    void testUpdatePassword_hadPassIsZero_hashedPasswordIsNull() throws GeneralException {
+        User user = new User();
+        user.setHashedPassword(null);
+        when(userDao.getUserById(1)).thenReturn(user);
+
+        int result = userService.updatePassword(1, 0, "oldPass", "newPass");
+        assertEquals(-1, result);
+    }
+
+    @Test
+    void testUpdatePassword_hadPassIsZero_hashedPasswordIsEmpty() throws GeneralException {
+        User user = new User();
+        user.setHashedPassword("");
+        when(userDao.getUserById(1)).thenReturn(user);
+
+        int result = userService.updatePassword(1, 0, "oldPass", "newPass");
+        assertEquals(-1, result);
+    }
+
+    @Test
+    void testUpdatePassword_hadPassIsZero_wrongOldPassword() throws GeneralException {
+        User user = new User();
+        user.setHashedPassword(PasswordUtil.hashPassword("correctOldPass"));
+        when(userDao.getUserById(1)).thenReturn(user);
+
+        int result = userService.updatePassword(1, 0, "wrongOldPass", "newPass");
+        assertEquals(-1, result);
+    }
+
+    @Test
+    void testUpdatePassword_hadPassIsZero_correctOldPassword() throws GeneralException {
+        User user = new User();
+        user.setHashedPassword(PasswordUtil.hashPassword("oldPass"));
+        when(userDao.getUserById(1)).thenReturn(user);
+        when(userDao.resetPassword("newPass", 1)).thenReturn(1);
+
+        int result = userService.updatePassword(1, 0, "oldPass", "newPass");
+        assertEquals(1, result);
+    }
+
+    @Test
+    void testUpdatePassword_hadPassIsOne() throws GeneralException {
+        when(userDao.resetPassword("newPass", 1)).thenReturn(1);
+
+        int result = userService.updatePassword(1, 1, null, "newPass");
+        assertEquals(1, result);
+    }
+
+    @Test
+    void testUpdatePassword_sqlExceptionFromResetPassword() throws GeneralException {
+        when(userDao.resetPassword("newPass", 1)).thenThrow(new GeneralException("Error in server."));
+
+        assertThrows(GeneralException.class, () -> userService.updatePassword(1, 1, null, "newPass"));
+    }
+
+    @Test
+    void testUpdatePassword_sqlExceptionFromGetUserById() throws GeneralException {
+        when(userDao.getUserById(1)).thenThrow(new GeneralException("Error in server."));
+
+        assertThrows(GeneralException.class, () -> userService.updatePassword(1, 0, "oldPass", "newPass"));
     }
 
 }

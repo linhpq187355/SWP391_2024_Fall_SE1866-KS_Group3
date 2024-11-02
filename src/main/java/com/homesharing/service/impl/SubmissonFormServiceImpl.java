@@ -35,6 +35,8 @@ import com.homesharing.model.Province;
 import com.homesharing.model.Ward;
 import com.homesharing.service.SubmissionFormService;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class SubmissonFormServiceImpl implements SubmissionFormService {
@@ -105,7 +107,7 @@ public class SubmissonFormServiceImpl implements SubmissionFormService {
     }
 
     @Override
-    public int saveHome(Home home) {
+    public int saveHome(Home home) throws SQLException, IOException, ClassNotFoundException {
         return homeDAO.saveHome(home);
     }
 

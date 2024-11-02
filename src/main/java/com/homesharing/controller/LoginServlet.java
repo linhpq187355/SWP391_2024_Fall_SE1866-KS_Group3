@@ -13,6 +13,8 @@ import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.exception.GeneralException;
+import com.homesharing.model.User;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.TokenServiceImpl;
@@ -27,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * The {@code LoginServlet} handles user login requests.  It processes login attempts,
@@ -40,20 +43,21 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class); // Logger instance
+    private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class); // Logger instance for logging errors and important events
 
-    private transient UserDAO userDao;
-    private transient UserService userService;// Mark userService as transient
+    private transient UserDAO userDao; // DAO for accessing user data
+    private transient UserService userService; // Service for user-related operations
 
     /**
-     * Initializes the servlet by instantiating the required DAOs and services.
+     * Initializes the servlet by instantiating the required DAO and service objects.
+     * This method is called once when the servlet is loaded into memory.
      */
     @Override
     public void init() {
-        userDao = new UserDAOImpl();
-        TokenDAO tokenDao = new TokenDAOImpl();
-        TokenService tokenService = new TokenServiceImpl(tokenDao);
-        userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);
+        userDao = new UserDAOImpl(); // Instantiate UserDAO for accessing user data
+        TokenDAO tokenDao = new TokenDAOImpl(); // Instantiate TokenDAO for managing tokens
+        TokenService tokenService = new TokenServiceImpl(tokenDao); // Instantiate TokenService with the TokenDAO
+        userService = new UserServiceImpl(userDao, tokenDao, tokenService,null); // Instantiate UserService with necessary dependencies
     }
 
     /**
@@ -68,11 +72,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            // Redirect to sign-up page
+            // Forward request to the login page (login.jsp)
             req.getRequestDispatcher("/login.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             logger.error("Error forwarding to login page: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");
+            ServletUtils.handleError(req, resp, 404); // Handle any errors by sending an error response
         }
     }
 
@@ -90,35 +94,43 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            // Get information from login form
+            // Retrieve login information from the request parameters
             String email = req.getParameter("email");
             String password = req.getParameter("password");
-            boolean rememberMe = req.getParameter("remember_me") != null;
+            boolean rememberMe = req.getParameter("remember_me") != null; // Check if remember-me option is selected
 
-            // Log the email for debugging (make sure to not log sensitive information)
-            logger.debug("Login attempt for email: {}", email);
-            // Pass information to service
+            // Pass credentials to the userService for authentication
             String result = userService.login(email, password, rememberMe, resp);
 
+            // Handle the result of the login attempt
             if (result.equals("success")) {
                 // Login successful, redirect to home page
                 req.getSession().setAttribute("message", "Đăng nhập thành công.");
                 req.getSession().setAttribute("messageType", "success");
                 resp.sendRedirect(req.getContextPath() + "/home-page");
             } else if (result.equals("not-verify")) {
-                int userId = userDao.findUserByEmail(email).getId();
-                req.getSession().setAttribute("userId",userId);
-                req.getRequestDispatcher("/input-otp.jsp").forward(req, resp);
+                // Account not verified, forward to OTP input page
+                User user = userDao.findUserByEmail(email); // Find user by email
+                if (user != null) {
+                    int userId = user.getId(); // Retrieve user ID
+                    req.getSession().setAttribute("userId", userId); // Store user ID in session
+                } else {
+                    req.setAttribute("error", "Không tìm thấy người dùng trong hệ thống."); // Error message if user is not found
+                    req.getRequestDispatcher("/login.jsp").forward(req, resp); // Forward back to login page
+                    return;
+                }
+                req.getRequestDispatcher("/input-otp.jsp").forward(req, resp); // Forward to OTP input page
             } else {
-                req.setAttribute("error", result);
+                // Login failed, set error message and forward to login page
+                req.setAttribute("error", result); // Set error message
                 if(result.equals("Email hoặc mật khẩu không đúng")) {
-                    req.setAttribute("email", email);
+                    req.setAttribute("email", email); // Preserve email for user to re-enter
                 }
                 req.getRequestDispatcher("/login.jsp").forward(req, resp);
             }
-        } catch (Exception e) {
+        } catch (SQLException | ServletException | IOException | GeneralException e) {
             logger.error("Error processing login request: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");
+            ServletUtils.handleError(req, resp, 500); // Handle errors
         }
     }
 }

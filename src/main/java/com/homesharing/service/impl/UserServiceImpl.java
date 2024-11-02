@@ -240,43 +240,51 @@ public class UserServiceImpl implements UserService {
      *
      * @param firstName      The first name of the user.
      * @param lastName       The last name of the user.
-     * @param email         The email address of the user.
-     * @param password      The password chosen by the user.
+     * @param email          The email address of the user.
+     * @param password       The password chosen by the user.
      * @param confirmPassword The confirmed password entered by the user.
-     * @param role          The role ID of the user.
-     * @param gender        The gender of the user ("male" or "female").
-     * @param phone         The phone number of the user.
-     * @param dob           The date of birth of the user (YYYY-MM-DD format).
-     * @return {@code true} if the account information is valid, {@code false} otherwise.
+     * @param role           The role ID of the user.
+     * @param gender         The gender of the user ("male" or "female").
+     * @param phone          The phone number of the user.
+     * @param dob            The date of birth of the user (YYYY-MM-DD format).
+     * @return A string containing the error message if invalid, or "Valid" if the account information is valid.
      */
     @Override
-    public boolean validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob) {
+    public String validateAccount(String firstName, String lastName, String email, String password, String confirmPassword, int role, String gender, String phone, String dob) {
         // Check if names contain only letters and spaces
-        if (!firstName.matches("[\\p{L}\\s]+") || !lastName.matches("[\\p{L}\\s]+")) {
-            return false;
+        if (!firstName.matches("[\\p{L}\\s]+")) {
+            return "First name can only contain letters and spaces.";
+        }
+        if (!lastName.matches("[\\p{L}\\s]+")) {
+            return "Last name can only contain letters and spaces.";
         }
 
         // Check if the email is valid
         String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
         if (!email.matches(emailRegex)) {
-            return false;
+            return "Invalid email format.";
         }
 
         // Check password length and confirmation
-        if (password.length() < 8 || !password.equals(confirmPassword)) {
-            return false;
+        if (password.length() < 8) {
+            return "Password must be at least 8 characters long.";
+        }
+        if (!password.equals(confirmPassword)) {
+            return "Password and confirm password do not match.";
         }
 
-        // Validate the new fields (dob and gender)
+        // Validate the date of birth (dob) field
         if (dob == null || dob.isEmpty()) {
-            return false;
+            return "Date of birth cannot be empty.";
         }
 
+        // Validate gender
         if (gender == null || (!gender.equals("male") && !gender.equals("female"))) {
-            return false;
+            return "Gender must be either 'male' or 'female'.";
         }
 
-        return true;
+        // All validations passed
+        return "Valid";
     }
 
     /**
@@ -382,16 +390,25 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String login(String email, String password, boolean rememberMe, HttpServletResponse response) throws SQLException {
+        // Validate input parameters
+        if (email == null || email.isEmpty() || !validateEmail(email)) {
+            return "Địa chỉ email không hợp lệ"; // Invalid email address
+        }
+        if (password == null || password.isEmpty()) {
+            return "Mật khẩu không được để trống"; // Password cannot be empty
+        }
+
         try{
         // Attempt to find the user by their email address
         User user = userDao.findUserByEmail(email);
 
-        // If the user does not exist, return false
+        // If the user does not exist, return an error message
         if (user == null) {
             // User does not exist
             return "Email hoặc mật khẩu không đúng";
         }
 
+        // Check if the user has a hashed password
         if(user.getHashedPassword() == null) {
             return "Tài khoản này chưa có mật khẩu, vui lòng đăng nhập bằng Google và cập nhật mật khẩu.";
         }
@@ -404,27 +421,21 @@ public class UserServiceImpl implements UserService {
 
         // Check if the user's status is active
         if (!user.getStatus().equals("active")) {
-            // User's status is not active
-            return "Tài khoản này đã bị khóa";
+            return "Tài khoản này đã bị khóa"; // User's account is locked
         }
 
-        int roleValue = user.getRolesId();
-        //check if user is not a host or tenant
-        if (roleValue == 1 || roleValue == 2) {
-            return "Bạn không có quyền đăng nhập ở đây.";
-        }
-
-        // Find token for user
+        // Find the token associated with the user
         Token token = tokenDao.findToken(user.getId());
 
-        // If the token does not exist, create a new one
+            // If the token does not exist or is not verified, send a new verification token
         if (token == null || !token.isVerified()) {
             tokenService.sendToken(email, user.getId());
-            return "not-verify";
+            return "not-verify"; // User not verified
         }
 
-        // identity max age
-        int cookieAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 1 week or 1 month
+        // Determine the max age for the cookies based on the 'remember me' option
+        int cookieAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 1 month or 1 week
+
         // Save user's information to cookies
         CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
         CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
@@ -432,9 +443,10 @@ public class UserServiceImpl implements UserService {
         CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
         CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
 
-        // Return true to indicate a successful login
+        // Return success message to indicate a successful login
         return "success";
         } catch (GeneralException e) {
+            // Handle any unexpected exceptions and rethrow with a custom message
             throw new GeneralException("Error:" ,e);
         }
     }
@@ -452,10 +464,10 @@ public class UserServiceImpl implements UserService {
      *         <li>-1: Incorrect old password provided.
      *         <li>-2: Invalid input (empty password or missing old password when required).
      *         </ul>
-     * @throws SQLException If a database error occurs.
+     * @throws GeneralException If a database error occurs.
      */
     @Override
-    public int updatePassword(int userId, int hadPass, String oldPass, String password) throws SQLException {
+    public int updatePassword(int userId, int hadPass, String oldPass, String password) throws GeneralException {
         if(password == null || password.isEmpty()) {
             return -2;
         }
@@ -464,10 +476,10 @@ public class UserServiceImpl implements UserService {
                 return -2;
             }
             User user = userDao.getUserById(userId);
-            if(user.getHashedPassword() == null || user.getHashedPassword().isEmpty()) {
-                return -2;
-            }
-            if(!user.getHashedPassword().equals(PasswordUtil.hashPassword(oldPass))) {
+            String hashedPassword = user.getHashedPassword();
+
+            if (hashedPassword == null || hashedPassword.isEmpty() ||
+                    !hashedPassword.equals(PasswordUtil.hashPassword(oldPass))) {
                 return -1;
             }
         }
@@ -518,7 +530,7 @@ public class UserServiceImpl implements UserService {
         // If the token does not exist, create a new one
         if (token == null || !token.isVerified()) {
             tokenService.sendToken(email, user.getId());
-            return "Tài khoản này chưa được xác thực, hãy click vào đường link trong email để xác thực tài khoản.";
+            return "Tài khoản này chưa được xác thực, liên hệ với quản trị viên để xác thực lại tài khoản.";
         }
 
         // identity max age

@@ -25,8 +25,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -38,16 +41,138 @@ import java.util.logging.Logger;
  * This class provides methods for CRUD operations and querying homes.
  */
 public class HomeDAOImpl extends DBContext implements HomeDAO {
-    private List<Home> homes = new ArrayList<>();
     // Logger for logging errors or information
     private static final Logger logger = Logger.getLogger(HomeDAOImpl.class.getName());
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HomeDAOImpl.class);
+
+    /**
+     * Update home info
+     *
+     * @param home
+     * @return home id indicate the task is success or not
+     */
+    public int updateHome(Home home) {
+        if (home == null || home.getId() <= 0) {
+            throw new IllegalArgumentException("Invalid homeId: " + home.getId());
+        }
+
+        List<String> updateColumns = new ArrayList<>();
+        List<Object> updateValues = new ArrayList<>();
+
+        if (home.getName() != null) {
+            updateColumns.add("name = ?");
+            updateValues.add(home.getName());
+        }
+        if (home.getAddress() != null) {
+            updateColumns.add("address = ?");
+            updateValues.add(home.getAddress());
+        }
+        if (home.getLongitude() != null && home.getLatitude() != null) {
+            updateColumns.add("latitude = ?");
+            updateColumns.add("longitude = ?");
+            updateValues.add(home.getLatitude());
+            updateValues.add(home.getLongitude());
+        }
+        if (home.getOrientation() != null) {
+            updateColumns.add("orientation = ?");
+            updateValues.add(home.getOrientation());
+        }
+        if (home.getArea() != null) {
+            updateColumns.add("area = ?");
+            updateValues.add(home.getArea());
+        }
+        if (home.getLeaseDuration() > 0) {
+            updateColumns.add("leaseDuration = ?");
+            updateValues.add(home.getLeaseDuration());
+        }
+        if (home.getMoveInDate() != null) {
+            updateColumns.add("moveInDate = ?");
+            updateValues.add(home.getMoveInDate());
+        }
+        if (home.getNumOfBedroom() > 0) {
+            updateColumns.add("numOfBedroom = ?");
+            updateValues.add(home.getNumOfBedroom());
+        }
+        if (home.getNumOfBath() > 0) {
+            updateColumns.add("numOfBath = ?");
+            updateValues.add(home.getNumOfBath());
+        }
+        if (home.getHomeDescription() != null) {
+            updateColumns.add("homeDescription = ?");
+            updateValues.add(home.getHomeDescription());
+        }
+        if (home.getTenantDescription() != null) {
+            updateColumns.add("tenantDescription = ?");
+            updateValues.add(home.getTenantDescription());
+        }
+        if (home.getModifiedDate() != null) {
+            updateColumns.add("modifiedDate = ?");
+            updateValues.add(java.sql.Timestamp.valueOf(home.getModifiedDate()));
+        }
+
+        if (updateColumns.isEmpty()) {
+            throw new IllegalArgumentException("No fields to update for homeId: " + home.getId());
+        }
+
+        String updateColumnsStr = String.join(", ", updateColumns);
+        String sql = "UPDATE Homes SET " + updateColumnsStr + " WHERE id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            int paramIndex = 1;
+            for (Object value : updateValues) {
+                preparedStatement.setObject(paramIndex++, value);
+            }
+            preparedStatement.setInt(paramIndex, home.getId());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            return home.getId();
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new IllegalArgumentException("Error updating home to the database: " + e.getMessage(), e);
+        }
+    }
+
+
+    /**
+     * Change home status
+     *
+     * @param homeId
+     * @param status
+     * @return home id indicate the success of the task or not
+     */
+    @Override
+    public int changeStatus(int homeId, String status) {
+        String[] allowedStatuses = {"active", "inactive", "pending", "sold"};
+        if (!Arrays.asList(allowedStatuses).contains(status)) {
+            throw new IllegalArgumentException("Invalid status. Status must be one of: " + Arrays.toString(allowedStatuses));
+        }
+        String sql = "UPDATE [dbo].[Homes] SET [status] = ? WHERE id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            int paramIndex = 1;
+            preparedStatement.setString(paramIndex, status);
+            preparedStatement.setInt(++paramIndex, homeId);
+
+            // Execute the update statement and capture affected rows
+            int affectedRows = preparedStatement.executeUpdate();
+
+            return affectedRows;
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            throw new IllegalArgumentException("Error updating home to the database: " + e.getMessage(), e);
+        }
+    }
 
 
     @Override
     public List<Home> getAllHomes() {
         List<Home> homes = new ArrayList<>();
-        String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [wardId], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
+        String sql = "SELECT [id], [name], [address], [longitude], [latitude], [orientation], [area], [leaseDuration], [moveInDate], [numOfBedroom], [numOfBath], [createdDate], [modifiedDate], [homeDescription], [tenantDescription], [wardsId], [homeTypeId], [createdBy] FROM [dbo].[Homes]";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -75,7 +200,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
                 home.setHomeDescription(resultSet.getString("homeDescription"));
                 home.setTenantDescription(resultSet.getString("tenantDescription"));
-                home.setWardId(resultSet.getInt("wardId"));
+                home.setWardId(resultSet.getInt("wardsId"));
                 home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                 home.setCreatedBy(resultSet.getInt("createdBy"));
 
@@ -109,8 +234,8 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      *
      * @param searchParams A map containing search criteria.
      * @return A list of homes matching the criteria.
-     * @throws SQLException            If a database access error occurs.
-     * @throws IOException             If an I/O error occurs.
+     * @throws SQLException           If a database access error occurs.
+     * @throws IOException            If an I/O error occurs.
      * @throws ClassNotFoundException If the JDBC driver class cannot be found.
      */
     @Override
@@ -118,12 +243,17 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         List<Home> homeList = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder(
-                "SELECT DISTINCT h.*, pri.id AS priceId, pri.price " +
+                "WITH LatestPrices AS (" +
+                        "    SELECT id AS priceId, price, Homesid, " +
+                        "           ROW_NUMBER() OVER(PARTITION BY Homesid ORDER BY id DESC) AS row_num " +
+                        "    FROM Prices" +
+                        ") " +
+                        "SELECT DISTINCT h.*, pri.priceId, pri.price " +
                         "FROM Homes h " +
                         "JOIN Wards w ON h.wardsId = w.id " +
                         "JOIN Districts d ON w.Districtsid = d.id " +
                         "JOIN Provinces p ON d.provincesId = p.id " +
-                        "LEFT JOIN Prices pri ON h.id = pri.Homesid " +
+                        "LEFT JOIN LatestPrices pri ON h.id = pri.Homesid AND pri.row_num = 1 " +
                         "WHERE 1=1"
         );
 
@@ -184,6 +314,15 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             sql.append(" WHERE feh.homesId = h.id AND fe.id IN (");
             sql.append(String.join(",", Collections.nCopies(fireEquipments.length, "?")));
             sql.append(")) = ").append(fireEquipments.length);
+        }
+
+        // Condition for createdBy
+        if (searchParams.containsKey("createdBy")) {
+            sql.append(" AND h.createdBy = ?");
+        }
+
+        if (searchParams.containsKey("status")) {
+            sql.append(" AND h.status = ?");
         }
 
         if (searchParams.containsKey("orderby")) {
@@ -284,6 +423,16 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 }
             }
 
+            if (searchParams.containsKey("createdBy")) {
+                int createdBy = Integer.parseInt(searchParams.get("createdBy").toString());
+                ps.setInt(paramIndex++, createdBy);
+            }
+
+            if (searchParams.containsKey("status")) {
+                String status = searchParams.get("status").toString();
+                ps.setString(paramIndex++, status);
+            }
+
             if (searchParams.containsKey("per_page")) {
                 int perPage = Integer.parseInt(searchParams.get("per_page").toString());
                 int targetPage = searchParams.containsKey("targetPage")
@@ -294,7 +443,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 ps.setInt(paramIndex++, offset);
                 ps.setInt(paramIndex, perPage);
             }
-            logger.info(sql.toString());
 
             resultSet = ps.executeQuery();
 
@@ -304,6 +452,11 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setName(resultSet.getString("name"));
                 home.setAddress(resultSet.getString("address"));
                 home.setArea(resultSet.getBigDecimal("area"));
+                home.setHomeDescription(resultSet.getString("homeDescription"));
+                home.setTenantDescription(resultSet.getString("tenantDescription"));
+                home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                home.setNumOfBath(resultSet.getInt("numOfBath"));
+                home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
                 home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
                 home.setPriceId(resultSet.getInt("priceId"));
                 home.setPrice(resultSet.getInt("price"));
@@ -795,10 +948,10 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
 
     @Override
     public Home getHomeById(int id) {
-        String sql = "SELECT [id], [name], [status] FROM [dbo].[Provinces] WHERE [id]=?";
+        String sql = "SELECT * FROM [dbo].[Homes] WHERE [id]=?";
 
         try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -818,7 +971,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                     home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
                     home.setHomeDescription(resultSet.getString("homeDescription"));
                     home.setTenantDescription(resultSet.getString("tenantDescription"));
-                    home.setWardId(resultSet.getInt("wardId"));
+                    home.setWardId(resultSet.getInt("wardsId"));
                     home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                     home.setCreatedBy(resultSet.getInt("createdBy"));
                     return home;
@@ -826,7 +979,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw as runtime exception to be handled by the service layer
-            throw new IllegalArgumentException("Error saving home to the database: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Error fetching home from the database: " + e.getMessage(), e);
         }
         return null;
     }
@@ -917,7 +1070,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setArea(resultSet.getBigDecimal("area"));
                 home.setLeaseDuration(resultSet.getInt("leaseDuration"));
                 home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
-                home.setWardId(resultSet.getInt("wardsId"));
                 matchingHomes.add(home);
             }
         } catch (SQLException e) {
@@ -1017,8 +1169,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         // Using try-with-resources to manage the database connection and resources
         try (Connection connection = DBContext.getConnection();
              // PreparedStatement with RETURN_GENERATED_KEYS to capture the inserted Home ID
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Setting parameters for the PreparedStatement using the Home object
             preparedStatement.setString(1, home.getName());
             preparedStatement.setString(2, home.getAddress());
@@ -1053,7 +1204,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             } else {
                 throw new SQLException("Creating home failed, no rows affected.");
             }
-
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw as runtime exception to be handled by the service layer
             throw new IllegalArgumentException("Error saving home to the database: " + e.getMessage(), e);
@@ -1121,5 +1271,50 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         }
 
         return homeList; // Return the list of homes
+    }
+
+    /**
+     * Get home object via author id
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Home> getHomesByUserId(int userId) {
+        List<Home> homes = new ArrayList<>();
+        String sql = "SELECT * FROM [dbo].[Homes] WHERE [createdBy]=?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Home home = new Home();
+                    home.setId(resultSet.getInt("id"));
+                    home.setName(resultSet.getString("name"));
+                    home.setAddress(resultSet.getString("address"));
+                    home.setLongitude(resultSet.getBigDecimal("longitude"));
+                    home.setLatitude(resultSet.getBigDecimal("latitude"));
+                    home.setOrientation(resultSet.getString("orientation"));
+                    home.setArea(resultSet.getBigDecimal("area"));
+                    home.setLeaseDuration(resultSet.getInt("leaseDuration"));
+                    home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
+                    home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
+                    home.setNumOfBath(resultSet.getInt("numOfBath"));
+                    home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                    home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
+                    home.setHomeDescription(resultSet.getString("homeDescription"));
+                    home.setTenantDescription(resultSet.getString("tenantDescription"));
+                    home.setWardId(resultSet.getInt("wardsId"));
+                    home.setHomeTypeId(resultSet.getInt("homeTypeId"));
+                    home.setCreatedBy(resultSet.getInt("createdBy"));
+                    homes.add(home);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            throw new IllegalArgumentException("Error fetch home from the database: " + e.getMessage(), e);
+        }
+        return homes;
     }
 }

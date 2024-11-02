@@ -7,7 +7,6 @@ public class Price {
     private int price;
     private int homesId;
     private LocalDateTime createdDate;
-    private int homeId;
 
     public Price() {
     }

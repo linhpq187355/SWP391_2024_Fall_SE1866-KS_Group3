@@ -11,6 +11,7 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.UserServiceImpl;
@@ -132,15 +133,16 @@ public class UpdatePasswordServlet extends HttpServlet {
         try {
             int result = userService.updatePassword(userId, hadPass, oldPassword, password);
             if(result == 1) {
-                req.setAttribute("message", "Cập nhật mật khẩu thành công.");
-                req.getRequestDispatcher("/user-security.jsp").forward(req, resp);
+                req.getSession().setAttribute("message", "Cập nhật mật khẩu thành công.");
+                req.getSession().setAttribute("messageType", "success");
+                resp.sendRedirect(req.getContextPath() + "/user-security");
             } else if (result == -1) {
                 req.setAttribute("error", "Mật khẩu cũ không khớp.");
                 req.getRequestDispatcher("/update-password.jsp").forward(req, resp);
             } else {
                 ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
             }
-        } catch (SQLException e) {
+        } catch (GeneralException e) {
             ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
         }
     }

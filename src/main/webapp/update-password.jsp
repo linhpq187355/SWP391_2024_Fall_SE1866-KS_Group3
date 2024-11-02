@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: LNV
+  User: ManhNC
   Date: 22/09/2024
   Time: 22:39
   To change this template use File | Settings | File Templates.
@@ -120,6 +120,12 @@
         // Check password length
         if (password.length < 8) {
             alert("Mật khẩu phải có ít nhất 8 ký tự!");
+            return false;
+        }
+
+        // Check if passwords match
+        if (password === oldPassword) {
+            alert("Mật khẩu mới phải khác mật khẩu cũ!");
             return false;
         }
         // Check if passwords match

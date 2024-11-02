@@ -80,24 +80,70 @@
     <div class="container">
         <div class="col-md-12 large-search">
             <div class="search-form wow pulse">
-                <form action="${pageContext.request.contextPath}/searchHomes" method="GET" class="form-inline" onsubmit="return validateSearchInput()">
+                <form action="searchHomes" method="GET" class="form-inline">
                     <div class="col-md-12">
                         <div class="col-md-12">
-                            <input id="searchInput" type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
+                            <input  id="searchInput" type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
                         </div>
                     </div>
-                    <div class="col-md-12" style="color: red;">
-                        <span id="error-message"></span>
+                    <div class="col-md-12 ">
+                        <div class="search-row">
+
+                            <div class="col-sm-3">
+                                <label for="price-range">Price range ($):</label>
+                                <input type="text" class="span2" value="" data-slider-min="0"
+                                       data-slider-max="100000" data-slider-step="5"
+                                       data-slider-value="[${param.minPrice != null ? param.minPrice : 0}, ${param.maxPrice != null ? param.maxPrice : 100000}]"
+                                       id="price-range" name="price-range" onchange="updatePriceValues()"><br />
+                                <b class="pull-left color">0$</b>
+                                <b class="pull-right color">100000$</b>
+                            </div>
+                            <input type="hidden" name="minPrice" id="minPrice" value="${param.minPrice != null ? param.minPrice : 0}">
+                            <input type="hidden" name="maxPrice" id="maxPrice" value="${param.maxPrice != null ? param.maxPrice : 100000}">
+                            <!-- End of  -->
+
+                            <div class="col-sm-3">
+                                <label for="property-geo">Property geo (m2) :</label>
+                                <input type="text" class="span2" value="" data-slider-min="0"
+                                       data-slider-max="600" data-slider-step="5"
+                                       data-slider-value="[50,450]" id="property-geo" ><br />
+                                <b class="pull-left color">40m</b>
+                                <b class="pull-right color">12000m</b>
+                            </div>
+                            <!-- End of  -->
+
+                            <div class="col-sm-3">
+                                <label for="price-range">Min baths :</label>
+                                <input type="text" class="span2" value="" data-slider-min="0"
+                                       data-slider-max="600" data-slider-step="5"
+                                       data-slider-value="[250,450]" id="min-baths" ><br />
+                                <b class="pull-left color">1</b>
+                                <b class="pull-right color">120</b>
+                            </div>
+                            <!-- End of  -->
+
+                            <div class="col-sm-3">
+                                <label for="property-geo">Min bed :</label>
+                                <input type="text" class="span2" value="" data-slider-min="0"
+                                       data-slider-max="600" data-slider-step="5"
+                                       data-slider-value="[250,450]" id="min-bed" ><br />
+                                <b class="pull-left color">1</b>
+                                <b class="pull-right color">120</b>
+                            </div>
+                            <!-- End of  -->
+
+                        </div>
+                        <!-- End of  -->
+
                     </div>
                     <div class="center">
-                        <input type="submit" value="Tìm kiếm" class="btn btn-default btn-lg-sheach">
+                        <input type="submit" value="" class="btn btn-default btn-lg-sheach">
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
-
+</div>
 
 
 <!-- property area -->
@@ -130,9 +176,10 @@
                     <div class="col-sm-6 col-md-3 p0">
                         <div class="box-two proerty-item">
                             <div class="item-thumb">
-                                <!-- Update the href to point to home detail page with home ID -->
                                 <a href="home-detail?id=${homes.id}">
-                                    <img class="property-image" src="${(homes.images != null && !homes.images.isEmpty()) ? homes.images[0] : 'assets/img/demo/property-1.jpg'}">
+                                    <img class="property-image"
+                                         src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/social_big/dribbble_grey.png'}"
+                                         alt="Property Image">
                                 </a>
                             </div>
                             <div class="item-entry overflow">
@@ -460,6 +507,16 @@
             return true;
         }
     </script>
+<script>
+    function updatePriceValues() {
+        // Lấy giá trị từ slider
+        var priceRange = document.getElementById('price-range').value;
+        var values = priceRange.split(','); // Tách giá trị
 
+        // Cập nhật các input ẩn
+        document.getElementById('minPrice').value = values[0];
+        document.getElementById('maxPrice').value = values[1];
+    }
+</script>
 </body>
 </html>

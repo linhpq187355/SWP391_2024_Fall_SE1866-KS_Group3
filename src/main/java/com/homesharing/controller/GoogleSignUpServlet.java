@@ -110,7 +110,7 @@ public class GoogleSignUpServlet extends HttpServlet {
 
         } catch (SQLException e) {
             logger.error("Error during Google sign-up/login: {}", e.getMessage(), e);
-            ServletUtils.handleError(response, "Error while processing your request."); // Generic error message for the user.
+            ServletUtils.handleError(request, response, 404); // Generic error message for the user.
         }
     }
 }

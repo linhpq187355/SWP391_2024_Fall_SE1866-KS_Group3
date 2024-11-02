@@ -86,7 +86,7 @@ public class ReSendOtpServlet extends HttpServlet {
             req.getRequestDispatcher("/input-otp.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
             logger.warn("Invalid userId parameter: {}", userIdParam);
-            ServletUtils.handleError(resp, "Invalid user ID.");
+            ServletUtils.handleError(req, resp, 404);
         } catch (SQLException e) {
             logger.error("Error resending OTP: {}", e.getMessage(), e); // Log the exception with stack trace
             // Handle invalid user ID format

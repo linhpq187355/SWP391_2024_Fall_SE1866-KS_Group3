@@ -82,7 +82,7 @@ public class CreateAccountServlet extends HttpServlet {
             req.getRequestDispatcher("/create-account.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             logger.error("Error forwarding to create-account.jsp: {}", e.getMessage(), e);
-            ServletUtils.handleError(resp, "Error while processing your request.");// Use a generic error message for the user
+            ServletUtils.handleError(req, resp, 404);// Use a generic error message for the user
         }
     }
 
@@ -115,9 +115,9 @@ public class CreateAccountServlet extends HttpServlet {
 
 
         // Validate user input
-        boolean isValid = userService.validateAccount(firstName, lastName, email, password, confirmPassword, roleId, gender, phone, dob);
+        String isValid = userService.validateAccount(firstName, lastName, email, password, confirmPassword, roleId, gender, phone, dob);
 
-        if (isValid) {
+        if (isValid.equalsIgnoreCase("Valid")) {
             try {
                 // Attempt to register the user
                 int result = userService.createAccount(firstName, lastName, email, password, roleId, gender, phone, dob);

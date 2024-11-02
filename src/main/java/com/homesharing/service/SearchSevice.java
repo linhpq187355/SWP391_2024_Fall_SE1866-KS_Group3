@@ -43,6 +43,5 @@ public interface SearchSevice {
      * @throws SQLException If there’s an issue with the database access.
      * @throws ClassNotFoundException If the database driver class isn’t found.
      */
-    Price getPriceByHomeId(int homeId) throws SQLException, ClassNotFoundException;
 
 }

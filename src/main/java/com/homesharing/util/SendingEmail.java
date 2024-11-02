@@ -45,7 +45,20 @@ public class SendingEmail {
      * @throws GeneralException   if unable to find the configuration file or load properties
      */
     public static void sendMail(String to, String subject, String content) throws MessagingException {
+        // Validate input parameters
+        if (to == null || to.isEmpty()) {
+            throw new GeneralException("Invalid email address");
+        }
+        if (subject == null || subject.isEmpty()) {
+            throw new GeneralException("Email subject cannot be null or empty");
+        }
+        if (content == null) {
+            throw new GeneralException("Email content cannot be null");
+        }
+
         Properties configProps = new Properties();
+
+        // Load email configuration properties from the config file
         try (InputStream input = SendingEmail.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {
                 throw new GeneralException("Unable to find config.properties");
@@ -55,25 +68,40 @@ public class SendingEmail {
             throw new GeneralException("Error loading configuration file", e);
         }
 
+        // Get sender's email and password from the properties file
         String senderMail = configProps.getProperty("email.sender");
         String senderPassword = configProps.getProperty("email.password");
+
+        if (senderMail == null || senderMail.isEmpty()) {
+            throw new GeneralException("Sender email cannot be null or empty in config");
+        }
+        if (senderPassword == null || senderPassword.isEmpty()) {
+            throw new GeneralException("Sender password cannot be null or empty in config");
+        }
+
+        // Set up mail server properties
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.starttls.enable", "true");
+
+        // Create a session with an authenticator
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(senderMail, senderPassword);
             }
         });
+
+        // Create a message and set its properties
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(senderMail));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
         message.setSubject(subject);
         message.setContent(content, "text/html; charset=UTF-8");
-        Transport.send(message);
 
+        // Send the message
+        Transport.send(message);
     }
 }

@@ -16,7 +16,13 @@ import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
-import com.homesharing.model.*;
+import com.homesharing.model.Amentity;
+import com.homesharing.model.FireEquipment;
+import com.homesharing.model.Home;
+import com.homesharing.model.HomeType;
+import com.homesharing.model.Price;
+import com.homesharing.model.Province;
+import com.homesharing.service.HomePageService;
 import com.homesharing.service.impl.HomePageServiceImpl;
 import com.homesharing.service.impl.SubmissonFormServiceImpl;
 import com.homesharing.util.ServletUtils;
@@ -25,11 +31,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.homesharing.service.HomePageService;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -78,7 +87,7 @@ public class HomeListServlet extends HttpServlet {
      * @throws IOException      if the request for the GET could not be handled
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> searchParams0 = new HashMap<>();
         // Process request parameters
         String orderBy = req.getParameter("orderby");

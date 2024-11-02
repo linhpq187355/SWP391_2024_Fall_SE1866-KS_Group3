@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface ProvinceDAO {
     List<Province> getAllProvinces();
-
+    Province getProvinceById(int id);
 }

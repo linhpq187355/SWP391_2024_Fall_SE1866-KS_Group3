@@ -102,13 +102,21 @@ public class TokenServiceImpl implements TokenService {
      * @throws GeneralException If sending the email fails.
      */
     @Override
-    public void sendToken(String email, int userId) throws SQLException {
-        Token oldToken = tokenDao.findToken(userId);
-        String tokenCode;
-        LocalDateTime requestedTime;
-        tokenCode = SecureRandomCode.generateCode();
-        requestedTime = LocalDateTime.now();
+    public void sendToken(String email, int userId) throws SQLException, GeneralException {
+        // Validate input parameters
+        if (email == null || email.isEmpty()) {
+            throw new GeneralException("Please enter a valid email address");
+        }
+        if (userId <= 0) {
+            throw new GeneralException("Invalid user ID: " + userId);
+        }
 
+        // Retrieve the existing token from the database
+        Token oldToken = tokenDao.findToken(userId);
+        String tokenCode = SecureRandomCode.generateCode(); // Generate a secure random code
+        LocalDateTime requestedTime = LocalDateTime.now();
+
+        // Update the existing token or create a new one
         if (oldToken != null) {
             tokenDao.updateToken(userId, tokenCode, requestedTime);
         } else {
@@ -117,7 +125,7 @@ public class TokenServiceImpl implements TokenService {
             tokenDao.insertToken(newToken);
         }
 
-        // Get base URL from properties
+        // Prepare the email content
         String subject = "Xac nhan email!!!";
         String content = "<!DOCTYPE html>"
                 + "<html>"
@@ -131,9 +139,11 @@ public class TokenServiceImpl implements TokenService {
                 + "<p>Trân trọng,<br>Đội ngũ hỗ trợ</p>"
                 + "</body>"
                 + "</html>";
+
+        // Attempt to send the email
         try {
             SendingEmail.sendMail(email, subject, content);
-        } catch (MessagingException e) {
+        } catch (MessagingException | GeneralException e) {
             throw new GeneralException("Error while sending email");
         }
     }

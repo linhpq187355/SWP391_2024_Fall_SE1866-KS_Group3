@@ -12,27 +12,26 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.*;
 import com.homesharing.dao.impl.*;
-import com.homesharing.model.Home;
-import com.homesharing.model.Preference;
-import com.homesharing.model.Price;
-import com.homesharing.model.User;
-import com.homesharing.service.PreferenceService;
-import com.homesharing.service.UserService;
-import com.homesharing.service.impl.HomePageServiceImpl;
-import com.homesharing.service.impl.PreferenceServiceImpl;
-import com.homesharing.service.impl.UserServiceImpl;
+import com.homesharing.exception.GeneralException;
+import com.homesharing.model.*;
+import com.homesharing.service.*;
+import com.homesharing.service.impl.*;
 import com.homesharing.util.CookieUtil;
+import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.homesharing.service.HomePageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * HomePageServlet class handles HTTP requests to the "/home-page" endpoint.
@@ -42,13 +41,20 @@ import java.util.List;
 @WebServlet("/home-page")
 public class HomePageServlet extends HttpServlet {
 
+    private static final Logger logger = LoggerFactory.getLogger(HomePageServlet.class); // Logger instance
+
     private HomePageService homePageService;  // Service layer for home page logic
     private HomeDAO homeDAO;  // Data Access Object for accessing home data
     private PriceDAO priceDAO;  // Data Access Object for accessing price data
     private UserDAO userDAO;
     private WardDAO wardDAO;
     private UserService userService;
+    private ReplyDAO replyDAO;
+    private NotificationDAO notificationDAO;
     private PreferenceService preferenceService;
+    private ConversationDAO conversationDAO;
+    private ConversationService conversationService;
+    private NotificationService notificationService;
 
     /**
      * Initializes the servlet by creating an instance of HomePageService.
@@ -62,6 +68,11 @@ public class HomePageServlet extends HttpServlet {
         homeDAO = new HomeDAOImpl();
         priceDAO = new PriceDAOImpl();
         userDAO = new UserDAOImpl();
+        replyDAO = new ReplyDAOImpl();
+        notificationDAO = new NotificationDAOImpl();
+        conversationDAO = new ConversationDAOImpl();
+        notificationService = new NotificationServiceImpl(notificationDAO);
+        conversationService = new ConversationServiceImpl(userDAO, conversationDAO, replyDAO);
         wardDAO = new WardDAOImpl();
         PreferenceDAO preferenceDAO = new PreferenceDAOImpl();
         // Initialize the home page service with the required DAOs
@@ -95,6 +106,22 @@ public class HomePageServlet extends HttpServlet {
         Preference preference = new Preference();
         if(userId!=null){
             User user = userDAO.getUser(Integer.parseInt(userId));
+            try {
+                int uId = Integer.parseInt(userId);
+                int countNewMessage = replyDAO.countNewMessages(uId);
+                Map<User, Reply> listUserConversation = conversationService.getListUserConversation(uId);
+                req.setAttribute("listUserConversation", listUserConversation);
+                req.setAttribute("countNewMessage", countNewMessage);
+                List<Notification> notifications = notificationService.getUnReadNotifications(uId);
+                int unreadCount = notifications.size();
+                req.setAttribute("unreadCount", unreadCount);
+                req.setAttribute("notifications", notifications);
+            } catch (SQLException | GeneralException e) {
+                logger.error("Error home-page: {}", e.getMessage(), e); // Log the exception with stack trace
+                // Handle invalid user ID format
+                ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra, vui lòng đăng nhập lại.");
+
+            }
             if(user.getRolesId() == 3){
                 preference = preferenceService.getPreference(Integer.parseInt(userId));
                 matchingHost = preferenceService.listMatchingPreferences(Integer.parseInt(userId));

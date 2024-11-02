@@ -62,7 +62,7 @@ public class DBContextTest {
     public static void tearDown() throws SQLException {
         // Close connection after testing
         if (connection != null && !connection.isClosed()) {
-            dbContext.closeConnection();
+            dbContext.closeConnection(connection);
             LOGGER.log(Level.INFO, "Kết nối đã được đóng.");
         }
     }

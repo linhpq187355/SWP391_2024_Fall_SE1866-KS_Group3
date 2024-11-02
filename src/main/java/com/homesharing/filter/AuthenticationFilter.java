@@ -15,6 +15,9 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,10 +32,12 @@ import java.util.List;
 @Priority(1)
 public class AuthenticationFilter implements Filter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationFilter.class);
+
     private static final List<String> excludedUrls = Arrays.asList(
-            "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/","/set-role",
-            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google",
-            "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp","/error.jsp","/home-list",
+            "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/","/set-role","/getDistricts","/getWards",
+            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google","/500.jsp","/403.jsp", "/400.jsp",
+            "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp","/error.jsp","/home-list", "/401.jsp",
             "/terms.jsp", "/announce.jsp", "/about-us.jsp", "/404.jsp", "/input-otp.jsp","/input-otp-2.jsp");
 
     /**
@@ -63,7 +68,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
-        System.out.println("Requested URL Path: " + path);
+        LOGGER.info("Requested URL Path: " + path);
 
         // Check if the URL should be excluded from authentication checks
         if (isUrlExcluded(path)) {

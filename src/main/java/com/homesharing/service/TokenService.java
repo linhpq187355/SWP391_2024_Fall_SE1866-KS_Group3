@@ -9,6 +9,8 @@
  */
 package com.homesharing.service;
 
+import com.homesharing.exception.GeneralException;
+
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -34,13 +36,16 @@ public interface TokenService {
     boolean checkToken(String token, int userId, LocalDateTime requestedTime) throws SQLException;
 
     /**
-     * Sends a verification token to the user's email address.
-     * The token is used to verify the user's email as part of the registration or email verification process.
+     * Sends a verification email containing a token to the specified user.
+     * Generates a new token or updates an existing one, then sends an email
+     * with the token to the user's email address.
      *
-     * @param email  The email address to which the token should be sent.
-     * @param userId The ID of the user to whom the token belongs.
+     * @param email  The user's email address. Should not be null or empty.
+     * @param userId The ID of the user.
+     * @throws SQLException If a database error occurs during token operations.
+     * @throws GeneralException If sending the email fails.
      */
-    void sendToken(String email, int userId) throws SQLException;
+    void sendToken(String email, int userId) throws SQLException, GeneralException;
 
     /**
      * ReSends a verification token to the user's email address.

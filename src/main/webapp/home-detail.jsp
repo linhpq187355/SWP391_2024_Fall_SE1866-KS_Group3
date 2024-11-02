@@ -315,7 +315,6 @@
                         </ul>
                     </div>
 
-
                     <!-- End additional-details area  -->
 
 
@@ -352,48 +351,6 @@
                             </ul>
                         </div>
                     </div>
-                    <%--                    <div class="similar-post-section padding-top-40">--%>
-                    <%--                        <div class="row"> <!-- Ensure row class is used -->--%>
-                    <%--                            <c:forEach var="similarHome" items="${similarHomes}">--%>
-                    <%--                                <div class="col-md-3 col-sm-6 col-xs-12"> <!-- Adjust column size based on your needs -->--%>
-                    <%--                                    <div id="prop-smlr-slide_0">--%>
-                    <%--                                        <div class="box-two proerty-item">--%>
-                    <%--                                            <div class="item-thumb">--%>
-                    <%--                                                <a href="home-detail?id=${similarHome.id}">--%>
-                    <%--                                                    <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}">--%>
-                    <%--                                                </a>--%>
-                    <%--                                            </div>--%>
-                    <%--                                            <div class="item-entry overflow">--%>
-                    <%--                                                <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
-                    <%--                                                <div class="dot-hr"></div>--%>
-                    <%--                                                <span class="pull-left"><b> Area :</b> ${similarHome.area}m </span>--%>
-                    <%--                                                <span class="proerty-price pull-right">${prices[0].price} VND/month</span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </div>--%>
-                    <%--                                    </div>--%>
-                    <%--                                </div>--%>
-                    <%--                            </c:forEach>--%>
-                    <%--                        </div>--%>
-                    <%--                    </div>--%>
-                    <%--                    <div class="similar-post-section padding-top-40">--%>
-                    <%--                        <c:forEach var="similarHome" items="${similarHomes}">--%>
-                    <%--                            <div id="prop-smlr-slide_0">--%>
-                    <%--                                <div class="box-two proerty-item">--%>
-                    <%--                                    <div class="item-thumb">--%>
-                    <%--                                        <a href="home-detail?id=${similarHome.id}">--%>
-                    <%--                                            <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}"> <!-- Replace with actual image -->--%>
-                    <%--                                        </a>--%>
-                    <%--                                    </div>--%>
-                    <%--                                    <div class="item-entry overflow">--%>
-                    <%--                                        <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
-                    <%--                                        <div class="dot-hr"></div>--%>
-                    <%--                                        <span class="pull-left"><b> Area :</b> ${similarHome.area}m</span> <!-- Replace with actual area -->--%>
-                    <%--                                        <span class="proerty-price pull-right">${prices[0].price} VND/month</span> <!-- Adjust price as necessary -->--%>
-                    <%--                                    </div>--%>
-                    <%--                                </div>--%>
-                    <%--                            </div>--%>
-                    <%--                        </c:forEach>--%>
-                    <%--                    </div>--%>
                     <!-- End video area  -->
 
                 </div>
@@ -469,6 +426,8 @@
                             </div>
                         </div>
                     </div>
+
+
 
 
 

@@ -143,4 +143,8 @@ public interface HomeDAO {
     List<Home> getMatchingHomes(int[] matchingHost);
 
     List<Home> getHomeByAppointment(List<Appointment> appointments);
+
+    List<Home> getHomesByUserId(int userId);
+    int updateHome(Home home);
+    int changeStatus(int homeId, String status);
 }

@@ -13,6 +13,7 @@
 package com.homesharing.dao;
 
 import com.homesharing.model.Appointment;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
 import java.sql.SQLException;
 import java.util.List;
@@ -103,7 +104,7 @@ public interface UserDAO {
      * @param email The email address to search for.
      * @return The {@link User} object if found, or {@code null} if no user is found.
      */
-    User findUserByEmail(String email) throws SQLException;
+    User findUserByEmail(String email) throws SQLException, GeneralException;
 
     List<User> getAllUsers();
     /**
