@@ -294,5 +294,16 @@ public class HomePageServiceImpl implements HomePageService {
         return listMatchingHomes;
     }
 
+    @Override
+    public List<Home> getHomesByAppoinment(List<Appointment> appointments) {
+
+        try{
+            return homeDAO.getHomeByAppointment(appointments);
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total homes by appointment: ", e);
+            throw new GeneralException("Failed to retrieve total homes appointment: ", e);
+        }
+    }
+
 
 }

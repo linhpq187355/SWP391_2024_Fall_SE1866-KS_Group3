@@ -15,8 +15,11 @@ package com.homesharing.dao.impl;
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
+import com.homesharing.model.Appointment;
+import com.homesharing.model.Home;
 import com.homesharing.model.User;
 import com.homesharing.util.PasswordUtil;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
@@ -33,6 +36,7 @@ import java.util.logging.Logger;
 public class UserDAOImpl extends DBContext implements UserDAO {
 
     private static final Logger logger = Logger.getLogger(UserDAOImpl.class.getName());
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserDAOImpl.class);
 
     /**
      * Updates the Google ID for a user in the database.
@@ -704,7 +708,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
 
     @Override
     public User getUserById(int id) {
-        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS Users] WHERE [id] = ?";
+        String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS_Users] WHERE [id] = ?";
 
 
         try (Connection connection = DBContext.getConnection();
@@ -938,6 +942,138 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         }
 
         return null; // Return null if no user is found
+    }
+
+    @Override
+    public List<User> getHostByAppointment(List<Appointment> appointments) {
+        if(appointments == null || appointments.isEmpty()){
+            LOGGER.warn("Appointment is null. No updates will be made.");
+            return null;
+        }
+        List<User> hostList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("select * \n" +
+                "from HSS_Users\n" +
+                "where id in (");
+        for (int i = 0; i < appointments.size(); i++) {
+            sql.append("?");
+            if (i < appointments.size() - 1) {
+                sql.append(", ");
+            }
+        }
+        sql.append(")");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql.toString());
+
+
+            // Set the price ID parameters in the prepared statement
+            for (int i = 0; i < appointments.size(); i++) {
+                preparedStatement.setInt(i + 1, appointments.get(i).getHostId());
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                hostList.add(user);
+            }
+        } catch (SQLException e) {
+            logger.warning("SQL error occurred while retrieving home from the database: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.warning("Unexpected error occurred: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return hostList;
+    }
+
+    @Override
+    public List<User> getTenantByAppointment(List<Appointment> appointments) {
+        if(appointments == null || appointments.isEmpty()){
+            LOGGER.warn("Appointment is null. No updates will be made.");
+            return null;
+        }
+        List<User> tenantList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("select * \n" +
+                "from HSS_Users\n" +
+                "where id in (");
+        for (int i = 0; i < appointments.size(); i++) {
+            sql.append("?");
+            if (i < appointments.size() - 1) {
+                sql.append(", ");
+            }
+        }
+        sql.append(")");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql.toString());
+
+
+            // Set the price ID parameters in the prepared statement
+            for (int i = 0; i < appointments.size(); i++) {
+                preparedStatement.setInt(i + 1, appointments.get(i).getTenantId());
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                tenantList.add(user);
+            }
+        } catch (SQLException e) {
+            logger.warning("SQL error occurred while retrieving home from the database: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.warning("Unexpected error occurred: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return tenantList;
     }
 
 

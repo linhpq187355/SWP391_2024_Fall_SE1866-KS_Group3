@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -37,6 +38,93 @@
     <link rel="stylesheet" href="assets/css/lightslider.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+
+    <style>
+        .card {
+            background-color: #7f7f7f;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .name {
+            font-size: 18px;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+        }
+        .similar-post-section .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .similar-post-section .col-md-3 {
+            margin-right: 10px; /* Optional spacing between homes */
+        }
+        .phone-button {
+            margin: 5px 0 5px 0;
+            background-color: #00c853;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .phone-button i {
+            margin-right: 10px;
+        }
+
+        .apmt-button {
+            margin: 5px 0 5px 0;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .apmt-button i {
+            margin-right: 10px;
+        }
+        .zalo-button, .like-button {
+            margin: 5px 0 5px 0;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zalo-button i, .like-button i {
+            margin-right: 10px;
+        }
+        /*#map{*/
+        /*    width: 100%;*/
+        /*    height: 100%;*/
+        /*}*/
+    </style>
 </head>
 <jsp:include page="header.jsp"/>
 
@@ -63,9 +151,7 @@
 
 <div class="content-area single-property" style="background-color: #FCFCFC;">&nbsp;
     <div class="container">
-
         <div class="clearfix padding-top-40">
-
             <div class="col-md-8 single-property-content prp-style-1">
                 <div class="row">
                     <div class="light-slide-item">
@@ -100,8 +186,9 @@
                 <div class="single-property-wrapper">
                     <div class="single-property-header">
                         <h1 class="property-title pull-left">${home.name}</h1>
-                        <span class="property-price pull-right"> Giá Thuê:  ${prices[0].price}VND/tháng</span>
+                        <span class="property-price pull-right"><fmt:formatNumber value="${prices[0].price}" type="number" groupingUsed="true"/> VND/tháng</span>
                     </div>
+
 
                     <div class="property-meta entry-meta clearfix">
 
@@ -111,7 +198,7 @@
                             </span>
                             <span class="property-info-entry">
                                 <span class="property-info-label">Trạng thái</span>
-                                <span class="property-info-value">${hometypes[0].status}</span>
+                                <span class="property-info-value">${homeTypes[0].status}</span>
                             </span>
                         </div>
                         <div class="col-xs-6 col-sm-3 col-md-3 p-b-15">
@@ -120,7 +207,7 @@
                             </span>
                             <span class="property-info-entry">
                                 <span class="property-info-label"> Loại Hình Nhà </span>
-                                <span class="property-info-value">${hometypes[0].name}</span>
+                                <span class="property-info-value">${homeTypes[0].name}</span>
                             </span>
                         </div>
                         <div class="col-xs-6 col-sm-3 col-md-3 p-b-15">
@@ -208,22 +295,26 @@
                     </div>
                     <!-- End description area -->
 
-                    <div class="section additional-details">
-                        <h4 class="s-property-title">Các tiện ích</h4>
-
-                        <ul class="additional-details-list clearfix">
-                            <c:forEach var="amentity" items="${amentities}">
+                    <div class="section property-features">
+                        <h4 class="s-property-title">Các tiện ích hiện có</h4>
+                        <ul>
+                            <c:forEach var="amenity" items="${amenities}">
                                 <li>
-                                    <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">${amentity.name}</span>
-                                    <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">
-                    <img src="${amentity.icon}" alt="${amentity.name} Icon"
-                         style="width:20px; height:20px; vertical-align:middle;">
-                                        <!-- If you want to show an icon -->
-                </span>
-                                </li>
-                            </c:forEach>
+                                    <a href="home-detail.jsp">${amenity.name}</a>
+                                </li>                            </c:forEach>
                         </ul>
                     </div>
+
+                    <div class="section property-features">
+                        <h4 class="s-property-title">Phương tiện phòng cháy chữa cháy </h4>
+                        <ul>
+                            <c:forEach var="fireEquipments" items="${fireEquipments}">
+                                <li>
+                                    <a href="home-detail.jsp">${fireEquipments.name}</a>
+                                </li>                            </c:forEach>
+                        </ul>
+                    </div>
+
 
                     <!-- End additional-details area  -->
 
@@ -261,6 +352,48 @@
                             </ul>
                         </div>
                     </div>
+                    <%--                    <div class="similar-post-section padding-top-40">--%>
+                    <%--                        <div class="row"> <!-- Ensure row class is used -->--%>
+                    <%--                            <c:forEach var="similarHome" items="${similarHomes}">--%>
+                    <%--                                <div class="col-md-3 col-sm-6 col-xs-12"> <!-- Adjust column size based on your needs -->--%>
+                    <%--                                    <div id="prop-smlr-slide_0">--%>
+                    <%--                                        <div class="box-two proerty-item">--%>
+                    <%--                                            <div class="item-thumb">--%>
+                    <%--                                                <a href="home-detail?id=${similarHome.id}">--%>
+                    <%--                                                    <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}">--%>
+                    <%--                                                </a>--%>
+                    <%--                                            </div>--%>
+                    <%--                                            <div class="item-entry overflow">--%>
+                    <%--                                                <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
+                    <%--                                                <div class="dot-hr"></div>--%>
+                    <%--                                                <span class="pull-left"><b> Area :</b> ${similarHome.area}m </span>--%>
+                    <%--                                                <span class="proerty-price pull-right">${prices[0].price} VND/month</span>--%>
+                    <%--                                            </div>--%>
+                    <%--                                        </div>--%>
+                    <%--                                    </div>--%>
+                    <%--                                </div>--%>
+                    <%--                            </c:forEach>--%>
+                    <%--                        </div>--%>
+                    <%--                    </div>--%>
+                    <%--                    <div class="similar-post-section padding-top-40">--%>
+                    <%--                        <c:forEach var="similarHome" items="${similarHomes}">--%>
+                    <%--                            <div id="prop-smlr-slide_0">--%>
+                    <%--                                <div class="box-two proerty-item">--%>
+                    <%--                                    <div class="item-thumb">--%>
+                    <%--                                        <a href="home-detail?id=${similarHome.id}">--%>
+                    <%--                                            <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}"> <!-- Replace with actual image -->--%>
+                    <%--                                        </a>--%>
+                    <%--                                    </div>--%>
+                    <%--                                    <div class="item-entry overflow">--%>
+                    <%--                                        <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
+                    <%--                                        <div class="dot-hr"></div>--%>
+                    <%--                                        <span class="pull-left"><b> Area :</b> ${similarHome.area}m</span> <!-- Replace with actual area -->--%>
+                    <%--                                        <span class="proerty-price pull-right">${prices[0].price} VND/month</span> <!-- Adjust price as necessary -->--%>
+                    <%--                                    </div>--%>
+                    <%--                                </div>--%>
+                    <%--                            </div>--%>
+                    <%--                        </c:forEach>--%>
+                    <%--                    </div>--%>
                     <!-- End video area  -->
 
                 </div>
@@ -268,293 +401,130 @@
 
 
             <div class="col-md-4 p0">
-                <aside class="sidebar sidebar-property blog-asside-right">
-                    <div class="dealer-widget">
+                <aside class="sidebar sidebar-property blog-asside-right" style="background-color: #fff; padding-top: 3px">
+                    <div class="dealer-widget" style="background-color: #fff;border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;margin: -5px;">
                         <div class="dealer-content">
                             <div class="inner-wrapper">
-
                                 <div class="clear">
-                                    <div class="col-xs-4 col-sm-4 dealer-face">
+                                    <div class="col-xs-4 col-sm-4 dealer-face" style="padding: 0">
                                         <a href="">
                                             <img src="assets/img/client-face1.png" class="img-circle">
                                         </a>
                                     </div>
-                                    <div class="col-xs-8 col-sm-8 ">
-                                        <h3 class="dealer-name">
+                                    <div class="col-xs-8 col-sm-8 " style="padding:0">
+                                        <h3 class="dealer-name" style="color: black">
                                             <a href="">${creator.firstName} ${creator.lastName}</a>
                                         </h3>
-                                        <div class="dealer-social-media">
-                                            <a class="twitter" target="_blank" href="">
-                                                <i class="fa fa-twitter"></i>
-                                            </a>
-                                            <a class="facebook" target="_blank" href="">
-                                                <i class="fa fa-facebook"></i>
-                                            </a>
-                                            <a class="gplus" target="_blank" href="">
-                                                <i class="fa fa-google-plus"></i>
-                                            </a>
-                                            <a class="linkedin" target="_blank" href="">
-                                                <i class="fa fa-linkedin"></i>
-                                            </a>
-                                            <a class="instagram" target="_blank" href="">
-                                                <i class="fa fa-instagram"></i>
-                                            </a>
+                                        <div class="dealer-email" style="color: black; display: flex; align-items: center">
+                                            <i class="fa-solid fa-envelope"></i>
+                                            <p style="padding: 0 0 5px 10px;">${creator.email}</p>
                                         </div>
+                                    </div>
 
+
+                                    <div class="clear">
+                                        <ul class="dealer-contacts">
+                                            <li>
+                                                <button class="phone-button">
+                                                    <i class="fas fa-phone"></i>
+                                                    ${creator.phoneNumber}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="zalo-button">
+                                                    <i class="fas fa-comment"></i>
+                                                    Liên Hệ
+                                                </button>
+                                            </li>
+
+                                            <c:if test="${cookie.roleId.value == 3}">
+                                                <li>
+                                                    <form action="${sessionScope.isInWishlist ? 'delete-wishlist' : 'add-wishlist'}" method="POST"
+                                                          onsubmit="return confirm('${sessionScope.isInWishlist ? 'Bạn có chắc chắn muốn xóa không?' : 'Bạn có chắc chắn muốn thêm vào danh sách yêu thích?'}');">
+                                                        <input type="hidden" name="homeId" value="${home.id}">
+                                                        <button type="submit" class="like-button">
+                                                            <i class="fas fa-heart"></i> ${sessionScope.isInWishlist ? 'Đã thêm' : 'Yêu thích'}
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </c:if>
+                                            <c:if test="${cookie.roleId.value ==3}">
+                                                <li>
+                                                    <button class="apmt-button" onclick="window.location.href='make-appointment?hostId=${creator.id}&homeId=${home.id}'">
+                                                        <i class="fa-solid fa-calendar"></i>
+                                                        Đặt lịch hẹn
+                                                    </button>
+                                                </li>
+                                            </c:if>
+
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <c:if test="${not empty sessionScope.message}">
+                                            <div class="alert alert-info">${sessionScope.message}</div>
+                                            <c:remove var="message" />
+                                        </c:if>
                                     </div>
                                 </div>
-
-                                <div class="clear">
-                                    <ul class="dealer-contacts">
-                                        <li><i class="pe-7s-map-marker strong"> </i> ${home.address}</li>
-                                        <li><i class="pe-7s-mail strong"> </i> ${creator.email}</li>
-                                        <li><i class="pe-7s-call strong"> </i> ${creator.phoneNumber}</li>
-                                    </ul>
-                                </div>
-
                             </div>
                         </div>
                     </div>
 
-                    <%--                            <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">--%>
-                    <%--                                <div class="panel-heading">--%>
-                    <%--                                    <h3 class="panel-title">Similar Properties</h3>--%>
-                    <%--                                </div>--%>
-                    <%--                                <div class="panel-body recent-property-widget">--%>
-                    <%--                                        <ul>--%>
-                    <%--                                        <li>--%>
-                    <%--                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
-                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
-                    <%--                                                <span class="property-seeker">--%>
-                    <%--                                                    <b class="b-1">A</b>--%>
-                    <%--                                                    <b class="b-2">S</b>--%>
-                    <%--                                                </span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
-                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
-                    <%--                                                <span class="property-price">3000000$</span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </li>--%>
-                    <%--                                        <li>--%>
-                    <%--                                            <div class="col-md-3 col-sm-3  col-xs-3 blg-thumb p0">--%>
-                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-1.jpg"></a>--%>
-                    <%--                                                <span class="property-seeker">--%>
-                    <%--                                                    <b class="b-1">A</b>--%>
-                    <%--                                                    <b class="b-2">S</b>--%>
-                    <%--                                                </span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
-                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
-                    <%--                                                <span class="property-price">3000000$</span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </li>--%>
-                    <%--                                        <li>--%>
-                    <%--                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
-                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-3.jpg"></a>--%>
-                    <%--                                                <span class="property-seeker">--%>
-                    <%--                                                    <b class="b-1">A</b>--%>
-                    <%--                                                    <b class="b-2">S</b>--%>
-                    <%--                                                </span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
-                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
-                    <%--                                                <span class="property-price">3000000$</span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </li>--%>
 
-                    <%--                                        <li>--%>
-                    <%--                                            <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
-                    <%--                                                <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
-                    <%--                                                <span class="property-seeker">--%>
-                    <%--                                                    <b class="b-1">A</b>--%>
-                    <%--                                                    <b class="b-2">S</b>--%>
-                    <%--                                                </span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                            <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
-                    <%--                                                <h6> <a href="single.html">Super nice villa </a></h6>--%>
-                    <%--                                                <span class="property-price">3000000$</span>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </li>--%>
 
-                    <%--                                    </ul>--%>
-                    <%--                                </div>--%>
-                    <%--                            </div>                          --%>
+                    <!-- Success Modal -->
+                    <!-- Success Modal -->
+                    <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="success-modal-label" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="success-modal-label">Thông báo</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="success-message">
+                                    <!-- Success message will be inserted here -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <%--                            <div class="panel panel-default sidebar-menu wow fadeInRight animated">--%>
-                    <%--                                <div class="panel-heading">--%>
-                    <%--                                    <h3 class="panel-title">Ads her  </h3>--%>
-                    <%--                                </div>--%>
-                    <%--                                <div class="panel-body recent-property-widget">--%>
-                    <%--                                    <img src="assets/img/ads.jpg">--%>
-                    <%--                                </div>--%>
-                    <%--                            </div>--%>
 
-                    <%--                            <div class="panel panel-default sidebar-menu wow fadeInRight animated" >--%>
-                    <%--                                <div class="panel-heading">--%>
-                    <%--                                    <h3 class="panel-title">Smart search</h3>--%>
-                    <%--                                </div>--%>
-                    <%--                                <div class="panel-body search-widget">--%>
-                    <%--                                    <form action="" class=" form-inline"> --%>
-                    <%--                                        <fieldset>--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-12">--%>
-                    <%--                                                    <input type="text" class="form-control" placeholder="Key word">--%>
-                    <%--                                                </div>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
 
-                    <%--                                        <fieldset>--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-6">--%>
 
-                    <%--                                                    <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="Select Your City">--%>
 
-                    <%--                                                        <option>New york, CA</option>--%>
-                    <%--                                                        <option>Paris</option>--%>
-                    <%--                                                        <option>Casablanca</option>--%>
-                    <%--                                                        <option>Tokyo</option>--%>
-                    <%--                                                        <option>Marraekch</option>--%>
-                    <%--                                                        <option>kyoto , shibua</option>--%>
-                    <%--                                                    </select>--%>
-                    <%--                                                </div>--%>
-                    <%--                                                <div class="col-xs-6">--%>
-
-                    <%--                                                    <select id="basic" class="selectpicker show-tick form-control">--%>
-                    <%--                                                        <option> -Status- </option>--%>
-                    <%--                                                        <option>Rent </option>--%>
-                    <%--                                                        <option>Boy</option>--%>
-                    <%--                                                        <option>used</option>  --%>
-
-                    <%--                                                    </select>--%>
-                    <%--                                                </div>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
-
-                    <%--                                        <fieldset class="padding-5">--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-6">--%>
-                    <%--                                                    <label for="price-range">Price range ($):</label>--%>
-                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
-                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
-                    <%--                                                           data-slider-value="[0,450]" id="price-range" ><br />--%>
-                    <%--                                                    <b class="pull-left color">2000$</b> --%>
-                    <%--                                                    <b class="pull-right color">100000$</b>                                                --%>
-                    <%--                                                </div>--%>
-                    <%--                                                <div class="col-xs-6">--%>
-                    <%--                                                    <label for="property-geo">Property geo (m2) :</label>--%>
-                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
-                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
-                    <%--                                                           data-slider-value="[50,450]" id="property-geo" ><br />--%>
-                    <%--                                                    <b class="pull-left color">40m</b> --%>
-                    <%--                                                    <b class="pull-right color">12000m</b>                                                --%>
-                    <%--                                                </div>                                            --%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>                                --%>
-
-                    <%--                                        <fieldset class="padding-5">--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-6">--%>
-                    <%--                                                    <label for="price-range">Min baths :</label>--%>
-                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
-                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
-                    <%--                                                           data-slider-value="[250,450]" id="min-baths" ><br />--%>
-                    <%--                                                    <b class="pull-left color">1</b> --%>
-                    <%--                                                    <b class="pull-right color">120</b>                                                --%>
-                    <%--                                                </div>--%>
-
-                    <%--                                                <div class="col-xs-6">--%>
-                    <%--                                                    <label for="property-geo">Min bed :</label>--%>
-                    <%--                                                    <input type="text" class="span2" value="" data-slider-min="0" --%>
-                    <%--                                                           data-slider-max="600" data-slider-step="5" --%>
-                    <%--                                                           data-slider-value="[250,450]" id="min-bed" ><br />--%>
-                    <%--                                                    <b class="pull-left color">1</b> --%>
-                    <%--                                                    <b class="pull-right color">120</b>--%>
-
-                    <%--                                                </div>--%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
-
-                    <%--                                        <fieldset class="padding-5">--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-6">--%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label> <input type="checkbox" checked> Fire Place</label>--%>
-                    <%--                                                    </div> --%>
-                    <%--                                                </div>--%>
-
-                    <%--                                                <div class="col-xs-6">--%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label> <input type="checkbox"> Dual Sinks</label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>                                            --%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
-
-                    <%--                                        <fieldset class="padding-5">--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-6"> --%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label> <input type="checkbox" checked> Swimming Pool</label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>  --%>
-                    <%--                                                <div class="col-xs-6"> --%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label> <input type="checkbox" checked> 2 Stories </label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>  --%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
-
-                    <%--                                        <fieldset class="padding-5">--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-6"> --%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label><input type="checkbox"> Laundry Room </label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>  --%>
-                    <%--                                                <div class="col-xs-6"> --%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label> <input type="checkbox"> Emergency Exit</label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>  --%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
-
-                    <%--                                        <fieldset class="padding-5">--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-6"> --%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label>  <input type="checkbox" checked> Jog Path </label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>  --%>
-                    <%--                                                <div class="col-xs-6"> --%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label>  <input type="checkbox"> 26' Ceilings </label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>  --%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
-
-                    <%--                                        <fieldset class="padding-5">--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-12"> --%>
-                    <%--                                                    <div class="checkbox">--%>
-                    <%--                                                        <label>  <input type="checkbox"> Hurricane Shutters </label>--%>
-                    <%--                                                    </div>--%>
-                    <%--                                                </div>  --%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>--%>
-
-                    <%--                                        <fieldset >--%>
-                    <%--                                            <div class="row">--%>
-                    <%--                                                <div class="col-xs-12">  --%>
-                    <%--                                                    <input class="button btn largesearch-btn" value="Search" type="submit">--%>
-                    <%--                                                </div>  --%>
-                    <%--                                            </div>--%>
-                    <%--                                        </fieldset>                                     --%>
-                    <%--                                    </form>--%>
-                    <%--                                </div>--%>
-                    <%--                            </div>--%>
+                    <%--                    <div id="map"></div>--%>
+                    <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated" style="    margin: 25px 9px 9px 9px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Bạn cũng có thể thích</h3>
+                        </div>
+                        <div class="panel-body recent-property-widget">
+                            <ul>
+                                <!-- Lặp qua danh sách các nhà tương tự -->
+                                <c:forEach var="similarHome" items="${similarHomes}">
+                                    <li>
+                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
+                                            <a href="home-detail?id=${similarHome.id}">
+                                                <img src="assets/img/demo/small-property-2.jpg" alt="${similarHome.address}"> <!-- Hình ảnh mẫu, bạn có thể thay đổi -->
+                                            </a>
+                                        </div>
+                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
+                                            <h6><a href="home-detail?id=${similarHome.id}">${similarHome.address}</a></h6>
+                                            <c:forEach items="${requestScope.priceSimilarHomes}" var="priceSimilarHomes">
+                                                <c:if test="${similarHome.id == priceSimilarHomes.homesId}">
+                                                    <span class="property-price"><fmt:formatNumber value="${priceSimilarHomes.price}" type="number" groupingUsed="true"/> VND/tháng</span>
+                                                </c:if>
+                                            </c:forEach>
+                                        </div>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </div>
+                    </div>
 
                 </aside>
             </div>
@@ -565,154 +535,10 @@
 
 
 <!-- Footer area-->
-<div class="footer-area">
+<jsp:include page="footer.jsp"/>
 
-    <div class=" footer">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer">
-                        <h4>About us </h4>
-                        <div class="footer-title-line"></div>
-
-                        <img src="assets/img/footer-logo.png" alt="" class="wow pulse" data-wow-delay="1s">
-                        <p>Lorem ipsum dolor cum necessitatibus su quisquam molestias. Vel unde, blanditiis.</p>
-                        <ul class="footer-adress">
-                            <li><i class="pe-7s-map-marker strong"> </i> 9089 your adress her</li>
-                            <li><i class="pe-7s-mail strong"> </i> email@yourcompany.com</li>
-                            <li><i class="pe-7s-call strong"> </i> +1 908 967 5906</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer">
-                        <h4>Quick links </h4>
-                        <div class="footer-title-line"></div>
-                        <ul class="footer-menu">
-                            <li><a href="properties.html">Properties</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="submit-property.html">Submit property </a></li>
-                            <li><a href="contact.html">Contact us</a></li>
-                            <li><a href="faq.html">fqa</a></li>
-                            <li><a href="faq.html">Terms </a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer">
-                        <h4>Last News</h4>
-                        <div class="footer-title-line"></div>
-                        <ul class="footer-blog">
-                            <li>
-                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                                    <a href="single.html">
-                                        <img src="assets/img/demo/small-proerty-2.jpg">
-                                    </a>
-                                    <span class="blg-date">12-12-2016</span>
-
-                                </div>
-                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                                    <h6><a href="single.html">Add news functions </a></h6>
-                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
-                                        ...</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                                    <a href="single.html">
-                                        <img src="assets/img/demo/small-proerty-2.jpg">
-                                    </a>
-                                    <span class="blg-date">12-12-2016</span>
-
-                                </div>
-                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                                    <h6><a href="single.html">Add news functions </a></h6>
-                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
-                                        ...</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                                    <a href="single.html">
-                                        <img src="assets/img/demo/small-proerty-2.jpg">
-                                    </a>
-                                    <span class="blg-date">12-12-2016</span>
-
-                                </div>
-                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                                    <h6><a href="single.html">Add news functions </a></h6>
-                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
-                                        ...</p>
-                                </div>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer news-letter">
-                        <h4>Stay in touch</h4>
-                        <div class="footer-title-line"></div>
-                        <p>Lorem ipsum dolor sit amet, nulla suscipit similique quisquam molestias. Vel unde,
-                            blanditiis.</p>
-
-                        <form>
-                            <div class="input-group">
-                                <input class="form-control" type="text" placeholder="E-mail ... ">
-                                <span class="input-group-btn">
-                                            <button class="btn btn-primary subscribe" type="button"><i
-                                                    class="pe-7s-paper-plane pe-2x"></i></button>
-                                        </span>
-                            </div>
-                            <!-- /input-group -->
-                        </form>
-
-                        <div class="social pull-right">
-                            <ul>
-                                <li><a class="wow fadeInUp animated" href="https://twitter.com/kimarotec"><i
-                                        class="fa fa-twitter"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://www.facebook.com/kimarotec"
-                                       data-wow-delay="0.2s"><i class="fa fa-facebook"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://plus.google.com/kimarotec"
-                                       data-wow-delay="0.3s"><i class="fa fa-google-plus"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec"
-                                       data-wow-delay="0.4s"><i class="fa fa-instagram"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec"
-                                       data-wow-delay="0.6s"><i class="fa fa-dribbble"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-copy text-center">
-        <div class="container">
-            <div class="row">
-                <div class="pull-left">
-                    <span> (C) <a href="http://www.KimaroTec.com">KimaroTheme</a> , All rights reserved 2016  </span>
-                </div>
-                <div class="bottom-menu pull-right">
-                    <ul>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.2s">Home</a></li>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.3s">Property</a></li>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.4s">Faq</a></li>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.6s">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="assets/js/jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -726,6 +552,8 @@
 <script src="assets/js/price-range.js"></script>
 <script type="text/javascript" src="assets/js/lightslider.min.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+
 
 <script>
     $(document).ready(function () {
@@ -743,6 +571,59 @@
             }
         });
     });
+
+    function showConfirmPopup(homeId, userId) {
+        // Hiển thị modal xác nhận
+        $('#login-modal').modal('show');
+
+        // Lưu các ID để sử dụng trong xác nhận
+        window.currentHomeId = homeId;
+        window.currentUserId = userId;
+    }
+
+    function confirmAddToWishlist(homeId, userId) {
+        // Tạo một yêu cầu POST tới servlet
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "add-to-wishlist", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                alert(xhr.responseText);
+            }
+        };
+        xhr.send("homeId=" + homeId + "&userId=" + userId);
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        var mapObj = null;
+        var defaultCoord = [21.0819, 105.6363];
+        var zoomLevel = 15;
+        var mapConfig = {
+            attributionControl: false,
+            center: defaultCoord,
+            zoom: zoomLevel,
+        };
+
+        mapObj = L.map('map', mapConfig);
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mapObj);
+    });
+</script>
+<script>
+    function confirmDelete() {
+        if (confirm('Bạn có chắc chắn muốn xóa không?')) {
+            // Nếu người dùng xác nhận, gửi form
+            document.getElementById('delete-form').submit();
+        }
+    }
+</script>
+<script>
+    function confirmAdd() {
+        return confirm('Bạn có chắc chắn muốn thêm vào danh sách yêu thích?');
+    }
 </script>
 
 </body>

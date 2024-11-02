@@ -96,4 +96,6 @@ public interface HomePageService {
      * @return a list of {@link Home} objects that match the specified host IDs for the user.
      */
     List<Home> getMatchingHome(int[] matchingHostsId, int userId);
+
+    List<Home> getHomesByAppoinment(List<Appointment> appointments);
 }

@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.homesharing.model.Appointment;
 import com.homesharing.model.Home;
 
 
@@ -140,4 +141,6 @@ public interface HomeDAO {
      * @return a List of Home objects that match the specified criteria.
      */
     List<Home> getMatchingHomes(int[] matchingHost);
+
+    List<Home> getHomeByAppointment(List<Appointment> appointments);
 }

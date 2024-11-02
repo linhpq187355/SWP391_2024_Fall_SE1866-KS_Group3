@@ -15,6 +15,7 @@ package com.homesharing.dao.impl;
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.exception.GeneralException;
+import com.homesharing.model.Appointment;
 import com.homesharing.model.Home;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
     private List<Home> homes = new ArrayList<>();
     // Logger for logging errors or information
     private static final Logger logger = Logger.getLogger(HomeDAOImpl.class.getName());
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PreferenceDAOImpl.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HomeDAOImpl.class);
 
 
     @Override
@@ -942,6 +943,70 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             }
         }
         return matchingHomes;
+    }
+
+    @Override
+    public List<Home> getHomeByAppointment(List<Appointment> appointments) {
+        if(appointments == null || appointments.isEmpty()){
+            LOGGER.warn("Appointment is null. No updates will be made.");
+            return null;
+        }
+        List<Home> homeList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("select id,name,address \n" +
+                "from Homes\n" +
+                "where id in (");
+        for (int i = 0; i < appointments.size(); i++) {
+            sql.append("?");
+            if (i < appointments.size() - 1) {
+                sql.append(", ");
+            }
+        }
+        sql.append(")");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql.toString());
+
+
+            // Set the price ID parameters in the prepared statement
+            for (int i = 0; i < appointments.size(); i++) {
+                preparedStatement.setInt(i + 1, appointments.get(i).getHomeId());
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setName(resultSet.getString("name"));
+                home.setAddress(resultSet.getString("address"));
+                homeList.add(home);
+            }
+        } catch (SQLException e) {
+            logger.warning("SQL error occurred while retrieving home from the database: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.warning("Unexpected error occurred: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return homeList;
     }
 
     @Override

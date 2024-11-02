@@ -12,6 +12,7 @@
 
 package com.homesharing.dao;
 
+import com.homesharing.model.Appointment;
 import com.homesharing.model.User;
 import java.sql.SQLException;
 import java.util.List;
@@ -153,4 +154,8 @@ public interface UserDAO {
      * @return The {@link User} object corresponding to the matching profile ID, or {@code null} if no user is found.
      */
     User getMatchingUserProfile(int id);
+
+    List<User> getHostByAppointment(List<Appointment> appointments);
+
+    List<User> getTenantByAppointment(List<Appointment> appointments);
 }

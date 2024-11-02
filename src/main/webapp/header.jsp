@@ -49,7 +49,7 @@
                 <div class="header-half header-call">
                     <p>
                         <span><i class="pe-7s-call"></i> 0989843097 </span>
-                        <span><i class="pe-7s-mail"></i> rommifyy@gmail.com</span>
+                        <span><i class="pe-7s-mail"></i> rommify68@gmail.com</span>
                     </p>
                 </div>
             </div>
@@ -203,6 +203,16 @@
                             <c:if test="${cookie.roleId.value ==4}">
                                 <li>
                                     <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${cookie.roleId.value ==4}">
+                                <li>
+                                    <a href="appointment-host-manage" class="li-acc-op">Quản lí lịch hẹn</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${cookie.roleId.value ==3}">
+                                <li>
+                                    <a href="appointment-tenant-list" class="li-acc-op">Lịch hẹn của tôi</a>
                                 </li>
                             </c:if>
 

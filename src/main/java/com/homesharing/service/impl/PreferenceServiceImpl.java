@@ -175,19 +175,19 @@ public class PreferenceServiceImpl implements PreferenceService {
             Preference hostPref = listMatchingPreference.get(i);
             int score = 0;
             if (Math.abs(pref.getCleanliness() - hostPref.getCleanliness()) <= 1) {
-                score += 10;
+                score += 30;
             }
             if (Math.abs(pref.getSmoking() - hostPref.getSmoking()) <= 1) {
-                score += 10;
+                score += 30;
             }
             if (Math.abs(pref.getDrinking() - hostPref.getDrinking()) <= 1) {
-                score += 10;
+                score += 20;
             }
             if (Math.abs(pref.getInteraction() - hostPref.getInteraction()) <= 1) {
-                score += 10;
+                score += 20;
             }
             if (Math.abs(pref.getGuest() - hostPref.getGuest()) <= 1) {
-                score += 10;
+                score += 20;
             }
             if (Math.abs(pref.getCooking() - hostPref.getCooking()) <= 1) {
                 score += 10;
