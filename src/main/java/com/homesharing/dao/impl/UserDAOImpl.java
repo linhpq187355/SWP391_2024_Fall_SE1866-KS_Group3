@@ -490,24 +490,26 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String sql = "SELECT [id]\n" +
-                "      ,[email]\n" +
-                "      ,[hashedPassword]\n" +
-                "      ,[phoneNumber]\n" +
-                "      ,[username]\n" +
-                "      ,[firstName]\n" +
-                "      ,[lastName]\n" +
-                "      ,[avatar]\n" +
-                "      ,[dob]\n" +
-                "      ,[address]\n" +
-                "      ,[gender]\n" +
-                "      ,[citizenNumber]\n" +
-                "      ,[createdAt]\n" +
-                "      ,[status]\n" +
-                "      ,[isVerified]\n" +
-                "      ,[modifiedDate]\n" +
-                "      ,[rolesid]\n" +
-                "  FROM [dbo].[HSS_Users]";
+        String sql = "SELECT u.[id],\n" +
+                "       u.[email],\n" +
+                "       u.[hashedPassword],\n" +
+                "       u.[phoneNumber],\n" +
+                "       u.[username],\n" +
+                "       u.[firstName],\n" +
+                "       u.[lastName],\n" +
+                "       u.[avatar],\n" +
+                "       u.[dob],\n" +
+                "       u.[address],\n" +
+                "       u.[gender],\n" +
+                "       u.[citizenNumber],\n" +
+                "       u.[createdAt],\n" +
+                "       u.[status],\n" +
+                "       u.[isVerified],\n" +
+                "       u.[modifiedDate],\n" +
+                "       u.[rolesid],\n" +
+                "       r.[name] AS roleName\n" +
+                "FROM [dbo].[HSS_Users] u\n" +
+                "LEFT JOIN [dbo].[Roles] r ON u.[rolesid] = r.[id]";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -526,6 +528,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setFirstName(resultSet.getString("firstName"));
                 user.setLastName(resultSet.getString("lastName"));
                 user.setAvatar(resultSet.getString("avatar"));
+                user.setRoleName(resultSet.getString("roleName"));
                 if (resultSet.getDate("dob") != null) {
                     user.setDob(resultSet.getDate("dob").toLocalDate());
                 }

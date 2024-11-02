@@ -1,43 +1,76 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version              AUTHOR           DESCRIPTION
+ * 2024-10-15      1.0                  ThangLT      First Implement
+ */
+
 package com.homesharing.controller;
 
-import com.google.gson.Gson;
+import com.homesharing.dao.AmentityHomeDAO;
+import com.homesharing.dao.DistrictDAO;
+import com.homesharing.dao.FireEquipHomeDAO;
 import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.HomeImageDAO;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.AmentityHomeDAOImpl;
+import com.homesharing.dao.impl.DistrictDAOImpl;
+import com.homesharing.dao.impl.FireEquipHomeImpl;
 import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.HomeImageDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
+import com.homesharing.dao.impl.ProvinceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Home;
+import com.homesharing.model.Price;
 import com.homesharing.model.User;
 import com.homesharing.service.HomeMgtService;
+import com.homesharing.service.HomePageService;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.HomeMgtServiceImpl;
+import com.homesharing.service.impl.HomePageServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.CookieUtil;
+import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 @WebServlet("/my-home")
 public class MyHomeListServlet extends HttpServlet {
-    private static final Logger logger = LoggerFactory.getLogger(CreateHomeServlet.class);
+    private static final java.util.logging.Logger LOGGER = Logger.getLogger(MyHomeListServlet.class.getName());
     private HomeMgtService homeMgtService;
+    private HomePageService homePageService;
     private UserService userService;
 
     @Override
     public void init() throws ServletException {
         HomeDAO homeDAO = new HomeDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
+        ProvinceDAO provinceDAO = new ProvinceDAOImpl();
+        DistrictDAO districtDAO = new DistrictDAOImpl();
+        HomeImageDAO homeImgDAO = new HomeImageDAOImpl();
+        AmentityHomeDAO amentityDAO = new AmentityHomeDAOImpl();
+        FireEquipHomeDAO fireEquipDAO = new FireEquipHomeImpl();
+
         PriceDAO priceDAO = new PriceDAOImpl();
-        this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO);
+        this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO, homeImgDAO, amentityDAO, fireEquipDAO);
+        this.homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
         this.userService = new UserServiceImpl(userDAO, null, null, null);
     }
 
@@ -51,25 +84,66 @@ public class MyHomeListServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, Object> searchParams = new HashMap<>();
+        String status = "active";
+        String orderBy = req.getParameter("orderby");
+        String order = req.getParameter("order");
+        String perPage = req.getParameter("per_page");
+        String currentPage = req.getParameter("currentPage");
+        String targetPage = req.getParameter("targetPage");
+
+        if (currentPage != null && !currentPage.isEmpty()) {
+            searchParams.put("currentPage", currentPage);
+        }
+        if (targetPage != null && !targetPage.isEmpty()) {
+            searchParams.put("targetPage", targetPage);
+        }
+        if (perPage != null && !perPage.isEmpty()) {
+            searchParams.put("per_page", perPage);
+        }
+        if(order != null && !order.isEmpty()) {
+            searchParams.put("order", order);
+        }
+        if(orderBy != null && !orderBy.isEmpty()) {
+            searchParams.put("orderby", orderBy);
+        }
+        if(status != null && !status.isEmpty()) {
+            searchParams.put("status", status);
+        }
+
+
+        int totalHomes = 0;
+        try {
+            totalHomes = homePageService.countSearchHome(searchParams);
+            homePageService.updateTargetPage(searchParams, totalHomes);
+        } catch (SQLException | ClassNotFoundException e) {
+            LOGGER.severe("Error while fetching new homes: " + e.getMessage());
+            ServletUtils.forwardWithMessage(req, resp, e.getMessage());
+        }
+
         String cookieValue = CookieUtil.getCookie(req, "id");
         if (cookieValue != null) {
             User user = null;
-
             user = userService.getUser(Integer.parseInt(cookieValue));
-            List<Home> homeList = homeMgtService.getPersonalHome(user.getId());
 
-            // Convert homeList to JSON using Gson
-            Gson gson = new Gson();
-            String homeListJson = gson.toJson(homeList);
-            resp.setContentType("text/html");
-            resp.setCharacterEncoding("UTF-8");
+            if(user != null) {
+                searchParams.put("createdBy", user.getId());
+                List<Home> homes = new ArrayList<>(homePageService.searchHome(searchParams));
+                req.setAttribute("totalHomes", totalHomes);
+                System.out.println("total homes: " + totalHomes);
+                List<Price> prices = new ArrayList<>(homePageService.getHomePrice(homes));
 
-            // Send the JSON data in response
-            req.setAttribute("homeList", homeListJson);
-            req.getRequestDispatcher("personal-homes.jsp").forward(req, resp);
+                req.setAttribute("homes", homes);
+                System.out.println(homes);
+                req.setAttribute("prices", prices);
+                req.setAttribute("searchParams", searchParams);
+            }
+
+            req.getRequestDispatcher("/personal-homes.jsp").forward(req, resp);
 
         } else {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+            resp.sendRedirect("login.jsp");
         }
     }
 }

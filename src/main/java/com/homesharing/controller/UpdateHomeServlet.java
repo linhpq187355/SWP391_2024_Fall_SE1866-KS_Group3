@@ -20,7 +20,7 @@ import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.WardDAO;
 import com.homesharing.dao.impl.AmentityHomeDAOImpl;
-import com.homesharing.dao.DistrictDAOImpl;
+import com.homesharing.dao.impl.DistrictDAOImpl;
 import com.homesharing.dao.impl.FireEquipHomeImpl;
 import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.HomeImageDAOImpl;
@@ -165,7 +165,7 @@ public class UpdateHomeServlet extends HttpServlet {
         req.setAttribute("fireEquipments", fireEquipments);
         req.setAttribute("movindate", moveInDate);
         req.setAttribute("images", images);
-        req.getRequestDispatcher("/update-demo.jsp").forward(req, resp);
+        req.getRequestDispatcher("/update-home.jsp").forward(req, resp);
     }
 
     /**

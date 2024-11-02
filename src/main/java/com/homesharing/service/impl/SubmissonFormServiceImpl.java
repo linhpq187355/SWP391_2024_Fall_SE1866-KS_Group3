@@ -1,3 +1,15 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-10      2.0                 ManhNC         Implement search service
+ */
+
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.AmentityDAO;
@@ -17,7 +29,7 @@ import com.homesharing.dao.impl.DistrictDAOImpl;
 import com.homesharing.dao.impl.FireEquipHomeImpl;
 import com.homesharing.dao.impl.FireEquipmentDAOImpl;
 import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.HomeImageDAOImp;
+import com.homesharing.dao.impl.HomeImageDAOImpl;
 import com.homesharing.dao.impl.HomeTypeDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.dao.impl.ProvinceDAOImpl;
@@ -59,7 +71,7 @@ public class SubmissonFormServiceImpl implements SubmissionFormService {
         this.homeTypeDAO = new HomeTypeDAOImpl();
         this.amentityDAO = new AmentityDAOImpl();
         this.fireEquipmentDAO = new FireEquipmentDAOImpl();
-        this.homeImageDAO = new HomeImageDAOImp();
+        this.homeImageDAO = new HomeImageDAOImpl();
         this.homeDAO = new HomeDAOImpl();
         this.amentityHomeDAO = new AmentityHomeDAOImpl();
         this.fireEquipHomeDAO = new FireEquipHomeImpl();

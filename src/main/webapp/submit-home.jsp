@@ -70,7 +70,198 @@
 </div>
 <!-- Body content -->
 
-<jsp:include page="header.jsp"/>
+<div class="header-connect">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-sm-8  col-xs-12">
+                <div class="header-half header-call">
+                    <p>
+                        <span><i class="pe-7s-call"></i> 0989843097 </span>
+                        <span><i class="pe-7s-mail"></i> rommifyy@gmail.com</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-5  col-sm-3 col-sm-offset-1  col-xs-12">
+                <div class="header-half header-social">
+                    <ul class="list-inline">
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-vine"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End top header -->
+
+<nav class="navbar navbar-default ">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="home-page" style=" display: contents"><img src="assets/img/logo-web.jpg"
+                                                                                     alt="" style="max-width: 4em;"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse yamm" id="navigation">
+
+            <c:if test="${not empty cookie.id}">
+                <div class="button navbar-right"
+                     style="padding-top: 1.5em; display: flex; justify-content: space-around; width: 15em">
+                    <c:if test="${cookie.roleId.value == 3}">
+                        <div class="dropdown ymm-sw">
+                            <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
+                               class="fa-regular fa-heart dropdown-toggle" style="font-size: 2em"></i>
+                            <div class="dropdown-menu navbar-nav" style="right: 20em; width: 27em; padding: 1rem 2rem">
+                                <div class="dropdown-cart-products">
+                                    <div class="product">
+                                        <div class="product-cart-details">
+                                            <h4 class="product-title">
+                                                <a href="product.html">ok</a>
+                                            </h4>
+                                            <span class="cart-product-info">
+                                              <span class="cart-product-qty">12</span>
+                                                okok
+                                        </span>
+                                        </div><!-- End .product-cart-details -->
+
+                                        <figure class="product-image-container">
+                                            <a href="product.html" class="product-image">
+                                                <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png"
+                                                     alt="product">
+                                            </a>
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="dropdown-cart-action">
+                                    <a href="showcart" class="btn btn-primary">Xem wishlist</a>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+
+                    <div class="dropdown ymm-sw" style="position: relative">
+                        <div style="border-radius: 5px;width: 10px;height: 10px;position: absolute;background-color: #FDC600;left: 20px;bottom: 22px;"></div>
+                        <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
+                           class="fa-regular fa-message dropdown-toggle" style="font-size: 2em"></i>
+                        <div class="dropdown-menu navbar-nav" style="top: 4.4em; right: -3em; width: 23em">
+                            <div class="chat-list">
+                                <figure class="chat-image-container">
+                                    <a href="product.html" class="product-image">
+                                        <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png"
+                                             alt="product">
+                                    </a>
+                                </figure>
+                                <div class="chat-info">
+                                    <h4 class="user-name">
+                                        <a href="product.html">Pham Quang Linh</a>
+                                    </h4>
+                                    <span class="recent-chat">
+                                             Ok chốt vậy nhé
+                                        </span>
+                                </div>
+                            </div>
+
+
+                            <div class="chat-list">
+                                <figure class="chat-image-container">
+                                    <a href="product.html" class="product-image">
+                                        <img src="https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png"
+                                             alt="product">
+                                    </a>
+                                </figure>
+                                <div class="chat-info">
+                                    <h4 class="user-name">
+                                        <a href="product.html">Pham Quang Linh</a>
+                                    </h4>
+                                    <span class="recent-chat">
+                                             Bạn đã tìm được người chưa?
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown ymm-sw" style="position: relative">
+                        <div style="border-radius: 5px;width: 10px;height: 10px;position: absolute;background-color: #FDC600;left: 20px;bottom: 22px;"></div>
+                        <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
+                           class="fa-regular fa-bell dropdown-toggle" style="font-size: 2em"></i>
+                        <ul class="dropdown-menu navbar-nav"
+                            style="top: 4.4em; right: -1.5em; width: 27em; padding-bottom: 1em">
+                            <li>
+                                <a href="index-2.html" class="li-no">Thông tin nhà của bạn đã được xác thực</a>
+                            </li>
+                            <li>
+                                <a href="index-3.html" class="li-no">ABC đã bình luận trên bài viết của bạn
+                                    shcakshka</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown ymm-sw">
+                        <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
+                           class="fa-regular fa-user dropdown-toggle" style="font-size: 2em"></i>
+                        <ul class="dropdown-menu navbar-nav" style="right: 12em">
+                            <li>
+                                <a href="user-profile" class="li-acc-op">Thông tin cá nhân</a>
+                            </li>
+                            <li>
+                                <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
+                            </li>
+                            <c:if test="${cookie.roleId.value ==4}">
+                                <li>
+                                    <a href="index-3.html" class="li-acc-op">Quản lí danh sách nhà</a>
+                                </li>
+                            </c:if>
+
+                            <li>
+                                <a href="logout" class="li-acc-op">Đăng xuất</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+
+                </div>
+            </c:if>
+            <c:if test="${empty cookie.id}">
+                <div class="button navbar-right">
+                    <button class="navbar-btn nav-button wow bounceInRight login"
+                            onclick=" window.location.href='login'" data-wow-delay="0.4s">Đăng nhập
+                    </button>
+                    <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.location.href='signup'"
+                            data-wow-delay="0.5s">Đăng kí
+                    </button>
+                </div>
+            </c:if>
+
+            <ul class="main-nav nav navbar-nav navbar-right">
+                <li class="dropdown ymm-sw " data-wow-delay="0.1s">
+                    <a href="home-page">Trang chủ</a>
+                </li>
+
+                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-page">Danh sách nhà</a></li>
+                <%--                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>--%>
+                <%--                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>--%>
+                <c:if test="${cookie.roleId.value ==4}">
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="submit-home">Đăng bài</a></li>
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="my-home">Bài đăng của tôi</a></li>
+                </c:if>
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
 
 <div class="page-head">
     <div class="container">
@@ -149,8 +340,8 @@
                                             <label>Vui lòng chọn vị trí trên bản đồ</label>
                                             <div id="map"></div>
                                             <%--                                            <div id="selected-location"></div>--%>
-                                            <input type="hidden" name="latitude" id="latitude" value="">
-                                            <input type="hidden" name="longitude" id="longitude" value="">
+                                            <input type="hidden" name="latitude" id="latitude" value="0">
+                                            <input type="hidden" name="longitude" id="longitude" value="0">
                                         </div>
                                     </div>
                                 </div>
@@ -334,7 +525,151 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp"/>
+<div class="footer-area">
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                    <div class="single-footer">
+                        <h4>About us </h4>
+                        <div class="footer-title-line"></div>
+
+                        <img src="assets/img/footer-logo.png" alt="" class="wow pulse" data-wow-delay="1s">
+                        <p>Lorem ipsum dolor cum necessitatibus su quisquam molestias. Vel unde, blanditiis.</p>
+                        <ul class="footer-adress">
+                            <li><i class="pe-7s-map-marker strong"> </i> FPT university</li>
+                            <li><i class="pe-7s-mail strong"> </i> rommifyy@gmail.com</li>
+                            <li><i class="pe-7s-call strong"> </i> 0989843097</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                    <div class="single-footer">
+                        <h4>Quick links </h4>
+                        <div class="footer-title-line"></div>
+                        <ul class="footer-menu">
+                            <li><a href="properties.html">Properties</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="submit-property.html">Submit property </a></li>
+                            <li><a href="contact.html">Contact us</a></li>
+                            <li><a href="about-us.jsp">About Us</a></li>
+                            <li><a href="terms.jsp">Terms </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                    <div class="single-footer">
+                        <h4>Last News</h4>
+                        <div class="footer-title-line"></div>
+                        <ul class="footer-blog">
+                            <li>
+                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
+                                    <a href="single.html">
+                                        <img src="assets/img/demo/small-proerty-2.jpg">
+                                    </a>
+                                    <span class="blg-date">12-12-2016</span>
+
+                                </div>
+                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
+                                    <h6><a href="single.html">Add news functions </a></h6>
+                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
+                                        ...</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
+                                    <a href="single.html">
+                                        <img src="assets/img/demo/small-proerty-2.jpg">
+                                    </a>
+                                    <span class="blg-date">12-12-2016</span>
+
+                                </div>
+                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
+                                    <h6><a href="single.html">Add news functions </a></h6>
+                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
+                                        ...</p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
+                                    <a href="single.html">
+                                        <img src="assets/img/demo/small-proerty-2.jpg">
+                                    </a>
+                                    <span class="blg-date">12-12-2016</span>
+
+                                </div>
+                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
+                                    <h6><a href="single.html">Add news functions </a></h6>
+                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
+                                        ...</p>
+                                </div>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
+                    <div class="single-footer news-letter">
+                        <h4>Stay in touch</h4>
+                        <div class="footer-title-line"></div>
+                        <p>Lorem ipsum dolor sit amet, nulla suscipit similique quisquam molestias. Vel unde,
+                            blanditiis.</p>
+
+                        <form>
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="E-mail ... ">
+                                <span class="input-group-btn">
+                                            <button class="btn btn-primary subscribe" type="button"><i
+                                                    class="pe-7s-paper-plane pe-2x"></i></button>
+                                        </span>
+                            </div>
+                            <!-- /input-group -->
+                        </form>
+
+                        <div class="social pull-right">
+                            <ul>
+                                <li><a class="wow fadeInUp animated" href="https://twitter.com/kimarotec"><i
+                                        class="fa fa-twitter"></i></a></li>
+                                <li><a class="wow fadeInUp animated" href="https://www.facebook.com/kimarotec"
+                                       data-wow-delay="0.2s"><i class="fa fa-facebook"></i></a></li>
+                                <li><a class="wow fadeInUp animated" href="https://plus.google.com/kimarotec"
+                                       data-wow-delay="0.3s"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec"
+                                       data-wow-delay="0.4s"><i class="fa fa-instagram"></i></a></li>
+                                <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec"
+                                       data-wow-delay="0.6s"><i class="fa fa-dribbble"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-copy text-center">
+        <div class="container">
+            <div class="row">
+                <div class="pull-left">
+                    <span> (C) <a href="http://www.KimaroTec.com">KimaroTheme</a> , All rights reserved 2016  </span>
+                </div>
+                <div class="bottom-menu pull-right">
+                    <ul>
+                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.2s">Home</a></li>
+                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.3s">Property</a></li>
+                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.4s">Faq</a></li>
+                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.6s">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="assets/js//jquery-1.10.2.min.js"></script>

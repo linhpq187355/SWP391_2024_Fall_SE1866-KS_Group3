@@ -1,22 +1,12 @@
 package com.homesharing.service.impl;
 
-import com.homesharing.dao.AmentityDAO;
 import com.homesharing.dao.AmentityHomeDAO;
-import com.homesharing.dao.DistrictDAO;
 import com.homesharing.dao.FireEquipHomeDAO;
-import com.homesharing.dao.FireEquipmentDAO;
 import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.HomeImageDAO;
 import com.homesharing.dao.PriceDAO;
-import com.homesharing.dao.ProvinceDAO;
-import com.homesharing.dao.WardDAO;
-import com.homesharing.model.District;
-import com.homesharing.model.FireEquipment;
 import com.homesharing.model.Home;
-import com.homesharing.model.HomeImage;
 import com.homesharing.model.Price;
-import com.homesharing.model.Province;
-import com.homesharing.model.Ward;
 import com.homesharing.service.HomeMgtService;
 
 import java.util.ArrayList;
