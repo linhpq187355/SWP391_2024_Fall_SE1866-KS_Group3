@@ -317,5 +317,13 @@ public class HomePageServiceImpl implements HomePageService {
         }
     }
 
+    @Override
+    public List<Home> getHomesByUser(int userId) {
+        return homeDAO.getHomesByUserId(userId);
+    }
+    @Override
+    public List<Price> getHomesByUserPrices(List<Home> getHomesByUser) {
+        return priceDAO.getPrices(getHomesByUser);
+    }
 
 }

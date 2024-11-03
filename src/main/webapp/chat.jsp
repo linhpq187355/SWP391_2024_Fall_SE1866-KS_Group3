@@ -574,13 +574,13 @@
                         const inputBar = document.getElementById("input-bar");
                         if (data.send === sendId) {
                             // Nếu mình là người gửi chặn
-                            blockedMessage.style.display = "none"; // Ẩn nút chặn
-                            blockerMessage.style.display = "block"; // Hiện nút bỏ chặn
+                            blockedMessage.style.display = "none";
+                            blockerMessage.style.display = "block";
                             inputBar.style.display = "none";
                         } else if (data.send === receivedId) {
                             // Nếu mình là người nhận và đã bị chặn
-                            blockerMessage.style.display = "none"; // Ẩn nút chặn
-                            inputBar.style.display = "none"; // Ẩn nút bỏ chặn
+                            blockerMessage.style.display = "none";
+                            inputBar.style.display = "none";
                             blockedMessage.style.display = "block";
                         }
                     } else {
@@ -909,8 +909,12 @@
     }
 
     async function sendMessage() {
-        const blockerId = document.getElementById("blockerId").value;
-        const userId = document.getElementById("userId").value;
+        const blockerElement = document.getElementById("blockerId");
+        const userElement = document.getElementById("userId");
+
+// Kiểm tra sự tồn tại của các phần tử trước khi lấy giá trị
+        const blockerId = blockerElement ? blockerElement.value : null;
+        const userId = userElement ? userElement.value : null;
         // Nếu cuộc trò chuyện bị chặn, hiển thị thông báo và không gửi tin nhắn
         if (blockerId) {
             if (blockerId === userId) {

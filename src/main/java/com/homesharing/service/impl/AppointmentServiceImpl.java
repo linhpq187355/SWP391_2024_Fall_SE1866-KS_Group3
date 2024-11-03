@@ -93,7 +93,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         try {
             int newId = appointmentDAO.insert(appointment);
             if(newId>0){
-                AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Bạn có lịch hẹn xem phòng mới!", "Appointment", "appointment-host-manage?appointmentId="+newId);
+                AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Bạn có lịch hẹn xem phòng mới vào: "+time+" | "+day+"/"+month+"/"+year+"!", "Bạn có lịch hẹn xem phòng mới!","Appointment", "appointment-host-manage?appointmentId="+newId);
             }
             return newId;
         } catch (RuntimeException e) {
@@ -202,9 +202,9 @@ public class AppointmentServiceImpl implements AppointmentService {
             int effectedRow = appointmentDAO.cancelAppointment(appointmentID, reason);
             if(effectedRow>0){
                 if(receiver.equals("host")){
-                    AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" đã bị hủy với lý do: "+reason, "Appointment", "appointment-host-manage?appointmentId="+appointmentId);
+                    AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" đã bị hủy với lý do: "+reason, "Lịch hẹn đã bị hủy!","Appointment", "appointment-host-manage?appointmentId="+appointmentId);
                 } else {
-                    AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" đã bị hủy với lý do: "+reason, "Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
+                    AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" đã bị hủy với lý do: "+reason, "Lịch hẹn đã bị hủy!","Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
                 }
 
             }
@@ -292,7 +292,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             int affectedRow = appointmentDAO.update(appointment);
             if(affectedRow>0){
                 if(host.equals("1")) {
-                    AddNotificationUtil.getInstance().addNotification(appointment1.getTenantId(),"Lịch hẹn ngày "+appointment1.getStartDate().getDayOfMonth()+"/"+appointment1.getStartDate().getMonthValue()+"/"+appointment1.getStartDate().getYear()+" đã được đổi sang "+ time+" | "+day+"/"+month+"/"+year+" bởi chủ phòng, vui lòng xem và xác nhận.", "Appointment", "appointment-tenant-list?appointmentId="+id);
+                    AddNotificationUtil.getInstance().addNotification(appointment1.getTenantId(),"Lịch hẹn ngày "+appointment1.getStartDate().getDayOfMonth()+"/"+appointment1.getStartDate().getMonthValue()+"/"+appointment1.getStartDate().getYear()+" đã được đổi sang "+ time+" | "+day+"/"+month+"/"+year+" bởi chủ phòng, vui lòng xem và xác nhận.", "Lịch hẹn đã được thay đổi!","Appointment", "appointment-tenant-list?appointmentId="+id);
                 }
             }
             return affectedRow;
@@ -313,9 +313,9 @@ public class AppointmentServiceImpl implements AppointmentService {
             int effectedRow = appointmentDAO.acceptAppointment(appointmentID);
             if(effectedRow >0){
                 if(receiver.equals("host")){
-                    AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã được chấp nhận!", "Appointment", "appointment-host-manage?appointmentId="+appointmentId);
+                    AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã được chấp nhận!", "Lịch hẹn được chấp nhận.","Appointment", "appointment-host-manage?appointmentId="+appointmentId);
                 } else {
-                    AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã được chấp nhận!", "Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
+                    AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã được chấp nhận!","Lịch hẹn được chấp nhận.", "Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
                 }
 
             }
@@ -336,7 +336,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             Appointment appointment = getAppointmentById(appointmentId);
             int effectedRow = appointmentDAO.rejectAppointment(appointmentID, reason);
             if(effectedRow >0){
-                AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã bị từ chối với lí do: "+reason+"!", "Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
+                AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã bị từ chối với lí do: "+reason+"!", "Lịch hẹn bị từ chối.","Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
             }
             return effectedRow;
         } catch (GeneralException e){

@@ -47,9 +47,9 @@ public class NotificationServiceImpl implements NotificationService {
      * @throws GeneralException for handling other exceptions specific to the business logic.
      */
     @Override
-    public boolean addNotification(int receiverId, String content, String type, String url) throws SQLException, GeneralException {
+    public boolean addNotification(int receiverId, String content, String type, String url, String title) throws SQLException, GeneralException {
         // Delegates the call to the DAO to add the notification
-        return notificationDAO.addNotification(receiverId, content, type, url);
+        return notificationDAO.addNotification(receiverId, content,title, type, url);
     }
 
     /**

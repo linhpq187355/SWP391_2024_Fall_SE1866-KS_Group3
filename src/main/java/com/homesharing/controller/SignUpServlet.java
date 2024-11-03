@@ -115,7 +115,7 @@ public class SignUpServlet extends HttpServlet {
                 if (result > 0) {
                     //redirect to verify email
                     String url = Config.getBaseUrl();
-                    notificationService.addNotification(result,"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.","System",url);
+                    notificationService.addNotification(result,"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.","System",url,"Chào mừng");
                     req.getSession().setAttribute("userId", result);
                     resp.sendRedirect(req.getContextPath() + "/verify");
                 } else if (result == 0) {

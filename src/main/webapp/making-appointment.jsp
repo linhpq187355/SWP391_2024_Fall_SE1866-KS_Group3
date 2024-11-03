@@ -196,7 +196,7 @@
             </table>
         </div>
         <h2 style="font-size: 30px;margin-bottom: 40px;color: #000;margin-left: 30px;">Chọn thời gian<span style="color: red;margin-left: 10px">*</span></h2>
-        <div class="time-picker" style="width: 85%; margin: auto">
+        <div class="time-picker" style="width: 91%; margin: auto">
             <table>
                 <tr>
                     <td class="time-slot">5:30 - 7:30</td>

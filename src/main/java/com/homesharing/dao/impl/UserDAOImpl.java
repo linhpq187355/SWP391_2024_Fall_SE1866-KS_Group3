@@ -549,7 +549,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setStatus(resultSet.getString("status"));
                 user.setVerified(resultSet.getBoolean("isVerified"));
                 // Check null before call toLocalDateTime()
-                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("lastModified");
+                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("modifiedDate");
                 if (lastModifiedTimestamp != null) {
                     user.setLastModified(lastModifiedTimestamp.toLocalDateTime());
                 } else {
@@ -598,7 +598,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[lastName] = ?\n" +
                 "      ,[avatar] = ?\n" +
                 "      ,[dob] = ?\n" +
-                "      ,[lastModified] = GETDATE()\n" +
+                "      ,[modifiedDate] = GETDATE()\n" +
                 " WHERE id = ?";
 
         Connection connection = null;
@@ -849,6 +849,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[minBudget] = ?" +
                 "      ,[maxBudget] = ?" +
                 "      ,[earliestMoveIn] = ?" +
+                "      ,[preferredCity] = ?" +
                 "      ,[latestMoveIn] = ?" +
                 " WHERE id = ?";
 
@@ -925,6 +926,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 } else {
                     user.setLatestMoveIn(null);
                 }
+                user.setPrefProv(resultSet.getInt("preferredCity"));
                 return user;
             }
 

@@ -144,7 +144,7 @@ public class VerifyEmailServlet extends HttpServlet {
                     request.setAttribute("error", "Bạn đã nhập sai OTP quá 5 lần. Vui lòng thử lại sau.");
                     request.getRequestDispatcher("/error.jsp").forward(request, response);
                 } else {
-                    request.setAttribute("error", "OTP không hợp lệ.");
+                    request.setAttribute("error", "OTP không hợp lệ hoặc đã bị quá hạn.");
                     request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
                 }
             }

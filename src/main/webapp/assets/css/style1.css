@@ -61,8 +61,8 @@ img {
 
 .wizard > .steps {
   position: absolute;
-  top: 19.44%;
-  right: 52.5%;
+  top: 16.44%;
+  right: 51.5%;
   transform: translateX(50%);
   z-index: 9; }
 

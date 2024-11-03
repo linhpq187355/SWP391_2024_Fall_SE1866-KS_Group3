@@ -59,8 +59,8 @@ public class AddNotificationUtil {
      * @param url     the URL related to the notification, if applicable
      * @throws SQLException if a database access error occurs while adding the notification
      */
-    public void addNotification(int id, String message, String type, String url) throws SQLException {
-        notificationService.addNotification(id,message,type,url);
+    public void addNotification(int id, String message, String title, String type, String url) throws SQLException {
+        notificationService.addNotification(id,message,type,url, title);
     }
 }
 

@@ -53,7 +53,7 @@ class NotificationDAOImplTest {
         when(preparedStatement.executeUpdate()).thenReturn(1); // Simulate a successful insert
 
         // Act
-        boolean result = notificationDAO.addNotification(receiverId, content, type, url);
+        boolean result = notificationDAO.addNotification(receiverId, content,"Hi", type, url);
 
         // Assert
         assertTrue(result);
@@ -76,7 +76,7 @@ class NotificationDAOImplTest {
 
         // Act & Assert
         Exception exception = assertThrows(GeneralException.class, () -> {
-            notificationDAO.addNotification(receiverId, content, type, url);
+            notificationDAO.addNotification(receiverId, content,"Hi", type, url);
         });
         assertTrue(exception.getMessage().contains("SQL error while adding notification: Database error"));
     }

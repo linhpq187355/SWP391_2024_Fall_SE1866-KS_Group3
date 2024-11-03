@@ -171,7 +171,7 @@
                             <div class="col-sm-5 col-sm-offset-1">
                                 <div class="form-group">
                                     <label>Sạch sẽ</label>
-                                    <div class="slider-container">
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.cleanliness == 100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -182,7 +182,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Hút thuốc</label>
-                                    <div class="slider-container">
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.smoking == 100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -193,7 +193,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Uống rượu/bia</label>
-                                    <div class="slider-container">
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.drinking == 100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -206,7 +206,7 @@
                             <div class="col-sm-5">
                                 <div class="form-group">
                                     <label>Hướng ngoại</label>
-                                    <div class="slider-container">
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.interaction ==100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -217,7 +217,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Nấu ăn</label>
-                                    <div class="slider-container">
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.cooking ==100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -228,7 +228,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Thú cưng</label>
-                                    <div class="slider-container">
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.pet ==100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>

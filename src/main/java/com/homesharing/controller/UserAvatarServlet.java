@@ -13,7 +13,7 @@ import java.nio.file.Files;
 
 @WebServlet("/user-avatar/*")
 public class UserAvatarServlet extends HttpServlet {
-    private static final String AVATAR_DIR = "D:/Java/HomeSharingWebsite/target/HomeSharingWebsite-1.0-SNAPSHOT/assets/img/user-avatar";
+    private static final String AVATAR_DIR = "E:/IntelliJ/SWP391_2024_Fall_SE1866-KS_Group3/target/HomeSharingWebsite-1.0-SNAPSHOT/assets/img/user-avatar";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

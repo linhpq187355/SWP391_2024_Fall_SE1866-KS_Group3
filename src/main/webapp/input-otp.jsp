@@ -54,7 +54,7 @@
                         <!-- Thêm liên kết Gửi lại OTP -->
                         <div class="text-center">
                             <p>Không nhận được OTP?</p>
-                            <a href="resend-otp?userId=${sessionScope.userId}" class="btn btn-link" id="resendOtpLink" style="pointer-events: none; opacity: 0.5;">Gửi lại OTP (<span id="countdown">60</span>s)</a>
+                            <a href="resend-otp?userId=${sessionScope.userId}" class="btn btn-link" id="resendOtpLink" >Gửi lại OTP (<span id="countdown">60</span>s)</a>
                         </div>
                     </div>
                 </div>
@@ -87,18 +87,43 @@
         var countdownElement = document.getElementById('countdown');
         var resendOtpLink = document.getElementById('resendOtpLink');
         var countdownTime = 60; // Thời gian đếm ngược, 60 giây
-        var countdownInterval = setInterval(function () {
-            countdownTime--;
-            countdownElement.textContent = countdownTime;
+        var countdownInterval;
 
-            if (countdownTime <= 0) {
-                clearInterval(countdownInterval);
-                // Kích hoạt lại liên kết "Gửi lại OTP"
-                resendOtpLink.classList.remove('disabled');  // Loại bỏ lớp disabled
-                resendOtpLink.style.pointerEvents = 'auto';  // Bật lại sự kiện click
-                resendOtpLink.textContent = 'Gửi lại OTP';  // Thay đổi văn bản liên kết
+        // Hàm để bắt đầu đếm ngược
+        function startCountdown() {
+            countdownTime = 60; // Reset thời gian đếm ngược
+            countdownElement.textContent = countdownTime; // Hiển thị thời gian ban đầu
+
+            countdownInterval = setInterval(function () {
+                countdownTime--;
+                countdownElement.textContent = countdownTime;
+
+                if (countdownTime <= 0) {
+                    clearInterval(countdownInterval);
+                    // Kích hoạt lại liên kết "Gửi lại OTP"
+                    resendOtpLink.classList.remove('disabled'); // Loại bỏ lớp disabled
+                    resendOtpLink.style.pointerEvents = 'auto'; // Bật lại sự kiện click
+                    resendOtpLink.style.opacity = '1';
+                    resendOtpLink.textContent = 'Gửi lại OTP'; // Thay đổi văn bản liên kết
+                }
+            }, 1000);
+        }
+
+        // Xử lý sự kiện click cho liên kết "Gửi lại OTP"
+        resendOtpLink.addEventListener('click', function (event) {
+            // Nếu liên kết không bị vô hiệu hóa
+            if (!resendOtpLink.classList.contains('disabled')) {
+                // Vô hiệu hóa liên kết "Gửi lại OTP"
+                event.preventDefault();
+                resendOtpLink.classList.add('disabled');
+                resendOtpLink.style.pointerEvents = 'none'; // Vô hiệu hóa sự kiện click
+                resendOtpLink.style.opacity = '0.5';
+                // Gửi lại OTP (có thể thêm mã gửi OTP ở đây)
+
+                // Bắt đầu đếm ngược
+                startCountdown();
             }
-        }, 1000);
+        });
     });
 
 

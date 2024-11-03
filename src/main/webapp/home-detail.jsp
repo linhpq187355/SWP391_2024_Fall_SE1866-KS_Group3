@@ -388,7 +388,7 @@
                                                 </button>
                                             </li>
                                             <li>
-                                                <a class="zalo-button" href="chat-box?userId=${creator.id}">
+                                                <a class="zalo-button" href="chat-box?userId=${creator.id}" style="font-weight: 100">
                                                     <i class="fas fa-comment"></i>
                                                     Liên Hệ
                                                 </a>
