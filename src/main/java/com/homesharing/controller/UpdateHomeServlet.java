@@ -165,7 +165,7 @@ public class UpdateHomeServlet extends HttpServlet {
         req.setAttribute("fireEquipments", fireEquipments);
         req.setAttribute("movindate", moveInDate);
         req.setAttribute("images", images);
-        req.getRequestDispatcher("/update-demo.jsp").forward(req, resp);
+        req.getRequestDispatcher("/update-home.jsp").forward(req, resp);
     }
 
     /**

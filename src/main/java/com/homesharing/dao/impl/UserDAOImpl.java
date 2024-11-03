@@ -6,8 +6,9 @@
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  *  * 2024-9-18      1.0                 ManhNC         First Implement
- * 2024-10-01      1.0              Pham Quang Linh     First Implement
- * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-01        1.0              Pham Quang Linh     First Implement
+ * 2024-10-10        2.0              Pham Quang Linh     Second Implement
+ * 2024-10-10        2.0              ManhNC             Second Implement
  */
 
 package com.homesharing.dao.impl;
@@ -327,7 +328,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             preparedStatement.setInt(1, userId);
 
             // Execute the query to check for email existence
-            resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();                    
             if (resultSet.next()) {
                 return resultSet.getInt(1); // Return true if email exists
             }
@@ -494,24 +495,26 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String sql = "SELECT [id]\n" +
-                "      ,[email]\n" +
-                "      ,[hashedPassword]\n" +
-                "      ,[phoneNumber]\n" +
-                "      ,[username]\n" +
-                "      ,[firstName]\n" +
-                "      ,[lastName]\n" +
-                "      ,[avatar]\n" +
-                "      ,[dob]\n" +
-                "      ,[address]\n" +
-                "      ,[gender]\n" +
-                "      ,[citizenNumber]\n" +
-                "      ,[createdAt]\n" +
-                "      ,[status]\n" +
-                "      ,[isVerified]\n" +
-                "      ,[lastModified]\n" +
-                "      ,[rolesid]\n" +
-                "  FROM [dbo].[HSS_Users]";
+        String sql = "SELECT u.[id],\n" +
+                "       u.[email],\n" +
+                "       u.[hashedPassword],\n" +
+                "       u.[phoneNumber],\n" +
+                "       u.[username],\n" +
+                "       u.[firstName],\n" +
+                "       u.[lastName],\n" +
+                "       u.[avatar],\n" +
+                "       u.[dob],\n" +
+                "       u.[address],\n" +
+                "       u.[gender],\n" +
+                "       u.[citizenNumber],\n" +
+                "       u.[createdAt],\n" +
+                "       u.[status],\n" +
+                "       u.[isVerified],\n" +
+                "       u.[modifiedDate],\n" +
+                "       u.[rolesid],\n" +
+                "       r.[name] AS roleName\n" +
+                "FROM [dbo].[HSS_Users] u\n" +
+                "LEFT JOIN [dbo].[Roles] r ON u.[rolesid] = r.[id]";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -714,7 +717,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     public User getUserById(int id) {
         String sql = "SELECT [id], [firstName], [lastName], [email], [Rolesid], [status], [hashedPassword], [createdAt] FROM [dbo].[HSS_Users] WHERE [id] = ?";
 
-
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             //
@@ -847,7 +849,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[minBudget] = ?" +
                 "      ,[maxBudget] = ?" +
                 "      ,[earliestMoveIn] = ?" +
-                "      ,[preferredCity] = ?" +
                 "      ,[latestMoveIn] = ?" +
                 " WHERE id = ?";
 

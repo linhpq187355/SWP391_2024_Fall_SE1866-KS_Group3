@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class FireEquipHomeImpl implements FireEquipHomeDAO {
+public class FireEquipHomeImpl extends DBContext implements FireEquipHomeDAO {
     @Override
     public int save(FireEquipmentsHome fireEquipmentsHome) {
         // First, check if the record already exists
@@ -22,7 +22,7 @@ public class FireEquipHomeImpl implements FireEquipHomeDAO {
 
         String sql = "INSERT INTO [dbo].[FireEquipments_Homes] ([fireEquipmentsId],[homesId]) VALUES (?,?)";
         // Using try-with-resources to manage the database connection and resources
-        try (Connection connection = DBContext.getConnection();
+        try (Connection connection = getConnection();
              // PreparedStatement with RETURN_GENERATED_KEYS to capture the inserted Home ID
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -55,7 +55,7 @@ public class FireEquipHomeImpl implements FireEquipHomeDAO {
         String sql = "DELETE FROM [dbo].[Amenities_Homes] WHERE [homesId] = ?";
         int affectedRows = 0; // To keep track of the number of affected rows
         // Using try-with-resources to manage the database connection and resources
-        try (Connection connection = DBContext.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             // Setting the homeId parameter for the PreparedStatement
             preparedStatement.setInt(1, homeId);
@@ -74,7 +74,7 @@ public class FireEquipHomeImpl implements FireEquipHomeDAO {
 
     private boolean exists(FireEquipmentsHome fireEquipmentsHome) {
         String sql = "SELECT COUNT(*) FROM [dbo].[FireEquipments_Homes] WHERE [fireEquipmentsId] = ? AND [homesId] = ?";
-        try (Connection connection = DBContext.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, fireEquipmentsHome.getFireEquipmentsId());
