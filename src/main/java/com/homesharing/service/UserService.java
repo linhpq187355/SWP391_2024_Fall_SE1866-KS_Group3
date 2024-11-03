@@ -12,11 +12,13 @@
 
 package com.homesharing.service;
 
+import com.homesharing.model.Appointment;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * UserService interface defines methods for user registration and validation.
@@ -206,5 +208,9 @@ public interface UserService {
      * @param userId          The ID of the user whose profile is to be updated.
      * @return An integer indicating the result of the update operation (e.g., number of rows affected).
      */
-    int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId);
+    int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget,String prefProv, String userId);
+
+    List<User> getHostByAppointment(List<Appointment> appointments);
+
+    List<User> getTenantByAppointment(List<Appointment> appointments);
 }

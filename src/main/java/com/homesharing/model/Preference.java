@@ -21,6 +21,20 @@ public class Preference {
     private int pet;
     private int guest;
 
+    public Preference() {
+    }
+
+    public Preference(int cleanliness, int smoking, int drinking, int interaction, int cooking, int pet, int guest, int userId) {
+        this.userId = userId;
+        this.cleanliness = cleanliness;
+        this.smoking = smoking;
+        this.drinking = drinking;
+        this.interaction = interaction;
+        this.cooking = cooking;
+        this.pet = pet;
+        this.guest = guest;
+    }
+
     public int getId() {
         return id;
     }

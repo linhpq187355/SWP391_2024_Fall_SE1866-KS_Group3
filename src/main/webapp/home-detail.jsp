@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+
     <style>
         .card {
             background-color: #7f7f7f;
@@ -68,6 +69,7 @@
             margin-right: 10px; /* Optional spacing between homes */
         }
         .phone-button {
+            margin: 5px 0 5px 0;
             background-color: #00c853;
             color: white;
             padding: 10px;
@@ -83,7 +85,26 @@
         .phone-button i {
             margin-right: 10px;
         }
+
+        .apmt-button {
+            margin: 5px 0 5px 0;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .apmt-button i {
+            margin-right: 10px;
+        }
         .zalo-button, .like-button {
+            margin: 5px 0 5px 0;
             background-color: white;
             color: black;
             padding: 10px;
@@ -98,7 +119,7 @@
         }
         .zalo-button i, .like-button i {
             margin-right: 10px;
-            }
+        }
         /*#map{*/
         /*    width: 100%;*/
         /*    height: 100%;*/
@@ -294,7 +315,6 @@
                         </ul>
                     </div>
 
-
                     <!-- End additional-details area  -->
 
 
@@ -331,48 +351,6 @@
                             </ul>
                         </div>
                     </div>
-<%--                    <div class="similar-post-section padding-top-40">--%>
-<%--                        <div class="row"> <!-- Ensure row class is used -->--%>
-<%--                            <c:forEach var="similarHome" items="${similarHomes}">--%>
-<%--                                <div class="col-md-3 col-sm-6 col-xs-12"> <!-- Adjust column size based on your needs -->--%>
-<%--                                    <div id="prop-smlr-slide_0">--%>
-<%--                                        <div class="box-two proerty-item">--%>
-<%--                                            <div class="item-thumb">--%>
-<%--                                                <a href="home-detail?id=${similarHome.id}">--%>
-<%--                                                    <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}">--%>
-<%--                                                </a>--%>
-<%--                                            </div>--%>
-<%--                                            <div class="item-entry overflow">--%>
-<%--                                                <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
-<%--                                                <div class="dot-hr"></div>--%>
-<%--                                                <span class="pull-left"><b> Area :</b> ${similarHome.area}m </span>--%>
-<%--                                                <span class="proerty-price pull-right">${prices[0].price} VND/month</span>--%>
-<%--                                            </div>--%>
-<%--                                        </div>--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </c:forEach>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                    <div class="similar-post-section padding-top-40">--%>
-<%--                        <c:forEach var="similarHome" items="${similarHomes}">--%>
-<%--                            <div id="prop-smlr-slide_0">--%>
-<%--                                <div class="box-two proerty-item">--%>
-<%--                                    <div class="item-thumb">--%>
-<%--                                        <a href="home-detail?id=${similarHome.id}">--%>
-<%--                                            <img src="assets/img/similar/property-1.jpg" alt="${similarHome.address}"> <!-- Replace with actual image -->--%>
-<%--                                        </a>--%>
-<%--                                    </div>--%>
-<%--                                    <div class="item-entry overflow">--%>
-<%--                                        <h5><a href="home-detail?id=${similarHome.id}"> ${similarHome.address} </a></h5>--%>
-<%--                                        <div class="dot-hr"></div>--%>
-<%--                                        <span class="pull-left"><b> Area :</b> ${similarHome.area}m</span> <!-- Replace with actual area -->--%>
-<%--                                        <span class="proerty-price pull-right">${prices[0].price} VND/month</span> <!-- Adjust price as necessary -->--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </c:forEach>--%>
-<%--                    </div>--%>
                     <!-- End video area  -->
 
                 </div>
@@ -380,58 +358,67 @@
 
 
             <div class="col-md-4 p0">
-                <aside class="sidebar sidebar-property blog-asside-right" style="background-color: #fff">
-                    <div class="dealer-widget" style="background-color: #fff;
-    border-radius: 10px;
-    border: solid 3px #ccc;
-    margin: -5px;">
+                <aside class="sidebar sidebar-property blog-asside-right" style="background-color: #fff; padding-top: 3px">
+                    <div class="dealer-widget" style="background-color: #fff;border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;margin: -5px;">
                         <div class="dealer-content">
                             <div class="inner-wrapper">
                                 <div class="clear">
-                                    <div class="col-xs-4 col-sm-4 dealer-face">
+                                    <div class="col-xs-4 col-sm-4 dealer-face" style="padding: 0">
                                         <a href="">
                                             <img src="assets/img/client-face1.png" class="img-circle">
                                         </a>
                                     </div>
-                                    <div class="col-xs-8 col-sm-8 ">
-                                        <h3 class="dealer-name">
+                                    <div class="col-xs-8 col-sm-8 " style="padding:0">
+                                        <h3 class="dealer-name" style="color: black">
                                             <a href="">${creator.firstName} ${creator.lastName}</a>
                                         </h3>
-
+                                        <div class="dealer-email" style="color: black; display: flex; align-items: center">
+                                            <i class="fa-solid fa-envelope"></i>
+                                            <p style="padding: 0 0 5px 10px;">${creator.email}</p>
+                                        </div>
                                     </div>
 
 
-                                <div class="clear">
-                                    <ul class="dealer-contacts">
-                                        <li>
-                                            <button class="phone-button">
-                                                <i class="fas fa-phone"></i>
-                                                ${creator.phoneNumber}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <a class="zalo-button" href="chat-box?userId=${creator.id}">
-                                                <i class="fas fa-comment"></i>
-                                                Liên Hệ
-                                            </a>
-                                        </li>
-                                        <c:if test="${cookie.roleId.value == 3}">
+                                    <div class="clear">
+                                        <ul class="dealer-contacts">
                                             <li>
-                                                <form action="${sessionScope.isInWishlist ? 'delete-wishlist' : 'add-wishlist'}" method="POST"
-                                                      onsubmit="return confirm('${sessionScope.isInWishlist ? 'Bạn có chắc chắn muốn xóa không?' : 'Bạn có chắc chắn muốn thêm vào danh sách yêu thích?'}');">
-                                                    <input type="hidden" name="homeId" value="${home.id}">
-                                                    <button type="submit" class="like-button">
-                                                        <i class="fas fa-heart"></i> ${sessionScope.isInWishlist ? 'Đã thêm' : 'Yêu thích'}
-                                                    </button>
-                                                </form>
+                                                <button class="phone-button">
+                                                    <i class="fas fa-phone"></i>
+                                                    ${creator.phoneNumber}
+                                                </button>
                                             </li>
-                                        </c:if>
-                                    </ul>
+                                            <li>
+                                                <a class="zalo-button" href="chat-box?userId=${creator.id}">
+                                                    <i class="fas fa-comment"></i>
+                                                    Liên Hệ
+                                                </a>
+                                            </li>
+
+                                            <c:if test="${cookie.roleId.value == 3}">
+                                                <li>
+                                                    <form action="${sessionScope.isInWishlist ? 'delete-wishlist' : 'add-wishlist'}" method="POST"
+                                                          onsubmit="return confirm('${sessionScope.isInWishlist ? 'Bạn có chắc chắn muốn xóa không?' : 'Bạn có chắc chắn muốn thêm vào danh sách yêu thích?'}');">
+                                                        <input type="hidden" name="homeId" value="${home.id}">
+                                                        <button type="submit" class="like-button">
+                                                            <i class="fas fa-heart"></i> ${sessionScope.isInWishlist ? 'Đã thêm' : 'Yêu thích'}
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </c:if>
+                                            <c:if test="${cookie.roleId.value ==3}">
+                                                <li>
+                                                    <button class="apmt-button" onclick="window.location.href='make-appointment?hostId=${creator.id}&homeId=${home.id}'">
+                                                        <i class="fa-solid fa-calendar"></i>
+                                                        Đặt lịch hẹn
+                                                    </button>
+                                                </li>
+                                            </c:if>
+
+                                        </ul>
                                     </div>
                                     <div>
                                         <c:if test="${not empty sessionScope.message}">
                                             <div class="alert alert-info">${sessionScope.message}</div>
-                                            <%-- Xóa thông điệp sau khi hiển thị --%>
                                             <c:remove var="message" />
                                         </c:if>
                                     </div>
@@ -439,6 +426,8 @@
                             </div>
                         </div>
                     </div>
+
+
 
 
 
@@ -467,82 +456,34 @@
 
 
 
-<%--                    <div id="map"></div>--%>
+                    <%--                    <div id="map"></div>--%>
                     <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated" style="    margin: 25px 9px 9px 9px">
-                                                                        <div class="panel-heading">
-                                                                            <h3 class="panel-title">Bạn cũng có thể thích</h3>
-                                                                        </div>
-                    <div class="panel-body recent-property-widget">
-                        <ul>
-                            <!-- Lặp qua danh sách các nhà tương tự -->
-                            <c:forEach var="similarHome" items="${similarHomes}">
-                                <li>
-                                    <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
-                                        <a href="home-detail?id=${similarHome.id}">
-                                            <img src="assets/img/demo/small-property-2.jpg" alt="${similarHome.address}"> <!-- Hình ảnh mẫu, bạn có thể thay đổi -->
-                                        </a>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
-                                        <h6><a href="home-detail?id=${similarHome.id}">${similarHome.address}</a></h6>
-                                        <c:forEach items="${requestScope.priceSimilarHomes}" var="priceSimilarHomes">
-                                            <c:if test="${similarHome.id == priceSimilarHomes.homesId}">
-                                                <span class="property-price"><fmt:formatNumber value="${priceSimilarHomes.price}" type="number" groupingUsed="true"/> VND/tháng</span>
-                                            </c:if>
-                                        </c:forEach>
-                                    </div>
-                                </li>
-                            </c:forEach>
-                        </ul>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Bạn cũng có thể thích</h3>
+                        </div>
+                        <div class="panel-body recent-property-widget">
+                            <ul>
+                                <!-- Lặp qua danh sách các nhà tương tự -->
+                                <c:forEach var="similarHome" items="${similarHomes}">
+                                    <li>
+                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
+                                            <a href="home-detail?id=${similarHome.id}">
+                                                <img src="assets/img/demo/small-property-2.jpg" alt="${similarHome.address}"> <!-- Hình ảnh mẫu, bạn có thể thay đổi -->
+                                            </a>
+                                        </div>
+                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">
+                                            <h6><a href="home-detail?id=${similarHome.id}">${similarHome.address}</a></h6>
+                                            <c:forEach items="${requestScope.priceSimilarHomes}" var="priceSimilarHomes">
+                                                <c:if test="${similarHome.id == priceSimilarHomes.homesId}">
+                                                    <span class="property-price"><fmt:formatNumber value="${priceSimilarHomes.price}" type="number" groupingUsed="true"/> VND/tháng</span>
+                                                </c:if>
+                                            </c:forEach>
+                                        </div>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </div>
                     </div>
-                    </div>
-
-<%--                                                        <div class="panel panel-default sidebar-menu similar-property-wdg wow fadeInRight animated">--%>
-<%--                                                    <div class="panel-heading">--%>
-<%--                                                        <h3 class="panel-title">Bạn cũng có thể thích</h3>--%>
-<%--                                                    </div>--%>
-<%--                                                    <div class="panel-body recent-property-widget">--%>
-<%--                                                            <ul>--%>
-<%--                                                            <li>--%>
-<%--                                                                <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
-<%--                                                                    <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
-<%--                                                                </div>--%>
-<%--                                                                <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
-<%--                                                                    <h6> <a href="home-detail?id=19">long bien ha noi</a></h6>--%>
-<%--                                                                    <span class="property-price">30000VND/tháng</span>--%>
-<%--                                                                </div>--%>
-<%--                                                            </li>--%>
-<%--                                                        </ul>--%>
-<%--                                                    </div>--%>
-<%--                                                            <div class="panel-body recent-property-widget">--%>
-<%--                                                                <ul>--%>
-<%--                                                                    <li>--%>
-<%--                                                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
-<%--                                                                            <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
-<%--                                                                        </div>--%>
-<%--                                                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
-<%--                                                                            <h6> <a href="single.html">ha dong ha noi</a></h6>--%>
-<%--                                                                            <span class="property-price">200000VND/tháng</span>--%>
-<%--                                                                        </div>--%>
-<%--                                                                    </li>--%>
-<%--                                                                </ul>--%>
-<%--                                                            </div>--%>
-<%--                                                            <div class="panel-body recent-property-widget">--%>
-<%--                                                                <ul>--%>
-<%--                                                                    <li>--%>
-<%--                                                                        <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">--%>
-<%--                                                                            <a href="single.html"><img src="assets/img/demo/small-property-2.jpg"></a>--%>
-<%--                                                                        </div>--%>
-<%--                                                                        <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">--%>
-<%--                                                                            <h6> <a href="single.html">thanh oai ha noi </a></h6>--%>
-<%--                                                                            <span class="property-price">100000VND/tháng</span>--%>
-<%--                                                                        </div>--%>
-<%--                                                                    </li>--%>
-<%--                                                                </ul>--%>
-<%--                                                            </div>--%>
-<%--                                                </div>--%>
-
-
-
 
                 </aside>
             </div>
@@ -553,152 +494,7 @@
 
 
 <!-- Footer area-->
-<div class="footer-area">
-
-    <div class=" footer">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer">
-                        <h4>About us </h4>
-                        <div class="footer-title-line"></div>
-
-                        <img src="assets/img/footer-logo.png" alt="" class="wow pulse" data-wow-delay="1s">
-                        <p>Lorem ipsum dolor cum necessitatibus su quisquam molestias. Vel unde, blanditiis.</p>
-                        <ul class="footer-adress">
-                            <li><i class="pe-7s-map-marker strong"> </i> 9089 your adress her</li>
-                            <li><i class="pe-7s-mail strong"> </i> email@yourcompany.com</li>
-                            <li><i class="pe-7s-call strong"> </i> +1 908 967 5906</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer">
-                        <h4>Quick links </h4>
-                        <div class="footer-title-line"></div>
-                        <ul class="footer-menu">
-                            <li><a href="properties.html">Properties</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="submit-property.html">Submit property </a></li>
-                            <li><a href="contact.html">Contact us</a></li>
-                            <li><a href="faq.html">fqa</a></li>
-                            <li><a href="faq.html">Terms </a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer">
-                        <h4>Last News</h4>
-                        <div class="footer-title-line"></div>
-                        <ul class="footer-blog">
-                            <li>
-                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                                    <a href="single.html">
-                                        <img src="assets/img/demo/small-proerty-2.jpg">
-                                    </a>
-                                    <span class="blg-date">12-12-2016</span>
-
-                                </div>
-                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                                    <h6><a href="single.html">Add news functions </a></h6>
-                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
-                                        ...</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                                    <a href="single.html">
-                                        <img src="assets/img/demo/small-proerty-2.jpg">
-                                    </a>
-                                    <span class="blg-date">12-12-2016</span>
-
-                                </div>
-                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                                    <h6><a href="single.html">Add news functions </a></h6>
-                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
-                                        ...</p>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="col-md-3 col-sm-4 col-xs-4 blg-thumb p0">
-                                    <a href="single.html">
-                                        <img src="assets/img/demo/small-proerty-2.jpg">
-                                    </a>
-                                    <span class="blg-date">12-12-2016</span>
-
-                                </div>
-                                <div class="col-md-8  col-sm-8 col-xs-8  blg-entry">
-                                    <h6><a href="single.html">Add news functions </a></h6>
-                                    <p style="line-height: 17px; padding: 8px 2px;">Lorem ipsum dolor sit amet, nulla
-                                        ...</p>
-                                </div>
-                            </li>
-
-
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 wow fadeInRight animated">
-                    <div class="single-footer news-letter">
-                        <h4>Stay in touch</h4>
-                        <div class="footer-title-line"></div>
-                        <p>Lorem ipsum dolor sit amet, nulla suscipit similique quisquam molestias. Vel unde,
-                            blanditiis.</p>
-
-                        <form>
-                            <div class="input-group">
-                                <input class="form-control" type="text" placeholder="E-mail ... ">
-                                <span class="input-group-btn">
-                                            <button class="btn btn-primary subscribe" type="button"><i
-                                                    class="pe-7s-paper-plane pe-2x"></i></button>
-                                        </span>
-                            </div>
-                            <!-- /input-group -->
-                        </form>
-
-                        <div class="social pull-right">
-                            <ul>
-                                <li><a class="wow fadeInUp animated" href="https://twitter.com/kimarotec"><i
-                                        class="fa fa-twitter"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://www.facebook.com/kimarotec"
-                                       data-wow-delay="0.2s"><i class="fa fa-facebook"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://plus.google.com/kimarotec"
-                                       data-wow-delay="0.3s"><i class="fa fa-google-plus"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec"
-                                       data-wow-delay="0.4s"><i class="fa fa-instagram"></i></a></li>
-                                <li><a class="wow fadeInUp animated" href="https://instagram.com/kimarotec"
-                                       data-wow-delay="0.6s"><i class="fa fa-dribbble"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-copy text-center">
-        <div class="container">
-            <div class="row">
-                <div class="pull-left">
-                    <span> (C) <a href="http://www.KimaroTec.com">KimaroTheme</a> , All rights reserved 2016  </span>
-                </div>
-                <div class="bottom-menu pull-right">
-                    <ul>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.2s">Home</a></li>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.3s">Property</a></li>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.4s">Faq</a></li>
-                        <li><a class="wow fadeInUp animated" href="#" data-wow-delay="0.6s">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
+<jsp:include page="footer.jsp"/>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>

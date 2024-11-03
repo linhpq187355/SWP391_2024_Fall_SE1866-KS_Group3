@@ -1,3 +1,15 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-01      1.0              Pham Quang Linh     First Implement
+ * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-10      2.0                 ManhNC         Implement search service
+ */
+
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.AmentityDAO;
@@ -11,8 +23,17 @@ import com.homesharing.dao.HomeTypeDAO;
 import com.homesharing.dao.PriceDAO;
 import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.dao.WardDAO;
-import com.homesharing.dao.impl.*;
-
+import com.homesharing.dao.impl.AmentityDAOImpl;
+import com.homesharing.dao.impl.AmentityHomeDAOImpl;
+import com.homesharing.dao.impl.DistrictDAOImpl;
+import com.homesharing.dao.impl.FireEquipHomeImpl;
+import com.homesharing.dao.impl.FireEquipmentDAOImpl;
+import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.HomeImageDAOImpl;
+import com.homesharing.dao.impl.HomeTypeDAOImpl;
+import com.homesharing.dao.impl.PriceDAOImpl;
+import com.homesharing.dao.impl.ProvinceDAOImpl;
+import com.homesharing.dao.impl.WardDAOImpl;
 import com.homesharing.model.Amentity;
 import com.homesharing.model.AmentityHome;
 import com.homesharing.model.District;

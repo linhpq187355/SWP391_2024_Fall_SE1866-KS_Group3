@@ -2,7 +2,6 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.RoleDAO;
-import com.homesharing.model.Home;
 import com.homesharing.model.Role;
 
 import java.sql.Connection;

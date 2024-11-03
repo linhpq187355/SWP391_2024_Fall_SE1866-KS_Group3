@@ -38,16 +38,18 @@ public class HomePageServiceImpl implements HomePageService {
     private final PriceDAO priceDAO;
     private static final int DEFAULT_NUMBER_OF_HOMES = 12;
     private final UserDAO userDAO;
+    private final WardDAO wardDAO;
 
     /**
      * Constructor for HomePageServiceImpl.
      * @param homeDAO The Data Access Object for Home entities.
      * @param priceDAO The Data Access Object for Price entities.
      */
-    public HomePageServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO, UserDAO userDAO) {
+    public HomePageServiceImpl(HomeDAO homeDAO, PriceDAO priceDAO, UserDAO userDAO, WardDAO wardDAO) {
         this.homeDAO = homeDAO;
         this.priceDAO = priceDAO;
         this.userDAO = userDAO;
+        this.wardDAO = wardDAO;
     }
 
     /**
@@ -68,6 +70,7 @@ public class HomePageServiceImpl implements HomePageService {
      */
     @Override
     public List<Home> getNewHomes() {
+
         List<Home> homeList = new ArrayList<>();
 
         try {
@@ -290,15 +293,28 @@ public class HomePageServiceImpl implements HomePageService {
                 }
             }
             Home home = homeList.get(i);
-            if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
-                if((user.getDuration().equals("short") && homeList.get(i).getLeaseDuration() <6) || (user.getDuration().equals("long") && homeList.get(i).getLeaseDuration() >=6) ){
-                    if(moveInCheck){
-                        listMatchingHomes.add(home);
+            if(user.getPrefProv() == wardDAO.getProvinceIdByWardId(home.getWardId())) {
+                if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
+                    if((user.getDuration().equals("short") && homeList.get(i).getLeaseDuration() <6) || (user.getDuration().equals("long") && homeList.get(i).getLeaseDuration() >=6) ){
+                        if(moveInCheck){
+                            listMatchingHomes.add(home);
+                        }
                     }
                 }
             }
         }
         return listMatchingHomes;
+    }
+
+    @Override
+    public List<Home> getHomesByAppoinment(List<Appointment> appointments) {
+
+        try{
+            return homeDAO.getHomeByAppointment(appointments);
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total homes by appointment: ", e);
+            throw new GeneralException("Failed to retrieve total homes appointment: ", e);
+        }
     }
 
 

@@ -144,4 +144,50 @@ public class WardDAOImpl implements WardDAO {
         }
         return null;
     }
+
+    @Override
+    public int getProvinceIdByWardId(int wardId) {
+        String sql = "select p.id\n" +
+                "from Wards w\n" +
+                "left join Districts d on d.id = w.Districtsid\n" +
+                "left join Provinces p on p.id = d.provincesId\n" +
+                "where w.id = ?";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, wardId);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            throw new IllegalArgumentException("Error retrieving from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        WardDAOImpl dao = new WardDAOImpl();
+        System.out.println(dao.getProvinceIdByWardId(5));
+    }
 }

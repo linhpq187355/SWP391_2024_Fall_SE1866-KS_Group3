@@ -490,6 +490,7 @@ class UserServiceImplTest {
         String rawMinBudget = "500";
         String rawMaxBudget = "1000";
         String userId = "1";
+        String prefProv = "5";
 
         User user = new User();
         user.setId(1);
@@ -500,11 +501,12 @@ class UserServiceImplTest {
         user.setLatestMoveIn(LocalDate.parse(lmvdate));
         user.setMinBudget(Integer.parseInt(rawMinBudget));
         user.setMaxBudget(Integer.parseInt(rawMaxBudget));
+        user.setPrefProv(Integer.parseInt(prefProv));
 
         when(userDao.updateMatchingProfile(any(User.class))).thenReturn(1);
 
         // Act
-        int result = userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget, userId);
+        int result = userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget,prefProv, userId);
 
         // Assert
         assertEquals(1, result);
@@ -533,12 +535,13 @@ class UserServiceImplTest {
         String rawMinBudget = "500";
         String rawMaxBudget = "1000";
         String userId = "1";
+        String prefProv = "5";
 
         when(userDao.updateMatchingProfile(any(User.class))).thenThrow(new GeneralException("Error"));
 
         // Act & Assert
         GeneralException thrown = assertThrows(GeneralException.class, () -> {
-            userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget, userId);
+            userService.updateMatchingProfile(dob, gender, rawHowLong, emvdate, lmvdate, rawMinBudget, rawMaxBudget,prefProv, userId);
         });
 
         assertEquals("Failed to update user matching profile", thrown.getMessage());

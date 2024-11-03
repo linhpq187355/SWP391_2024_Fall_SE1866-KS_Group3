@@ -15,6 +15,7 @@ package com.homesharing.service.impl;
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
+import com.homesharing.model.Appointment;
 import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.Token;
 import com.homesharing.model.User;
@@ -29,6 +30,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -668,7 +670,7 @@ public class UserServiceImpl implements UserService {
      * @throws GeneralException if an error occurs during the update.
      */
     @Override
-    public int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget, String userId) {
+    public int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget,String prefProv, String userId) {
         try {
             User user = new User();
             user.setDob(LocalDate.parse(dob));
@@ -679,11 +681,32 @@ public class UserServiceImpl implements UserService {
             user.setLatestMoveIn(LocalDate.parse(lmvdate));
             user.setMinBudget(Integer.parseInt(rawMinBudget));
             user.setMaxBudget(Integer.parseInt(rawMaxBudget));
+            user.setPrefProv(Integer.parseInt(prefProv));
 
             return userDao.updateMatchingProfile(user);
 
         } catch (Exception e) {
             throw new GeneralException("Failed to update user matching profile", e);
+        }
+    }
+
+    @Override
+    public List<User> getHostByAppointment(List<Appointment> appointments) {
+        try{
+            return userDao.getHostByAppointment(appointments);
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total host by appointment: ", e);
+            throw new GeneralException("Failed to retrieve total host appointment: ", e);
+        }
+    }
+
+    @Override
+    public List<User> getTenantByAppointment(List<Appointment> appointments) {
+        try{
+            return userDao.getTenantByAppointment(appointments);
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total tenant by appointment: ", e);
+            throw new GeneralException("Failed to retrieve total tenant appointment: ", e);
         }
     }
 

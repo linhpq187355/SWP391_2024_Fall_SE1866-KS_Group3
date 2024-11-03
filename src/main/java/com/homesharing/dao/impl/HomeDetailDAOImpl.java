@@ -551,7 +551,6 @@ public class HomeDetailDAOImpl extends DBContext implements HomeDetailDAO {
      * @param homeId
      * @return the home type
      */
-    @Override
     public HomeType getHomeTypeByHomeId(int homeId) {
         String sql = "SELECT ht.id, ht.name, ht.description, ht.status " +
                 "FROM HomeTypes ht " +
@@ -595,5 +594,6 @@ public class HomeDetailDAOImpl extends DBContext implements HomeDetailDAO {
 
         return null;
     }
+
 
 }

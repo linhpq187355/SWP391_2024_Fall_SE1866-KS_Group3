@@ -30,8 +30,8 @@ $(document).ready(function() {
             },
             'home-name': {
                 required: true,
-                minlength: 5,
-                maxlength: 255
+                minlength: 20,
+                maxlength: 99
             },
             'province': {
                 required: true
@@ -44,23 +44,23 @@ $(document).ready(function() {
             },
             'address-detail': {
                 required: true,
-                minlength: 5,
+                minlength: 15,
                 maxlength: 255
             },
             'home-description': {
                 required: true,
-                minlength: 10,
-                maxlength: 500
+                minlength: 30,
+                maxlength: 3000
             },
             'tenant-description': {
                 required: true,
-                minlength: 10,
-                maxlength: 500
+                minlength: 30,
+                maxlength: 3000
             },
             'area': {
                 required: true,
                 number: true,
-                min: 10,
+                min: 4,
                 max: 1000
             },
             'leaseDuration': {
@@ -79,13 +79,13 @@ $(document).ready(function() {
                 required: true,
                 number: true,
                 min: 1,
-                max: 10
+                max: 20
             },
             'numOfBath': {
                 required: true,
                 number: true,
                 min: 1,
-                max: 10
+                max: 20
             },
             'price': {
                 required: true,
@@ -139,13 +139,13 @@ $(document).ready(function() {
             },
             'home-description': {
                 required: 'Vui lòng nhập mô tả về nơi ở',
-                minlength: 'Mô tả về nơi ở phải có ít nhất 10 ký tự',
-                maxlength: 'Mô tả về nơi ở không được quá 500 ký tự'
+                minlength: 'Mô tả về nơi ở phải có ít nhất 30 ký tự',
+                maxlength: 'Mô tả về nơi ở không được quá 3000 ký tự'
             },
             'tenant-description': {
                 required: 'Vui lòng nhập mô tả về người bạn muốn ở ghép',
-                minlength: 'Mô tả về người bạn muốn ở ghép phải có ít nhất 10 ký tự',
-                maxlength: 'Mô tả về người bạn muốn ở ghép không được quá 500 ký tự'
+                minlength: 'Mô tả về người bạn muốn ở ghép phải có ít nhất 30 ký tự',
+                maxlength: 'Mô tả về người bạn muốn ở ghép không được quá 3000 ký tự'
             },
             'area': {
                 required: 'Vui lòng nhập diện tích nơi ở',

@@ -5,24 +5,23 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LocalDateTimeAdapter extends TypeAdapter<LocalDate> {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     @Override
-    public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
-        if (localDate == null) {
-            jsonWriter.nullValue(); // Write null value for null LocalDate
+    public void write(JsonWriter out, LocalDateTime value) throws IOException {
+        if (value != null) {
+            out.value(value.format(formatter));
         } else {
-            jsonWriter.value(localDate.format(formatter));
+            out.nullValue();
         }
     }
 
     @Override
-    public LocalDate read(JsonReader jsonReader) throws IOException {
-        String dateStr = jsonReader.nextString();
-        return dateStr != null ? LocalDate.parse(dateStr, formatter) : null;
+    public LocalDateTime read(JsonReader in) throws IOException {
+        return in.hasNext() ? LocalDateTime.parse(in.nextString(), formatter) : null;
     }
 }

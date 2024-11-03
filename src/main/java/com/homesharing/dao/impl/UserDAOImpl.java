@@ -10,13 +10,17 @@
  * 2024-10-10        2.0              Pham Quang Linh    Second Implement
  * 2024-10-10        2.0                 ManhNC          Second Implement
  */
+
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.exception.GeneralException;
+import com.homesharing.model.Appointment;
+import com.homesharing.model.Home;
 import com.homesharing.model.User;
 import com.homesharing.util.PasswordUtil;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
@@ -33,6 +37,7 @@ import java.util.logging.Logger;
 public class UserDAOImpl extends DBContext implements UserDAO {
 
     private static final Logger logger = Logger.getLogger(UserDAOImpl.class.getName());
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserDAOImpl.class);
 
     /**
      * Updates the Google ID for a user in the database.
@@ -356,7 +361,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public User getUser(int id) {
-        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.duration, u.earliestMoveIn, u.latestMoveIn, u.minBudget, u.maxBudget,u.rolesid \n"
+        String sql = "SELECT u.id, u.address, u.gender, u.firstName, u.lastName, u.avatar, u.dob, u.isVerified, u.email, u.phoneNumber, u.duration, u.earliestMoveIn, u.latestMoveIn, u.minBudget, u.maxBudget,u.rolesid,u.preferredCity \n"
                 + "FROM [HSS_Users] u WHERE u.id = ?";
 
         Connection connection = null;
@@ -388,6 +393,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setLatestMoveIn(resultSet.getDate("latestMoveIn") != null ? resultSet.getDate("latestMoveIn").toLocalDate() : null);
                 user.setDuration(resultSet.getString("duration"));
                 user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                user.setPrefProv(resultSet.getInt("preferredCity"));
 
                 user.setDob(resultSet.getDate("dob") != null ? resultSet.getDate("dob").toLocalDate() : null);
                 user.setRolesId(resultSet.getInt("rolesid"));
@@ -489,24 +495,26 @@ public class UserDAOImpl extends DBContext implements UserDAO {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String sql = "SELECT [id]\n" +
-                "      ,[email]\n" +
-                "      ,[hashedPassword]\n" +
-                "      ,[phoneNumber]\n" +
-                "      ,[username]\n" +
-                "      ,[firstName]\n" +
-                "      ,[lastName]\n" +
-                "      ,[avatar]\n" +
-                "      ,[dob]\n" +
-                "      ,[address]\n" +
-                "      ,[gender]\n" +
-                "      ,[citizenNumber]\n" +
-                "      ,[createdAt]\n" +
-                "      ,[status]\n" +
-                "      ,[isVerified]\n" +
-                "      ,[modifiedDate]\n" +
-                "      ,[rolesid]\n" +
-                "  FROM [dbo].[HSS_Users]";
+        String sql = "SELECT u.[id],\n" +
+                "       u.[email],\n" +
+                "       u.[hashedPassword],\n" +
+                "       u.[phoneNumber],\n" +
+                "       u.[username],\n" +
+                "       u.[firstName],\n" +
+                "       u.[lastName],\n" +
+                "       u.[avatar],\n" +
+                "       u.[dob],\n" +
+                "       u.[address],\n" +
+                "       u.[gender],\n" +
+                "       u.[citizenNumber],\n" +
+                "       u.[createdAt],\n" +
+                "       u.[status],\n" +
+                "       u.[isVerified],\n" +
+                "       u.[modifiedDate],\n" +
+                "       u.[rolesid],\n" +
+                "       r.[name] AS roleName\n" +
+                "FROM [dbo].[HSS_Users] u\n" +
+                "LEFT JOIN [dbo].[Roles] r ON u.[rolesid] = r.[id]";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -541,7 +549,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setStatus(resultSet.getString("status"));
                 user.setVerified(resultSet.getBoolean("isVerified"));
                 // Check null before call toLocalDateTime()
-                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("modifiedDate");
+                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("lastModified");
                 if (lastModifiedTimestamp != null) {
                     user.setLastModified(lastModifiedTimestamp.toLocalDateTime());
                 } else {
@@ -856,8 +864,9 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             preparedStatement.setInt(4, user.getMinBudget());
             preparedStatement.setInt(5, user.getMaxBudget());
             preparedStatement.setDate(6, java.sql.Date.valueOf(user.getEarliestMoveIn()));
-            preparedStatement.setDate(7, java.sql.Date.valueOf(user.getLatestMoveIn()));
-            preparedStatement.setInt(8, user.getId());
+            preparedStatement.setInt(7, user.getPrefProv());
+            preparedStatement.setDate(8, java.sql.Date.valueOf(user.getLatestMoveIn()));
+            preparedStatement.setInt(9, user.getId());
 
             // Execute the update and get the number of affected rows
             rowsUpdated = preparedStatement.executeUpdate();
@@ -890,7 +899,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
      */
     @Override
     public User getMatchingUserProfile(int id) {
-        String sql = "SELECT [id], [minBudget], [maxBudget], [earliestMoveIn], [latestMoveIn], [duration] FROM [dbo].[HSS_Users] WHERE [id] = ?";
+        String sql = "SELECT [id], [minBudget], [maxBudget], [earliestMoveIn], [latestMoveIn], [duration], [preferredCity] FROM [dbo].[HSS_Users] WHERE [id] = ?";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -937,6 +946,145 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         }
 
         return null; // Return null if no user is found
+    }
+
+    @Override
+    public List<User> getHostByAppointment(List<Appointment> appointments) {
+        if(appointments == null || appointments.isEmpty()){
+            LOGGER.warn("Appointment is null. No updates will be made.");
+            return null;
+        }
+        List<User> hostList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("select * \n" +
+                "from HSS_Users\n" +
+                "where id in (");
+        for (int i = 0; i < appointments.size(); i++) {
+            sql.append("?");
+            if (i < appointments.size() - 1) {
+                sql.append(", ");
+            }
+        }
+        sql.append(")");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql.toString());
+
+
+            // Set the price ID parameters in the prepared statement
+            for (int i = 0; i < appointments.size(); i++) {
+                preparedStatement.setInt(i + 1, appointments.get(i).getHostId());
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                hostList.add(user);
+            }
+        } catch (SQLException e) {
+            logger.warning("SQL error occurred while retrieving home from the database: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.warning("Unexpected error occurred: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return hostList;
+    }
+
+    @Override
+    public List<User> getTenantByAppointment(List<Appointment> appointments) {
+        if(appointments == null || appointments.isEmpty()){
+            LOGGER.warn("Appointment is null. No updates will be made.");
+            return null;
+        }
+        List<User> tenantList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("select * \n" +
+                "from HSS_Users\n" +
+                "where id in (");
+        for (int i = 0; i < appointments.size(); i++) {
+            sql.append("?");
+            if (i < appointments.size() - 1) {
+                sql.append(", ");
+            }
+        }
+        sql.append(")");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql.toString());
+
+
+            // Set the price ID parameters in the prepared statement
+            for (int i = 0; i < appointments.size(); i++) {
+                preparedStatement.setInt(i + 1, appointments.get(i).getTenantId());
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                tenantList.add(user);
+            }
+        } catch (SQLException e) {
+            logger.warning("SQL error occurred while retrieving home from the database: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.warning("Unexpected error occurred: {}"+ e.getMessage());
+            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return tenantList;
+    }
+
+
+    public static void main(String[] args) {
+        UserDAOImpl userDAO = new UserDAOImpl();
+        User user = userDAO.getUser(1);
+        System.out.println(user.getFirstName());
     }
 
 }

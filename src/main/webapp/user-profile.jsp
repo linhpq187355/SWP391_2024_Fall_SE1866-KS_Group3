@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Submit your home</title>
+    <title>Thông tin của bạn</title>
     <meta name="description" content="GARO is a real-estate template">
     <meta name="author" content="ThangLT">
     <meta name="keyword" content="html5, css, bootstrap, property, real-estate theme , bootstrap template">

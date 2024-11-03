@@ -1725,7 +1725,6 @@ proerty-th
     display: block;
     position: relative;
     width:100%;
-    opacity: 0.7;
     min-height: 225px;
     max-height: 265px;
 }
@@ -1745,7 +1744,7 @@ proerty-th
     position: relative;
 }
 .proerty-th .proerty-item  .item-entry h5::after {
-    background: transparent url("../../assets/img/chevron-down.png") no-repeat scroll center center;
+
     width: 15px;
     left: 20px;
     height: 7px;
@@ -2128,7 +2127,6 @@ single property page
 }
 .dealer-face img:hover{
     opacity: 0.9;
-    border: 2px solid #FFF;
 }
 .dealer-social-media a{
     color: #969696;

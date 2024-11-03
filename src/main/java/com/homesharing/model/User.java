@@ -9,13 +9,17 @@
  */
 
 package com.homesharing.model;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class User {
     private int id;
     private String googleId;
     private int rolesId;
+    private List<Permission> permissions;
+    private String roleName;
     private String email;
     private String hashedPassword;
     private String phoneNumber;
@@ -37,11 +41,13 @@ public class User {
     private int maxBudget;
     private LocalDate earliestMoveIn;
     private LocalDate latestMoveIn;
+    private int prefProv;
 
     // Constructors
-    public User() {}
+    public User() {
+    }
 
-    public User(String firstName, String lastName,String email, String hashedPassword) {
+    public User(String firstName, String lastName, String email, String hashedPassword) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -87,9 +93,10 @@ public class User {
         return isVerified;
     }
 
-    public String getVerify(){
-        return isVerified?"Verified":"Not Verified";
+    public String getVerify() {
+        return isVerified ? "Verified" : "Not Verified";
     }
+
     public void setVerified(boolean verified) {
         isVerified = verified;
     }
@@ -237,6 +244,22 @@ public class User {
     public void setLatestMoveIn(LocalDate latestMoveIn) {
         this.latestMoveIn = latestMoveIn;
     }
+
+    public int getPrefProv() {
+        return prefProv;
+    }
+
+    public void setPrefProv(int prefProv) {
+        this.prefProv = prefProv;
+    }
+
+    public String getRoleName() { return roleName;}
+
+    public void setRoleName(String roleName) { this.roleName = roleName; }
+
+    public List<Permission> getPermissions() { return permissions; }
+
+    public void setPermissions(List<Permission> permissions) { this.permissions = permissions; }
 
     @Override
     public String toString() {

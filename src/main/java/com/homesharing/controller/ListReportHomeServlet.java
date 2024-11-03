@@ -1,10 +1,7 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.*;
-import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.PriceDAOImpl;
-import com.homesharing.dao.impl.RoleDAOImpl;
-import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.dao.impl.*;
 import com.homesharing.model.Home;
 import com.homesharing.model.Report;
 import com.homesharing.model.ReportType;
@@ -36,12 +33,14 @@ public class ListReportHomeServlet extends HttpServlet {
     private ReportTypeDAO reportTypeDAO;
     private UserDAO userDao;
     private RoleDAO roleDao;
+    private WardDAO wardDAO;
 
     public void init() throws ServletException {
         this.reportService = new ReportServiceImpl(reportDAO, reportTypeDAO);
         homeDAO = new HomeDAOImpl();
         priceDAO = new PriceDAOImpl();
-        this.homePageService = new HomePageServiceImpl(homeDAO, priceDAO, userDao);
+        wardDAO = new WardDAOImpl();
+        this.homePageService = new HomePageServiceImpl(homeDAO, priceDAO, userDao,wardDAO);
         userDao = new UserDAOImpl();
         roleDao = new RoleDAOImpl();
         this.userManagementServiceService = new UserManagementServiceImpl();

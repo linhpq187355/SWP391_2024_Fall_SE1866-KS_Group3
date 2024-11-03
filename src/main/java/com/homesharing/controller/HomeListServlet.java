@@ -74,7 +74,7 @@ public class HomeListServlet extends HttpServlet {
         userDAO = new UserDAOImpl();
         submissonFormService = new SubmissonFormServiceImpl();
         // Initialize the home page service with the required DAOs
-        homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO,null);
     }
 
     /**

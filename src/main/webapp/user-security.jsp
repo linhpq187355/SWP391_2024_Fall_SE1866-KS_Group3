@@ -63,7 +63,7 @@
     <div class="content-area user-profiel" style="background-color: #FCFCFC;">&nbsp;
         <div class="container">
             <div class="row">
-                <div class="col-sm-10 col-sm-offset-1 profiel-container">
+                <div class="col-sm-10 col-sm-offset-1 profiel-container" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;border-radius: 11px;">
 
 
                         <div class="profiel-header">
@@ -102,15 +102,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3 padding-top-25">
-                                <div class="form-group">
+                            <div class="col-sm-3 padding-top-25" style="width: 60%">
+                                <div class="form-group" style="margin-left: 30px">
                                     <label>Họ và tên</label>
                                     <p>${requestScope.user.firstName} ${requestScope.user.lastName}</p>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" style="margin-left: 30px">
                                     <label>Email</label>
                                     <p>${requestScope.user.email}</p>
-                                    <button onclick="window.location.href='user-update-email'" class='btn btn-finish btn-primary'>Cập nhật Email</button>
+
                                 </div>
 <%--                                <div class="form-group">--%>
 <%--                                    <label>SĐT</label>--%>
@@ -122,8 +122,9 @@
 <%--                                    </c:if>--%>
 <%--                                    <button onclick="window.location.href='user-update-phone'" class='btn btn-finish btn-primary'>Cập nhật</button>--%>
 <%--                                </div>--%>
-                                <div class="form-group">
-                                    <button onclick="window.location.href='user-update-password'" class='btn btn-finish btn-primary'>Cập nhật mật khẩu</button>
+                                <div class="form-group" style="display: flex; justify-content: space-around">
+                                    <button onclick="window.location.href='user-update-email'" class='btn btn-finish btn-primary' style="border-radius: 10px">Cập nhật Email</button>
+                                    <button onclick="window.location.href='user-update-password'" class='btn btn-finish btn-primary' style="border-radius: 10px">Cập nhật mật khẩu</button>
                                 </div>
                             </div>
                         </div>

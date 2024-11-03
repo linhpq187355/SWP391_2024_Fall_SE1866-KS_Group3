@@ -47,7 +47,7 @@ public class SearchServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        homePageService = new HomePageServiceImpl(homeDAO, priceDAO, userDAO);
+        homePageService = new HomePageServiceImpl(homeDAO, priceDAO, userDAO,null);
     }
 
     /**
