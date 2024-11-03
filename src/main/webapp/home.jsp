@@ -46,7 +46,6 @@
         }
         #searchInput::placeholder {
             color: #777;
-
         }
     </style>
 </head>
@@ -61,7 +60,7 @@
 <jsp:include page="header.jsp"/>
 <!-- End of nav bar -->
 
-<div class="banner-area row" style="padding: 0 80px;margin: 50px 0;display: flex;align-items: center;">
+<div class="banner-area row" style="padding: 0 80px;display: flex;align-items: center;">
     <div class="col-md-6">
         <div>
             <h2 style="text-align: center;color: #FA6C00;">CHUNG NHÀ - CHUNG VUI</h2>
@@ -70,14 +69,17 @@
         <div style="display: flex;width: 80%;justify-content: space-between;border: 1px solid #ccc;box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;border-radius: 15px;height: 50px;margin-left: 15%;margin-top: 5%;align-items: center;">
             <i class="fa-solid fa-location-dot" style="font-size: 25px;margin-left: 4%;"></i>
             <form action="searchHomes" method="GET" class="form-inline" style="width: 80%;">
-
-                <input style="border: none;font-size: 17px;font-weight: 900;" placeholder="Nhập địa điểm" id="searchInput" type="text" name="name" class="form-control  value="${param.name}">
+                <input style="border: none;font-size: 17px;font-weight: 900; box-shadow: none;" placeholder="Nhập địa điểm" id="searchInput" type="text" name="name" class="form-control  value="${param.name}">
             </form>
             <i class="fa-solid fa-magnifying-glass" style="font-size: 25px;margin-right: 5%;"></i>
         </div>
     </div>
-    <div class="col-md-6" style="padding: 0">
-        <img src="assets/img/banner/fa46a892b6baacbee6d2f7845a093dfa.png" alt="banner">
+    <div class="slider-area col-md-6">
+            <div id="bg-slider" class="owl-carousel owl-theme" style="margin-top: 75px">
+                <img src="assets/img/banner/banner-1.png" alt="banner">
+                <img src="assets/img/banner/banner-2.png" alt="banner">
+                <img src="assets/img/banner/banner-3.png" alt="banner">
+            </div>
     </div>
 </div>
 
