@@ -116,6 +116,45 @@ public class ChatEndpoint {
                     }
                 }
             }
+        } else if (type.equals("block")) {
+            boolean isBlocked = conversationDAO.updateConversationStatus(conversationId, sentId, "block");
+            jsonMessage.addProperty("isBlocked",  isBlocked ? "yes" : "no");
+            Session ses = onlineUsers.get(sentId);
+            if (ses != null && ses.isOpen()) {
+                try {
+                    ses.getBasicRemote().sendText(jsonMessage.toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            Session ses2 = onlineUsers.get(receivedId);
+            if (ses2 != null && ses2.isOpen()) {
+                try {
+                    ses2.getBasicRemote().sendText(jsonMessage.toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } else if (type.equals("unblock")) {
+            boolean isUnBlocked = conversationDAO.updateConversationStatus(conversationId, sentId, "unblock");
+            if(isUnBlocked) {
+                Session ses = onlineUsers.get(sentId);
+                if (ses != null && ses.isOpen()) {
+                    try {
+                        ses.getBasicRemote().sendText(message);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                Session ses2 = onlineUsers.get(receivedId);
+                if (ses2 != null && ses2.isOpen()) {
+                    try {
+                        ses2.getBasicRemote().sendText(message);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         }
     }
 

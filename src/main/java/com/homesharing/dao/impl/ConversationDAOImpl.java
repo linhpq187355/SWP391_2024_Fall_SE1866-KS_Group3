@@ -47,8 +47,7 @@ public class ConversationDAOImpl extends DBContext implements ConversationDAO {
         }
 
         String sql = "select * from Conversations " +
-                "where userOne = ? or userTwo = ?  " +
-                "and status = 'active' ";
+                "where userOne = ? or userTwo = ? ";
         List<Conversation> conversations = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -104,8 +103,7 @@ public class ConversationDAOImpl extends DBContext implements ConversationDAO {
     @Override
     public int getConversationId(int userOne, int userTwo) throws SQLException {
         String sql = "select id from Conversations " +
-                "where userOne = ? and userTwo = ?  " +
-                "and status = 'active' ";
+                "where userOne = ? and userTwo = ? ";
         Connection connection = null; // Initialize connection
         PreparedStatement preparedStatement = null; // Initialize prepared statement
         ResultSet resultSet = null; // Initialize result set
@@ -222,9 +220,9 @@ public class ConversationDAOImpl extends DBContext implements ConversationDAO {
      */
     @Override
     public Map<Integer, Integer> contactUsersWithConversationId(int userId) throws SQLException {
-        String sql = "SELECT userOne AS userId, id FROM Conversations WHERE userTwo = ? AND status = 'active' " +
+        String sql = "SELECT userOne AS userId, id FROM Conversations WHERE userTwo = ? " +
                 "UNION " +
-                "SELECT userTwo AS userId, id FROM Conversations WHERE userOne = ? AND status = 'active'";
+                "SELECT userTwo AS userId, id FROM Conversations WHERE userOne = ? ";
         Map<Integer, Integer> contactUserIds = new HashMap<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -271,5 +269,130 @@ public class ConversationDAOImpl extends DBContext implements ConversationDAO {
 
         return contactUserIds;
     }
+
+    /**
+     * Updates the conversation status to block or unblock it based on the action parameter.
+     *
+     * @param conversationId the ID of the conversation to update
+     * @param blockerId the ID of the user who is blocking/unblocking the conversation
+     * @param action the action to perform: "block" or "unblock"
+     * @return true if the conversation was successfully updated, false otherwise
+     * @throws SQLException if a database access error occurs while updating the conversation
+     */
+    @Override
+    public boolean updateConversationStatus(int conversationId, int blockerId, String action) throws SQLException {
+        String sql;
+        String status;
+
+        // Determine status based on the action
+        if ("block".equalsIgnoreCase(action)) {
+            status = "block_by_" + blockerId; // Set status to blocked by the user
+        } else if ("unblock".equalsIgnoreCase(action)) {
+            status = "active"; // Reset status to active
+        } else {
+            throw new IllegalArgumentException("Invalid action: " + action); // Throw an error if action is invalid
+        }
+
+        sql = "UPDATE [dbo].[Conversations] SET [status] = ? WHERE [id] = ?";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isUpdated = false;
+
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+
+            // Set parameters for the query
+            preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, conversationId);
+
+            // Execute the update and check if it affected any row
+            int affectedRows = preparedStatement.executeUpdate();
+            isUpdated = affectedRows > 0; // Nếu có hàng bị ảnh hưởng, set isUpdated = true
+
+        } catch (SQLException e) {
+            String errorMessage = String.format("SQL error while updating conversation with ID %d by user %d. Reason: %s",
+                    conversationId, blockerId, e.getMessage());
+            throw new SQLException(errorMessage, e);
+        } catch (IOException e) {
+            String errorMessage = String.format("I/O error while updating conversation with ID %d by user %d. Reason: %s",
+                    conversationId, blockerId, e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } catch (ClassNotFoundException e) {
+            String errorMessage = String.format("Class not found error while updating conversation with ID %d by user %d. Reason: %s",
+                    conversationId, blockerId, e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            closeConnection(connection);
+        }
+
+        return isUpdated;
+    }
+
+
+    /**
+     * Retrieves the conversation details based on the conversation ID.
+     *
+     * @param conversationId the ID of the conversation to retrieve
+     * @return the Conversation object containing the conversation details, or null if no conversation exists
+     * @throws SQLException if a database access error occurs while retrieving the conversation
+     */
+    @Override
+    public Conversation getConversation(int conversationId) throws SQLException {
+        String sql = "SELECT id, userOne, userTwo, time, status FROM Conversations WHERE id = ?";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = getConnection(); // Get the database connection
+            preparedStatement = connection.prepareStatement(sql);
+
+            // Set parameters for the prepared statement
+            preparedStatement.setInt(1, conversationId);
+
+            // Execute the query and retrieve results
+            resultSet = preparedStatement.executeQuery();
+
+            // If the conversation exists, create and return a Conversation object
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int userOne = resultSet.getInt("userOne");
+                int userTwo = resultSet.getInt("userTwo");
+                Timestamp time = resultSet.getTimestamp("time");
+                String status = resultSet.getString("status");
+
+                // Create and return the Conversation object
+                return new Conversation(id, userOne, userTwo, time.toLocalDateTime(), status);
+            }
+
+        } catch (SQLException e) {
+            String errorMessage = String.format("SQL error while retrieving conversation with ID: %d. Reason: %s",
+                    conversationId, e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } catch (IOException e) {
+            String errorMessage = String.format("I/O error while retrieving conversation with ID: %d. Reason: %s",
+                    conversationId, e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } catch (ClassNotFoundException e) {
+            String errorMessage = String.format("Class not found error while retrieving conversation with ID: %d. Reason: %s",
+                    conversationId, e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } finally {
+            // Close resources
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            closeConnection(connection);
+        }
+        return null; // Return null if no conversation is found
+    }
+
 
 }

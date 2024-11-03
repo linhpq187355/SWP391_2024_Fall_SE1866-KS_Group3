@@ -8,6 +8,7 @@ import com.homesharing.dao.impl.ConversationDAOImpl;
 import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.dao.impl.ReplyDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.model.Conversation;
 import com.homesharing.model.Notification;
 import com.homesharing.model.Reply;
 import com.homesharing.model.User;
@@ -86,6 +87,12 @@ public class ChatInformationServlet extends HttpServlet {
                 return;
             }
 
+            Conversation conversation = conversationDAO.getConversation(conversationId);
+            if (conversation == null) {
+                ServletUtils.forwardWithMessage(req, resp, "Không thể tìm thấy cuộc trò chuyện.");
+                return;
+            }
+
             User matchedUser = userDAO.getUser(userTwo);
 
             if (matchedUser == null) {
@@ -122,6 +129,7 @@ public class ChatInformationServlet extends HttpServlet {
             req.setAttribute("mediaReplyCount", mediaReplyCount);
             req.setAttribute("fileReplyCount", fileReplyCount);
             req.setAttribute("User", matchedUser);
+            req.setAttribute("conversation", conversation);
             req.setAttribute("conversationId",conversationId);
         } catch (SQLException e) {
             logger.error("Error fetching data: {}", e.getMessage(), e); // Log the exception with stack trace

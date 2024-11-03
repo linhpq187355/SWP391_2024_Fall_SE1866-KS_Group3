@@ -6,9 +6,9 @@
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  *  * 2024-9-18      1.0                 ManhNC         First Implement
- * 2024-10-01        1.0              Pham Quang Linh     First Implement
- * 2024-10-10        2.0              Pham Quang Linh     Second Implement
- * 2024-10-10        2.0              ManhNC             Second Implement
+ * 2024-10-01        1.0              Pham Quang Linh    First Implement
+ * 2024-10-10        2.0              Pham Quang Linh    Second Implement
+ * 2024-10-10        2.0                 ManhNC          Second Implement
  */
 
 package com.homesharing.dao.impl;
@@ -915,7 +915,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setMinBudget(resultSet.getInt("minBudget"));
                 user.setMaxBudget(resultSet.getInt("maxBudget"));
                 user.setDuration(resultSet.getString("duration"));
-                user.setPrefProv(resultSet.getInt("preferredCity"));
                 if(resultSet.getDate("earliestMoveIn") != null){
                     user.setEarliestMoveIn(resultSet.getDate("earliestMoveIn").toLocalDate());
                 } else {

@@ -18,10 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class HomeDAOImplTest {
+class HomeDAOImplTest {
     private HomeDAOImpl homeDAO;
 
     private Connection connection;
@@ -275,6 +272,52 @@ public class HomeDAOImplTest {
     }
 
     @Test
+    void testGetMinArea_ReturnsMaxArea() throws Exception {
+        // Arrange
+        BigDecimal expectedMinArea = new BigDecimal("50.0");
+
+        // Mock result set to return the expected value
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getBigDecimal("area")).thenReturn(expectedMinArea);
+
+        // Act
+        BigDecimal actualMinArea = homeDAO.getMinArea();
+
+        // Assert
+        assertEquals(expectedMinArea, actualMinArea);
+
+        // Verify interactions
+        verify(preparedStatement).executeQuery();
+        verify(resultSet).next();
+        verify(resultSet).getBigDecimal("area");
+    }
+
+    @Test
+    void testGetMinArea_ReturnZero_WhenNoResult() throws Exception {
+        BigDecimal expectedMinArea = new BigDecimal("0");
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false);
+
+        BigDecimal actualMinArea = homeDAO.getMinArea();
+        assertEquals(expectedMinArea, actualMinArea);
+        verify(preparedStatement, times(1)).executeQuery();
+    }
+
+    @Test
+    void testGetMinArea_ThrowsGeneralException_WhenSQLException() throws Exception {
+        // Arrange
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Act & Assert
+        Exception exception = assertThrows(GeneralException.class, () -> homeDAO.getMinArea());
+        assertEquals("Error get min area in the database: Database error", exception.getMessage());
+    }
+
+    @Test
     void testGetMaxArea_ReturnsMaxArea() throws Exception {
         // Arrange
         BigDecimal expectedMinArea = new BigDecimal("50.0");
@@ -319,6 +362,7 @@ public class HomeDAOImplTest {
         Exception exception = assertThrows(GeneralException.class, () -> homeDAO.getMaxArea());
         assertEquals("Error get max area in the database: Database error", exception.getMessage());
     }
+
 
     @Test
     void testGetMinBed_ReturnsMinBed() throws Exception {
@@ -503,6 +547,180 @@ public class HomeDAOImplTest {
         Exception exception = assertThrows(GeneralException.class, () -> homeDAO.getMaxBath());
         assertEquals("Error get max bath in the database: Database error", exception.getMessage());
     }
+
+    @Test
+    void testGetSearchedHomes_NoParams() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(connection, times(1)).prepareStatement(anyString());
+        verify(preparedStatement, times(1)).executeQuery();
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_WithKeyword() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("keyword", "sample");
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(2)).setString(anyInt(), anyString());
+        verify(preparedStatement, times(1)).executeQuery();
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_WithPriceRange() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("minPrice", 100);
+        searchParams.put("maxPrice", 500);
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(2)).setInt(anyInt(), anyInt());
+        verify(preparedStatement, times(1)).executeQuery();
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_WithAreaRange() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("minArea", BigDecimal.valueOf(50));
+        searchParams.put("maxArea", BigDecimal.valueOf(150));
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(2)).setBigDecimal(anyInt(), any(BigDecimal.class));
+        verify(preparedStatement, times(1)).executeQuery();
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_WithAmenities() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("amenities", new String[]{"1", "2", "3"});
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(3)).setInt(anyInt(), anyInt());
+        verify(preparedStatement, times(1)).executeQuery();
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_WithPagination() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("per_page", 10);
+        searchParams.put("targetPage", 2);
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(2)).setInt(anyInt(), anyInt());
+        verify(preparedStatement, times(1)).executeQuery();
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_WithAllConditions() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("keyword", "sample");
+        searchParams.put("homeType", 1);
+        searchParams.put("province", 1);
+        searchParams.put("district", 1);
+        searchParams.put("ward", 1);
+        searchParams.put("minPrice", 100);
+        searchParams.put("maxPrice", 500);
+        searchParams.put("minArea", BigDecimal.valueOf(50));
+        searchParams.put("maxArea", BigDecimal.valueOf(150));
+        searchParams.put("minBath", 1);
+        searchParams.put("maxBath", 2);
+        searchParams.put("minBed", 1);
+        searchParams.put("maxBed", 3);
+        searchParams.put("amenities", new String[]{"1", "2"});
+        searchParams.put("fireEquipments", new String[]{"1", "3"});
+        searchParams.put("createdBy", 1);
+        searchParams.put("status", "available");
+        searchParams.put("orderby", "property_price");
+        searchParams.put("order", "ASC");
+        searchParams.put("per_page", 10);
+        searchParams.put("targetPage", 2);
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, atLeast(15)).setInt(anyInt(), anyInt());
+        verify(preparedStatement, times(2)).setBigDecimal(anyInt(), any(BigDecimal.class));
+        verify(preparedStatement, times(3)).setString(anyInt(), anyString());
+        verify(preparedStatement, times(1)).executeQuery();
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_NullKeyword() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("keyword", null);
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(2)).setString(anyInt(), anyString());
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_InvalidPriceRange() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("minPrice", 500);
+        searchParams.put("maxPrice", 100);  // maxPrice < minPrice
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(1)).executeQuery();  // or check for error handling if applicable
+        assertNotNull(homes);
+    }
+
+    @Test
+    void testGetSearchedHomes_LargeAmenities() throws Exception {
+        Map<String, Object> searchParams = new HashMap<>();
+        String[] amenities = new String[1000];  // simulate large array of amenities
+        Arrays.fill(amenities, "1");
+        searchParams.put("amenities", amenities);
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        List<Home> homes = homeDAO.getSearchedHomes(searchParams);
+
+        verify(preparedStatement, times(1000)).setInt(anyInt(), anyInt());
+        assertNotNull(homes);
+    }
+
     @Test
     void testGetSearchedHomes_noResults() throws Exception {
         // Giả lập prepareStatement và executeQuery

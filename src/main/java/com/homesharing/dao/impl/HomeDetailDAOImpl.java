@@ -18,7 +18,7 @@ import java.util.List;
  * This class is responsible for interacting with the database to retrieve
  * details related to homes, such as home information, prices, creator information, etc.
  */
-public class HomeDetailDAOImpl implements HomeDetailDAO {
+public class HomeDetailDAOImpl extends DBContext implements HomeDetailDAO {
 
     /**
      * Retrieve a Home object by its unique ID.

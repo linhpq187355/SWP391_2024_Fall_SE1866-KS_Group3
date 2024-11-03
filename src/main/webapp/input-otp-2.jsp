@@ -105,7 +105,10 @@
         let otp = document.getElementById("otp").value;
         // Check otp length
         if (otp.length !== 6) {
-            alert("OTP có 6 kí tự");
+            Swal.fire({
+                icon: 'error',
+                title: 'OTP có 6 kí tự'
+            });
             return false;
         }
         return true;

@@ -144,7 +144,7 @@ public class VerifyEmailServlet extends HttpServlet {
                     request.setAttribute("error", "Bạn đã nhập sai OTP quá 5 lần. Vui lòng thử lại sau.");
                     request.getRequestDispatcher("/error.jsp").forward(request, response);
                 } else {
-                    request.setAttribute("error", "OTP không hợp lệ. Bạn đã nhập sai " + otpAttempts + " lần.");
+                    request.setAttribute("error", "OTP không hợp lệ.");
                     request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
                 }
             }
@@ -165,7 +165,7 @@ public class VerifyEmailServlet extends HttpServlet {
     private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response, String message) {
         request.setAttribute("error", message);
         try {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/500.jsp");
             dispatcher.forward(request, response);
         } catch (IOException | ServletException e) {
             logger.error("Error forwarding to announce page: {}", e.getMessage(), e); // Log the exception for debugging

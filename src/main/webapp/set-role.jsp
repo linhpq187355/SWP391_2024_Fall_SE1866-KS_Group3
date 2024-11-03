@@ -29,29 +29,47 @@
         <div class="row">
             <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-center">
-                        <h3 class="text-muted">Chọn vai trò</h3>
-                    </div>
                     <div class="panel-body">
                         <form action="set-role" method="post" onsubmit="return validateForm()">
-                            <div class="form-group">
-                                <label for="role">Vai trò <span class="text-danger">*</span></label>
-                                <select class="form-control" name="role" id="role" required>
-                                    <option value="">Bạn muốn</option>
-                                    <option value="findRoommate">Tìm roommate</option>
-                                    <option value="postRoom">Đăng phòng</option>
-                                </select>
+                            <div style="display: flex;justify-content: center; margin-top: 10em;">
+                                <img src="assets/img/OBJECTS.svg" alt="Role Image" width="190" height="170">
                             </div>
-<%--                            <div class="form-group">--%>
-<%--                                <div class="checkbox">--%>
-<%--                                    <label>--%>
-<%--                                        <input type="checkbox" value="" name="iAgree" id="iAgree" required> Tôi đồng ý với <a href="#!" class="text-primary">các điều khoản, điều kiện của trang web.</a>--%>
-<%--                                    </label>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
+                            <div style="text-align: center; color: #1A1A1A; font-size: 32px; font-weight: 700; text-transform: capitalize; line-height: 48px; word-wrap: break-word; margin-top: 20px">Vai Trò</div>
+                            <div style="width: 100%; text-align: center; color: #4D4D4D; font-size: 20px; font-weight: 500; line-height: 30px; word-wrap: break-word">Vui lòng chọn vai trò phù hợp với nhu cầu của bạn.<br/>Mỗi vai trò sẽ có các chức năng và quyền hạn khác nhau.</div>
                             <div class="form-group">
-                                <button class="btn btn-primary btn-block" type="submit">Xác nhận</button>
+                                <div style="display: flex; justify-content: space-between;     margin-top: 40px;">
+                                    <div style="width: 80%; margin: 10px; background: white; border-radius: 10px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: flex; align-items: start; justify-content: space-between;">
+                                        <div style="display: flex; align-items: flex-start;     width: 90%;">
+                                            <img src="assets/img/Frame.svg" style="width: 40px; height: auto; margin-right: 10px;">
+                                            <div>
+                                                <h4 style="font-weight: 800; margin: 0;">Người Thuê</h4>
+                                                <p style="margin: 0; color: #555; font-size: 0.9em;">Chưa có nhà, đang cần tìm nhà và người ở ghép.</p>
+                                            </div>
+                                        </div>
+                                        <input type="radio" name="role" value="findRoommate" required>
+                                    </div>
+                                    <div style="width: 80%;margin: 10px; background: white; border-radius: 10px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: flex; align-items: start; justify-content: space-between;">
+                                        <div style="display: flex; align-items: flex-start;     width: 90%;">
+                                            <img src="assets/img/Frame.svg" style="width: 40px; height: auto; margin-right: 10px;">
+                                            <div>
+                                                <h4 style="font-weight: 800; margin: 0;">Đăng phòng</h4>
+                                                <p style="margin: 0; color: #555; font-size: 0.9em;">Đã có nhà, đang cần tìm người ở ghép, có thể tạo tin đăng.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <input type="radio" name="role" value="postRoom" required>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="" name="iAgree" id="iAgree" required> Tôi đồng ý với
+                                        <a href="terms.jsp" class="text-primary">các điều khoản, điều kiện của trang web.</a>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit">Đăng kí</button>
                         </form>
                         <hr>
                     </div>

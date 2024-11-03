@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -84,5 +85,9 @@ public class CookieUtil {
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    public static String decodeCookieValue(String encodedValue) {
+        return URLDecoder.decode(encodedValue, StandardCharsets.UTF_8);
     }
 }

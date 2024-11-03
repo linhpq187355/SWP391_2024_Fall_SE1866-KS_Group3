@@ -122,7 +122,8 @@ public class CreateAccountServlet extends HttpServlet {
                 // Attempt to register the user
                 int result = userService.createAccount(firstName, lastName, email, password, roleId, gender, phone, dob);
                 if (result > 0) {
-                    //redirect to verify email
+                    req.getSession().setAttribute("message", "Tạo tài khoản thành công.");
+                    req.getSession().setAttribute("messageType", "success");
                     resp.sendRedirect(req.getContextPath() + "/dashboard/account-manage");
                 } else if (result == -2) {
                     req.setAttribute("error", "Email này đã được sử dụng, vui lòng nhập email khác.");

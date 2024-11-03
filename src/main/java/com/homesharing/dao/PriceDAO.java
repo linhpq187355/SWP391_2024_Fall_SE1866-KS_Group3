@@ -12,9 +12,11 @@
 
 package com.homesharing.dao;
 
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -36,13 +38,13 @@ public interface PriceDAO {
      *
      * @return The minimum price.
      */
-    int getMinPrice();
+    int getMinPrice() throws SQLException;
 
     /**
      * Retrieves the maximum price of homes from the database.
      *
      * @return The maximum price.
      */
-    int getMaxPrice();
+    int getMaxPrice() throws SQLException;
 
 }

@@ -64,7 +64,7 @@
             <div class="col-xs-12">
                 <div class="m-b-50 text-center">
                     <h2 class="h1 font-weight-bold">Đăng nhập</h2>
-                    <p>Chưa có tài khoản? <a href="sign-up.jsp">Đăng ký</a></p>
+                    <p>Chưa có tài khoản? <a href="sign-up.jsp">Đăng ký tại đây</a></p>
                 </div>
             </div>
         </div>
@@ -151,6 +151,7 @@
     </div>
 </section>
 <jsp:include page="footer.jsp"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function validateForm() {
         let email = document.getElementById("email").value.trim();
@@ -158,20 +159,29 @@
 
         // Check for required fields and ensure they're not just spaces
         if (email === "" || password === "") {
-            alert("Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.'
+            });
             return false;
         }
 
         // Validate email
         let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert("Vui lòng nhập một địa chỉ email hợp lệ!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Vui lòng nhập một địa chỉ email hợp lệ!'
+            });
             return false;
         }
 
         // Check password length
         if (password.length < 8) {
-            alert("Mật khẩu phải có ít nhất 8 ký tự!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu phải có ít nhất 8 ký tự!'
+            });
             return false;
         }
 

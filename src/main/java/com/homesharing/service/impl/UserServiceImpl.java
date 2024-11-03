@@ -23,6 +23,7 @@ import com.homesharing.service.PreferenceService;
 import com.homesharing.service.TokenService;
 import com.homesharing.service.UserService;
 import com.homesharing.util.CookieUtil;
+import com.homesharing.util.JwtUtil;
 import com.homesharing.util.PasswordUtil;
 import com.homesharing.util.SecureRandomCode;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +31,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -535,12 +538,15 @@ public class UserServiceImpl implements UserService {
 
         // identity max age
         int cookieAge = 24 * 60 * 60; // 1 day
-        // Save user's information to cookies
+        String jwt = JwtUtil.generateToken(String.valueOf(user.getId()), String.valueOf(user.getRolesId()), user.getEmail());
+        CookieUtil.addCookie(response, "authToken", jwt, cookieAge);
         CookieUtil.addCookie(response, "id", String.valueOf(user.getId()), cookieAge);
         CookieUtil.addCookie(response, "firstName", user.getFirstName(), cookieAge);
         CookieUtil.addCookie(response, "lastName", user.getLastName(), cookieAge);
         CookieUtil.addCookie(response, "email", user.getEmail(), cookieAge);
         CookieUtil.addCookie(response, "roleId", String.valueOf(user.getRolesId()), cookieAge);
+
+
 
         // Return true to indicate a successful login
         return "success";
@@ -558,6 +564,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String logout(HttpServletResponse response) {
         //delete all cookie
+        CookieUtil.removeCookie(response, "authToken");
         CookieUtil.removeCookie(response, "id");
         CookieUtil.removeCookie(response, "firstName");
         CookieUtil.removeCookie(response, "lastName");

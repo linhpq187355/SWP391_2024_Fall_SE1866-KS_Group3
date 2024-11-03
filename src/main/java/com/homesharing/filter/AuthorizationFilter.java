@@ -9,13 +9,17 @@
  */
 package com.homesharing.filter;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.homesharing.util.CookieUtil;
+import com.homesharing.util.JwtUtil;
 import jakarta.annotation.Priority;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Authorization filter for controlling access to the dashboard.
@@ -26,6 +30,8 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {"/dashboard/*"})
 @Priority(2)
 public class AuthorizationFilter implements Filter {
+
+    private static final Logger logger = Logger.getLogger(AuthorizationFilter.class.getName());
 
     /**
      * Initializes the filter. This method is called by the servlet container only once upon filter creation.
@@ -54,15 +60,25 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        String roleId = CookieUtil.getCookie(httpRequest, "roleId");
-
-        // Check if the user has a valid role ID (1 for admin, 2 for staff)
-        if (roleId != null && ((roleId.equals("1")) || roleId.equals("2"))) {
-            // User has permission, continue request processing
-            chain.doFilter(request, response);
+        String encodedEmail = CookieUtil.getCookie(httpRequest, "email");
+        String email = CookieUtil.decodeCookieValue(encodedEmail);
+        String jwt = CookieUtil.getCookie(httpRequest, "authToken");
+        Map<String, Claim> claims = JwtUtil.getAllClaims(jwt);
+        if (claims != null) {
+            String roleId = claims.get("role").asString(); // Cast to String
+            String jwtMail = claims.get("email").asString();
+            if(jwtMail.equals(email)) {
+                if ("1".equals(roleId) || "2".equals(roleId)) {
+                    chain.doFilter(request, response);
+                } else {
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/403.jsp");
+                }
+            } else {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/403.jsp");
+            }
         } else {
             // User does not have permission, redirect to staff login
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/staff-login");
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/403.jsp");
         }
     }
 

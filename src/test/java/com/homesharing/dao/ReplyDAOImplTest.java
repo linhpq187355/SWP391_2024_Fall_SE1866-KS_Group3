@@ -1,7 +1,6 @@
 package com.homesharing.dao;
 
 import com.homesharing.conf.DBContext;
-import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.dao.impl.ReplyDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Reply;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -367,6 +367,151 @@ class ReplyDAOImplTest {
 
         // Verify the message
         assertEquals("SQL error while retrieving replies from the database: Database error", exception.getMessage());
+    }
+
+    @Test
+    void testGetLastestReply_Found() throws Exception {
+        int conversationId = 1;
+        String expectedReplyText = "This is the latest reply";
+        LocalDateTime expectedTime = LocalDateTime.now().minusMinutes(5);
+        String expectedStatus = "sent";
+        int expectedUserId = 100;
+        String expectedContentType = "text";
+        String expectedContentUrl = null;
+
+        // Set up the mock behavior for the PreparedStatement and ResultSet
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getString("reply")).thenReturn(expectedReplyText);
+        when(resultSet.getTimestamp("time")).thenReturn(Timestamp.valueOf(expectedTime));
+        when(resultSet.getString("status")).thenReturn(expectedStatus);
+        when(resultSet.getInt("userId")).thenReturn(expectedUserId);
+        when(resultSet.getString("contentType")).thenReturn(expectedContentType);
+        when(resultSet.getString("contentUrl")).thenReturn(expectedContentUrl);
+
+        // Call the method under test
+        Reply result = replyDAO.getLastestReply(conversationId);
+
+        // Verify the expected behavior and values
+        assertNotNull(result);
+        assertEquals(expectedReplyText, result.getText());
+        assertEquals(expectedTime, result.getTime());
+        assertEquals(expectedStatus, result.getStatus());
+        assertEquals(conversationId, result.getConversationId());
+        assertEquals(expectedUserId, result.getUserId());
+        assertEquals(expectedContentType, result.getContentType());
+        assertEquals(expectedContentUrl, result.getContentUrl());
+        verify(preparedStatement).setInt(1, conversationId);
+        verify(preparedStatement).close();
+    }
+
+    @Test
+    void testGetLastestReply_NotFound() throws Exception {
+        int conversationId = 1;
+
+        // Mock the PreparedStatement and ResultSet to simulate no data found
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false);
+
+        // Call the method under test
+        Reply result = replyDAO.getLastestReply(conversationId);
+
+        // Verify that result is null since no data is found
+        assertNull(result);
+        verify(preparedStatement).setInt(1, conversationId);
+        verify(preparedStatement).close();
+    }
+
+    @Test
+    void testGetLastestReply_SQLException() throws Exception {
+        int conversationId = 1;
+
+        // Mock the behavior to throw an SQLException
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
+
+        // Assert that the GeneralException is thrown with the expected message
+        GeneralException exception = assertThrows(GeneralException.class, () -> replyDAO.getLastestReply(conversationId));
+        assertTrue(exception.getMessage().contains("SQL error while fetching the latest reply from the database"));
+
+        // Verify that no further interactions occur
+        verify(preparedStatement, never()).setInt(anyInt(), anyInt());
+    }
+
+    @Test
+    void testGetLastestReply_IOException() throws Exception {
+        int conversationId = 1;
+
+        // Mock DBContext.getConnection() to throw IOException
+        mockedDBContext.when(DBContext::getConnection).thenThrow(new IOException("Connection error"));
+
+        // Assert that the GeneralException is thrown with the expected message
+        GeneralException exception = assertThrows(GeneralException.class, () -> replyDAO.getLastestReply(conversationId));
+        assertTrue(exception.getMessage().contains("I/O error while fetching the latest reply from the database"));
+
+        // Verify that no interaction with the database occurs
+        verify(connection, never()).prepareStatement(anyString());
+    }
+
+    @Test
+    void testGetLastestReply_ClassNotFoundException() throws Exception {
+        int conversationId = 1;
+
+        // Mock DBContext.getConnection() to throw ClassNotFoundException
+        mockedDBContext.when(DBContext::getConnection).thenThrow(new ClassNotFoundException("JDBC driver not found"));
+
+        // Assert that the GeneralException is thrown with the expected message
+        GeneralException exception = assertThrows(GeneralException.class, () -> replyDAO.getLastestReply(conversationId));
+        assertTrue(exception.getMessage().contains("Class not found error while fetching the latest reply from the database"));
+
+        // Verify that no interaction with the database occurs
+        verify(connection, never()).prepareStatement(anyString());
+    }
+
+    @Test
+    void testCountNewMessages() throws SQLException {
+        int userId = 1; // Example user ID
+        int expectedNewMessageCount = 5; // Expected number of new messages
+
+        // Mock the behavior of connection, prepared statement, and result set
+        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("NewMessageCount")).thenReturn(expectedNewMessageCount);
+
+        // Call the method under test
+        int actualNewMessageCount = replyDAO.countNewMessages(userId);
+
+        // Verify the expected results
+        assertEquals(expectedNewMessageCount, actualNewMessageCount, "The count of new messages should match the expected value.");
+
+        // Verify that methods were called with correct parameters
+        verify(preparedStatement, times(1)).setInt(1, userId);
+        verify(preparedStatement, times(1)).setInt(2, userId);
+        verify(preparedStatement, times(1)).setInt(3, userId);
+        verify(preparedStatement, times(1)).setInt(4, userId);
+        verify(preparedStatement, times(1)).setInt(5, userId);
+
+        // Verify resources were closed
+        verify(resultSet, times(1)).close();
+        verify(preparedStatement, times(1)).close();
+    }
+
+    @Test
+    void testCountNewMessagesSQLException() throws SQLException {
+        int userId = 1;
+
+        // Mock behavior for SQLException
+        when(connection.prepareStatement(any(String.class))).thenThrow(new SQLException("Database error"));
+
+        // Assert that GeneralException is thrown
+        GeneralException exception = assertThrows(GeneralException.class, () -> replyDAO.countNewMessages(userId));
+        assertTrue(exception.getMessage().contains("SQL error counting new messages for user ID"));
+
+        // Verify resources were closed
+        verify(preparedStatement, never()).close();
+        verify(resultSet, never()).close();
     }
 
 }
