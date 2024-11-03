@@ -17,7 +17,7 @@ import com.homesharing.dao.impl.DistrictDAOImpl;
 import com.homesharing.dao.impl.FireEquipHomeImpl;
 import com.homesharing.dao.impl.FireEquipmentDAOImpl;
 import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.HomeImageDAOImp;
+import com.homesharing.dao.impl.HomeImageDAOImpl;
 import com.homesharing.dao.impl.HomeTypeDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.dao.impl.ProvinceDAOImpl;
@@ -59,7 +59,7 @@ public class SubmissonFormServiceImpl implements SubmissionFormService {
         this.homeTypeDAO = new HomeTypeDAOImpl();
         this.amentityDAO = new AmentityDAOImpl();
         this.fireEquipmentDAO = new FireEquipmentDAOImpl();
-        this.homeImageDAO = new HomeImageDAOImp();
+        this.homeImageDAO = new HomeImageDAOImpl();
         this.homeDAO = new HomeDAOImpl();
         this.amentityHomeDAO = new AmentityHomeDAOImpl();
         this.fireEquipHomeDAO = new FireEquipHomeImpl();

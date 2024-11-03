@@ -594,4 +594,6 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
 
         return null;
     }
+
+
 }

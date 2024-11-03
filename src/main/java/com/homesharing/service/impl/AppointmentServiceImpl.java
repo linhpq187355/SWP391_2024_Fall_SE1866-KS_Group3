@@ -1,12 +1,16 @@
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.AppointmentDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Appointment;
 import com.homesharing.service.AppointmentService;
+import com.homesharing.util.AddNotificationUtil;
 import org.apache.logging.log4j.core.util.JsonUtils;
 
+import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -87,10 +91,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus("hostPending");
 
         try {
-            return appointmentDAO.insert(appointment);
+            int newId = appointmentDAO.insert(appointment);
+            if(newId>0){
+                AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Bạn có lịch hẹn xem phòng mới!", "Appointment", "appointment-host-manage?appointmentId="+newId);
+            }
+            return newId;
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE,"Error inserting appointment into the database: {}", e.getMessage());
             throw new RuntimeException("Error saving appointment to the database: " + e.getMessage(), e);
+        } catch (SQLException s) {
+            LOGGER.log(Level.SEVERE,"Error add notification: {}", s.getMessage());
+            throw new RuntimeException("Error add notification: " + s.getMessage(), s);
         }
     }
 
@@ -184,13 +195,26 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public int cancelAppointment(String appointmentId, String reason) {
+    public int cancelAppointment(String appointmentId, String reason, String receiver) {
         try{
             int appointmentID = Integer.parseInt(appointmentId);
-            return appointmentDAO.cancelAppointment(appointmentID, reason);
+            Appointment appointment = getAppointmentById(appointmentId);
+            int effectedRow = appointmentDAO.cancelAppointment(appointmentID, reason);
+            if(effectedRow>0){
+                if(receiver.equals("host")){
+                    AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" đã bị hủy với lý do: "+reason, "Appointment", "appointment-host-manage?appointmentId="+appointmentId);
+                } else {
+                    AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" đã bị hủy với lý do: "+reason, "Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
+                }
+
+            }
+            return effectedRow;
         } catch (GeneralException e){
             LOGGER.log(Level.SEVERE,"Error cancel appointments", e.getMessage());
             throw new GeneralException("Error cancel appointments" + e.getMessage(), e);
+        } catch (SQLException s) {
+            LOGGER.log(Level.SEVERE,"Error add notification: {}", s.getMessage());
+            throw new RuntimeException("Error add notification: " + s.getMessage(), s);
         }
     }
 
@@ -200,13 +224,13 @@ public class AppointmentServiceImpl implements AppointmentService {
             int appointmentID = Integer.parseInt(appointmentId);
             return appointmentDAO.getAppointmentById(appointmentID);
         } catch (GeneralException e){
-            LOGGER.log(Level.SEVERE,"Error cancel appointments", e.getMessage());
-            throw new GeneralException("Error cancel appointments" + e.getMessage(), e);
+            LOGGER.log(Level.SEVERE,"Error get appointments", e.getMessage());
+            throw new GeneralException("Error get appointments" + e.getMessage(), e);
         }
     }
 
     @Override
-    public int updateAppointment(String day, String month, String year, String time, String note,String status,String id) {
+    public int updateAppointment(String day, String month, String year, String time, String note,String status,String id, String host) {
         String[] times;
         LocalTime localStartTime = null;
         LocalTime localEndTime = null;
@@ -264,21 +288,44 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus(status);
 
         try {
-            return appointmentDAO.update(appointment);
+            Appointment appointment1 = getAppointmentById(id);
+            int affectedRow = appointmentDAO.update(appointment);
+            if(affectedRow>0){
+                if(host.equals("1")) {
+                    AddNotificationUtil.getInstance().addNotification(appointment1.getTenantId(),"Lịch hẹn ngày "+appointment1.getStartDate().getDayOfMonth()+"/"+appointment1.getStartDate().getMonthValue()+"/"+appointment1.getStartDate().getYear()+" đã được đổi sang "+ time+" | "+day+"/"+month+"/"+year+" bởi chủ phòng, vui lòng xem và xác nhận.", "Appointment", "appointment-tenant-list?appointmentId="+id);
+                }
+            }
+            return affectedRow;
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE,"Error updating appointment into the database: {}", e.getMessage());
             throw new RuntimeException("Error updating appointment to the database: " + e.getMessage(), e);
+        } catch (SQLException s) {
+            LOGGER.log(Level.SEVERE,"Error add notification: {}", s.getMessage());
+            throw new RuntimeException("Error add notification: " + s.getMessage(), s);
         }
     }
 
     @Override
-    public int acceptAppointment(String appointmentId) {
+    public int acceptAppointment(String appointmentId, String receiver) {
         try{
             int appointmentID = Integer.parseInt(appointmentId);
-            return appointmentDAO.acceptAppointment(appointmentID);
+            Appointment appointment = getAppointmentById(appointmentId);
+            int effectedRow = appointmentDAO.acceptAppointment(appointmentID);
+            if(effectedRow >0){
+                if(receiver.equals("host")){
+                    AddNotificationUtil.getInstance().addNotification(appointment.getHostId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã được chấp nhận!", "Appointment", "appointment-host-manage?appointmentId="+appointmentId);
+                } else {
+                    AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã được chấp nhận!", "Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
+                }
+
+            }
+            return effectedRow;
         } catch (GeneralException e){
             LOGGER.log(Level.SEVERE,"Error accept appointments", e.getMessage());
             throw new GeneralException("Error accept appointments" + e.getMessage(), e);
+        } catch (SQLException s) {
+            LOGGER.log(Level.SEVERE,"Error add notification: {}", s.getMessage());
+            throw new RuntimeException("Error add notification: " + s.getMessage(), s);
         }
     }
 
@@ -286,10 +333,18 @@ public class AppointmentServiceImpl implements AppointmentService {
     public int rejectAppointment(String appointmentId, String reason) {
         try{
             int appointmentID = Integer.parseInt(appointmentId);
-            return appointmentDAO.rejectAppointment(appointmentID, reason);
+            Appointment appointment = getAppointmentById(appointmentId);
+            int effectedRow = appointmentDAO.rejectAppointment(appointmentID, reason);
+            if(effectedRow >0){
+                AddNotificationUtil.getInstance().addNotification(appointment.getTenantId(),"Yêu cầu lịch hẹn ngày "+appointment.getStartDate().getDayOfMonth()+"/"+appointment.getStartDate().getMonthValue()+"/"+appointment.getStartDate().getYear()+" của bạn đã bị từ chối với lí do: "+reason+"!", "Appointment", "appointment-tenant-list?appointmentId="+appointmentId);
+            }
+            return effectedRow;
         } catch (GeneralException e){
             LOGGER.log(Level.SEVERE,"Error reject appointments", e.getMessage());
             throw new GeneralException("Error reject appointments" + e.getMessage(), e);
+        } catch (SQLException s) {
+            LOGGER.log(Level.SEVERE,"Error add notification: {}", s.getMessage());
+            throw new RuntimeException("Error add notification: " + s.getMessage(), s);
         }
     }
 

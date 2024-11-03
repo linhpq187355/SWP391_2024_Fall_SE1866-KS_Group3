@@ -518,6 +518,31 @@
 
 <script>
 
+    window.onload = function() {
+        // Lấy thông tin appointment từ requestScope
+        const appointmentStatus = '${requestScope.appointment.status}';
+        const homeName = '${requestScope.home.name}';
+        const homeAddress = '${requestScope.home.address}';
+        const appointmentStartDate = '${requestScope.appointment.startDate}';
+        const appointmentEndDate = '${requestScope.appointment.endDate}';
+        const hostFirstName = '${requestScope.host.firstName}';
+        const hostLastName = '${requestScope.host.lastName}';
+        const hostPhoneNumber = '${requestScope.host.phoneNumber}';
+        const hostEmail = '${requestScope.host.email}';
+        const appointmentNote = '${requestScope.appointment.note}';
+        const appointmentRejectReason = '${requestScope.appointment.rejectReason}';
+        const appointmentId = '${requestScope.appointment.id}';
+        const appointmentCancelReason = '${requestScope.appointment.cancelReason}';
+
+        // Gọi hàm showPopup với thông tin của appointment
+        if(appointmentId){
+            showPopup(appointmentStatus, homeName, homeAddress, appointmentStartDate, appointmentEndDate, hostFirstName,
+                hostLastName,hostPhoneNumber,hostEmail,appointmentNote,appointmentRejectReason,appointmentId,appointmentCancelReason);
+        }
+
+
+    };
+
     document.addEventListener("DOMContentLoaded", function() {
         const today = new Date();
         const upcomingStatusElements = document.querySelectorAll(".upcoming-status");

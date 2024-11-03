@@ -35,7 +35,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         PreparedStatement preparedStatement = null;
         try{
             connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = connection.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setObject(1, appointment.getStartDate());
             preparedStatement.setObject(2, appointment.getEndDate());
             preparedStatement.setString(3, appointment.getStatus());
@@ -45,6 +45,18 @@ public class AppointmentDAOImpl implements AppointmentDAO {
             preparedStatement.setInt(7, appointment.getHomeId());
             // Execute the update to insert the user into the database
             affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                // Retrieve the generated keys (ID)
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1); // Return the generated ID
+                    } else {
+                        throw new SQLException("Inserting appointment failed, no ID obtained.");
+                    }
+                }
+            } else {
+                throw new SQLException("Inserting appointment failed, no rows affected.");
+            }
 
         } catch (SQLException e) {
             LOGGER.error("SQL error occurred while inserting appointment: {}", e.getMessage());
@@ -65,7 +77,6 @@ public class AppointmentDAOImpl implements AppointmentDAO {
                 throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
             }
         }
-        return affectedRows;
     }
 
     @Override
@@ -261,7 +272,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
                 " WHERE id = ?";
         int affectedRows = 0;
 
-        // Using try-with-resources to ensure automatic resource management
+
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try{

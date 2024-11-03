@@ -2,7 +2,9 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
 import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
@@ -52,10 +54,22 @@ public class AppointmentListServlet extends HttpServlet {
         String aMess = req.getParameter("aMessage");
         String aError = req.getParameter("aError");
         String tenantId = CookieUtil.getCookie(req, "id");
+        String appointmentId = req.getParameter("appointmentId");
+        Appointment appointment = null;
+        Home home = null;
+        User host = null;
+        if(appointmentId != null && !appointmentId.isEmpty()) {
+            appointment = appointmentService.getAppointmentById(appointmentId);
+            home = homePageService.getHomeById(appointment.getHomeId());
+            host = userService.getUser(appointment.getHostId());
+        }
         List<Appointment> appointmentList = appointmentService.getAppointmentsByTenant(tenantId);
         List<Home> homeList = homePageService.getHomesByAppoinment(appointmentList);
         List<User> hostList = userService.getHostByAppointment(appointmentList);
         req.setAttribute("appointmentList", appointmentList);
+        req.setAttribute("home", home);
+        req.setAttribute("host", host);
+        req.setAttribute("appointment", appointment);
         req.setAttribute("homeList", homeList);
         req.setAttribute("hostList", hostList);
         req.setAttribute("aMess", aMess);

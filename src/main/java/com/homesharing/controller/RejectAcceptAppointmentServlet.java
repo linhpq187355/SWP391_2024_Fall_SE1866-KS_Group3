@@ -1,7 +1,9 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.model.Appointment;
 import com.homesharing.service.AppointmentService;
 import com.homesharing.service.impl.AppointmentServiceImpl;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 @WebServlet("/accept-reject-appointment")
 public class RejectAcceptAppointmentServlet extends HttpServlet {
     private AppointmentService appointmentService;
+    private NotificationDAO notificationDAO;
     private static final Logger LOGGER = Logger.getLogger(EditAppointmentServlet.class.getName());
 
     @Override
@@ -37,7 +40,7 @@ public class RejectAcceptAppointmentServlet extends HttpServlet {
         try{
             if(status.equals("accepted")){
                 if(host.equals("1")){
-                    int rowEffected = appointmentService.acceptAppointment(id);
+                    int rowEffected = appointmentService.acceptAppointment(id,"tenant");
                     if(rowEffected>0){
                         resp.sendRedirect("appointment-host-manage?aMessage=1");
                     } else {
@@ -46,7 +49,7 @@ public class RejectAcceptAppointmentServlet extends HttpServlet {
                     }
                 } else {
                     if(host.equals("0")){
-                        int rowEffected = appointmentService.acceptAppointment(id);
+                        int rowEffected = appointmentService.acceptAppointment(id, "host");
                         if(rowEffected>0){
                             resp.sendRedirect("appointment-tenant-list?aMessage=1");
                         } else {

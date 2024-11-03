@@ -548,6 +548,44 @@
 </c:if>
 
 <script>
+    let currentAppointmentId = null;
+    let currentStatus = null;
+    let currentHomeName = null;
+    let currentAddress = null;
+    let currentStartTime = null;
+    let currentEndTime = null;
+    let currentFirstName = null;
+    let currentLastName = null;
+    let currentOwnerPhone = null;
+    let currentOwnerEmail = null;
+    let currentNote = null;
+    let currentRejectReason = null;
+    let currentCancelReason = null;
+
+    window.onload = function() {
+        // Lấy thông tin appointment từ requestScope
+        const appointmentStatus = '${requestScope.appointment.status}';
+        const homeName = '${requestScope.home.name}';
+        const homeAddress = '${requestScope.home.address}';
+        const appointmentStartDate = '${requestScope.appointment.startDate}';
+        const appointmentEndDate = '${requestScope.appointment.endDate}';
+        const tenantFirstName = '${requestScope.tenant.firstName}';
+        const tenantLastName = '${requestScope.tenant.lastName}';
+        const tenantPhoneNumber = '${requestScope.tenant.phoneNumber}';
+        const tenantEmail = '${requestScope.tenant.email}';
+        const appointmentNote = '${requestScope.appointment.note}';
+        const appointmentRejectReason = '${requestScope.appointment.rejectReason}';
+        const appointmentId = '${requestScope.appointment.id}';
+        const appointmentCancelReason = '${requestScope.appointment.cancelReason}';
+
+        // Gọi hàm showPopup với thông tin của appointment
+        if(appointmentId){
+            showPopup(appointmentStatus, homeName, homeAddress, appointmentStartDate, appointmentEndDate, tenantFirstName,
+                tenantLastName,tenantPhoneNumber,tenantEmail,appointmentNote,appointmentRejectReason,appointmentId,appointmentCancelReason);
+        }
+
+
+    };
 
     document.addEventListener("DOMContentLoaded", function() {
         const today = new Date();
@@ -610,19 +648,7 @@
 
     updatePagination();
 
-    let currentAppointmentId = null;
-    let currentStatus = null;
-    let currentHomeName = null;
-    let currentAddress = null;
-    let currentStartTime = null;
-    let currentEndTime = null;
-    let currentFirstName = null;
-    let currentLastName = null;
-    let currentOwnerPhone = null;
-    let currentOwnerEmail = null;
-    let currentNote = null;
-    let currentRejectReason = null;
-    let currentCancelReason = null;
+
 
     function showPopup(status, homeName, address, startTime, endTime, firstName,lastName, ownerPhone, ownerEmail,note,rejectReason,appointmentId, cancelReason) {
         const day = startTime.substring(8, 10); // "YYYY-MM-DD"
@@ -718,6 +744,8 @@
         document.getElementById("overlay").style.display = "block";
         document.getElementById("popup").style.display = "block";
     }
+
+
 
     // Đóng popup khi bấm nút "Đóng" hoặc overlay
     document.querySelector("#popup .xclose").onclick = closePopup;
@@ -835,9 +863,10 @@
     function updateAppointment(event) {
         event.preventDefault(); // Prevents form submission
         if (currentAppointmentId) {
-            window.location.href = "host-update-appointment?id=" + currentAppointmentId;
+            window.location.href = "host-update-appointment?id=" + currentAppointmentId+"&host=1";
         }
     }
+
 </script>
 <jsp:include page="footer.jsp"/>
 </body>

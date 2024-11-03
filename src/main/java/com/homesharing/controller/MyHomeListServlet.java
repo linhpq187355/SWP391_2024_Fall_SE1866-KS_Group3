@@ -1,12 +1,9 @@
 package com.homesharing.controller;
 
 import com.google.gson.Gson;
-import com.homesharing.dao.HomeDAO;
-import com.homesharing.dao.PriceDAO;
-import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.PriceDAOImpl;
-import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.dao.*;
+import com.homesharing.dao.impl.*;
+import com.homesharing.model.Amentity;
 import com.homesharing.model.Home;
 import com.homesharing.model.User;
 import com.homesharing.service.HomeMgtService;
@@ -31,13 +28,19 @@ public class MyHomeListServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(CreateHomeServlet.class);
     private HomeMgtService homeMgtService;
     private UserService userService;
+    private HomeImageDAO homeImageDAO;
+    private AmentityHomeDAO amentityDAO;
+    private FireEquipHomeDAO fireEquipHomeDAO;
 
     @Override
     public void init() throws ServletException {
         HomeDAO homeDAO = new HomeDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
         PriceDAO priceDAO = new PriceDAOImpl();
-        this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO);
+        homeImageDAO = new HomeImageDAOImpl();
+        amentityDAO = new AmentityHomeDAOImpl();
+        fireEquipHomeDAO = new FireEquipHomeImpl();
+        this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO,homeImageDAO,amentityDAO,fireEquipHomeDAO);
         this.userService = new UserServiceImpl(userDAO, null, null, null);
     }
 

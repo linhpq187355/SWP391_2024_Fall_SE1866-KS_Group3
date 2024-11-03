@@ -3,6 +3,7 @@
     import com.homesharing.dao.*;
     import com.homesharing.dao.impl.HomeDAOImpl;
     import com.homesharing.dao.impl.PriceDAOImpl;
+    import com.homesharing.dao.impl.WardDAOImpl;
     import com.homesharing.dao.impl.WishListDAOImpl;
     import com.homesharing.model.*;
     import com.homesharing.service.HomeDetailService;
@@ -32,6 +33,7 @@
         private HomeDAO homeDAO;  // Data Access Object for accessing home data
         private PriceDAO priceDAO;
         private UserDAO userDAO;
+        private WardDAO wardDAO;
         private HomeDetailService homeDetailService;
         private WishListService wishListService;
 
@@ -43,7 +45,8 @@
         public void init() throws ServletException {
             homeDAO = new HomeDAOImpl();
             priceDAO = new PriceDAOImpl();
-            homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
+            wardDAO = new WardDAOImpl();
+            homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO,wardDAO);
             this.homeDetailService = new HomeDetailServiceImpl();
             this.wishListService = new WishListServiceImpl();
         }

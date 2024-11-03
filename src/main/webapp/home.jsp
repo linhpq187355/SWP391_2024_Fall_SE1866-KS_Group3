@@ -44,6 +44,10 @@
             height: 200px; /* Hoặc bạn có thể đặt kích thước cố định tùy thuộc vào yêu cầu */
             object-fit: cover; /* Giúp cắt ảnh nếu vượt quá chiều rộng hoặc chiều cao, mà vẫn giữ tỉ lệ */
         }
+        #searchInput::placeholder {
+            color: #777;
+
+        }
     </style>
 </head>
 
@@ -57,93 +61,26 @@
 <jsp:include page="header.jsp"/>
 <!-- End of nav bar -->
 
-<div class="slider-area">
-    <div class="slider">
-        <div id="bg-slider" class="owl-carousel owl-theme">
+<div class="banner-area row" style="padding: 0 80px;margin: 50px 0;display: flex;align-items: center;">
+    <div class="col-md-6">
+        <div>
+            <h2 style="text-align: center;color: #FA6C00;">CHUNG NHÀ - CHUNG VUI</h2>
+            <p style="text-align: center;font-size: 20px;color: #484848;">Nơi kết nối những người cùng chung chí hướng</p>
+        </div>
+        <div style="display: flex;width: 80%;justify-content: space-between;border: 1px solid #ccc;box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;border-radius: 15px;height: 50px;margin-left: 15%;margin-top: 5%;align-items: center;">
+            <i class="fa-solid fa-location-dot" style="font-size: 25px;margin-left: 4%;"></i>
+            <form action="searchHomes" method="GET" class="form-inline" style="width: 80%;">
 
-            <div class="item"><img src="assets/img/banner-01.png" alt="The Last of us"></div>
-            <div class="item"><img src="assets/img/banner-02.jpg" alt="GTA V"></div>
-
+                <input style="border: none;font-size: 17px;font-weight: 900;" placeholder="Nhập địa điểm" id="searchInput" type="text" name="name" class="form-control  value="${param.name}">
+            </form>
+            <i class="fa-solid fa-magnifying-glass" style="font-size: 25px;margin-right: 5%;"></i>
         </div>
     </div>
-    <div class="container slider-content">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12" id="bn-text">
-                <h2>Chung nhà - Chung vui</h2>
-                <p>Tìm Bạn Cùng Phòng: Nhanh Chóng, Dễ Dàng và Đáng Tin Cậy</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="home-lager-shearch" style="background-color: rgb(252, 252, 252); padding-top: 25px; margin-top: -125px;">
-    <div class="container">
-        <div class="col-md-12 large-search">
-            <div class="search-form wow pulse">
-                <form action="searchHomes" method="GET" class="form-inline">
-                    <div class="col-md-12">
-                        <div class="col-md-12">
-                            <input  id="searchInput" type="text" name="name" class="form-control" placeholder="Nhập tối đa 5 địa điểm, dự án. Ví dụ: Quận Hoàn Kiếm, Quận Đống Đa" value="${param.name}">
-                        </div>
-                    </div>
-                    <div class="col-md-12 ">
-                        <div class="search-row">
-
-                            <div class="col-sm-3">
-                                <label for="price-range">Price range ($):</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="100000" data-slider-step="5"
-                                       data-slider-value="[${param.minPrice != null ? param.minPrice : 0}, ${param.maxPrice != null ? param.maxPrice : 100000}]"
-                                       id="price-range" name="price-range" onchange="updatePriceValues()"><br />
-                                <b class="pull-left color">0$</b>
-                                <b class="pull-right color">100000$</b>
-                            </div>
-                            <input type="hidden" name="minPrice" id="minPrice" value="${param.minPrice != null ? param.minPrice : 0}">
-                            <input type="hidden" name="maxPrice" id="maxPrice" value="${param.maxPrice != null ? param.maxPrice : 100000}">
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <label for="property-geo">Property geo (m2) :</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="600" data-slider-step="5"
-                                       data-slider-value="[50,450]" id="property-geo" ><br />
-                                <b class="pull-left color">40m</b>
-                                <b class="pull-right color">12000m</b>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <label for="price-range">Min baths :</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="600" data-slider-step="5"
-                                       data-slider-value="[250,450]" id="min-baths" ><br />
-                                <b class="pull-left color">1</b>
-                                <b class="pull-right color">120</b>
-                            </div>
-                            <!-- End of  -->
-
-                            <div class="col-sm-3">
-                                <label for="property-geo">Min bed :</label>
-                                <input type="text" class="span2" value="" data-slider-min="0"
-                                       data-slider-max="600" data-slider-step="5"
-                                       data-slider-value="[250,450]" id="min-bed" ><br />
-                                <b class="pull-left color">1</b>
-                                <b class="pull-right color">120</b>
-                            </div>
-                            <!-- End of  -->
-
-                        </div>
-                        <!-- End of  -->
-
-                    </div>
-                    <div class="center">
-                        <input type="submit" value="" class="btn btn-default btn-lg-sheach">
-                    </div>
-                </form>
-            </div>
-        </div>
+    <div class="col-md-6" style="padding: 0">
+        <img src="assets/img/banner/fa46a892b6baacbee6d2f7845a093dfa.png" alt="banner">
     </div>
 </div>
+
 
 
 <!-- property area -->
@@ -152,7 +89,7 @@
 <div class="content-area recent-property" style="background-color: #FCFCFC; padding-bottom: 55px;">
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
+            <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title" style="margin-left: 0">
                 <c:choose>
                     <c:when test="${!empty param.name || !empty param.minPrice || !empty param.maxPrice}">
                         <h2>Kết quả tìm kiếm của bạn</h2>
@@ -163,7 +100,7 @@
                     </c:when>
 
                     <c:otherwise>
-                        <h2>Bài đăng mới nhất</h2>
+                        <h2 style="text-align: left; color: #484848; letter-spacing: 0">Bài đăng mới nhất</h2>
                     </c:otherwise>
                 </c:choose>
 
@@ -174,23 +111,39 @@
             <div class="proerty-th">
                 <c:forEach items="${requestScope.homes}" var="homes">
                     <div class="col-sm-6 col-md-3 p0">
-                        <div class="box-two proerty-item">
+                        <div class="box-two proerty-item" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;border-radius: 15px;margin: 15px;height: 390px;">
                             <div class="item-thumb">
                                 <a href="home-detail?id=${homes.id}">
                                     <img class="property-image"
                                          src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/social_big/dribbble_grey.png'}"
-                                         alt="Property Image">
+                                         alt="Property Image" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
                                 </a>
                             </div>
                             <div class="item-entry overflow">
-                                <h5><a href="home-detail?id=${homes.id}">${homes.address}</a></h5>
-                                <div class="dot-hr"></div>
-                                <span class="pull-left"><b>Area :</b> ${homes.area}</span>
-                                <c:forEach items="${requestScope.prices}" var="prices">
-                                    <c:if test="${prices.homesId == homes.id}">
-                                        <span class="proerty-price pull-right">${prices.price}</span>
-                                    </c:if>
-                                </c:forEach>
+
+                                <h5 style="letter-spacing: 0;height: 35px"><a href="home-detail?id=${homes.id}">${homes.name}</a></h5>
+                                <div style="display: flex;align-items: center;border-bottom: 1px solid #484848;padding-bottom: 10px;">
+                                    <i class="fa-solid fa-location-dot" ></i>
+                                    <p style="padding: 0;margin-left: 10px;">${homes.address}</p>
+                                </div>
+                                <div style="display: flex;justify-content: space-between;font-size: 15px;color: #FA6C00;margin-top: 10px;align-items: center;">
+                                    <div>
+                                        <i class="fa-solid fa-chart-area"></i> ${homes.area} m<sup>2</sup>
+                                    </div>
+                                    <div>
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                        <c:forEach items="${requestScope.prices}" var="prices">
+                                            <c:if test="${prices.homesId == homes.id}">
+                                                ${prices.price}
+                                            </c:if>
+                                        </c:forEach>
+                                         đ
+                                    </div>
+                                    <div style="border: 1px solid #ccc;border-radius: 5px;height: 35px;width: 35px;display: flex;justify-content: center;align-items: center;font-size: 25px;">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

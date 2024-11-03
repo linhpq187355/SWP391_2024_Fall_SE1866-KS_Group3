@@ -10,7 +10,7 @@ import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.WardDAO;
 import com.homesharing.dao.impl.AmentityHomeDAOImpl;
-import com.homesharing.dao.DistrictDAOImpl;
+import com.homesharing.dao.impl.DistrictDAOImpl;
 import com.homesharing.dao.impl.FireEquipHomeImpl;
 import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.HomeImageDAOImpl;

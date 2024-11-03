@@ -14,13 +14,13 @@ public interface AppointmentService {
 
     List<Appointment> getAppointmentsByTenant(String tenantId);
 
-    int cancelAppointment(String appointmentId, String reason);
+    int cancelAppointment(String appointmentId, String reason, String receiver);
 
     Appointment getAppointmentById(String appointmentId);
 
-    int updateAppointment(String day, String month, String year, String time, String note,String status, String id);
+    int updateAppointment(String day, String month, String year, String time, String note,String status, String id, String host);
 
-    int acceptAppointment(String appointmentId);
+    int acceptAppointment(String appointmentId, String receiver);
 
     int rejectAppointment(String appointmentId, String reason);
 }

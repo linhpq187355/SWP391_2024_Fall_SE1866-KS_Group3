@@ -70,6 +70,7 @@ public class HomePageServiceImpl implements HomePageService {
      */
     @Override
     public List<Home> getNewHomes() {
+
         List<Home> homeList = new ArrayList<>();
 
         try {

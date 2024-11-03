@@ -1,7 +1,9 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.model.Appointment;
 import com.homesharing.model.Price;
 import com.homesharing.service.AppointmentService;
@@ -110,7 +112,7 @@ public class EditAppointmentServlet extends HttpServlet {
                     req.setAttribute("appointment", appointment);
                     req.getRequestDispatcher("update-appointment.jsp").forward(req, resp);
                 } else {
-                    int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"hostPending", aptmId);
+                    int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"hostPending", aptmId,"0");
 
                     if(rowsUpdated>0){
                         req.setAttribute("message","Sửa lịch thành công!");

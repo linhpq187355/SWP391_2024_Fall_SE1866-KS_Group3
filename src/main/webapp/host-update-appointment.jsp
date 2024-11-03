@@ -255,6 +255,7 @@
             <input type="hidden" name="selectedTime" id="hiddenTime">
             <input type="hidden" name="note" value="${requestScope.appointment.note}">
             <input type="hidden" name="aptmId" value="${requestScope.appointment.id}">
+            <input type="hidden" name="host" value="${requestScope.host}">
             <h5 style="color: #ffa500;text-align: center;margin-top: 30px;">Thông tin thay đổi sẽ được chuyển cho người thuê để chờ xác nhận. Hệ thống sẽ thông báo cho bạn khi xác nhận xong.</h5>
             <div class="footer">
                 <div class="info">

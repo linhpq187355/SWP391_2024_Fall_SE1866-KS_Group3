@@ -1,7 +1,9 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.model.Appointment;
 import com.homesharing.service.AppointmentService;
 import com.homesharing.service.impl.AppointmentServiceImpl;
@@ -84,7 +86,7 @@ public class MakeAppointmentServlet extends HttpServlet {
 
         try {
                 List<Appointment> hostAppointmentList = appointmentService.getAppointments(hostId);
-            List<Appointment> tenantAppointmentList = appointmentService.getAppointments(tenantId);
+                List<Appointment> tenantAppointmentList = appointmentService.getAppointments(tenantId);
                 boolean checkOverlapping = appointmentService.checkOverlapping(selectedDate, selectedMonth, selectedYear,selectedTime,hostAppointmentList,tenantAppointmentList);
                 if(checkOverlapping){
                     req.setAttribute("over", "Thời gian bị lặp.");

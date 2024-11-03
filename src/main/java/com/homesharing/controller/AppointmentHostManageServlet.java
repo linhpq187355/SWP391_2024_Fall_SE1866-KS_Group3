@@ -2,9 +2,11 @@ package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
 import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
 import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Appointment;
 import com.homesharing.model.Home;
@@ -46,6 +48,7 @@ public class AppointmentHostManageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String hostId = CookieUtil.getCookie(req, "id");
+        String appointmentId = req.getParameter("appointmentId");
         String aMessage = req.getParameter("aMessage");
         String aError = req.getParameter("aError");
         String rMessage = req.getParameter("rMessage");
@@ -55,8 +58,19 @@ public class AppointmentHostManageServlet extends HttpServlet {
         List<Appointment> appointmentList = appointmentService.getAppointments(hostId);
         List<Home> homeList = homePageService.getHomesByAppoinment(appointmentList);
         List<User> tenantList = userService.getTenantByAppointment(appointmentList);
+        Appointment appointment = null;
+        Home home = null;
+        User tenant = null;
+        if(appointmentId != null && !appointmentId.isEmpty()) {
+            appointment = appointmentService.getAppointmentById(appointmentId);
+            home = homePageService.getHomeById(appointment.getHomeId());
+            tenant = userService.getUser(appointment.getTenantId());
+        }
 
+        req.setAttribute("home", home);
+        req.setAttribute("tenant", tenant);
         req.setAttribute("tenantList", tenantList);
+        req.setAttribute("appointment", appointment);
         req.setAttribute("appointmentList", appointmentList);
         req.setAttribute("homeList", homeList);
         req.setAttribute("aError", aError);

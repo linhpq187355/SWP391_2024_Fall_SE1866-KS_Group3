@@ -1,7 +1,9 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.service.AppointmentService;
 import com.homesharing.service.impl.AppointmentServiceImpl;
 import jakarta.servlet.ServletException;
@@ -31,24 +33,24 @@ public class CancelAppointmentServlet extends HttpServlet {
         String cancelReason = req.getParameter("reason");
         String host = req.getParameter("host");
         try{
-
-            int rowsUpdated = appointmentService.cancelAppointment(appointmentId, cancelReason);
-            if(rowsUpdated>0){
-                if(host.equals("0")){
+            if(host.equals("0")){
+                int rowsUpdated = appointmentService.cancelAppointment(appointmentId, cancelReason, "host");
+                if(rowsUpdated>0) {
                     resp.sendRedirect("appointment-tenant-list?cancelMessage=1");
                 } else {
-                    resp.sendRedirect("appointment-host-manage?cMessage=1");
+                    LOGGER.warning("Failed to cancel appointment.");
+                    resp.sendRedirect("appointment-tenant-list?cancelError=1");
                 }
             } else {
-
-                LOGGER.warning("Failed to cancel appointment.");
-                if(host.equals("0")){
-                    resp.sendRedirect("appointment-tenant-list?cancelError=1");
+                int rowsUpdated = appointmentService.cancelAppointment(appointmentId, cancelReason, "tenant");
+                if(rowsUpdated>0) {
+                    resp.sendRedirect("appointment-host-manage?cMessage=1");
                 } else {
+                    LOGGER.warning("Failed to cancel appointment.");
                     resp.sendRedirect("appointment-host-manage?cError=1");
                 }
-
             }
+
         }  catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE,"Lỗi khi lưu dữ liệu hẹn: {}", e.getMessage());
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Không thể lưu dữ liệu hẹn.");

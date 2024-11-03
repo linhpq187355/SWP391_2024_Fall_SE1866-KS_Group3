@@ -1,7 +1,9 @@
 package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
+import com.homesharing.dao.NotificationDAO;
 import com.homesharing.dao.impl.AppointmentDAOImpl;
+import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.model.Appointment;
 import com.homesharing.service.AppointmentService;
 import com.homesharing.service.impl.AppointmentServiceImpl;
@@ -12,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,6 +35,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         Appointment appointment = appointmentService.getAppointmentById(id);
+        String host = req.getParameter("host");
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedStartTime = appointment.getStartDate().format(timeFormatter);
@@ -42,6 +46,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
         req.setAttribute("appointmentDay", appointment.getStartDate().getDayOfMonth());
         req.setAttribute("appointmentTime", formattedStartTime + " - " + formattedEndTime);
         req.setAttribute("appointment", appointment);
+        req.setAttribute("host", host);
         req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
     }
 
@@ -54,6 +59,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
         String note = null;
         String aptmId = null;
         Appointment appointment = null;
+        String host = null;
 
 
         try {
@@ -64,6 +70,8 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
             selectedYear = req.getParameter("selectedYear");
             aptmId = req.getParameter("aptmId");
             note = req.getParameter("note");
+            host = req.getParameter("host");
+
 
             appointment = appointmentService.getAppointmentById(aptmId);
 
@@ -106,7 +114,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
                     req.setAttribute("appointment", appointment);
                     req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
                 } else {
-                    int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"tenantPending", aptmId);
+                    int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"tenantPending", aptmId,host);
 
                     if(rowsUpdated>0){
                         req.setAttribute("message","Sửa lịch thành công!");
