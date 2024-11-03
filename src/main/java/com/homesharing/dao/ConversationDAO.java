@@ -61,4 +61,25 @@ public interface ConversationDAO {
      * @throws SQLException if a database access error occurs while retrieving contact users
      */
     Map<Integer, Integer> contactUsersWithConversationId(int userId) throws SQLException;
+
+    /**
+     * Updates the conversation status to block or unblock it based on the action parameter.
+     *
+     * @param conversationId the ID of the conversation to update
+     * @param blockerId the ID of the user who is blocking/unblocking the conversation
+     * @param action the action to perform: "block" or "unblock"
+     * @return true if the conversation was successfully updated, false otherwise
+     * @throws SQLException if a database access error occurs while updating the conversation
+     */
+    boolean updateConversationStatus(int conversationId, int blockerId, String action) throws SQLException;
+
+    /**
+     * Retrieves the conversation details based on the conversation ID.
+     *
+     * @param conversationId the ID of the conversation to retrieve
+     * @return the Conversation object containing the conversation details, or null if no conversation exists
+     * @throws SQLException if a database access error occurs while retrieving the conversation
+     */
+    Conversation getConversation(int conversationId) throws SQLException;
+
 }

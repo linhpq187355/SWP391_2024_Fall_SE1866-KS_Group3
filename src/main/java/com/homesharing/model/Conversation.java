@@ -1,7 +1,7 @@
 package com.homesharing.model;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 public class Conversation {
     private int id;

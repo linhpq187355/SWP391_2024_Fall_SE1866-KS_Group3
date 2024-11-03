@@ -38,10 +38,8 @@ public interface HomeDAO {
      * @param searchParams a map of search criteria where the key is the search parameter and the value is its value.
      * @return a list of Home objects matching the search criteria.
      * @throws SQLException if a database access error occurs.
-     * @throws IOException if an I/O error occurs.
-     * @throws ClassNotFoundException if the class of a serialized object cannot be found.
      */
-    List<Home> getSearchedHomes(Map<String, Object> searchParams)  throws SQLException, IOException, ClassNotFoundException;
+    List<Home> getSearchedHomes(Map<String, Object> searchParams)  throws SQLException;
 
     /**
      * Fetches the first image URL for a given home by its ID.
@@ -68,42 +66,42 @@ public interface HomeDAO {
      *
      * @return a BigDecimal representing the minimum area size.
      */
-    BigDecimal getMinArea();
+    BigDecimal getMinArea() throws SQLException;
 
     /**
      * Retrieves the maximum area size of all homes in the database.
      *
      * @return a BigDecimal representing the maximum area size.
      */
-    BigDecimal getMaxArea();
+    BigDecimal getMaxArea() throws SQLException;
 
     /**
      * Retrieves the minimum number of bedrooms available in homes in the database.
      *
      * @return the minimum number of bedrooms.
      */
-    int getMinBed();
+    int getMinBed() throws SQLException;
 
     /**
      * Retrieves the maximum number of bedrooms available in homes in the database.
      *
      * @return the maximum number of bedrooms.
      */
-    int getMaxBed();
+    int getMaxBed() throws SQLException;
 
     /**
      * Retrieves the minimum number of bathrooms available in homes in the database.
      *
      * @return the minimum number of bathrooms.
      */
-    int getMinBath();
+    int getMinBath() throws SQLException;
 
     /**
      * Retrieves the maximum number of bathrooms available in homes in the database.
      *
      * @return the maximum number of bathrooms.
      */
-    int getMaxBath();
+    int getMaxBath() throws SQLException;
 
     /**
      * Save home's info to the database

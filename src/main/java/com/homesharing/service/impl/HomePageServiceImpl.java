@@ -145,7 +145,7 @@ public class HomePageServiceImpl implements HomePageService {
             }
             return homeList;
 
-        } catch (SQLException | IOException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             logger.severe("Error during home search: " + e.getMessage());
             throw new GeneralException("Failed to search for homes.", e);
         }

@@ -15,6 +15,7 @@ import com.homesharing.dao.ReplyDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.*;
 import com.homesharing.exception.GeneralException;
+import com.homesharing.model.Conversation;
 import com.homesharing.model.Notification;
 import com.homesharing.model.Reply;
 import com.homesharing.model.User;
@@ -127,6 +128,12 @@ public class ChatBoxServlet extends HttpServlet {
                 return;
             }
 
+            Conversation conversation = conversationDAO.getConversation(conversationId);
+            if (conversation == null) {
+                ServletUtils.forwardWithMessage(req, resp, "Không thể tìm thấy cuộc trò chuyện.");
+                return;
+            }
+
             // Get the list of user conversations again for setting attributes
             Map<User, Reply> listUserConversation = conversationService.getListUserConversation(uId);
             User matchedUser = userDAO.getUser(userTwo); // Retrieve the user object for the user to chat with
@@ -154,7 +161,7 @@ public class ChatBoxServlet extends HttpServlet {
             req.setAttribute("messageStatus", messageStatus);
             req.setAttribute("replies", replies); // Set replies in request attributes
             req.setAttribute("conversationId", conversationId); // Set conversation ID in request attributes
-
+            req.setAttribute("conversation", conversation);
             // Forward the request to the chat JSP page for rendering
             req.getRequestDispatcher("chat.jsp").forward(req, resp);
         } catch (SQLException | ServletException | IOException | GeneralException e) {

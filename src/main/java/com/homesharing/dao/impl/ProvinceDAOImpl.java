@@ -1,7 +1,6 @@
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
-import com.homesharing.dao.DistrictDAOImpl;
 import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Province;

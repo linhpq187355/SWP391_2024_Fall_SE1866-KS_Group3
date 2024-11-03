@@ -279,4 +279,102 @@ class ConversationDAOImplTest {
         assertTrue(exception.getMessage().contains("SQL error while fetching contact users for user ID 1. Reason: Database error"));
     }
 
+    @Test
+    void testUpdateConversationStatus_BlockAction_Success() throws Exception {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        boolean result = conversationDAO.updateConversationStatus(1, 123, "block");
+
+        assertTrue(result);
+        verify(preparedStatement).setString(1, "block_by_123");
+        verify(preparedStatement).setInt(2, 1);
+        verify(preparedStatement).executeUpdate();
+    }
+
+    @Test
+    void testUpdateConversationStatus_UnblockAction_Success() throws Exception {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+
+        boolean result = conversationDAO.updateConversationStatus(1, 123, "unblock");
+
+        assertTrue(result);
+        verify(preparedStatement).setString(1, "active");
+        verify(preparedStatement).setInt(2, 1);
+        verify(preparedStatement).executeUpdate();
+    }
+
+    @Test
+    void testUpdateConversationStatus_InvalidAction_ExceptionThrown() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            conversationDAO.updateConversationStatus(1, 123, "invalidAction");
+        });
+
+        assertEquals("Invalid action: invalidAction", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateConversationStatus_SQLExceptionThrown() throws Exception {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Database error"));
+
+        SQLException exception = assertThrows(SQLException.class, () -> {
+            conversationDAO.updateConversationStatus(1, 123, "block");
+        });
+
+        assertTrue(exception.getMessage().contains("SQL error while updating conversation with ID"));
+    }
+
+    @Test
+    void testGetConversation_Success() throws Exception {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        // Mock result set values
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("id")).thenReturn(1);
+        when(resultSet.getInt("userOne")).thenReturn(101);
+        when(resultSet.getInt("userTwo")).thenReturn(102);
+        when(resultSet.getTimestamp("time")).thenReturn(Timestamp.valueOf(LocalDateTime.of(2024, 10, 1, 12, 0)));
+        when(resultSet.getString("status")).thenReturn("active");
+
+        Conversation conversation = conversationDAO.getConversation(1);
+
+        assertNotNull(conversation);
+        assertEquals(1, conversation.getId());
+        assertEquals(101, conversation.getUserOne());
+        assertEquals(102, conversation.getUserTwo());
+        assertEquals(LocalDateTime.of(2024, 10, 1, 12, 0), conversation.getTime());
+        assertEquals("active", conversation.getStatus());
+
+        verify(preparedStatement).setInt(1, 1);
+        verify(preparedStatement).executeQuery();
+    }
+
+    @Test
+    void testGetConversation_NotFound() throws Exception {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(false); // No conversation found
+
+        Conversation conversation = conversationDAO.getConversation(1);
+
+        assertNull(conversation);
+        verify(preparedStatement).setInt(1, 1);
+        verify(preparedStatement).executeQuery();
+    }
+
+    @Test
+    void testGetConversation_SQLExceptionThrown() throws Exception {
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
+
+        GeneralException exception = assertThrows(GeneralException.class, () -> {
+            conversationDAO.getConversation(1);
+        });
+
+        assertTrue(exception.getMessage().contains("SQL error while retrieving conversation with ID"));
+    }
+
 }

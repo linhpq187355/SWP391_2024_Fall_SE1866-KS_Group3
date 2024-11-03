@@ -11,7 +11,6 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

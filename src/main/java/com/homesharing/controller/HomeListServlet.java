@@ -31,6 +31,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -39,7 +41,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * The {@code HomeListServlet} handles requests to display a list of homes
@@ -54,7 +55,7 @@ import java.util.logging.Logger;
 @WebServlet("/home-list")
 public class HomeListServlet extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(HomeListServlet.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(HomeListServlet.class);
 
     private SubmissonFormServiceImpl submissonFormService;
     private HomePageService homePageService;  // Service layer for home page logic
@@ -180,7 +181,7 @@ public class HomeListServlet extends HttpServlet {
             totalHomes = homePageService.countSearchHome(searchParams0);
             homePageService.updateTargetPage(searchParams0, totalHomes);
         } catch (SQLException | ClassNotFoundException e) {
-            LOGGER.severe("Error while fetching new homes: " + e.getMessage());
+            logger.error("Error while fetching new homes: " + e.getMessage());
             ServletUtils.forwardWithMessage(req, resp, e.getMessage());
         }
 
@@ -202,22 +203,29 @@ public class HomeListServlet extends HttpServlet {
 
         //get list province
         List<Province> provinces0 = new ArrayList<>(submissonFormService.getProvinces());
-        int maxPrice = priceDAO.getMaxPrice();
-        int minPrice = priceDAO.getMinPrice();
-        req.setAttribute("maxPrice", maxPrice);
-        req.setAttribute("minPrice", minPrice);
-        BigDecimal minArea = homeDAO.getMinArea();
-        BigDecimal maxArea = homeDAO.getMaxArea();
-        req.setAttribute("minArea", minArea);
-        req.setAttribute("maxArea", maxArea);
-        int minBed = homeDAO.getMinBed();
-        int maxBed = homeDAO.getMaxBed();
-        req.setAttribute("minBed", minBed);
-        req.setAttribute("maxBed", maxBed);
-        int minBath = homeDAO.getMinBath();
-        int maxBath = homeDAO.getMaxBath();
-        req.setAttribute("minBath", minBath);
-        req.setAttribute("maxBath", maxBath);
+        try {
+            int maxPrice = priceDAO.getMaxPrice();
+            int minPrice = priceDAO.getMinPrice();
+            req.setAttribute("maxPrice", maxPrice);
+            req.setAttribute("minPrice", minPrice);
+            BigDecimal minArea = homeDAO.getMinArea();
+            BigDecimal maxArea = homeDAO.getMaxArea();
+            req.setAttribute("minArea", minArea);
+            req.setAttribute("maxArea", maxArea);
+            int minBed = homeDAO.getMinBed();
+            int maxBed = homeDAO.getMaxBed();
+            req.setAttribute("minBed", minBed);
+            req.setAttribute("maxBed", maxBed);
+            int minBath = homeDAO.getMinBath();
+            int maxBath = homeDAO.getMaxBath();
+            req.setAttribute("minBath", minBath);
+            req.setAttribute("maxBath", maxBath);
+        } catch (SQLException e) {
+            logger.error("Error processing login request: {}", e.getMessage(), e);
+            ServletUtils.handleError(req, resp, 500); // Handle errors
+            return;
+        }
+
         req.setAttribute("homeTypes", homeTypes0);
         req.setAttribute("listAmen", listAmen0);
         req.setAttribute("listFire", listFire0);

@@ -5,9 +5,11 @@
   Time: 17:46
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<html  lang="vi">
 <head>
     <title>Thông tin đoạn chat</title>
     <meta charset="UTF-8">
@@ -24,7 +26,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #FFC107;
+    background-color: #ffa500;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -38,7 +40,7 @@
     }
     .header-2 .actions button {
     background-color: white;
-    color: #FFC107;
+    color: #ffa500;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
@@ -74,7 +76,7 @@
     gap: 10px;
     }
     .profile .actions button {
-    background-color: #FFC107;
+    background-color: #ffa500;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -131,7 +133,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-left: none;
-    background-color: #FFC107;
+    background-color: #ffa500;
     color: white;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
@@ -185,11 +187,56 @@
         border-radius: 5px;
         cursor: pointer;
     }
+    /* Kiểu modal ẩn ban đầu */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Nội dung modal */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 300px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    /* Nút đóng modal */
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
     </style>
 </head>
 <body>
 <jsp:include page="header.jsp"/>
 <c:set var="User" value="${requestScope.User}"/>
+<c:set var="conversation" value="${requestScope.conversation}"/>
+<c:if test="${not empty cookie.id}">
+    <c:set var="sendId" value="${cookie.id.value}" />
+</c:if>
+<input type="hidden" id="userId" value="${User.id}"/>
+<input type="hidden" id="sendId" value="${sendId}" />
+<input type="hidden" id="conversationId" value="${requestScope.conversationId}"/>
 <div class="chat-infor-window">
     <div class="header-2">
         <div class="actions">
@@ -204,6 +251,7 @@
     </div>
     <div class="profile">
         <img alt="User avatar" height="100" src="${User.avatar != null ? User.avatar : 'https://storage.googleapis.com/a1aa/image/oRjCj8SFHfWPTizQoCa6MRn8NyEvs6ZJ0uYtBbTXmoMnbz1JA.jpg'}" width="100"/>
+        <c:set var="blockerId" value="${fn:startsWith(conversation.status, 'block_by_') ? fn:substringAfter(conversation.status, 'block_by_') : ''}" />
         <div class="info">
             <h2>
                 ${User.firstName} ${User.lastName}
@@ -211,21 +259,23 @@
             <p>
                 ${User.email}
             </p>
+            <!-- Thông báo bị chặn -->
+            <div id="blockMessage" style="color: red; font-weight: bold; ${blockerId != '' && blockerId == User.id ? '' : 'display: none;'}">
+                Bạn đã bị chặn
+            </div>
         </div>
         <div class="actions">
             <button>
                 Xem hồ sơ
             </button>
-            <button>
-                <i class="fas fa-ban">
-                </i>
-                Chặn
+            <button id="blockButton" style="background-color: #ce0a0a; ${conversation.status == 'active' ? '' : 'display: none;'}" onclick="showBlockModal()">
+                <i class="fas fa-ban"></i> Chặn
             </button>
-            <button>
-                <i class="fas fa-flag">
-                </i>
-                Báo cáo
+            <!-- Nút bỏ chặn -->
+            <button id="unblockButton" style="background-color: #086a24; ${fn:startsWith(conversation.status, 'block_by_') && blockerId != User.id ? '' : 'display: none;'}" onclick="showUnblockModal()">
+                <i class="fas fa-unlock"></i> Bỏ chặn
             </button>
+
         </div>
     </div>
     <div class="stats">
@@ -338,7 +388,153 @@
         </div>
     </div>
 </div>
-<script>
+<!-- Modal -->
+<div id="blockModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeBlockModal()">&times;</span>
+        <h3>Xác nhận chặn</h3>
+        <p>Bạn có chắc chắn muốn chặn người dùng này không?</p>
+        <button onclick="confirmBlock()" style="background-color: #ce0a0a; color: white; padding: 8px 12px;">Xác nhận</button>
+    </div>
+</div>
+
+<div id="unblockModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeUnBlockModal()">&times;</span>
+        <h3>Xác nhận chặn</h3>
+        <p>Bạn có chắc chắn muốn bỏ chặn người dùng này không?</p>
+        <button onclick="confirmUnBlock()" style="background-color: #ce0a0a; color: white; padding: 8px 12px;">Xác nhận</button>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+    let ws;
+    let conversationId = document.getElementById("conversationId").value;
+    let receivedId = document.getElementById("userId").value;
+    let sendId = document.getElementById("sendId").value;
+
+    function connect() {
+        console.log("on connection");
+        ws = new WebSocket("ws://localhost:9999/homeSharing/chat");
+        ws.onmessage = function(event) {
+            let data = JSON.parse(event.data);
+            if (data.type === "block") {
+                if(data.conversationId === conversationId) {
+                    if(data.isBlocked === "yes") {
+                        const blockButton = document.getElementById("blockButton");
+                        const unblockButton = document.getElementById("unblockButton"); // Giả sử bạn có một nút bỏ chặn với id "unblockButton"
+                        const blockMessage = document.getElementById("blockMessage");
+                        if (data.send === sendId) {
+                            // Nếu mình là người gửi chặn
+                            blockButton.style.display = "none"; // Ẩn nút chặn
+                            unblockButton.style.display = "block"; // Hiện nút bỏ chặn
+                            blockMessage.style.display = "none";
+                            unblockButton.style.backgroundColor = "#086a24"; // Thay đổi màu nút bỏ chặn nếu cần
+                        } else if (data.send === receivedId) {
+                            // Nếu mình là người nhận và đã bị chặn
+                            blockButton.style.display = "none"; // Ẩn nút chặn
+                            unblockButton.style.display = "none"; // Ẩn nút bỏ chặn
+                            blockMessage.style.display = "block";
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại sau.'
+                        });
+                    }
+
+                }
+            } else if (data.type === "unblock") {
+                const blockButton = document.getElementById("blockButton");
+                const unblockButton = document.getElementById("unblockButton");
+                const blockMessage = document.getElementById("blockMessage");
+                unblockButton.style.display = "none";
+                blockButton.style.display = "block";
+                blockMessage.style.display = "none";
+            }
+        };
+
+        ws.onopen = function() {
+            console.log("connection open");
+            ws.send(JSON.stringify({ received: receivedId,send: sendId, conversationId: conversationId, message: "", type: "start" }));
+        };
+
+        ws.onclose = function() {
+            console.log("connection close");
+        };
+        ws.onerror = function(error) {
+            console.error("WebSocket error:", error);
+            // Hiển thị thông báo lỗi cho người dùng
+            alert("Lỗi kết nối WebSocket. Vui lòng thử lại sau.");
+        };
+    }
+
+    function showBlockModal() {
+        // Hiển thị modal
+        document.getElementById("blockModal").style.display = "block";
+    }
+
+    function showUnblockModal() {
+        // Hiển thị modal
+        document.getElementById("unblockModal").style.display = "block";
+    }
+
+    function closeBlockModal() {
+        // Đóng modal
+        document.getElementById("blockModal").style.display = "none";
+    }
+
+    function closeUnBlockModal() {
+        // Đóng modal
+        document.getElementById("unblockModal").style.display = "none";
+    }
+    function confirmBlock() {
+        // Xử lý chặn người dùng khi xác nhận
+        blockUser();
+        // Đóng modal sau khi chặn
+        closeBlockModal();
+    }
+
+    function confirmUnBlock() {
+        // Xử lý chặn người dùng khi xác nhận
+        unBlockUser();
+        // Đóng modal sau khi chặn
+        closeUnBlockModal();
+    }
+
+    function blockUser() {
+        const messageData = {
+            received: receivedId,
+            send: sendId,
+            conversationId: conversationId,
+            type: "block",
+        };
+        ws.send(JSON.stringify(messageData));
+    }
+
+    function unBlockUser() {
+        // Tạo dữ liệu JSON để gửi yêu cầu chặn
+        const data = JSON.stringify({
+            type: "unblock",
+            received: receivedId,
+            send: sendId,
+            conversationId: conversationId
+        });
+
+        // Gửi yêu cầu chặn qua WebSocket
+        ws.send(data);
+    }
+
+    // Đóng modal khi click ra ngoài
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("blockModal")) {
+            closeBlockModal();
+        }
+        if (event.target == document.getElementById("unblockModal")) {
+            closeUnBlockModal();
+        }
+    }
+
     function goBack() {
         window.location.href = "${pageContext.request.contextPath}/chat-box?userId=${User.id}";
     }
@@ -391,6 +587,9 @@
             document.body.removeChild(modal);
         });
     }
+    document.addEventListener("DOMContentLoaded", function() {
+        connect(); // Gọi hàm connect khi DOM đã sẵn sàng
+    });
 </script>
 </body>
 </html>

@@ -6,11 +6,10 @@
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  *  * 2024-9-18      1.0                 ManhNC         First Implement
- * 2024-10-01        1.0              Pham Quang Linh     First Implement
- * 2024-10-10        2.0              Pham Quang Linh     Second Implement
- * 2024-10-10        2.0              ManhNC             Second Implement
+ * 2024-10-01        1.0              Pham Quang Linh    First Implement
+ * 2024-10-10        2.0              Pham Quang Linh    Second Implement
+ * 2024-10-10        2.0                 ManhNC          Second Implement
  */
-
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -938,13 +937,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         }
 
         return null; // Return null if no user is found
-    }
-
-
-    public static void main(String[] args) {
-        UserDAOImpl userDAO = new UserDAOImpl();
-        User user = userDAO.getUser(1);
-        System.out.println(user.getFirstName());
     }
 
 }

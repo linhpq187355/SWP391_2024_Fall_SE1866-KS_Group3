@@ -87,7 +87,6 @@
         var countdownElement = document.getElementById('countdown');
         var resendOtpLink = document.getElementById('resendOtpLink');
         var countdownTime = 60; // Thời gian đếm ngược, 60 giây
-
         var countdownInterval = setInterval(function () {
             countdownTime--;
             countdownElement.textContent = countdownTime;
@@ -107,7 +106,10 @@
         let otp = document.getElementById("otp").value;
         // Check otp length
         if (otp.length !== 6) {
-            alert("OTP có 6 kí tự");
+            Swal.fire({
+                icon: 'error',
+                title: 'OTP có 6 kí tự'
+            });
             return false;
         }
         return true;

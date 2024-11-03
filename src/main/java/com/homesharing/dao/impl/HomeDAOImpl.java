@@ -4,6 +4,7 @@
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-20      1.0                 ManhNC         Implement search house method
  * 2024-10-30      1.0                 ThangLT          Change sql query in getSearchedHome to fix duplicate issues
  */
 package com.homesharing.dao.impl;
@@ -230,11 +231,9 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @param searchParams A map containing search criteria.
      * @return A list of homes matching the criteria.
      * @throws SQLException           If a database access error occurs.
-     * @throws IOException            If an I/O error occurs.
-     * @throws ClassNotFoundException If the JDBC driver class cannot be found.
      */
     @Override
-    public List<Home> getSearchedHomes(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException {
+    public List<Home> getSearchedHomes(Map<String, Object> searchParams) throws SQLException {
         List<Home> homeList = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder(
@@ -316,10 +315,12 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             sql.append(" AND h.createdBy = ?");
         }
 
+        // Condition for status
         if (searchParams.containsKey("status")) {
             sql.append(" AND h.status = ?");
         }
 
+        // Condition for order
         if (searchParams.containsKey("orderby")) {
             String orderby = (String) searchParams.get("orderby");
             String order = (String) searchParams.get("order");
@@ -345,7 +346,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         try {
-            connection = DBContext.getConnection();
+            connection = getConnection();
             ps = connection.prepareStatement(sql.toString());
             int paramIndex = 1;
 
@@ -438,7 +439,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 ps.setInt(paramIndex++, offset);
                 ps.setInt(paramIndex, perPage);
             }
-            logger.info(sql.toString());
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
@@ -457,16 +457,21 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setPrice(resultSet.getInt("price"));
                 homeList.add(home);
             }
+        } catch (SQLException e) {
+            String errorMessage = String.format("SQL error while retrieving searching homes: Reason: %s", e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } catch (IOException e) {
+            String errorMessage = String.format("I/O error while retrieving searching homes: Reason: %s", e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } catch (ClassNotFoundException e) {
+            String errorMessage = String.format("Class not found error while retrieving searching homes for: Reason: %s", e.getMessage());
+            throw new GeneralException(errorMessage, e);
         } finally {
-            try {
+                //close resources
                 if (resultSet != null) resultSet.close();
                 if (ps != null) ps.close();
                 if (connection != null) closeConnection(connection); // Pass the connection object
-            } catch (SQLException e) {
-                logger.warning("Failed to close resources: " + e.getMessage());
-            }
         }
-
         return homeList;
     }
 
@@ -478,7 +483,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @throws GeneralException If there is a database error.
      */
     @Override
-    public String fetchFirstImage(int homeId) {
+    public String fetchFirstImage(int homeId) throws SQLException {
         String sql = "select top 1 imgUrl" +
                 " from HomeImages" +
                 " where Homesid = ?;";
@@ -486,7 +491,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = DBContext.getConnection();
+            connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, homeId);
@@ -499,7 +504,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             throw new GeneralException("Error finding image in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
-            try {
                 if (resultSet != null) {
                     resultSet.close();
                 }
@@ -509,9 +513,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 if (connection != null) {
                     connection.close();
                 }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
         }
 
         return null;
@@ -602,7 +603,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         try {
-            connection = DBContext.getConnection();
+            connection = getConnection();
             ps = connection.prepareStatement(sql.toString());
             int paramIndex = 1;
 
@@ -679,6 +680,15 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             if (resultSet.next()) {
                 totalCount = resultSet.getInt(1);
             }
+        } catch (SQLException e) {
+            String errorMessage = String.format("SQL error while retrieving searching homes: Reason: %s", e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } catch (IOException e) {
+            String errorMessage = String.format("I/O error while retrieving searching homes: Reason: %s", e.getMessage());
+            throw new GeneralException(errorMessage, e);
+        } catch (ClassNotFoundException e) {
+            String errorMessage = String.format("Class not found error while retrieving searching homes for: Reason: %s", e.getMessage());
+            throw new GeneralException(errorMessage, e);
         } finally {
             if (resultSet != null) resultSet.close();
             if (ps != null) ps.close();
@@ -694,7 +704,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @throws GeneralException If a database error occurs.
      */
     @Override
-    public BigDecimal getMinArea() {
+    public BigDecimal getMinArea() throws SQLException {
         String sql = "select top 1 area " +
                 " from Homes order by  area asc;";
         Connection connection = null;
@@ -712,7 +722,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             throw new GeneralException("Error get min area in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
-            try {
                 if (resultSet != null) {
                     resultSet.close();
                 }
@@ -722,9 +731,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 if (connection != null) {
                     connection.close();
                 }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
         }
 
         return BigDecimal.valueOf(0);
@@ -737,7 +743,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @throws GeneralException If a database error occurs.
      */
     @Override
-    public BigDecimal getMaxArea() {
+    public BigDecimal getMaxArea() throws SQLException {
         String sql = "select top 1 area " +
                 " from Homes order by  area desc;";
         Connection connection = null;
@@ -755,7 +761,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             throw new GeneralException("Error get max area in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
-            try {
                 if (resultSet != null) {
                     resultSet.close();
                 }
@@ -765,9 +770,6 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 if (connection != null) {
                     connection.close();
                 }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
         }
 
         return BigDecimal.valueOf(0);
@@ -780,7 +782,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @throws GeneralException if a database error occurs.
      */
     @Override
-    public int getMinBed() {
+    public int getMinBed() throws SQLException {
         String sql = "select top 1 numOfBedroom " +
                 " from Homes order by  numOfBedroom asc;";
         Connection connection = null;
@@ -797,19 +799,14 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error get min bed in the database: " + e.getMessage(), e);
         } finally {
-            // Closing resources in reverse order of opening
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
             }
         }
         return 0;
@@ -822,7 +819,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @throws GeneralException if a database error occurs.
      */
     @Override
-    public int getMaxBed() {
+    public int getMaxBed() throws SQLException {
         String sql = "select top 1 numOfBedroom " +
                 " from Homes order by  numOfBedroom desc;";
         Connection connection = null;
@@ -839,19 +836,14 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error get max bed in the database: " + e.getMessage(), e);
         } finally {
-            // Closing resources in reverse order of opening
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
             }
         }
         return 0;
@@ -864,7 +856,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @throws GeneralException if a database error occurs.
      */
     @Override
-    public int getMinBath() {
+    public int getMinBath() throws SQLException {
         String sql = "select top 1 numOfBath " +
                 " from Homes order by  numOfBath asc;";
         Connection connection = null;
@@ -882,18 +874,14 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             throw new GeneralException("Error get min bath in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
             }
         }
         return 0;
@@ -906,7 +894,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
      * @throws GeneralException if a database error occurs.
      */
     @Override
-    public int getMaxBath() {
+    public int getMaxBath() throws SQLException {
         String sql = "select top 1 numOfBath " +
                 " from Homes order by  numOfBath desc;";
         Connection connection = null;
@@ -924,18 +912,14 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
             throw new GeneralException("Error get max bath in the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
             }
         }
         return 0;

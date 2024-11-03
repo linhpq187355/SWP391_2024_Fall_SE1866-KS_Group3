@@ -11,14 +11,14 @@
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>DashBoard - HomeSharing</title>
+    <title>DashBoard - Roomify</title>
     <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
             name="viewport"
     />
     <link
             rel="icon"
-            href="./assets/img/kaiadmin/favicon.ico"
+            href="./assets/img/logo-web.png"
             type="image/x-icon"
     />
 
@@ -48,23 +48,22 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
-    <link rel="stylesheet" href="./assets/css/kaiadmin.min.css"/>
-
+    <link rel="stylesheet" href="assets/css/dashboard.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
 </head>
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <div class="sidebar" data-background-color="dark">
+    <div class="sidebar" data-background-color="light">
         <div class="sidebar-logo">
             <!-- Logo Header -->
-            <div class="logo-header" data-background-color="dark">
+            <div class="logo-header" data-background-color="light">
                 <a href="./index.html" class="logo">
                     <img
-                            src="./assets/img/kaiadmin/logo_light.svg"
+                            src="./assets/img/logo-light.png"
                             alt="navbar brand"
                             class="navbar-brand"
-                            height="20"
+                            height="65"
                     />
                 </a>
                 <div class="nav-toggle">
@@ -109,217 +108,117 @@
                 <span class="sidebar-mini-icon">
                   <i class="fa fa-ellipsis-h"></i>
                 </span>
-                        <h4 class="text-section">Components</h4>
+                        <h4 class="text-section">Quản Trị</h4>
                     </li>
                     <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#base">
-                            <i class="fas fa-layer-group"></i>
-                            <p>Base</p>
+                        <a data-bs-toggle="collapse" href="#announces">
+                            <i class="fas fa-bullhorn"></i>
+                            <p>Thông Báo</p>
                             <span class="caret"></span>
                         </a>
-                        <div class="collapse" id="base">
+                        <div class="collapse" id="announces">
                             <ul class="nav nav-collapse">
                                 <li>
                                     <a href="../components/avatars.html">
-                                        <span class="sub-item">Avatars</span>
+                                        <span class="sub-item">Danh sách thông báo</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="../components/buttons.html">
-                                        <span class="sub-item">Buttons</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../components/gridsystem.html">
-                                        <span class="sub-item">Grid System</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../components/panels.html">
-                                        <span class="sub-item">Panels</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../components/notifications.html">
-                                        <span class="sub-item">Notifications</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../components/sweetalert.html">
-                                        <span class="sub-item">Sweet Alert</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../components/font-awesome-icons.html">
-                                        <span class="sub-item">Font Awesome Icons</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../components/simple-line-icons.html">
-                                        <span class="sub-item">Simple Line Icons</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../components/typography.html">
-                                        <span class="sub-item">Typography</span>
+                                        <span class="sub-item">Đăng thông báo</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#sidebarLayouts">
-                            <i class="fas fa-th-list"></i>
-                            <p>Sidebar Layouts</p>
+                        <a data-bs-toggle="collapse" href="#home-mgt">
+                            <i class="fas fa-newspaper"></i>
+                            <p>Tin Đăng Nhà</p>
                             <span class="caret"></span>
                         </a>
-                        <div class="collapse" id="sidebarLayouts">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="../sidebar-style-2.html">
-                                        <span class="sub-item">Sidebar Style 2</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../icon-menu.html">
-                                        <span class="sub-item">Icon Menu</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#forms">
-                            <i class="fas fa-pen-square"></i>
-                            <p>Forms</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="forms">
+                        <div class="collapse" id="home-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
                                     <a href="../forms/forms.html">
-                                        <span class="sub-item">Basic Form</span>
+                                        <span class="sub-item">Danh sách tin đăng</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../forms/forms.html">
+                                        <span class="sub-item">Tạo tin đăng</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a data-bs-toggle="collapse" href="#acc-mgt">
+                            <i class="fas fa-user"></i>
+                            <p>Tài Khoản</p>
+                            <span class="caret"></span>
+                        </a>
+                        <div class="collapse" id="acc-mgt">
+                            <ul class="nav nav-collapse">
+                                <li>
+                                    <a href="../forms/forms.html">
+                                        <span class="sub-item">Danh sách tài khoản</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a data-bs-toggle="collapse" href="#report-mgt">
+                            <i class="fas fa-flag"></i>
+                            <p>Báo Cáo</p>
+                            <span class="caret"></span>
+                        </a>
+                        <div class="collapse" id="report-mgt">
+                            <ul class="nav nav-collapse">
+                                <li>
+                                    <a href="../forms/forms.html">
+                                        <span class="sub-item">Danh sách báo cáo</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a data-bs-toggle="collapse" href="#permissons">
+                            <i class="fas fa-key"></i>
+                            <p>Phân Quyền</p>
+                            <span class="caret"></span>
+                        </a>
+                        <div class="collapse" id="permissons">
+                            <ul class="nav nav-collapse">
+                                <li>
+                                    <a href="../forms/forms.html">
+                                        <span class="sub-item">Danh sách quản trị viên</span>
+                                    </a>
+                                    <a href="../forms/forms.html">
+                                        <span class="sub-item">Tạo quản trị viên</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item active submenu">
-                        <a data-bs-toggle="collapse" href="#tables">
-                            <i class="fas fa-table"></i>
-                            <p>Tables</p>
+                        <a data-bs-toggle="collapse" href="#ticket-mgt">
+                            <i class="fas fa-ticket-alt"></i>
+                            <p>Phiếu Hỗ Trợ</p>
                             <span class="caret"></span>
                         </a>
-                        <div class="collapse show" id="tables">
+                        <div class="collapse" id="ticket-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../tables/tables.html">
-                                        <span class="sub-item">Basic Table</span>
-                                    </a>
-                                </li>
-                                <li class="active">
-                                    <a href="../tables/datatables.html">
-                                        <span class="sub-item">Datatables</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#maps">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <p>Maps</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="maps">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="../maps/googlemaps.html">
-                                        <span class="sub-item">Google Maps</span>
+                                    <a href="../forms/forms.html">
+                                        <span class="sub-item">Danh sách phiếu</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../maps/jsvectormap.html">
-                                        <span class="sub-item">Jsvectormap</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#charts">
-                            <i class="far fa-chart-bar"></i>
-                            <p>Charts</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="charts">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="../charts/charts.html">
-                                        <span class="sub-item">Chart Js</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../charts/sparkline.html">
-                                        <span class="sub-item">Sparkline</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../widgets.html">
-                            <i class="fas fa-desktop"></i>
-                            <p>Widgets</p>
-                            <span class="badge badge-success">4</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#submenu">
-                            <i class="fas fa-bars"></i>
-                            <p>Menu Levels</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="submenu">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a data-bs-toggle="collapse" href="#subnav1">
-                                        <span class="sub-item">Level 1</span>
-                                        <span class="caret"></span>
-                                    </a>
-                                    <div class="collapse" id="subnav1">
-                                        <ul class="nav nav-collapse subnav">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="sub-item">Level 2</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="sub-item">Level 2</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a data-bs-toggle="collapse" href="#subnav2">
-                                        <span class="sub-item">Level 1</span>
-                                        <span class="caret"></span>
-                                    </a>
-                                    <div class="collapse" id="subnav2">
-                                        <ul class="nav nav-collapse subnav">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="sub-item">Level 2</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="sub-item">Level 1</span>
+                                    <a href="../forms/forms.html">
+                                        <span class="sub-item">Tạo phiếu</span>
                                     </a>
                                 </li>
                             </ul>
@@ -784,8 +683,9 @@
                                                     name="role"
                                                     required
                                             >
-                                                <option value="1">admin</option>
-                                                <option value="2">moderator</option>
+                                                <option value="2" selected>Moderator</option>
+                                                <option value="3" >Tenant</option>
+                                                <option value="4" >Host</option>
                                             </select>
                                         </div>
                                     </div>
@@ -939,6 +839,7 @@
 <script src="./assets/js/plugin/datatables/datatables.min.js"></script>
 <!-- Kaiadmin JS -->
 <script src="./assets/js/kaiadmin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
         // $("#basic-datatables").DataTable({});
@@ -1014,20 +915,29 @@
         if (phone !== "") { // Optional: chỉ kiểm tra nếu người dùng nhập số điện thoại
             let phoneRegex = /((09|03|07|08|05)+([0-9]{8})\b)/g; // This regex matches Vietnamese phone numbers
             if (!phoneRegex.test(phone)) {
-                alert("Vui lòng nhập một số điện thoại hợp lệ!");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Vui lòng nhập một số điện thoại hợp lệ!'
+                });
                 return false;
             }
         }
 
         if (!genderMale && !genderFemale) {
-            alert("Vui lòng chọn giới tính!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Vui lòng chọn giới tính!'
+            });
             return false;
         }
 
         let dob = document.getElementById("dob").value;
 
         if (dob === "") {
-            alert("Vui lòng nhập ngày sinh!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Vui lòng nhập ngày sinh!'
+            });
             return false;
         }
 
@@ -1036,14 +946,20 @@
         let currentDate = new Date();
 
         if (dobDate > currentDate) {
-            alert("Ngày sinh không thể lớn hơn ngày hiện tại!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Ngày sinh không thể lớn hơn ngày hiện tại!'
+            });
             return false;
         }
 
 
         // Check for required fields and ensure they're not just spaces
         if (firstName === "" || lastName === "" || email === "" || password === "" || confirmPassword === ""|| role === "") {
-            alert("Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.'
+            });
             return false;
         }
 
@@ -1051,38 +967,56 @@
         let nameRegex = /^[\p{L}\s]+$/u;
 
         if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-            alert("Names can only contain letters and spaces.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Họ và tên chỉ chứa chữ cái và khoảng trắng.'
+            });
             return false;
         }
 
         // Validate email
         let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert("Vui lòng nhập một địa chỉ email hợp lệ!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Vui lòng nhập một địa chỉ email hợp lệ!'
+            });
             return false;
         }
 
         // Check password length
         if (password.length < 8) {
-            alert("Mật khẩu phải có ít nhất 8 ký tự!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu phải có ít nhất 8 ký tự!'
+            });
             return false;
         }
 
         // Check if passwords match
         if (password !== confirmPassword) {
-            alert("Mật khẩu không khớp!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu không khớp!'
+            });
             return false;
         }
 
         if (password.trim() !== password || confirmPassword.trim() !== confirmPassword) {
-            alert("Mật khẩu không được chứa khoảng trắng ở đầu hoặc cuối.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu không được chứa khoảng trắng ở đầu hoặc cuối.'
+            });
             return false;
         }
 
 
         // Check if a role is selected
         if (role === "") {
-            alert("Vui lòng chọn một vai trò!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Vui lòng chọn một vai trò!'
+            });
             return false;
         }
 
@@ -1094,7 +1028,6 @@
         return true;
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <%
     String message = (String) session.getAttribute("message");
     String messageType = (String) session.getAttribute("messageType");

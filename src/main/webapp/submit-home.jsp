@@ -99,7 +99,7 @@
 
                         <div class="tab-content">
                             <div class="tab-pane" id="step1">
-                                <div class="row p-b-15  ">
+                                <div class="row p-b-15 ">
                                     <h4 class="info-text"> THÔNG TIN CƠ BẢN</h4>
                                     <div class="col-sm-12">
                                         <div class="form-group">

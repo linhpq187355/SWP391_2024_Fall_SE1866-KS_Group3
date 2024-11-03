@@ -352,6 +352,7 @@
     <c:if test="${not empty requestScope.replies}">
         <c:set var="latestReply" value="${requestScope.replies[requestScope.replies.size() - 1]}" />
     </c:if>
+<c:set var="conversation" value="${requestScope.conversation}"/>
 <section class="bg-light">
     <c:set var="User" value="${requestScope.User}"/>
     <div class="cchat-container">
@@ -411,8 +412,9 @@
             </div>
         </div>
         <div class="cchat-window" data-user-id="${User.id}">
-                <div class="header" style="justify-content: space-between;">
-<div style="display: flex;">
+            <c:set var="blockerId" value="${fn:startsWith(conversation.status, 'block_by_') ? fn:substringAfter(conversation.status, 'block_by_') : ''}" />
+            <div class="header" style="justify-content: space-between;">
+                    <div style="display: flex;">
     <img alt="User profile" height="50"
          src="${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
          width="50"/>
@@ -428,7 +430,7 @@
                     <a href="chat-information?userId=${User.id}">
                         <i class="fas fa-info-circle" style="font-size: xx-large;"></i>
                     </a>
-            </div>
+                </div>
             <div class="messages" id="messages">
                 <c:if test="${not empty requestScope.replies}">
                     <c:forEach items="${requestScope.replies}" var="reply">
@@ -470,6 +472,12 @@
                     </c:forEach>
                 </c:if>
                 <div class="seen-status" id="seen-status" style="display: none;">Đã xem</div>
+                <div id="blockNoticeChanner" style="color: red; font-weight: bold; text-align: center; ${blockerId == User.id ? '' : 'display: none;'}">
+                    Bạn đã bị chặn bởi ${User.firstName} ${User.lastName}.
+                </div>
+                <div id="blockNoticeChanned" style="color: red; font-weight: bold; text-align: center; ${blockerId != '' && blockerId != User.id ? '' : 'display: none;'}">
+                    Bạn đã chặn ${User.firstName} ${User.lastName}. Hãy bỏ chặn nếu muốn nhắn tin.
+                </div>
             </div>
             <!-- Thanh chứa câu hỏi gợi ý -->
             <div id="suggestions-container" class="suggestions-container">
@@ -480,9 +488,10 @@
                 <button class="suggestion-item" onclick="fillSuggestion('Điều kiện vệ sinh ra sao?')">Điều kiện vệ sinh ra sao?</button>
                 <!-- Thêm câu hỏi gợi ý khác -->
             </div>
-            <div class="input-bar" style="
+            <div class="input-bar" id="input-bar" style="
                         flex-direction: column;
                         flex-flow: wrap;
+                        ${blockerId != '' ? 'display: none;' : ''}
                     ">
                 <!-- Thay form gửi tin nhắn thành việc xử lý bằng JavaScript -->
                 <div id="filePreviewContainer"></div>
@@ -539,7 +548,6 @@
     let messagesContainer = document.getElementById("messages");
 
     function connect() {
-        let intervalId;
         ws = new WebSocket("ws://localhost:9999/homeSharing/chat");
         const seenStatus = document.getElementById("seen-status");
         ws.onmessage = function(event) {
@@ -558,6 +566,38 @@
                 updateStatus("Đang offline");
             } else if (data.type === "yes") {
                 updateStatus("Đang hoạt động");
+            } else if (data.type === "block") {
+                if(data.conversationId === conversationId) {
+                    if(data.isBlocked === "yes") {
+                        const blockerMessage = document.getElementById("blockNoticeChanned");
+                        const blockedMessage = document.getElementById("blockNoticeChanner"); // Giả sử bạn có một nút bỏ chặn với id "unblockButton"
+                        const inputBar = document.getElementById("input-bar");
+                        if (data.send === sendId) {
+                            // Nếu mình là người gửi chặn
+                            blockedMessage.style.display = "none"; // Ẩn nút chặn
+                            blockerMessage.style.display = "block"; // Hiện nút bỏ chặn
+                            inputBar.style.display = "none";
+                        } else if (data.send === receivedId) {
+                            // Nếu mình là người nhận và đã bị chặn
+                            blockerMessage.style.display = "none"; // Ẩn nút chặn
+                            inputBar.style.display = "none"; // Ẩn nút bỏ chặn
+                            blockedMessage.style.display = "block";
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại sau.'
+                        });
+                    }
+
+                }
+            } else if (data.type === "unblock") {
+                const blockerMessage = document.getElementById("blockNoticeChanned");
+                const blockedMessage = document.getElementById("blockNoticeChanner"); // Giả sử bạn có một nút bỏ chặn với id "unblockButton"
+                const inputBar = document.getElementById("input-bar");
+                blockerMessage.style.display = "none";
+                inputBar.style.display = "flex";
+                blockedMessage.style.display = "none";
             } else {
                 // Hiển thị tin nhắn nhận được hoặc gửi đi
                 if(data.conversationId === conversationId) {
@@ -869,6 +909,23 @@
     }
 
     async function sendMessage() {
+        const blockerId = document.getElementById("blockerId").value;
+        const userId = document.getElementById("userId").value;
+        // Nếu cuộc trò chuyện bị chặn, hiển thị thông báo và không gửi tin nhắn
+        if (blockerId) {
+            if (blockerId === userId) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Bạn đã chặn người này. Hãy bỏ chặn nếu muốn nhắn tin.'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Bạn đã bị chặn và không thể gửi tin nhắn.'
+                });
+            }
+            return;
+        }
         const message = document.getElementById("replyText").value;
         const fileInputs = document.querySelectorAll('input[type="file"]');
         const files = [];
