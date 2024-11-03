@@ -10,22 +10,8 @@
 
 package com.homesharing.controller;
 
-import com.homesharing.dao.AmentityHomeDAO;
-import com.homesharing.dao.DistrictDAO;
-import com.homesharing.dao.FireEquipHomeDAO;
-import com.homesharing.dao.HomeDAO;
-import com.homesharing.dao.HomeImageDAO;
-import com.homesharing.dao.PriceDAO;
-import com.homesharing.dao.ProvinceDAO;
-import com.homesharing.dao.UserDAO;
-import com.homesharing.dao.impl.AmentityHomeDAOImpl;
-import com.homesharing.dao.impl.DistrictDAOImpl;
-import com.homesharing.dao.impl.FireEquipHomeImpl;
-import com.homesharing.dao.impl.HomeDAOImpl;
-import com.homesharing.dao.impl.HomeImageDAOImpl;
-import com.homesharing.dao.impl.PriceDAOImpl;
-import com.homesharing.dao.impl.ProvinceDAOImpl;
-import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.dao.*;
+import com.homesharing.dao.impl.*;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.model.User;
@@ -42,8 +28,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -55,7 +39,7 @@ import java.util.logging.Logger;
 
 @WebServlet("/my-home")
 public class MyHomeListServlet extends HttpServlet {
-    private static final java.util.logging.Logger LOGGER = Logger.getLogger(MyHomeListServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MyHomeListServlet.class.getName());
     private HomeMgtService homeMgtService;
     private HomePageService homePageService;
     private UserService userService;
@@ -67,12 +51,13 @@ public class MyHomeListServlet extends HttpServlet {
         ProvinceDAO provinceDAO = new ProvinceDAOImpl();
         DistrictDAO districtDAO = new DistrictDAOImpl();
         HomeImageDAO homeImgDAO = new HomeImageDAOImpl();
+        WardDAO wardDAO = new WardDAOImpl();
         AmentityHomeDAO amentityDAO = new AmentityHomeDAOImpl();
         FireEquipHomeDAO fireEquipDAO = new FireEquipHomeImpl();
 
         PriceDAO priceDAO = new PriceDAOImpl();
         this.homeMgtService = new HomeMgtServiceImpl(homeDAO, priceDAO, homeImgDAO, amentityDAO, fireEquipDAO);
-        this.homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO);
+        this.homePageService = new HomePageServiceImpl(homeDAO, priceDAO,userDAO,wardDAO);
         this.userService = new UserServiceImpl(userDAO, null, null, null);
     }
 
