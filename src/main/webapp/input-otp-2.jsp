@@ -30,31 +30,33 @@
         <div class="row">
             <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-center">
-                        <h3 class="text-muted">Nhập mã xác thực được gửi qua email của bạn.</h3>
-                    </div>
-                    <div class="panel-body">
-                        <form action="verify-new" method="post" onsubmit="return validateForm()">
-                            <c:if test="${requestScope.error != null}">
-                                <div class="col-xs-12">
-                                    <div class="alert alert-danger">
+                    <div>
+                        <div class="panel-heading text-center">
+                            <h3 class="text-muted" style="margin-top: 70px" >Nhập mã xác thực được gửi qua email của bạn.</h3>
+                        </div>
+                        <div class="panel-body" style="margin-bottom: 150px">
+                            <form action="verify-new" method="post" onsubmit="return validateForm()">
+                                <c:if test="${requestScope.error != null}">
+                                    <div class="col-xs-12">
+                                        <div class="alert alert-danger">
                                             ${requestScope.error}
+                                        </div>
                                     </div>
+                                </c:if>
+                                <div class="form-group">
+                                    <label for="otp">OTP <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" style="margin-bottom: 40px;" name="otp" id="otp" placeholder="Tên" required maxlength="6" minlength="6">
                                 </div>
-                            </c:if>
-                            <div class="form-group">
-                                <label for="otp">OTP <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="otp" id="otp" placeholder="Tên" required maxlength="6" minlength="6">
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-block" style="margin-bottom: 40px;" type="submit">Xác nhận</button>
+                                </div>
+                            </form>
+                            <hr>
+                            <!-- Thêm liên kết Gửi lại OTP -->
+                            <div class="text-center">
+                                <p>Không nhận được OTP?</p>
+                                <a href="resend-otp-new-email?userId=${sessionScope.userId}&email=${sessionScope.email}" class="btn btn-link"  id="resendOtpLink" style="pointer-events: none; opacity: 0.5;">Gửi lại OTP (<span id="countdown">60</span>s)</a>
                             </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary btn-block" type="submit">Xác nhận</button>
-                            </div>
-                        </form>
-                        <hr>
-                        <!-- Thêm liên kết Gửi lại OTP -->
-                        <div class="text-center">
-                            <p>Không nhận được OTP?</p>
-                            <a href="resend-otp-new-email?userId=${sessionScope.userId}&email=${sessionScope.email}" class="btn btn-link"  id="resendOtpLink" style="pointer-events: none; opacity: 0.5;">Gửi lại OTP (<span id="countdown">60</span>s)</a>
                         </div>
                     </div>
                 </div>
@@ -86,20 +88,33 @@
     $(document).ready(function () {
         var countdownElement = document.getElementById('countdown');
         var resendOtpLink = document.getElementById('resendOtpLink');
-        var countdownTime = 60; // Thời gian đếm ngược, 60 giây
+        var countdownTime = parseInt(sessionStorage.getItem('otpCountdown')) || 60; // Lấy thời gian từ sessionStorage hoặc mặc định là 60
 
-        var countdownInterval = setInterval(function () {
-            countdownTime--;
-            countdownElement.textContent = countdownTime;
+        if (countdownTime <= 0) {
+            // Nếu thời gian đã hết, kích hoạt lại liên kết ngay lập tức
+            resendOtpLink.classList.remove('disabled');
+            resendOtpLink.style.pointerEvents = 'auto';
+            resendOtpLink.textContent = 'Gửi lại OTP';
+        } else {
+            // Vô hiệu hóa liên kết và bắt đầu đếm ngược
+            resendOtpLink.classList.add('disabled');
+            resendOtpLink.style.pointerEvents = 'none';
 
-            if (countdownTime <= 0) {
-                clearInterval(countdownInterval);
-                // Kích hoạt lại liên kết "Gửi lại OTP"
-                resendOtpLink.classList.remove('disabled');  // Loại bỏ lớp disabled
-                resendOtpLink.style.pointerEvents = 'auto';  // Bật lại sự kiện click
-                resendOtpLink.textContent = 'Gửi lại OTP';  // Thay đổi văn bản liên kết
-            }
-        }, 1000);
+            var countdownInterval = setInterval(function () {
+                countdownTime--;
+                sessionStorage.setItem('otpCountdown', countdownTime); // Lưu thời gian vào sessionStorage
+                countdownElement.textContent = countdownTime;
+
+                if (countdownTime <= 0) {
+                    clearInterval(countdownInterval);
+                    sessionStorage.setItem('otpCountdown', 60);
+                    // Kích hoạt lại liên kết
+                    resendOtpLink.classList.remove('disabled');
+                    resendOtpLink.style.pointerEvents = 'auto';
+                    resendOtpLink.textContent = 'Gửi lại OTP';
+                }
+            }, 1000);
+        }
     });
     function validateForm() {
         let otp = document.getElementById("otp").value;

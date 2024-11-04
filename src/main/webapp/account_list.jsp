@@ -191,7 +191,7 @@
                         <div class="collapse" id="permissons">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="dashboard/permission-list">
                                         <span class="sub-item">Danh sách quản trị viên</span>
                                     </a>
                                     <a href="../forms/forms.html">
@@ -853,3 +853,5 @@
 %>
 </body>
 </html>
+
+

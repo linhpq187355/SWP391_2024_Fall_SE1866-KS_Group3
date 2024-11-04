@@ -69,7 +69,7 @@ public class GrantPermissionServlet extends HttpServlet {
                     }
                 }
                 userMgtService.updateUserPermission(allowedPermissions, userId);
-                request.getRequestDispatcher("/permission-list.jsp").forward(request, response);
+                request.getRequestDispatcher("permission-list.jsp").forward(request, response);
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID format.");
             }

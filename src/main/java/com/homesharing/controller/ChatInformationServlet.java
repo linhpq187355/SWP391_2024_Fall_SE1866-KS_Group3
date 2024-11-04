@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-22      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.controller;
 
 import com.homesharing.dao.ConversationDAO;
@@ -32,6 +41,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servlet for handling chat information retrieval.
+ * This servlet retrieves conversation details, messages, and user information for display on the chat information page.
+ */
 @WebServlet("/chat-information")
 public class ChatInformationServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(ChatInformationServlet.class); // Logger instance
@@ -52,13 +65,22 @@ public class ChatInformationServlet extends HttpServlet {
         conversationService = new ConversationServiceImpl(userDAO, conversationDAO,replyDAO);
     }
 
+    /**
+     * Handles GET requests to retrieve chat information.
+     *
+     * @param req The HTTP servlet request.
+     * @param resp The HTTP servlet response.
+     * @throws ServletException If a servlet error occurs.
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String userId = CookieUtil.getCookie(req, "id");
         String rawUserTwo = req.getParameter("userId");
 
+        // Check for null user IDs
         if (userId == null || rawUserTwo == null) {
-            ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra, vui lòng đăng nhập lại.");
+            ServletUtils.handleError(req, resp, 500);
             return;
         }
 
@@ -67,6 +89,8 @@ public class ChatInformationServlet extends HttpServlet {
         try {
             uId = Integer.parseInt(userId);
             userTwo = Integer.parseInt(rawUserTwo);
+
+            // Retrieve unread messages and notification counts
             int countNewMessage = replyDAO.countNewMessages(uId);
             Map<User, Reply> listUserConversation = conversationService.getListUserConversation(uId);
             req.setAttribute("listUserConversation", listUserConversation);
@@ -76,37 +100,35 @@ public class ChatInformationServlet extends HttpServlet {
             req.setAttribute("unreadCount", unreadCount);
             req.setAttribute("notifications", notifications);
         } catch (NumberFormatException | SQLException e) {
-            ServletUtils.forwardWithMessage(req, resp, "ID người dùng không hợp lệ, vui lòng đăng nhập lại.");
+            ServletUtils.handleError(req, resp, 500);
             return;
         }
 
         try {
             int conversationId = conversationService.getConversationId(uId, userTwo);
+
+            // Check if conversation ID is valid
             if (conversationId == 0) {
-                ServletUtils.forwardWithMessage(req, resp, "Không thể tìm thấy cuộc trò chuyện.");
+                ServletUtils.handleError(req, resp, 500); // Handle the error condition
                 return;
             }
 
             Conversation conversation = conversationDAO.getConversation(conversationId);
-            if (conversation == null) {
-                ServletUtils.forwardWithMessage(req, resp, "Không thể tìm thấy cuộc trò chuyện.");
-                return;
-            }
 
             User matchedUser = userDAO.getUser(userTwo);
 
-            if (matchedUser == null) {
-                ServletUtils.forwardWithMessage(req, resp, "Người dùng không tồn tại trong cuộc trò chuyện.");
+            // Check if conversation and user data are retrieved successfully
+            if (conversation == null || matchedUser == null) {
+                ServletUtils.handleError(req, resp, 500); // Handle missing data
                 return;
             }
             List<Reply> replies = conversationService.getListReplyConversation(conversationId);
 
-            // Khởi tạo ba danh sách con
-            List<Reply> textReplies = new ArrayList<>();   // Danh sách cho contentType là null (text)
-            List<Reply> mediaReplies = new ArrayList<>();   // Danh sách cho contentType là image hoặc video
-            List<Reply> fileReplies = new ArrayList<>();    // Danh sách cho contentType là file
+            // Categorize replies by content type
+            List<Reply> textReplies = new ArrayList<>();
+            List<Reply> mediaReplies = new ArrayList<>();
+            List<Reply> fileReplies = new ArrayList<>();
 
-            // Phân loại các reply
             for (Reply reply : replies) {
                 String contentType = reply.getContentType();
                 if (contentType == null) {
@@ -133,10 +155,14 @@ public class ChatInformationServlet extends HttpServlet {
             req.setAttribute("conversationId",conversationId);
         } catch (SQLException e) {
             logger.error("Error fetching data: {}", e.getMessage(), e); // Log the exception with stack trace
-            ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra trong quá trình lấy dữ liệu.");
+            ServletUtils.handleError(req, resp, 500);
             return;
         }
+        try {
+            req.getRequestDispatcher("chat-information.jsp").forward(req, resp);
+        } catch (ServletException | IOException e) {
+            ServletUtils.handleError(req, resp, 500);
+        }
 
-        req.getRequestDispatcher("chat-information.jsp").forward(req, resp);
     }
 }

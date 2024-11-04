@@ -216,7 +216,7 @@
                         <div class="collapse" id="permissions">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="/dashboard/account-list">
+                                    <a href="/dashboard/permission-list">
                                         <span class="sub-item">Danh sách quản trị viên</span>
                                     </a>
                                     <a href="../forms/forms.html">

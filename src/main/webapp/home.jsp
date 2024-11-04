@@ -60,8 +60,7 @@
 <jsp:include page="header.jsp"/>
 <!-- End of nav bar -->
 
-<div class="banner-area row" style="padding: 0 80px;margin: 50px 0;display: flex;align-items: center;">
-    <div class="col-md-6">
+<div class="banner-area row" style="padding: 0 80px;display: flex;align-items: center;">    <div class="col-md-6">
         <div>
             <h2 style="text-align: center;color: #FA6C00;">CHUNG NHÀ - CHUNG VUI</h2>
             <p style="text-align: center;font-size: 20px;color: #484848;">Nơi kết nối những người cùng chung chí hướng</p>
@@ -70,13 +69,16 @@
             <i class="fa-solid fa-location-dot" style="font-size: 25px;margin-left: 4%;"></i>
             <form action="searchHomes" method="GET" class="form-inline" style="width: 80%;">
 
-                <input style="border: none;font-size: 17px;font-weight: 900;" placeholder="Nhập địa điểm" id="searchInput" type="text" name="name" class="form-control  value="${param.name}">
-            </form>
+                <input style="border: none;font-size: 17px;font-weight: 900; box-shadow: none;" placeholder="Nhập địa điểm" id="searchInput" type="text" name="name" class="form-control  value="${param.name}">            </form>
             <i class="fa-solid fa-magnifying-glass" style="font-size: 25px;margin-right: 5%;"></i>
         </div>
     </div>
-    <div class="col-md-6" style="padding: 0">
-        <img src="assets/img/banner/fa46a892b6baacbee6d2f7845a093dfa.png" alt="banner">
+    <div class="slider-area col-md-6">
+        <div id="bg-slider" class="owl-carousel owl-theme" style="margin-top: 75px">
+            <img src="assets/img/banner/banner-1.png" alt="banner">
+            <img src="assets/img/banner/banner-2.png" alt="banner">
+            <img src="assets/img/banner/banner-3.png" alt="banner">
+        </div>
     </div>
 </div>
 
@@ -114,7 +116,7 @@
                             <div class="item-thumb">
                                 <a href="home-detail?id=${homes.id}">
                                     <img class="property-image"
-                                         src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/social_big/dribbble_grey.png'}"
+                                         src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/property-1/property1.jpg'}"
                                          alt="Property Image" style="border-top-left-radius: 15px;border-top-right-radius: 15px;">
                                 </a>
                             </div>

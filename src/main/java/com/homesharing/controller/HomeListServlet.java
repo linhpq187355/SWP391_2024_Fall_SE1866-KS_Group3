@@ -6,7 +6,6 @@
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
  * 2024-10-02      1.0                 ManhNC         First Implement
- * 2024-10-27      1.1                 AI Assistant     Improved code and comments
  */
 package com.homesharing.controller;
 

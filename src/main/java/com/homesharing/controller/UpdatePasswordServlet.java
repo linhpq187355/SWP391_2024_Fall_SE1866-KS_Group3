@@ -67,7 +67,7 @@ public class UpdatePasswordServlet extends HttpServlet {
         String userIdCookie = CookieUtil.getCookie(req, "id");
         if (userIdCookie == null) {
             LOGGER.warning("User ID cookie is missing.");
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID cookie is missing.");
+            ServletUtils.handleError(req, resp, 500);
             return;
         }
 
@@ -86,8 +86,7 @@ public class UpdatePasswordServlet extends HttpServlet {
             session.setAttribute("hadPass", hadPass);
             user = userService.getUser(userId);
         } catch (SQLException e) {
-            ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
-        }
+            ServletUtils.handleError(req, resp, 500);        }
 
         // Get message and error from request parameters
         String message = req.getParameter("message");
@@ -124,7 +123,7 @@ public class UpdatePasswordServlet extends HttpServlet {
         int userId = Integer.parseInt(userIdCookie);
         String hadPassRaw = req.getSession().getAttribute("hadPass").toString();
         if (hadPassRaw == null) {
-            ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
+            ServletUtils.handleError(req, resp, 500);
             return;
         }
         int hadPass = Integer.parseInt(hadPassRaw);
@@ -140,11 +139,9 @@ public class UpdatePasswordServlet extends HttpServlet {
                 req.setAttribute("error", "Mật khẩu cũ không khớp.");
                 req.getRequestDispatcher("/update-password.jsp").forward(req, resp);
             } else {
-                ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
-            }
+                ServletUtils.handleError(req, resp, 500);            }
         } catch (GeneralException e) {
-            ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
-        }
+            ServletUtils.handleError(req, resp, 500);        }
     }
 
 }

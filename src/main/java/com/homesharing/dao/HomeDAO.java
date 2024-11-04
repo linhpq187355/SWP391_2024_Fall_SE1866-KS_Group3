@@ -8,6 +8,7 @@
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second
  * 2024-10-10      1.0                 ManhNC            update some method
+ * 2024-10-25      2.0              Pham Quang Linh     Add functions
  */
 
 package com.homesharing.dao;
@@ -140,6 +141,13 @@ public interface HomeDAO {
      */
     List<Home> getMatchingHomes(int[] matchingHost);
 
+
+    /**
+     * Retrieves a list of homes associated with a list of appointments.
+     *
+     * @param appointments a list of Appointment objects to filter homes.
+     * @return a List of Home objects associated with the specified appointments.
+     */
     List<Home> getHomeByAppointment(List<Appointment> appointments);
 
     List<Home> getHomesByUserId(int userId);

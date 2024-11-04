@@ -105,7 +105,7 @@ public class GoogleSignUpServlet extends HttpServlet {
                     break;
                 default: // Registration/Login failed
                     request.setAttribute(ERROR_ATTRIBUTE, "Có lỗi xảy ra ở phía server.");
-                    ServletUtils.forwardToErrorPage(request, response);
+                    ServletUtils.handleError(request, response, 500);
             }
 
         } catch (SQLException e) {

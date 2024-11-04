@@ -89,13 +89,13 @@ public class VerifyEmailServlet extends HttpServlet {
             otpAttemptsMap = new HashMap<>();
             session.setAttribute("otpAttemptsMap", otpAttemptsMap);
         }
-        request.getSession().setMaxInactiveInterval(5 * 60);
+        request.getSession().setMaxInactiveInterval(30 * 60);
         try {
             request.getRequestDispatcher("/input-otp.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             // Handle any runtime exceptions thrown by the service or servlet
             request.setAttribute("error", "An error occurred during registration: " + e.getMessage());
-            ServletUtils.forwardToErrorPage(request, response);
+            ServletUtils.handleError(request, response, 500);
         }
     }
 

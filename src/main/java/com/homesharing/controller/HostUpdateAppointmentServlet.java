@@ -93,7 +93,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
 
         try {
             List<Appointment> hostAppointmentList = appointmentService.getAppointments(String.valueOf(appointment.getHostId()));
-            List<Appointment> tenantAppointmentList = appointmentService.getAppointments(String.valueOf(appointment.getTenantId()));
+            List<Appointment> tenantAppointmentList = appointmentService.getAppointmentsByTenant(String.valueOf(appointment.getTenantId()));
             for(int i=0;i<hostAppointmentList.size();i++){
                 if(hostAppointmentList.get(i).getId() == Integer.parseInt(aptmId)){
                     hostAppointmentList.remove(i);

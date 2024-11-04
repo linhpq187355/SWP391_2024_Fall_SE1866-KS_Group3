@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: ManhNC
+  User: Duy Long Laptop
   Date: 26-Sep-24
   Time: 9:58 PM
   To change this template use File | Settings | File Templates.
@@ -21,9 +21,7 @@
             href="./assets/img/logo-web.png"
             type="image/x-icon"
     />
-
     <base href="${pageContext.request.contextPath}/">
-
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
@@ -43,13 +41,12 @@
             },
         });
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
     <link rel="stylesheet" href="assets/css/dashboard.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
 <body>
 <div class="wrapper">
@@ -119,12 +116,12 @@
                         <div class="collapse" id="announces">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../components/avatars.html">
+                                    <a href="announcement-manage">
                                         <span class="sub-item">Danh sách thông báo</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../components/buttons.html">
+                                    <a href="announcement">
                                         <span class="sub-item">Đăng thông báo</span>
                                     </a>
                                 </li>
@@ -140,12 +137,12 @@
                         <div class="collapse" id="home-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="home-post-manage">
                                         <span class="sub-item">Danh sách tin đăng</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="#">
                                         <span class="sub-item">Tạo tin đăng</span>
                                     </a>
                                 </li>
@@ -161,7 +158,7 @@
                         <div class="collapse" id="acc-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="dashboard/account-manage">
                                         <span class="sub-item">Danh sách tài khoản</span>
                                     </a>
                                 </li>
@@ -177,7 +174,7 @@
                         <div class="collapse" id="report-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="report-home-manage">
                                         <span class="sub-item">Danh sách báo cáo</span>
                                     </a>
                                 </li>
@@ -614,184 +611,96 @@
         <div class="container">
             <div class="page-inner">
                 <div class="page-header">
-                    <h3 class="fw-bold mb-3">Tạo tài khoản</h3>
+                    <h3 class="fw-bold mb-3">Tài khoản</h3>
                     <ul class="breadcrumbs mb-3">
-                        <li class="nav-home">
-                            <a href="dashboard/account-manage">
+                        <li class="nav-home" style="color: black;">
+                            <a href="#">
                                 <i class="icon-home"></i>
                             </a>
                         </li>
-                        <li class="separator">
+                        <li class="separator" style="color: black;">
                             <i class="icon-arrow-right"></i>
                         </li>
-                        <li class="nav-item">
-                            <a href="dashboard/account-manage">Tài khoản</a>
+                        <li class="nav-item" style="color: black;">
+                            <a href="#">Bảng biểu</a>
+                        </li>
+                        <li class="separator" style="color: black;">
+                            <i class="icon-arrow-right"></i>
+                        </li>
+                        <li class="nav-item" style="color: black;">
+                            <a href="#">Cơ sở dữ liệu</a>
                         </li>
                     </ul>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <form action="dashboard/create-account" method="post" onsubmit="return validateForm()">
-                            <div class="card-header">
-                                <div class="card-title">Điền các thông tin cần thiết</div>
-                                <c:if test="${requestScope.error != null}">
-                                    <div class="col-xs-12">
-                                        <div class="alert alert-danger">
-                                                ${requestScope.error}
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${requestScope.message != null}">
-                                    <div class="col-xs-12">
-                                        <div class="alert alert-success">
-                                                ${requestScope.message}
-                                        </div>
-                                    </div>
-                                </c:if>
+                            <div class="card-header" style="display: flex; justify-content: space-between">
+                                <h4 class="card-title">Danh sách người dùng</h4>
+                                <button class="btn btn-secondary"
+                                        onclick="window.location.href='dashboard/create-account'">
+                        <span class="btn-label">
+                          <i class="fa fa-plus"></i>
+                        </span>
+                                    Tạo tài khoản
+                                </button>
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="form-group form-group-default">
-                                            <label for="email">Email<span class="text-danger">*</span></label>
-                                            <input
-                                                    name="email"
-                                                    id="email"
-                                                    type="email"
-                                                    class="form-control"
-                                                    required
-                                                    value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>"
-                                            />
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label for="phone">Số điện thoại</label>
-                                            <input
-                                                    name="phone"
-                                                    id="phone"
-                                                    type="tel"
-                                                    class="form-control"
-                                                    value="<%= request.getAttribute("phone") != null ? request.getAttribute("phone") : "" %>"
-                                            />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="role">Vai trò<span class="text-danger">*</span></label>
-                                            <select
-                                                    class="form-select form-control"
-                                                    id="role"
-                                                    name="role"
-                                                    required
-                                            >
-                                                <option value="2" selected>Moderator</option>
-                                                <option value="3" >Tenant</option>
-                                                <option value="4" >Host</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="form-group form-group-default">
-                                            <label for="firstName">Họ<span class="text-danger">*</span></label>
-                                            <input
-                                                    name="firstName"
-                                                    id="firstName"
-                                                    type="text"
-                                                    class="form-control"
-                                                    required
-                                                    maxlength="50"
-                                                    value="<%= request.getAttribute("firstName") != null ? request.getAttribute("firstName") : "" %>"
-                                            />
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label for="lastName">Tên<span class="text-danger">*</span></label>
-                                            <input
-                                                    name="lastName"
-                                                    id="lastName"
-                                                    type="text"
-                                                    class="form-control"
-                                                    required
-                                                    maxlength="50"
-                                                    value="<%= request.getAttribute("lastName") != null ? request.getAttribute("lastName") : "" %>"
-                                            />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="dob">Ngày sinh<span class="text-danger">*</span></label>
-                                            <input
-                                                    type="date"
-                                                    class="form-control form-control"
-                                                    id="dob"
-                                                    name="dob"
-                                                    required
-                                                    value="<%= request.getAttribute("dob") != null ? request.getAttribute("dob") : "" %>"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="form-group form-group-default">
-                                            <label for="password">Mật khẩu<span class="text-danger">*</span></label>
-                                            <input
-                                                    id="password"
-                                                    name="password"
-                                                    type="password"
-                                                    class="form-control"
-                                                    required
-                                            />
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label for="rePassword">Nhập lại Mật khẩu<span class="text-danger">*</span></label>
-                                            <input
-                                                    id="rePassword"
-                                                    name="rePassword"
-                                                    type="password"
-                                                    class="form-control"
-                                                    required
-                                            />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="gender">Giới tính<span class="text-danger">*</span></label><br />
-                                            <div class="d-flex">
-                                                <div class="form-check" id="gender">
-                                                    <input
-                                                            class="form-check-input"
-                                                            type="radio"
-                                                            name="gender"
-                                                            id="flexRadioDefault1"
-                                                            value="male"
-                                                    />
-                                                    <label
-                                                            class="form-check-label"
-                                                            for="flexRadioDefault1"
-                                                    >
-                                                        Nam
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input
-                                                            class="form-check-input"
-                                                            type="radio"
-                                                            name="gender"
-                                                            id="flexRadioDefault2"
-                                                            value="female"
-                                                            checked
-                                                    />
-                                                    <label
-                                                            class="form-check-label"
-                                                            for="flexRadioDefault2"
-                                                    >
-                                                        Nữ
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                <div class="table-responsive">
+                                    <table
+                                            id="basic-datatables"
+                                            class="display table table-striped table-hover"
+                                    >
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên</th>
+                                            <th>Tạo lúc</th>
+                                            <th>Blog</th>
+                                            <th>Trạng thái</th>
+                                            <th>Quản lí</th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên</th>
+                                            <th>Tạo lúc</th>
+                                            <th>Blog</th>
+                                            <th>Trạng thái</th>
+                                            <th>Quản lí</th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        <c:forEach var="post" items="${posts}">
+                                            <tr>
+                                                <td>${post.id}</td>
+                                                <td>${post.authorName}</td>
+                                                <td>
+                                                        ${post.createdAt}
+                                                </td>
+                                                <td>
+                                                    <a href="single.html?postId=${post.id}">Xem Blog</a>
+                                                </td>
+                                                <td>${post.status}</td>
+                                                <td>
+                                                    <form action="admin-blog" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn thực hiện hành động này không?');">
+                                                        <input type="hidden" name="postId" value="${post.id}"/>
+                                                        <input type="hidden" name="authorId" value="${post.authorId}"/> <!-- Nếu cần -->
+                                                        <button type="submit" name="action" value="approve" class="btn btn-success">
+                                                            Duyệt
+                                                        </button>
+                                                        <button type="submit" name="action" value="delete" class="btn btn-danger">
+                                                            Xóa
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div class="card-action">
-                                <button class="btn btn-success" type="submit">Xác nhận</button>
-                                <button class="btn btn-danger">Hủy</button>
-                            </div>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -804,24 +713,19 @@
                     <ul class="nav">
                         <li class="nav-item">
                             <a class="nav-link" href="home-page">
-                                HSW
+                                Trang chủ
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"> Help </a>
+                            <a class="nav-link" href="#"> Hỗ trợ </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"> Licenses </a>
+                            <a class="nav-link" href="#"> Điều khoản </a>
                         </li>
                     </ul>
                 </nav>
                 <div class="copyright">
-                    2024, made with <i class="fa fa-heart heart text-danger"></i> by
-                    <a href="http://www.themekita.com">HSW</a>
-                </div>
-                <div>
-                    Distributed by
-                    <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
+                    Copyright ©2024, All Right Reserved by Roomify team
                 </div>
             </div>
         </footer>
@@ -839,7 +743,6 @@
 <script src="./assets/js/plugin/datatables/datatables.min.js"></script>
 <!-- Kaiadmin JS -->
 <script src="./assets/js/kaiadmin.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
         // $("#basic-datatables").DataTable({});
@@ -898,136 +801,29 @@
     });
 </script>
 <script type="text/javascript">
-    function validateForm() {
-        let firstName = document.getElementById("firstName").value.trim();
-        let lastName = document.getElementById("lastName").value.trim();
-        let email = document.getElementById("email").value.trim();
-        let password = document.getElementById("password").value;
-        let confirmPassword = document.getElementById("rePassword").value;
-        let role = document.getElementById("role").value;
-
-        // Check if a gender is selected
-        let genderMale = document.getElementById("flexRadioDefault1").checked;
-        let genderFemale = document.getElementById("flexRadioDefault2").checked;
-
-        let phone = document.getElementById("phone").value.trim();
-
-        if (phone !== "") { // Optional: chỉ kiểm tra nếu người dùng nhập số điện thoại
-            let phoneRegex = /((09|03|07|08|05)+([0-9]{8})\b)/g; // This regex matches Vietnamese phone numbers
-            if (!phoneRegex.test(phone)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Vui lòng nhập một số điện thoại hợp lệ!'
-                });
-                return false;
-            }
+    function activateAccount(id) {
+        if (confirm("Are you sure to activate this account?")) {
+            window.location = "activate?userId=" + id;
+            // If confirmed, announce the success
+            alert("Confirmed request");
+        } else {
+            // If not confirmed, announce failure or do nothing
+            alert("Account activation canceled.");
         }
+    }
 
-        if (!genderMale && !genderFemale) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Vui lòng chọn giới tính!'
-            });
-            return false;
+    function banAccount(id) {
+        if (confirm("Are you sure to ban this account?")) {
+            window.location = "ban?userId=" + id;
+            // If confirmed, announce the success
+            alert("Confirmed request");
+        } else {
+            // If not confirmed, announce failure or do nothing
+            alert("Account ban canceled.");
         }
-
-        let dob = document.getElementById("dob").value;
-
-        if (dob === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Vui lòng nhập ngày sinh!'
-            });
-            return false;
-        }
-
-// Optional: Check if dob is a valid date and not in the future
-        let dobDate = new Date(dob);
-        let currentDate = new Date();
-
-        if (dobDate > currentDate) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Ngày sinh không thể lớn hơn ngày hiện tại!'
-            });
-            return false;
-        }
-
-
-        // Check for required fields and ensure they're not just spaces
-        if (firstName === "" || lastName === "" || email === "" || password === "" || confirmPassword === ""|| role === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.'
-            });
-            return false;
-        }
-
-        // Check if firstName and lastName only contain letters and spaces (supports Vietnamese characters)
-        let nameRegex = /^[\p{L}\s]+$/u;
-
-        if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Họ và tên chỉ chứa chữ cái và khoảng trắng.'
-            });
-            return false;
-        }
-
-        // Validate email
-        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Vui lòng nhập một địa chỉ email hợp lệ!'
-            });
-            return false;
-        }
-
-        // Check password length
-        if (password.length < 8) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Mật khẩu phải có ít nhất 8 ký tự!'
-            });
-            return false;
-        }
-
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Mật khẩu không khớp!'
-            });
-            return false;
-        }
-
-        if (password.trim() !== password || confirmPassword.trim() !== confirmPassword) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Mật khẩu không được chứa khoảng trắng ở đầu hoặc cuối.'
-            });
-            return false;
-        }
-
-
-        // Check if a role is selected
-        if (role === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Vui lòng chọn một vai trò!'
-            });
-            return false;
-        }
-
-        // Update trimmed values
-        document.getElementById("firstName").value = firstName;
-        document.getElementById("lastName").value = lastName;
-        document.getElementById("email").value = email;
-
-        return true;
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <%
     String message = (String) session.getAttribute("message");
     String messageType = (String) session.getAttribute("messageType");
@@ -1047,3 +843,5 @@
 %>
 </body>
 </html>
+
+

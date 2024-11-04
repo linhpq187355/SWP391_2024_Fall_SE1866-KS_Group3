@@ -9,6 +9,7 @@
  * 2024-10-10      1.0                 ManhNC            update some method
  * 2024-10-20      1.0                 ManhNC         Implement search house method
  * 2024-10-30      1.0                 ThangLT          Change sql query in getSearchedHome to fix duplicate issues
+ * 2024-10-30      1.0              Pham Quang Linh     Add method
  */
 package com.homesharing.dao.impl;
 
@@ -966,6 +967,12 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         return null;
     }
 
+    /**
+     * Retrieves the total number of homes available in the database.
+     *
+     * @return the total number of homes, or 0 if none are found.
+     * @throws RuntimeException if there is an error during the database operation.
+     */
     @Override
     public int getNumberHomes() {
         String sql = "select count(id) total\n" +
@@ -1079,6 +1086,13 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         return matchingHomes;
     }
 
+    /**
+     * Retrieves a list of homes based on the specified appointments.
+     *
+     * @param appointments a list of Appointment objects containing home IDs.
+     * @return a list of Home objects matching the appointment IDs, or null if the input is invalid.
+     * @throws RuntimeException if there is an error during the database operation.
+     */
     @Override
     public List<Home> getHomeByAppointment(List<Appointment> appointments) {
         if(appointments == null || appointments.isEmpty()){
@@ -1142,6 +1156,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         }
         return homeList;
     }
+
 
     @Override
     public int saveHome(Home home) {

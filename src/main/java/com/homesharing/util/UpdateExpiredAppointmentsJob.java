@@ -16,10 +16,10 @@ public class UpdateExpiredAppointmentsJob implements Job {
         AppointmentDAO appointmentDAO = new AppointmentDAOImpl();
         LocalDateTime now = LocalDateTime.now();
 
-        // Lấy danh sách các appointment đã quá hạn
+
         List<Appointment> expiredAppointments = appointmentDAO.findExpiredAppointments(now);
 
-        // Cập nhật trạng thái của từng appointment
+
         for (Appointment appointment : expiredAppointments) {
             appointment.setStatus("expired");
             appointmentDAO.update(appointment);

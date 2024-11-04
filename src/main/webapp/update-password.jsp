@@ -98,6 +98,7 @@
 </section>
 
 <jsp:include page="footer.jsp"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function validateForm() {
         let password = document.getElementById("password").value;
@@ -108,29 +109,44 @@
 
         // Kiểm tra nếu cần nhập mật khẩu cũ nhưng không có giá trị
         if (oldPasswordField && oldPassword === "") {
-            alert("Mật khẩu cũ không thể để trống.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu cũ không thể để trống.'
+            });
             return false;
         }
 
         // Check for required fields and ensure they're not just spaces
         if (password.trim() === "" || confirmPassword.trim() === "") {
-            alert("Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.'
+            });
             return false;
         }
         // Check password length
         if (password.length < 8) {
-            alert("Mật khẩu phải có ít nhất 8 ký tự!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu phải có ít nhất 8 ký tự!'
+            });
             return false;
         }
 
         // Check if passwords match
         if (password === oldPassword) {
-            alert("Mật khẩu mới phải khác mật khẩu cũ!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu mới phải khác mật khẩu cũ!'
+            });
             return false;
         }
         // Check if passwords match
         if (password !== confirmPassword) {
-            alert("Mật khẩu không khớp!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Mật khẩu không khớp!'
+            });
             return false;
         }
         return true;

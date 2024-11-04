@@ -65,7 +65,7 @@ public class NotificationServlet extends HttpServlet {
         String userId = CookieUtil.getCookie(req, "id");
         String type = req.getParameter("type");
         if (userId == null) {
-            ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra, vui lòng đăng nhập lại.");
+            ServletUtils.handleError(req, resp, 500);
             return;
         }
         if(type == null || type.equals("")) {
@@ -88,7 +88,7 @@ public class NotificationServlet extends HttpServlet {
             } catch (SQLException | GeneralException e) {
                 logger.error("Error home-page: {}", e.getMessage(), e); // Log the exception with stack trace
                 // Handle invalid user ID format
-                ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra, vui lòng đăng nhập lại.");
+                ServletUtils.handleError(req, resp, 500);
             }
         }
         // Forward the request to the JSP page for rendering

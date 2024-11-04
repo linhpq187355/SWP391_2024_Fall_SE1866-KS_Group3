@@ -4,7 +4,7 @@
  *
  * Record of change:
  * DATE            Version             AUTHOR           DESCRIPTION
- * 2024-10-20      1.1                 AI Assistant     Improved code and comments
+ * 2024-10-20      1.2.2              ManhNC    Improved code and comments
  */
 package com.homesharing.controller;
 
@@ -28,7 +28,7 @@ import java.util.List;
  * <p>
  * Bugs: None known.
  *
- * @author AI Assistant
+ * @author ManhNC
  */
 @WebServlet("/getDistricts")
 public class GetDistrictsServlet extends HttpServlet {

@@ -261,8 +261,13 @@
                 <div class="info">
                     <i class="fas fa-info-circle"></i> Thời gian tính theo giờ Việt Nam
                 </div>
-                <div>
-                    <button type="button" class="continue" onclick="saveAppointment()">Xác nhận</button>
+                <div style="display: flex;flex-direction: row-reverse;width: 20%;justify-content: space-between;">
+                    <div>
+                        <button type="button" class="continue" onclick="saveAppointment()">Xác nhận</button>
+                    </div>
+                    <div>
+                        <button style="background-color: #ff2b2b;color: #fff;" type="button" class="cancel" onclick="window.location.href='appointment-host-manage?appointmentId=${requestScope.appointment.id}'">Hủy</button>
+                    </div>
                 </div>
             </div>
         </form>

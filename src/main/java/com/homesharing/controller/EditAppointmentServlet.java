@@ -90,50 +90,50 @@ public class EditAppointmentServlet extends HttpServlet {
         }
 
         try {
-                List<Appointment> hostAppointmentList = appointmentService.getAppointments(String.valueOf(appointment.getHostId()));
-                List<Appointment> tenantAppointmentList = appointmentService.getAppointments(String.valueOf(appointment.getTenantId()));
-                for(int i=0;i<hostAppointmentList.size();i++){
-                    if(hostAppointmentList.get(i).getId() == Integer.parseInt(aptmId)){
-                        hostAppointmentList.remove(i);
-                    }
+            List<Appointment> hostAppointmentList = appointmentService.getAppointments(String.valueOf(appointment.getHostId()));
+            List<Appointment> tenantAppointmentList = appointmentService.getAppointmentsByTenant(String.valueOf(appointment.getTenantId()));
+            for(int i=0;i<hostAppointmentList.size();i++){
+                if(hostAppointmentList.get(i).getId() == Integer.parseInt(aptmId)){
+                    hostAppointmentList.remove(i);
                 }
-                for(int i=0;i<tenantAppointmentList.size();i++){
-                    if(tenantAppointmentList.get(i).getId() == Integer.parseInt(aptmId)){
-                        tenantAppointmentList.remove(i);
-                    }
+            }
+            for(int i=0;i<tenantAppointmentList.size();i++){
+                if(tenantAppointmentList.get(i).getId() == Integer.parseInt(aptmId)){
+                    tenantAppointmentList.remove(i);
                 }
-                boolean checkOverlapping = appointmentService.checkOverlapping(selectedDate, selectedMonth, selectedYear,selectedTime,hostAppointmentList,tenantAppointmentList);
-                if(checkOverlapping){
-                    req.setAttribute("over", "Thời gian bị lặp.");
-                    req.setAttribute("appointmentDay", selectedDate);
-                    req.setAttribute("appointmentTime", selectedTime);
+            }
+            boolean checkOverlapping = appointmentService.checkOverlapping(selectedDate, selectedMonth, selectedYear,selectedTime,hostAppointmentList,tenantAppointmentList);
+            if(checkOverlapping){
+                req.setAttribute("over", "Thời gian bị lặp.");
+                req.setAttribute("appointmentDay", selectedDate);
+                req.setAttribute("appointmentTime", selectedTime);
+                req.setAttribute("appointmentMonth", selectedMonth+1);
+                req.setAttribute("appointmentYear", selectedYear);
+                req.setAttribute("appointment", appointment);
+                req.getRequestDispatcher("update-appointment.jsp").forward(req, resp);
+            } else {
+                int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"hostPending", aptmId,"0");
+
+                if(rowsUpdated>0){
+                    req.setAttribute("message","Sửa lịch thành công!");
                     req.setAttribute("appointmentMonth", selectedMonth+1);
                     req.setAttribute("appointmentYear", selectedYear);
-                    req.setAttribute("appointment", appointment);
+                    req.setAttribute("appointmentDay", selectedDate);
+                    req.setAttribute("appointmentTime", selectedTime);
                     req.getRequestDispatcher("update-appointment.jsp").forward(req, resp);
                 } else {
-                    int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"hostPending", aptmId,"0");
-
-                    if(rowsUpdated>0){
-                        req.setAttribute("message","Sửa lịch thành công!");
-                        req.setAttribute("appointmentMonth", selectedMonth+1);
-                        req.setAttribute("appointmentYear", selectedYear);
-                        req.setAttribute("appointmentDay", selectedDate);
-                        req.setAttribute("appointmentTime", selectedTime);
-                        req.getRequestDispatcher("update-appointment.jsp").forward(req, resp);
-                    } else {
-                        LOGGER.warning("Failed to insert appointment.");
+                    LOGGER.warning("Failed to insert appointment.");
 
 
-                        req.setAttribute("appointmentMonth", selectedMonth+1);
-                        req.setAttribute("appointmentYear", selectedYear);
-                        req.setAttribute("appointmentDay", selectedDate);
-                        req.setAttribute("appointmentTime", selectedTime);
-                        req.setAttribute("appointment", appointment);
-                        req.setAttribute("error","Sửa lịch thất bại!");
-                        req.getRequestDispatcher("update-appointment.jsp").forward(req, resp);
-                    }
+                    req.setAttribute("appointmentMonth", selectedMonth+1);
+                    req.setAttribute("appointmentYear", selectedYear);
+                    req.setAttribute("appointmentDay", selectedDate);
+                    req.setAttribute("appointmentTime", selectedTime);
+                    req.setAttribute("appointment", appointment);
+                    req.setAttribute("error","Sửa lịch thất bại!");
+                    req.getRequestDispatcher("update-appointment.jsp").forward(req, resp);
                 }
+            }
 
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE,"Lỗi khi lưu dữ liệu hẹn: {}", e.getMessage());

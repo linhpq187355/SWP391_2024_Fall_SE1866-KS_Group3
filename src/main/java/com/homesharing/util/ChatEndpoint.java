@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, HomeSharing Project.
+ * H.SYS:
+ *  Home Sharing System
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-20      1.0                 ManhNC         First Implement
+ */
 package com.homesharing.util;
 
 import com.google.gson.*;
@@ -7,6 +16,7 @@ import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.ConversationDAOImpl;
 import com.homesharing.dao.impl.ReplyDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Reply;
 import com.homesharing.service.ConversationService;
 import com.homesharing.service.impl.ConversationServiceImpl;
@@ -22,10 +32,14 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * WebSocket endpoint for real-time chat functionality.
+ * Manages user connections, message broadcasting, and various chat actions.
+ */
 @ServerEndpoint("/chat")
 public class ChatEndpoint {
 
-    // Sử dụng ConcurrentHashMap để thread-safe
+    // Using ConcurrentHashMap for thread-safe
     private static ConcurrentHashMap<Integer, Session> onlineUsers = new ConcurrentHashMap<>();
     private static Set<Session> sessions = new HashSet<>();
     private static UserDAO userDAO = new UserDAOImpl();
@@ -33,11 +47,24 @@ public class ChatEndpoint {
     private static ReplyDAO replyDAO = new ReplyDAOImpl();
     private static ConversationService conversationService = new ConversationServiceImpl(userDAO, conversationDAO, replyDAO);
 
+    /**
+     * Called when a new client connects to the WebSocket.
+     * Adds the session to the set of active sessions.
+     * @param session The WebSocket session of the newly connected client.
+     */
     @OnOpen
     public void onOpen(Session session) {
         sessions.add(session);
     }
 
+    /**
+     * Called when a message is received from a client.
+     * Processes the message based on its type and performs corresponding actions.
+     * @param message The message received from the client.
+     * @param session The WebSocket session of the client that sent the message.
+     * @throws IOException If an I/O error occurs during message processing.
+     * @throws SQLException If a database error occurs during message processing.
+     */
     @OnMessage
     public void onMessage(String message, Session session) throws IOException, SQLException {
         JsonObject jsonMessage = JsonParser.parseString(message).getAsJsonObject();
@@ -102,7 +129,7 @@ public class ChatEndpoint {
                     try {
                         ses.getBasicRemote().sendText(jsonMessage.toString());
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new GeneralException(e.getMessage());
                     }
                 }
             } else {
@@ -112,7 +139,7 @@ public class ChatEndpoint {
                     try {
                         ses.getBasicRemote().sendText(jsonMessage.toString());
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new GeneralException(e.getMessage());
                     }
                 }
             }
@@ -124,7 +151,7 @@ public class ChatEndpoint {
                 try {
                     ses.getBasicRemote().sendText(jsonMessage.toString());
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw new GeneralException(e.getMessage());
                 }
             }
             Session ses2 = onlineUsers.get(receivedId);
@@ -132,7 +159,7 @@ public class ChatEndpoint {
                 try {
                     ses2.getBasicRemote().sendText(jsonMessage.toString());
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw new GeneralException(e.getMessage());
                 }
             }
         } else if (type.equals("unblock")) {
@@ -143,7 +170,7 @@ public class ChatEndpoint {
                     try {
                         ses.getBasicRemote().sendText(message);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new GeneralException(e.getMessage());
                     }
                 }
                 Session ses2 = onlineUsers.get(receivedId);
@@ -151,13 +178,18 @@ public class ChatEndpoint {
                     try {
                         ses2.getBasicRemote().sendText(message);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new GeneralException(e.getMessage());
                     }
                 }
             }
         }
     }
 
+    /**
+     * Called when a client disconnects from the WebSocket.
+     * Removes the session from the set of active sessions and online users.
+     * @param session The WebSocket session of the disconnected client.
+     */
     @OnClose
     public void onClose(Session session) {
         int userId = (int) session.getUserProperties().get("userId");
@@ -165,7 +197,13 @@ public class ChatEndpoint {
         sessions.remove(session);
     }
 
-
+    /**
+     * Sends a message to the specified user and all other users in the same conversation.
+     * @param message The message to be sent.
+     * @param senderId The ID of the user who sent the message.
+     * @param conversationId The ID of the conversation.
+     * @throws SQLException If a database error occurs during message sending.
+     */
     private void sendMessage(String message, int senderId, int conversationId) throws SQLException {
 
         Map<Integer, Integer> contactUsers = conversationDAO.contactUsersWithConversationId(senderId);
@@ -174,7 +212,7 @@ public class ChatEndpoint {
             try {
                 ses.getBasicRemote().sendText(message);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new GeneralException(e.getMessage());
             }
         }
         // Gửi tin nhắn đến tất cả session của người dùng đã liên hệ (và đang online)
@@ -188,7 +226,7 @@ public class ChatEndpoint {
                     try {
                         receiverSession.getBasicRemote().sendText(message);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new GeneralException(e.getMessage());
                     }
                 }
             }

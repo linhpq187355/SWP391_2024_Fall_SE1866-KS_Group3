@@ -114,12 +114,12 @@ public class SetRoleServlet extends HttpServlet {
             } catch (SQLException e) {
                 logger.error("SQL error during registration: {}", e.getMessage(), e);
                 request.setAttribute(ERROR_ATTRIBUTE, "Có lỗi xảy ra ở phía server.");
-                ServletUtils.forwardToErrorPage(request, response);
+                ServletUtils.handleError(request, response, 500);
             }
         }else{
             // If the Google account is not present, prompt for re-login
             request.setAttribute(ERROR_ATTRIBUTE, "Đã hết thời gian, vui lòng đăng nhập lại.");
-            ServletUtils.forwardToErrorPage(request, response);
+            ServletUtils.handleError(request, response, 500);
         }
     }
 

@@ -52,6 +52,9 @@ public class MakeAppointmentServlet extends HttpServlet {
         String tenantId = null;
         String note = null;
 
+        PrintWriter out = resp.getWriter();
+
+
         try {
             // Lấy dữ liệu từ request
             selectedDate = req.getParameter("selectedDate");
@@ -63,6 +66,8 @@ public class MakeAppointmentServlet extends HttpServlet {
 
 
             tenantId = CookieUtil.getCookie(req, "id");
+
+
             if (tenantId == null || tenantId.isEmpty()) {
                 throw new IllegalArgumentException("Tenant ID không hợp lệ hoặc không tồn tại trong Cookie.");
             }
@@ -86,7 +91,7 @@ public class MakeAppointmentServlet extends HttpServlet {
 
         try {
                 List<Appointment> hostAppointmentList = appointmentService.getAppointments(hostId);
-                List<Appointment> tenantAppointmentList = appointmentService.getAppointments(tenantId);
+                List<Appointment> tenantAppointmentList = appointmentService.getAppointmentsByTenant(tenantId);
                 boolean checkOverlapping = appointmentService.checkOverlapping(selectedDate, selectedMonth, selectedYear,selectedTime,hostAppointmentList,tenantAppointmentList);
                 if(checkOverlapping){
                     req.setAttribute("over", "Thời gian bị lặp.");

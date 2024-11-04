@@ -80,7 +80,7 @@ public class UpdateEmailServlet extends HttpServlet {
         String userIdCookie = CookieUtil.getCookie(req, "id");
         if (userIdCookie == null) {
             LOGGER.warning("User ID cookie is missing.");
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID cookie is missing.");
+            ServletUtils.handleError(req, resp, 500);
             return;
         }
 
@@ -91,7 +91,7 @@ public class UpdateEmailServlet extends HttpServlet {
 
             user = userService.getUser(userId);
             if (user == null) {
-                ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
+                ServletUtils.handleError(req, resp, 500);
                 return;
             }
             req.getSession().setAttribute("userId", user.getId());
@@ -161,11 +161,9 @@ public class UpdateEmailServlet extends HttpServlet {
                 req.getSession().setAttribute("email", email);
                 resp.sendRedirect(req.getContextPath() + "/verify-new");
             } catch (NumberFormatException | SQLException e) {
-                ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
-            }
+                ServletUtils.handleError(req, resp, 500);            }
         } else {
-            ServletUtils.forwardWithMessage(req,resp,"Có lỗi xảy ra, vui lòng đăng nhập lại.");
-        }
+            ServletUtils.handleError(req, resp, 500);        }
     }
 
 }

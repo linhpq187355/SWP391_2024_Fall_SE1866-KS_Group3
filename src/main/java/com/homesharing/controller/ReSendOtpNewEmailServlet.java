@@ -95,8 +95,7 @@ public class ReSendOtpNewEmailServlet extends HttpServlet {
         } catch (SQLException e) {
             logger.error("Error resending OTP: {}", e.getMessage(), e); // Log the exception with stack trace
             // Handle invalid user ID format
-            ServletUtils.forwardWithMessage(req, resp, "Có lỗi xảy ra, vui lòng đăng nhập lại để xác thực.");
-        }
+            ServletUtils.handleError(req, resp, 500);        }
     }
 
 }

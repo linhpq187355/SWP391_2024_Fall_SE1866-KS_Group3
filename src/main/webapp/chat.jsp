@@ -239,7 +239,10 @@
         @media (max-width: 768px) {
             .cchat-container {
                 flex-direction: row; /* Thay đổi thành row */
-                height: auto; /* Tự động điều chỉnh chiều cao */
+                height: 100%; /* Tự động điều chỉnh chiều cao */
+            }
+            .cchat-window .messages {
+                height: 500px;
             }
 
             .cchat-list {

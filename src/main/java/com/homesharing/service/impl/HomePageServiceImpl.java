@@ -242,6 +242,12 @@ public class HomePageServiceImpl implements HomePageService {
     @Override
     public Home getHomeById(int id) { return homeDAO.getHomeById(id); }
 
+    /**
+     * Retrieves the total count of homes available in the data source.
+     *
+     * @return The total number of homes.
+     * @throws GeneralException If there is an error while retrieving the count.
+     */
     @Override
     public int getHomeCount() {
         try {
@@ -306,6 +312,13 @@ public class HomePageServiceImpl implements HomePageService {
         return listMatchingHomes;
     }
 
+    /**
+     * Retrieves homes associated with the specified list of appointments.
+     *
+     * @param appointments A list of Appointment objects used to filter homes.
+     * @return A list of Home objects that match the given appointments.
+     * @throws GeneralException If there is an error while retrieving homes by appointment.
+     */
     @Override
     public List<Home> getHomesByAppoinment(List<Appointment> appointments) {
 
@@ -324,6 +337,15 @@ public class HomePageServiceImpl implements HomePageService {
     @Override
     public List<Price> getHomesByUserPrices(List<Home> getHomesByUser) {
         return priceDAO.getPrices(getHomesByUser);
+    }
+    /**
+     * Change home status
+     * @param homeId home id to change status
+     * @param status home status to change to
+     */
+    @Override
+    public void updateStatusHome(int homeId, String status) {
+        this.homeDAO.changeStatus(homeId, status);
     }
 
 }
