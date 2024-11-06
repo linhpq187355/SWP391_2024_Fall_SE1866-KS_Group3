@@ -515,7 +515,8 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "       u.[rolesid],\n" +
                 "       r.[name] AS roleName\n" +
                 "FROM [dbo].[HSS_Users] u\n" +
-                "LEFT JOIN [dbo].[Roles] r ON u.[rolesid] = r.[id]";
+                "LEFT JOIN [dbo].[Roles] r ON u.[rolesid] = r.[id]\n"+
+                "WHERE r.[name]!= 'admin'";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -534,6 +535,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 user.setFirstName(resultSet.getString("firstName"));
                 user.setLastName(resultSet.getString("lastName"));
                 user.setAvatar(resultSet.getString("avatar"));
+                user.setRoleName(resultSet.getString("roleName"));
                 if (resultSet.getDate("dob") != null) {
                     user.setDob(resultSet.getDate("dob").toLocalDate());
                 }

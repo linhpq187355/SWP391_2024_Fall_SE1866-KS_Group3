@@ -38,9 +38,7 @@ public class ListPermissionServlet extends HttpServlet {
             List<Permission> permissions = userMgtService.fetchUserPermissions(userList.get(i).getId());
             userList.get(i).setPermissions(permissions);
         }
-        List<Role> roleList = userMgtService.getAllRoles();
         request.setAttribute("userList", userList);
-        request.setAttribute("roleList", roleList);
         request.getRequestDispatcher("/permission-list.jsp").forward(request, response);
     }
 }

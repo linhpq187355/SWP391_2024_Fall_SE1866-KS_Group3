@@ -151,7 +151,25 @@ public interface HomeDAO {
      */
     List<Home> getHomeByAppointment(List<Appointment> appointments);
 
+    /**
+     * Fetch home list via user id
+     * @param userId
+     * @return the home list
+     */
     List<Home> getHomesByUserId(int userId);
+
+    /**
+     * Update the given home
+     * @param home
+     * @return number of rows affected
+     */
     int updateHome(Home home);
+
+    /**
+     * Change the status of home
+     * @param homeId
+     * @param status
+     * @return the result
+     */
     int changeStatus(int homeId, String status);
 }

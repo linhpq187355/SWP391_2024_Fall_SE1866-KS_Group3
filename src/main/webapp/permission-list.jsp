@@ -184,7 +184,7 @@
                         <div class="collapse" id="acc-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="/dashboard/permission-list">
                                         <span class="sub-item">Danh sách tài khoản</span>
                                     </a>
                                 </li>
@@ -200,7 +200,7 @@
                         <div class="collapse" id="report-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="/report">
                                         <span class="sub-item">Danh sách báo cáo</span>
                                     </a>
                                 </li>
