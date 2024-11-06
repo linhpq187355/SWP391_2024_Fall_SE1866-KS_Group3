@@ -336,10 +336,103 @@
 
 <jsp:include page="footer.jsp"/>
 <script>
+    const appointments = [
+        <c:forEach var="appointment" items="${requestScope.hostAppointment}">
+        {
+            startDate: "${appointment.startDate}",
+            endDate: "${appointment.endDate}",
+            status: "${appointment.status}"
+        },
+        </c:forEach>
+    ];
+    const appointments2 = [
+        <c:forEach var="appointment" items="${requestScope.tenantAppointment}">
+        {
+            startDate: "${appointment.startDate}",
+            endDate: "${appointment.endDate}",
+            status: "${appointment.status}"
+        },
+        </c:forEach>
+    ];
+    console.log(appointments2);
+    function parseDate(dateString) {
+        return new Date(dateString);
+    }
+
+    function updateTimePicker(selectedDate) {
+        const timeSlots = document.querySelectorAll('.time-picker .time-slot');
+
+
+        timeSlots.forEach(slot => {
+            // Reset trạng thái cho từng ô
+            slot.classList.remove('disabled');
+
+            // Lấy khoảng thời gian của ô hiện tại
+            const [startTime, endTime] = slot.textContent.split(' - ');
+
+            const slotStart = new Date(selectedDate+"T"+startTime+":00");
+            const slotEnd = new Date(selectedDate+"T"+endTime+":00");
+
+            console.log("Slot Start:", slotStart);
+            console.log("Slot End:", slotEnd);
+
+            // Kiểm tra xem ô thời gian có trùng với appointment nào không
+            for (const appointment of appointments) {
+
+                const appointmentStart = parseDate(appointment.startDate);
+                const appointmentEnd = parseDate(appointment.endDate);
+                if(appointmentStart.getDate() === parseDate(selectedDate+"T"+"00"+":00").getDate() && appointment.status === "accepted"){
+                    if (
+                        (slotStart >= appointmentStart && slotStart < appointmentEnd) ||
+                        (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
+                        (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
+                    ) {
+
+                        slot.classList.add('disabled');
+                        break;
+                    }
+                }
+
+
+            }
+            for (const appointment of appointments2) {
+
+                const appointmentStart = parseDate(appointment.startDate);
+                const appointmentEnd = parseDate(appointment.endDate);
+                if(appointmentStart.getDate() === parseDate(selectedDate+"T"+"00"+":00").getDate() && appointment.status === "accepted"){
+                    if (
+                        (slotStart >= appointmentStart && slotStart < appointmentEnd) ||
+                        (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
+                        (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
+                    ) {
+
+                        slot.classList.add('disabled');
+                        break;
+                    }
+                }
+
+
+            }
+        });
+    }
+    function onDateSelected(day, month, year) {
+        const paddedMonth = String(month + 1).padStart(2, '0');
+        const paddedDay = String(day).padStart(2, '0');
+        const selectedDate = year + "-" + paddedMonth + "-" + paddedDay;
+        console.log("Selected Date:", selectedDate);
+        console.log(paddedMonth);
+        console.log(year);
+        updateTimePicker(selectedDate);
+    }
     document.addEventListener('DOMContentLoaded', function () {
         // Thêm sự kiện click vào các ô thời gian
         const timeSlots = document.querySelectorAll('.time-picker .time-slot');
         const selectedTime = "${requestScope.appointmentTime}";
+        const currentDay = "${requestScope.appointmentDay}";
+        const currentMonth = "${requestScope.appointmentMonth}";
+        const currentYear = "${requestScope.appointmentYear}";
+        onDateSelected(currentDay, currentMonth, currentYear);
+
         timeSlots.forEach(slot => {
             if (slot.textContent.trim() === selectedTime){
                 slot.classList.add('selected');
@@ -441,6 +534,9 @@
                             month: currentMonth,
                             year: currentYear
                         };
+                        const selectedDateElement = document.querySelector('.calendar .selected');
+                        const selectedDate2 = selectedDateElement ? selectedDateElement.innerText : null;
+                        onDateSelected(selectedDate2,currentMonth,currentYear);
                     });
                     date++;
                 }
@@ -529,13 +625,6 @@
         document.getElementById('overlay2').style.display = 'none';
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const error = "<c:out value='${requestScope.over}'/>";
-        if (error) {
-            document.getElementById('popup3').style.display = 'block';
-            document.getElementById('overlay3').style.display = 'block';
-        }
-    });
 
     document.addEventListener("DOMContentLoaded", function () {
         const error = "<c:out value='${requestScope.error}'/>";
@@ -545,11 +634,6 @@
         }
     });
 
-
-    function closePopup3() {
-        document.getElementById('popup3').style.display = 'none';
-        document.getElementById('overlay3').style.display = 'none';
-    }
 
     function closePopup4() {
         document.getElementById('popup4').style.display = 'none';

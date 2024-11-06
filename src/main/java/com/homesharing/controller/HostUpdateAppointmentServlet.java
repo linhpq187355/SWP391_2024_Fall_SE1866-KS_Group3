@@ -116,26 +116,26 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
                 } else {
                     int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"tenantPending", aptmId,host);
 
-                    if(rowsUpdated>0){
-                        req.setAttribute("message","Sửa lịch thành công!");
-                        req.setAttribute("appointmentMonth", selectedMonth+1);
-                        req.setAttribute("appointmentYear", selectedYear);
-                        req.setAttribute("appointmentDay", selectedDate);
-                        req.setAttribute("appointmentTime", selectedTime);
-                        req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
-                    } else {
-                        LOGGER.warning("Failed to insert appointment.");
+            if(rowsUpdated>0){
+                req.setAttribute("message","Sửa lịch thành công!");
+                req.setAttribute("appointmentMonth", selectedMonth+1);
+                req.setAttribute("appointmentYear", selectedYear);
+                req.setAttribute("appointmentDay", selectedDate);
+                req.setAttribute("appointmentTime", selectedTime);
+                req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
+            } else {
+                LOGGER.warning("Failed to insert appointment.");
 
 
-                        req.setAttribute("appointmentMonth", selectedMonth+1);
-                        req.setAttribute("appointmentYear", selectedYear);
-                        req.setAttribute("appointmentDay", selectedDate);
-                        req.setAttribute("appointmentTime", selectedTime);
-                        req.setAttribute("appointment", appointment);
-                        req.setAttribute("error","Sửa lịch thất bại!");
-                        req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
-                    }
-                }
+                req.setAttribute("appointmentMonth", selectedMonth+1);
+                req.setAttribute("appointmentYear", selectedYear);
+                req.setAttribute("appointmentDay", selectedDate);
+                req.setAttribute("appointmentTime", selectedTime);
+                req.setAttribute("appointment", appointment);
+                req.setAttribute("error","Sửa lịch thất bại!");
+                req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
+            }
+
 
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE,"Lỗi khi lưu dữ liệu hẹn: {}", e.getMessage());

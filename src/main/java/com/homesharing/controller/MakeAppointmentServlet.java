@@ -101,15 +101,14 @@ public class MakeAppointmentServlet extends HttpServlet {
                 } else {
                     int rowsUpdated = appointmentService.insertAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,tenantId , hostId, note,homeId);
 
-                    if(rowsUpdated>0){
-                        req.setAttribute("message","Đặt lịch thành công!");
-                        req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
-                    } else {
-                        LOGGER.warning("Failed to insert appointment.");
-                        req.setAttribute("error","Đặt lịch thất bại!");
-                        req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
-                    }
-                }
+            if(rowsUpdated>0){
+                req.setAttribute("message","Đặt lịch thành công!");
+                req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
+            } else {
+                LOGGER.warning("Failed to insert appointment.");
+                req.setAttribute("error","Đặt lịch thất bại!");
+                req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
+            }
 
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE,"Lỗi khi lưu dữ liệu hẹn: {}", e.getMessage());
