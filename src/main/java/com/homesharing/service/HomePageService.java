@@ -104,5 +104,15 @@ public interface HomePageService {
      */
     List<Home> getMatchingHome(int[] matchingHostsId, int userId);
 
+    List<Home> getHomesByUser(int userId);
+
+    /**
+     * Retrieves a list of homes associated with a specific list of appointments.
+     *
+     * @param appointments A list of {@link Appointment} objects to find matching homes.
+     * @return A list of {@link Home} objects associated with the provided appointments.
+     */
     List<Home> getHomesByAppoinment(List<Appointment> appointments);
+    List<Price> getHomesByUserPrices(List<Home> getHomesByUser);
+    void updateStatusHome(int homeId, String status);
 }

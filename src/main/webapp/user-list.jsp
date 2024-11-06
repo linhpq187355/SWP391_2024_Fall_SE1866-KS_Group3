@@ -427,7 +427,7 @@
                                 <div class="col-sm-6 col-md-3 p0" style="margin-bottom: 15px; text-align: center;">
                                     <div class="item-thumb">
                                         <img class="property-image"
-                                             src="${user.avatar != null ? user.avatar : 'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png'}"
+                                             src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
                                              style="width: 100%; max-width: 200px; border-radius: 50%;"> <!-- Có thể điều chỉnh kích thước và làm tròn hình ảnh -->
                                     </div>
                                     <div class="item-entry overflow">

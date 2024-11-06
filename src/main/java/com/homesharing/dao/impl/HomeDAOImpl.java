@@ -522,6 +522,49 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         return null;
     }
 
+    @Override
+    public List<String> fetchImages(int homeId) {
+        String sql = "select imgUrl" +
+                " from HomeImages" +
+                " where Homesid = ?;";
+        List<String> imageUrls = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, homeId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String imgUrl = resultSet.getString("imgUrl");
+                if (imgUrl != null) {
+                    imageUrls.add(imgUrl);
+                }
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error finding image in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return imageUrls;
+    }
     /**
      * Counts the number of homes matching the provided search criteria.
      *

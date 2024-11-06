@@ -187,6 +187,9 @@
                                 </li>
                             </c:if>
                             <li>
+                                <a href="user-blog" class="li-acc-op">Quản lí Blog</a>
+                            </li>
+                            <li>
                                 <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
                             </li>
                             <c:if test="${cookie.roleId.value == 4}">
@@ -240,10 +243,16 @@
                 <li class="dropdown ymm-sw " data-wow-delay="0.1s">
                     <a href="home-page">Trang chủ</a>
                 </li>
-
+                <c:if test="${cookie.roleId.value != 0}">
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="view-blog">Diễn Đàn</a></li>
+                </c:if>
+                <c:if test="${cookie.roleId.value ==3}">
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="user-list">Tìm bạn phù hợp</a>
+                    </li>
+                </c:if>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-list">Tất cả nhà</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
-                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
+<%--                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>--%>
                 <c:if test="${cookie.roleId.value ==4}">
                     <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="submit-home">Đăng bài</a></li>
                 </c:if>

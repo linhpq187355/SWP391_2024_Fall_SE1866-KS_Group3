@@ -1,20 +1,26 @@
 package com.homesharing.service.impl;
 
+import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.WishListDAO;
+import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.WishListDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.model.Price;
 import com.homesharing.model.WishList;
 import com.homesharing.service.WishListService;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WishListServiceImpl implements WishListService {
     private final WishListDAO wishListDAO;
+    private final HomeDAO homeDAO;
 
     public WishListServiceImpl() {
-        this.wishListDAO = new WishListDAOImpl(); // Khởi tạo DAO
+        this.wishListDAO = new WishListDAOImpl();
+        this.homeDAO = new HomeDAOImpl();
     }
 
     @Override
@@ -31,14 +37,32 @@ public class WishListServiceImpl implements WishListService {
     public void addWishList(WishList wishlist) {
         wishListDAO.addWishList(wishlist);
     }
-    @Override
-    public List<Home> getWishlistByUserId(int userId) {
-        return wishListDAO.getWishlistByUserId(userId); // Gọi phương thức DAO
-    }
+//    @Override
+//    public List<Home> getWishlistByUserId(int userId) {
+//        return wishListDAO.getWishlistByUserId(userId); // Gọi phương thức DAO
+//    }
 
     @Override
     public boolean isAlreadyInWishlist(int userId, int homeId, String status) {
-        return wishListDAO.isAlreadyInWishlist(userId, homeId,status); // Kiểm tra xem nhà có trong danh sách yêu thích chưa
+        return wishListDAO.isAlreadyInWishlist(userId, homeId,status);
+    }
+    @Override
+    public List<Home> getWishlistByUserId(int userId) {
+        List<Home> homeList = wishListDAO.getWishlistByUserId(userId);
+        try {
+            for (Home home : homeList) {
+                List<String> images = new ArrayList<>();
+                String firstImage = homeDAO.fetchFirstImage(home.getId());
+                if (firstImage != null) {
+                    images.add(firstImage);
+                }
+                home.setImages(images);
+            }
+            return homeList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>(); // Trả về danh sách rỗng nếu có ngoại lệ
     }
 
     @Override

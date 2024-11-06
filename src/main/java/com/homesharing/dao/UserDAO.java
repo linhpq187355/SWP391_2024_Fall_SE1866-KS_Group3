@@ -18,6 +18,8 @@ import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
 import java.sql.SQLException;
 import java.util.List;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * UserDao interface defines the data access methods for user-related operations.
@@ -177,4 +179,29 @@ public interface UserDAO {
      * @return A list of {@link User} objects representing the tenants associated with the given appointments.
      */
     List<User> getTenantByAppointment(List<Appointment> appointments);
+
+
+    List<User> getFilteredUsers(Map<String, Object> searchParams)  throws SQLException, IOException, ClassNotFoundException;
+    int numOfUser(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException;
+
+    int getMinCleanliness();
+    int getMaxCleanliness();
+
+    int getMinSmoking();
+    int getMaxSmoking();
+
+    int getMinDrinking();
+    int getMaxDrinking();
+
+    int getMinInteraction();
+    int getMaxInteraction();
+
+    int getMinGuests();
+    int getMaxGuests();
+
+    int getMinCooking();
+    int getMaxCooking();
+
+    int getMinPet();
+    int getMaxPet();
 }

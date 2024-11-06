@@ -321,7 +321,7 @@
                         <a href="blog-detail?postId=${blogPost.id}">
                             <img alt="Illustration of Aquarius and Virgo zodiac signs"
                                  height="400"
-                                 src="${not empty blogPost.imagePath ? blogPost.imagePath : 'https://xaydunganthienphat.com.vn/upload/filemanager/mau%20nha/mau%20nha%20cap%204%20mai%20thai%203%20phong%20ngu/mau-nha-cap-4-mai-thai-3-phong-ngu-1-phong-tho-mau-so-2.jpg'}"
+                                 src="https://xaydunganthienphat.com.vn/upload/filemanager/mau%20nha/mau%20nha%20cap%204%20mai%20thai%203%20phong%20ngu/mau-nha-cap-4-mai-thai-3-phong-ngu-1-phong-tho-mau-so-2.jpg"
                                  width="600"/>
                         </a>
                         <h3>

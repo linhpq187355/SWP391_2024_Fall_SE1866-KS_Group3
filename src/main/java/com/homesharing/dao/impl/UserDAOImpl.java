@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.Map;
 
 /**
  * Implementation of the UserDAO interface, handling database operations for the User entity.
@@ -1101,6 +1101,717 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             }
         }
         return tenantList;
+    }
+
+
+    @Override
+    public int getMaxPet() {
+        String sql = "SELECT TOP 1 pet FROM Preferences ORDER BY pet DESC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("pet");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get max pet in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMinPet() {
+        String sql = "SELECT TOP 1 pet FROM Preferences ORDER BY pet ASC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("pet");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min pet in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMaxCooking() {
+        String sql = "SELECT TOP 1 cooking FROM Preferences ORDER BY cooking DESC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("cooking");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get max cooking in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMinCooking() {
+        String sql = "SELECT TOP 1 cooking FROM Preferences ORDER BY cooking ASC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("cooking");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min cooking in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMaxGuests() {
+        String sql = "SELECT TOP 1 guests FROM Preferences ORDER BY guests DESC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("guests");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get max guests in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMinGuests() {
+        String sql = "SELECT TOP 1 guests FROM Preferences ORDER BY guests ASC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("guests");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min guests in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMaxInteraction() {
+        String sql = "SELECT TOP 1 interaction FROM Preferences ORDER BY interaction DESC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("interaction");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get max interaction in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMinInteraction() {
+        String sql = "SELECT TOP 1 interaction FROM Preferences ORDER BY interaction ASC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("interaction");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min interaction in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMaxDrinking() {
+        String sql = "SELECT TOP 1 drinking FROM Preferences ORDER BY drinking DESC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("drinking");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get max drinking in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMinDrinking() {
+        String sql = "SELECT TOP 1 drinking FROM Preferences ORDER BY drinking ASC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("drinking");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min drinking in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMaxSmoking() {
+        String sql = "SELECT TOP 1 smoking FROM Preferences ORDER BY smoking DESC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("smoking");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get max smoking in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMinSmoking() {
+        String sql = "SELECT TOP 1 smoking FROM Preferences ORDER BY smoking ASC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("smoking");
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min smoking in the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int getMinCleanliness() {
+        String sql = "SELECT TOP 1 cleanliness FROM Preferences ORDER BY cleanliness ASC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("cleanliness");
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min cleanliness in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0; // Trả về 0 nếu không tìm thấy giá trị
+    }
+    @Override
+    public int getMaxCleanliness() {
+        String sql = "SELECT TOP 1 cleanliness FROM Preferences ORDER BY cleanliness DESC;";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("cleanliness");
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error get min cleanliness in the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return 0; // Trả về 0 nếu không tìm thấy giá trị
+    }
+    @Override
+    public List<User> getFilteredUsers(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException {
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT u.id,u.firstName,u.lastName,u.avatar,u.gender,u.rolesId, \n" +
+                "       p.cleanliness, p.workSchedule, p.smoking, p.drinking, \n" +
+                "       p.interaction, p.guests, p.cooking, p.pet \n" +
+                "FROM HSS_Users u \n" +
+                "JOIN Preferences p ON u.id = p.usersId \n" +
+                "JOIN Homes h ON u.id = h.createdBy \n" +
+                "JOIN Wards w ON h.wardsId = w.id \n" +
+                "JOIN Districts d ON w.Districtsid = d.id \n" + // Kết nối bảng Districts
+                "JOIN Provinces pr ON d.provincesId = pr.id \n" + // Kết nối bảng Provinces
+                "WHERE 1=1");
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        List<User> userList = new ArrayList<>();
+
+        if (searchParams.containsKey("gender")) {
+            sql.append(" AND u.gender = ?");
+        }
+        if (searchParams.containsKey("province")) {
+            sql.append(" AND pr.id = ?");
+        }
+        if (searchParams.containsKey("district")) {
+            sql.append(" AND d.id = ?");
+        }
+        if (searchParams.containsKey("ward")) {
+            sql.append(" AND w.id = ?");
+        }
+
+        // Các điều kiện lọc khác
+        if (searchParams.containsKey("minCleanliness") && searchParams.containsKey("maxCleanliness")) {
+            sql.append(" AND p.cleanliness BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minSmoking") && searchParams.containsKey("maxSmoking")) {
+            sql.append(" AND p.smoking BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minDrinking") && searchParams.containsKey("maxDrinking")) {
+            sql.append(" AND p.drinking BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minInteraction") && searchParams.containsKey("maxInteraction")) {
+            sql.append(" AND p.interaction BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minGuests") && searchParams.containsKey("maxGuests")) {
+            sql.append(" AND p.guests BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minCooking") && searchParams.containsKey("maxCooking")) {
+            sql.append(" AND p.cooking BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minPet") && searchParams.containsKey("maxPet")) {
+            sql.append(" AND p.pet BETWEEN ? AND ?");
+        }
+        sql.append(" ORDER BY u.id DESC");
+
+        if (searchParams.containsKey("per_page")) {
+            sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ");
+        }
+
+        try {
+            connection = DBContext.getConnection();
+            ps = connection.prepareStatement(sql.toString());
+            int paramIndex = 1;
+
+            if (searchParams.containsKey("gender")) {
+                ps.setString(paramIndex++, (String) searchParams.get("gender"));
+            }
+            if (searchParams.containsKey("province")) {
+                int provinceId = Integer.parseInt(searchParams.get("province").toString());
+                ps.setInt(paramIndex++, provinceId);
+            }
+            if (searchParams.containsKey("district")) {
+                int districtId = Integer.parseInt(searchParams.get("district").toString());
+                ps.setInt(paramIndex++, districtId);
+            }
+            if (searchParams.containsKey("ward")) {
+                int wardId = Integer.parseInt(searchParams.get("ward").toString());
+                ps.setInt(paramIndex++, wardId);
+            }
+
+            if (searchParams.containsKey("minCleanliness") && searchParams.containsKey("maxCleanliness")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minCleanliness"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxCleanliness"));
+            }
+            if (searchParams.containsKey("minSmoking") && searchParams.containsKey("maxSmoking")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minSmoking"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxSmoking"));
+            }
+            if (searchParams.containsKey("minDrinking") && searchParams.containsKey("maxDrinking")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minDrinking"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxDrinking"));
+            }
+            if (searchParams.containsKey("minInteraction") && searchParams.containsKey("maxInteraction")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minInteraction"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxInteraction"));
+            }
+            if (searchParams.containsKey("minGuests") && searchParams.containsKey("maxGuests")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minGuests"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxGuests"));
+            }
+            if (searchParams.containsKey("minCooking") && searchParams.containsKey("maxCooking")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minCooking"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxCooking"));
+            }
+            if (searchParams.containsKey("minPet") && searchParams.containsKey("maxPet")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minPet"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxPet"));
+            }
+            if (searchParams.containsKey("per_page")) {
+                int perPage = Integer.parseInt(searchParams.get("per_page").toString());
+                int targetPage = searchParams.containsKey("targetPage")
+                        ? Integer.parseInt(searchParams.get("targetPage").toString())
+                        : 1;
+
+                int offset = (targetPage - 1) * perPage;
+                ps.setInt(paramIndex++, offset);
+                ps.setInt(paramIndex, perPage);
+            }
+
+            logger.info(sql.toString());
+            resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAvatar(resultSet.getString("avatar"));
+                user.setGender(resultSet.getString("gender"));
+                user.setRolesId(resultSet.getInt("rolesId"));
+                userList.add(user);
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                logger.warning("Failed to close resources: " + e.getMessage());
+            }
+        }
+        return userList;
+    }
+    @Override
+    public int numOfUser(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(DISTINCT u.id) \n" +
+                "FROM HSS_Users u \n" +
+                "JOIN Preferences p ON u.id = p.usersId \n" +
+                "JOIN Homes h ON u.id = h.createdBy \n" +
+                "JOIN Wards w ON h.wardsId = w.id \n" +
+                "JOIN Districts d ON w.Districtsid = d.id \n" +
+                "JOIN Provinces pr ON d.provincesId = pr.id \n" +
+                "WHERE 1=1");
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        int totalCount = 0; // Đặt giá trị mặc định
+
+        if (searchParams.containsKey("gender")) {
+            sql.append(" AND u.gender = ?");
+        }
+        if (searchParams.containsKey("province")) {
+            sql.append(" AND pr.id = ?");
+        }
+        if (searchParams.containsKey("district")) {
+            sql.append(" AND d.id = ?");
+        }
+        if (searchParams.containsKey("ward")) {
+            sql.append(" AND w.id = ?");
+        }
+
+        if (searchParams.containsKey("minCleanliness") && searchParams.containsKey("maxCleanliness")) {
+            sql.append(" AND p.cleanliness BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minSmoking") && searchParams.containsKey("maxSmoking")) {
+            sql.append(" AND p.smoking BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minDrinking") && searchParams.containsKey("maxDrinking")) {
+            sql.append(" AND p.drinking BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minInteraction") && searchParams.containsKey("maxInteraction")) {
+            sql.append(" AND p.interaction BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minGuests") && searchParams.containsKey("maxGuests")) {
+            sql.append(" AND p.guests BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minCooking") && searchParams.containsKey("maxCooking")) {
+            sql.append(" AND p.cooking BETWEEN ? AND ?");
+        }
+        if (searchParams.containsKey("minPet") && searchParams.containsKey("maxPet")) {
+            sql.append(" AND p.pet BETWEEN ? AND ?");
+        }
+
+        try {
+            connection = DBContext.getConnection();
+            ps = connection.prepareStatement(sql.toString());
+            int paramIndex = 1;
+
+            if (searchParams.containsKey("gender")) {
+                ps.setString(paramIndex++, (String) searchParams.get("gender"));
+            }
+            if (searchParams.containsKey("province")) {
+                int provinceId = Integer.parseInt(searchParams.get("province").toString());
+                ps.setInt(paramIndex++, provinceId);
+            }
+            if (searchParams.containsKey("district")) {
+                int districtId = Integer.parseInt(searchParams.get("district").toString());
+                ps.setInt(paramIndex++, districtId);
+            }
+            if (searchParams.containsKey("ward")) {
+                int wardId = Integer.parseInt(searchParams.get("ward").toString());
+                ps.setInt(paramIndex++, wardId);
+            }
+
+            if (searchParams.containsKey("minCleanliness") && searchParams.containsKey("maxCleanliness")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minCleanliness"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxCleanliness"));
+            }
+            if (searchParams.containsKey("minSmoking") && searchParams.containsKey("maxSmoking")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minSmoking"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxSmoking"));
+            }
+            if (searchParams.containsKey("minDrinking") && searchParams.containsKey("maxDrinking")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minDrinking"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxDrinking"));
+            }
+            if (searchParams.containsKey("minInteraction") && searchParams.containsKey("maxInteraction")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minInteraction"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxInteraction"));
+            }
+            if (searchParams.containsKey("minGuests") && searchParams.containsKey("maxGuests")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minGuests"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxGuests"));
+            }
+            if (searchParams.containsKey("minCooking") && searchParams.containsKey("maxCooking")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minCooking"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxCooking"));
+            }
+            if (searchParams.containsKey("minPet") && searchParams.containsKey("maxPet")) {
+                ps.setInt(paramIndex++, (Integer) searchParams.get("minPet"));
+                ps.setInt(paramIndex++, (Integer) searchParams.get("maxPet"));
+            }
+
+            logger.info(sql.toString());
+            resultSet = ps.executeQuery();
+            if (resultSet.next()) { // Thêm kiểm tra này
+                totalCount = resultSet.getInt(1);
+            }
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                logger.warning("Failed to close resources: " + e.getMessage());
+            }
+        }
+        return totalCount;
     }
 
 

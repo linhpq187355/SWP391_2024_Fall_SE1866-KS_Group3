@@ -8,9 +8,10 @@ import com.homesharing.dao.impl.HomeImageDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.model.*;
 import com.homesharing.service.HomeDetailService;
-
+import java.util.Set;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.HashSet;
 
 public class HomeDetailServiceImpl implements HomeDetailService {
     private final HomeDetailDAO homeDetailDAO;
@@ -120,15 +121,17 @@ public class HomeDetailServiceImpl implements HomeDetailService {
     }
     @Override
     public List<Home> getSimilarHomess(int homeId, int priceDifference) {
-        List<Home> similarHomes = getHomesByWard(homeId, priceDifference);
+        Set<Home> similarHomes = new HashSet<>(getHomesByWard(homeId, priceDifference));
 
-        // Kiểm tra xem có đủ nhà hay không, nếu không thì tìm nhà cùng quận
         if (similarHomes.size() < 4) {
             List<Home> districtHomes = getHomesByDistrict(homeId, priceDifference);
-            similarHomes.addAll(districtHomes);
+            for (Home home : districtHomes) {
+                if (similarHomes.size() < 4 && home.getId() != homeId) {
+                    similarHomes.add(home);
+                }
+            }
         }
-
-        return similarHomes.stream().distinct().limit(4).collect(Collectors.toList()); // Lấy tối đa 4 nhà
+        return similarHomes.stream().limit(4).collect(Collectors.toList());
     }
 
     @Override

@@ -18,8 +18,11 @@ import com.homesharing.exception.GeneralException;
 import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UserService interface defines methods for user registration and validation.
@@ -232,4 +235,14 @@ public interface UserService {
      * @return A list of User objects who are tenants for the appointments.
      */
     List<User> getTenantByAppointment(List<Appointment> appointments);
+
+    void addRangeToMap(Map<String, Object> map, String rangeParam, String minKey, String maxKey);
+
+    List<User> searchUserByPreference(Map<String, Object> searchParams );
+
+    int CountSearchUser(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException;
+
+    void updateTargetPage(Map<String, Object> searchParams, int totalHomes);
+
+
 }

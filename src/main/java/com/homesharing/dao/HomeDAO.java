@@ -51,6 +51,7 @@ public interface HomeDAO {
      * @throws SQLException if a database access error occurs.
      */
     String fetchFirstImage(int homeId) throws SQLException;
+    List<String> fetchImages(int homeId);
 
     /**
      * Retrieves the number of homes that match the search parameters provided.

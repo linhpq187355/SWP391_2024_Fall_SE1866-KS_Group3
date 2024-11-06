@@ -34,7 +34,7 @@ public class BlogAdminServlet extends HttpServlet {
             post.setAuthorName(authorName); // Set the author name in the BlogPost object
         }
         request.setAttribute("posts", posts);
-        request.getRequestDispatcher("manage-blog.jsp").forward(request, response);
+        request.getRequestDispatcher("manage-blog2.jsp").forward(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
