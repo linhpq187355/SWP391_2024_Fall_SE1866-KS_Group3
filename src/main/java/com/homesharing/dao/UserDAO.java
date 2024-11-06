@@ -8,6 +8,7 @@
  * 2024-9-18      1.0                 ManhNC         First Implement
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-30      2.0              Pham Quang Linh     Add functions
  */
 
 package com.homesharing.dao;
@@ -140,6 +141,11 @@ public interface UserDAO {
      */
     int resetPassword(String password, int id);
 
+    /**
+     * Retrieves the total number of users in the database.
+     *
+     * @return The total count of users.
+     */
     int getNumberUsers();
     /**
      * Updates the matching profile of a user in the database.
@@ -156,7 +162,19 @@ public interface UserDAO {
      */
     User getMatchingUserProfile(int id);
 
+    /**
+     * Retrieves a list of host users associated with specific appointments.
+     *
+     * @param appointments A list of {@link Appointment} objects.
+     * @return A list of {@link User} objects representing the hosts associated with the given appointments.
+     */
     List<User> getHostByAppointment(List<Appointment> appointments);
 
+    /**
+     * Retrieves a list of tenant users associated with specific appointments.
+     *
+     * @param appointments A list of {@link Appointment} objects.
+     * @return A list of {@link User} objects representing the tenants associated with the given appointments.
+     */
     List<User> getTenantByAppointment(List<Appointment> appointments);
 }

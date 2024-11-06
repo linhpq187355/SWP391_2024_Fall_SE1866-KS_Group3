@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-25      1.0              Pham Quang Linh     First Implement
+ */
 package com.homesharing.service.impl;
 
 import com.homesharing.dao.AppointmentDAO;
@@ -20,14 +29,40 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The AppointmentServiceImpl class provides implementation of AppointmentService interface
+ * for managing appointments between hosts and tenants, including functionalities such as
+ * inserting, checking for overlapping appointments, and retrieving appointments by host or tenant.
+ */
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentDAO appointmentDAO;
     private static final Logger LOGGER = Logger.getLogger(AppointmentServiceImpl.class.getName());
 
+    /**
+     * Constructs an AppointmentServiceImpl with a specified AppointmentDAO.
+     *
+     * @param appointmentDAO the data access object for appointment data
+     */
     public AppointmentServiceImpl(AppointmentDAO appointmentDAO) {
         this.appointmentDAO = appointmentDAO;
     }
 
+
+    /**
+     * Inserts a new appointment with the specified parameters.
+     *
+     * @param day         the day of the appointment
+     * @param month       the month of the appointment
+     * @param year        the year of the appointment
+     * @param time        the time range for the appointment in "HH:mm - HH:mm" format
+     * @param tenantId    the ID of the tenant
+     * @param hostId      the ID of the host
+     * @param note        additional notes for the appointment
+     * @param homeId      the ID of the home
+     * @return            the ID of the newly created appointment
+     * @throws IllegalArgumentException if any date/time format is invalid
+     * @throws RuntimeException         if an error occurs during database interaction
+     */
     @Override
     public int insertAppointment(String day, String month, String year, String time, String tenantId, String hostId, String note, String homeId) {
         String[] times;
@@ -105,6 +140,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    /**
+     * Checks if an appointment overlaps with existing appointments for both host and tenant.
+     *
+     * @param day                the day of the appointment
+     * @param month              the month of the appointment
+     * @param year               the year of the appointment
+     * @param time               the time range for the appointment in "HH:mm - HH:mm" format
+     * @param hostAppointments   list of existing appointments for the host
+     * @param tenantAppointments list of existing appointments for the tenant
+     * @return                   true if overlapping, false otherwise
+     */
     @Override
     public boolean checkOverlapping(String day, String month, String year,String time, List<Appointment> hostAppointments, List<Appointment> tenantAppointments) {
         if (tenantAppointments == null || tenantAppointments.isEmpty()) {
@@ -170,6 +216,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         return false;
     }
 
+    /**
+     * Retrieves a list of appointments by host ID.
+     *
+     * @param hostId the ID of the host
+     * @return       list of appointments associated with the host
+     */
     @Override
     public List<Appointment> getAppointments(String hostId) {
         try{
@@ -182,6 +234,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    /**
+     * Retrieves a list of appointments by tenant ID.
+     *
+     * @param tenantId the ID of the tenant
+     * @return         list of appointments associated with the tenant
+     */
     @Override
     public List<Appointment> getAppointmentsByTenant(String tenantId) {
         try{
@@ -194,6 +252,16 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    /**
+     * Cancels an appointment and sends a notification to the host or tenant about the cancellation.
+     *
+     * @param appointmentId The ID of the appointment to cancel.
+     * @param reason        The reason for the cancellation.
+     * @param receiver      Specifies if the notification is sent to the host or tenant.
+     * @return The number of affected rows in the database.
+     * @throws GeneralException If an error occurs while cancelling the appointment.
+     * @throws RuntimeException If an error occurs while adding the notification.
+     */
     @Override
     public int cancelAppointment(String appointmentId, String reason, String receiver) {
         try{
@@ -218,6 +286,13 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    /**
+     * Retrieves an appointment by its ID.
+     *
+     * @param appointmentId The ID of the appointment to retrieve.
+     * @return The Appointment object associated with the given ID.
+     * @throws GeneralException If an error occurs while retrieving the appointment.
+     */
     @Override
     public Appointment getAppointmentById(String appointmentId) {
         try{
@@ -229,6 +304,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    /**
+     * Updates the details of an existing appointment, such as date, time, and status,
+     * and notifies the tenant if the appointment is updated by the host.
+     *
+     * @param day    The day of the appointment.
+     * @param month  The month of the appointment.
+     * @param year   The year of the appointment.
+     * @param time   The time of the appointment in "HH:mm - HH:mm" format.
+     * @param note   A note or message associated with the appointment.
+     * @param status The status of the appointment.
+     * @param id     The ID of the appointment.
+     * @param host   Indicates if the host is updating the appointment.
+     * @return The number of affected rows in the database.
+     * @throws IllegalArgumentException If the date or time format is invalid.
+     * @throws RuntimeException         If an error occurs while updating the appointment or adding the notification.
+     */
     @Override
     public int updateAppointment(String day, String month, String year, String time, String note,String status,String id, String host) {
         String[] times;
@@ -305,6 +396,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    /**
+     * Accepts an appointment and sends a notification to the host or tenant about the acceptance.
+     *
+     * @param appointmentId The ID of the appointment to accept.
+     * @param receiver      Specifies if the notification is sent to the host or tenant.
+     * @return The number of affected rows in the database.
+     * @throws GeneralException If an error occurs while accepting the appointment.
+     * @throws RuntimeException If an error occurs while adding the notification.
+     */
     @Override
     public int acceptAppointment(String appointmentId, String receiver) {
         try{
@@ -329,6 +429,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    /**
+     * Rejects an appointment with a given reason and notifies the tenant of the rejection.
+     *
+     * @param appointmentId The ID of the appointment to reject.
+     * @param reason        The reason for the rejection.
+     * @return The number of affected rows in the database.
+     * @throws GeneralException If an error occurs while rejecting the appointment.
+     * @throws RuntimeException If an error occurs while adding the notification.
+     */
     @Override
     public int rejectAppointment(String appointmentId, String reason) {
         try{

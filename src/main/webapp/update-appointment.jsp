@@ -254,7 +254,7 @@
             <input type="hidden" name="selectedYear" id="hiddenYear">
             <input type="hidden" name="selectedTime" id="hiddenTime">
             <input type="hidden" name="aptmId" value="${requestScope.appointment.id}">
-            <h2 style="margin-bottom: 30px; color: #000;margin-left: 30px;">Ghi chú</h2>
+            <h2 style="margin-bottom: 30px; color: #000;margin-left: 30px;">Ghi chú<span style="color: red;margin-left: 10px">*</span></h2>
             <div class="apmt-note" style="width: 83%; margin: auto">
                 <textarea name="note" placeholder="Thêm ghi chú" style="width: 100%;padding: 10px;height: 200px;border-radius: 15px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;border: none;">${requestScope.appointment.note}</textarea>
             </div>
@@ -262,8 +262,13 @@
                 <div class="info">
                     <i class="fas fa-info-circle"></i> Thời gian tính theo giờ Việt Nam
                 </div>
-                <div>
-                    <button type="button" class="continue" onclick="saveAppointment()">Xác nhận</button>
+                <div style="display: flex;flex-direction: row-reverse;width: 20%;justify-content: space-between;">
+                    <div>
+                        <button type="button" class="continue" onclick="saveAppointment()">Xác nhận</button>
+                    </div>
+                    <div>
+                        <button style="background-color: #ff2b2b;color: #fff;" type="button" class="cancel" onclick="window.location.href='appointment-tenant-list?appointmentId=${requestScope.appointment.id}'">Hủy</button>
+                    </div>
                 </div>
             </div>
         </form>

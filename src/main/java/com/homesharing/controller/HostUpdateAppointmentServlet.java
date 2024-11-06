@@ -7,6 +7,7 @@ import com.homesharing.dao.impl.NotificationDAOImpl;
 import com.homesharing.model.Appointment;
 import com.homesharing.service.AppointmentService;
 import com.homesharing.service.impl.AppointmentServiceImpl;
+import com.homesharing.util.CookieUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,12 +37,17 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
         String id = req.getParameter("id");
         Appointment appointment = appointmentService.getAppointmentById(id);
         String host = req.getParameter("host");
+        String hostId = CookieUtil.getCookie(req, "id");
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedStartTime = appointment.getStartDate().format(timeFormatter);
         String formattedEndTime = appointment.getEndDate().format(timeFormatter);
 
+        List<Appointment> hostAppointment = appointmentService.getAppointments(hostId);
+        List<Appointment> tenantAppointment = appointmentService.getAppointmentsByTenant(String.valueOf(appointment.getTenantId()));
         req.setAttribute("appointmentMonth", appointment.getStartDate().getMonthValue());
+        req.setAttribute("hostAppointment", hostAppointment);
+        req.setAttribute("tenantAppointment", tenantAppointment);
         req.setAttribute("appointmentYear", appointment.getStartDate().getYear());
         req.setAttribute("appointmentDay", appointment.getStartDate().getDayOfMonth());
         req.setAttribute("appointmentTime", formattedStartTime + " - " + formattedEndTime);
@@ -92,29 +98,8 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
         }
 
         try {
-            List<Appointment> hostAppointmentList = appointmentService.getAppointments(String.valueOf(appointment.getHostId()));
-            List<Appointment> tenantAppointmentList = appointmentService.getAppointmentsByTenant(String.valueOf(appointment.getTenantId()));
-            for(int i=0;i<hostAppointmentList.size();i++){
-                if(hostAppointmentList.get(i).getId() == Integer.parseInt(aptmId)){
-                    hostAppointmentList.remove(i);
-                }
-            }
-            for(int i=0;i<tenantAppointmentList.size();i++){
-                if(tenantAppointmentList.get(i).getId() == Integer.parseInt(aptmId)){
-                    tenantAppointmentList.remove(i);
-                }
-            }
-                boolean checkOverlapping = appointmentService.checkOverlapping(selectedDate, selectedMonth, selectedYear,selectedTime,hostAppointmentList,tenantAppointmentList);
-                if(checkOverlapping){
-                    req.setAttribute("over", "Thời gian bị lặp.");
-                    req.setAttribute("appointmentDay", selectedDate);
-                    req.setAttribute("appointmentTime", selectedTime);
-                    req.setAttribute("appointmentMonth", selectedMonth+1);
-                    req.setAttribute("appointmentYear", selectedYear);
-                    req.setAttribute("appointment", appointment);
-                    req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
-                } else {
-                    int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"tenantPending", aptmId,host);
+
+            int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"tenantPending", aptmId,host);
 
             if(rowsUpdated>0){
                 req.setAttribute("message","Sửa lịch thành công!");

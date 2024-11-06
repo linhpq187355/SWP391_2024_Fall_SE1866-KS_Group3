@@ -9,6 +9,7 @@
  * 2024-10-01        1.0              Pham Quang Linh    First Implement
  * 2024-10-10        2.0              Pham Quang Linh    Second Implement
  * 2024-10-10        2.0                 ManhNC          Second Implement
+ * 2024-10-30        2.0              Pham Quang Linh    Add functions
  */
 
 package com.homesharing.dao.impl;
@@ -792,6 +793,12 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return rowsUpdated;
     }
 
+    /**
+     * Retrieves the total number of users with specific roles (rolesid in 3 or 4).
+     *
+     * @return The total number of users with roles 3 or 4.
+     * @throws RuntimeException If there is an error accessing the database.
+     */
     @Override
     public int getNumberUsers() {
         String sql = "select count(id) total\n" +
@@ -950,6 +957,13 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return null; // Return null if no user is found
     }
 
+    /**
+     * Retrieves a list of hosts associated with the provided appointments.
+     *
+     * @param appointments List of appointments containing host IDs to fetch hosts.
+     * @return A list of User objects representing hosts or null if appointments are null/empty.
+     * @throws RuntimeException If there is an error accessing the database.
+     */
     @Override
     public List<User> getHostByAppointment(List<Appointment> appointments) {
         if(appointments == null || appointments.isEmpty()){
@@ -1016,6 +1030,13 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return hostList;
     }
 
+    /**
+     * Retrieves a list of tenants associated with the provided appointments.
+     *
+     * @param appointments List of appointments containing tenant IDs to fetch tenants.
+     * @return A list of User objects representing tenants or null if appointments are null/empty.
+     * @throws RuntimeException If there is an error accessing the database.
+     */
     @Override
     public List<User> getTenantByAppointment(List<Appointment> appointments) {
         if(appointments == null || appointments.isEmpty()){

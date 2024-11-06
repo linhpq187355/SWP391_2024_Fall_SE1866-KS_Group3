@@ -8,6 +8,7 @@
  * 2024-9-18      1.0                 ManhNC         First Implement
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-25      2.0              Pham Quang Linh     Add functions
  */
 
 package com.homesharing.service.impl;
@@ -641,6 +642,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Retrieves the total number of registered users.
+     *
+     * @return The total number of users.
+     * @throws GeneralException If there is an error retrieving the user count.
+     */
     @Override
     public int getNumberOfUsers() {
         try {
@@ -686,6 +693,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Retrieves the list of hosts associated with a list of appointments.
+     *
+     * @param appointments The list of appointments to find hosts for.
+     * @return A list of User objects representing the hosts.
+     * @throws GeneralException If there is an error retrieving the hosts.
+     */
     @Override
     public List<User> getHostByAppointment(List<Appointment> appointments) {
         try{
@@ -696,6 +710,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Retrieves the list of tenants associated with a list of appointments.
+     *
+     * @param appointments The list of appointments to find tenants for.
+     * @return A list of User objects representing the tenants.
+     * @throws GeneralException If there is an error retrieving the tenants.
+     */
     @Override
     public List<User> getTenantByAppointment(List<Appointment> appointments) {
         try{
