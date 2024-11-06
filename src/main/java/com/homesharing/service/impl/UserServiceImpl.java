@@ -396,9 +396,6 @@ public class UserServiceImpl implements UserService {
         if (email == null || email.isEmpty() || !validateEmail(email)) {
             return "Địa chỉ email không hợp lệ"; // Invalid email address
         }
-        if (password == null || password.isEmpty()) {
-            return "Mật khẩu không được để trống"; // Password cannot be empty
-        }
 
         try{
         // Attempt to find the user by their email address
