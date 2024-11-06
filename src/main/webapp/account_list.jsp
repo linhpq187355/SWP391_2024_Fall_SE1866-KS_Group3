@@ -24,7 +24,6 @@
     <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
-    <%--    <script src="https://cdn.tailwindcss.com"></script>--%>
     <script>
         WebFont.load({
             google: {families: ["Public Sans:300,400,500,600,700"]},
@@ -117,12 +116,12 @@
                         <div class="collapse" id="announces">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../components/avatars.html">
+                                    <a href="announcement-manage">
                                         <span class="sub-item">Danh sách thông báo</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../components/buttons.html">
+                                    <a href="announcement">
                                         <span class="sub-item">Đăng thông báo</span>
                                     </a>
                                 </li>
@@ -138,12 +137,12 @@
                         <div class="collapse" id="home-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="home-post-manage">
                                         <span class="sub-item">Danh sách tin đăng</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="#">
                                         <span class="sub-item">Tạo tin đăng</span>
                                     </a>
                                 </li>
@@ -159,7 +158,7 @@
                         <div class="collapse" id="acc-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="dashboard/account-manage">
                                         <span class="sub-item">Danh sách tài khoản</span>
                                     </a>
                                 </li>
@@ -175,7 +174,7 @@
                         <div class="collapse" id="report-mgt">
                             <ul class="nav nav-collapse">
                                 <li>
-                                    <a href="../forms/forms.html">
+                                    <a href="report-home-manage">
                                         <span class="sub-item">Danh sách báo cáo</span>
                                     </a>
                                 </li>

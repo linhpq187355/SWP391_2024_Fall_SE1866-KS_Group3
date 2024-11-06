@@ -219,6 +219,11 @@
                                     <a href="appointment-tenant-list" class="li-acc-op">Lịch hẹn của tôi</a>
                                 </li>
                             </c:if>
+                            <c:if test="${cookie.roleId.value ==1}">
+                                <li>
+                                    <a href="dashboard" class="li-acc-op">Dashboard</a>
+                                </li>
+                            </c:if>
 
                             <li>
                                 <a href="logout" class="li-acc-op">Đăng xuất</a>

@@ -31,6 +31,7 @@ public class Home {
     private LocalDateTime modifiedDate;
     private String homeDescription;
     private String tenantDescription;
+    private String status;
     private int wardId;
     private int homeTypeId; // One-to-one relationship with HomeType
     private int createdBy;
@@ -198,5 +199,9 @@ public class Home {
     public void setImages(List<String> images) {
         this.images = images;
     }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 
 }
