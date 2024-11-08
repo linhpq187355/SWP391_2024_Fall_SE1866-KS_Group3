@@ -87,6 +87,8 @@ public interface AppointmentDAO {
      */
     int rejectAppointment(int appointmentId, String reason);
 
+    List<Appointment> getAllAppointments();
+
     /**
      * Finds expired appointments based on the current time.
      *

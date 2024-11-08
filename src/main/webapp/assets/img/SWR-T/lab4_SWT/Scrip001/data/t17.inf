@@ -1,0 +1,15 @@
+[t17]
+FileName1=t17.json
+URL1=https://static.edge.microsoftapp.net/default/cloud_config_observers.json
+Total=3
+RequestHeaderFile=t17_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t17_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_17.xml
+FileName2=t17_all.min.css
+URL2=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css
+FileName3=t17_jquery-3.5.1.min.html
+URL3=https://code.jquery.com/jquery-3.5.1.min.js
+[ProtocolInfo]
+ProtocolId=QTWeb

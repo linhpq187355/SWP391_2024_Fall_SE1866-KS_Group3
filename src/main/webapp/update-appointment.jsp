@@ -195,7 +195,7 @@
             </table>
         </div>
         <h2 style="font-size: 30px;margin-bottom: 40px;color: #000;margin-left: 30px;">Chọn thời gian<span style="color: red;margin-left: 10px">*</span></h2>
-        <div class="time-picker" style="width: 85%; margin: auto">
+        <div class="time-picker" style="width: 91%; margin: auto">
             <table>
                 <tr>
                     <td class="time-slot">05:30 - 07:30</td>
@@ -320,7 +320,7 @@
 
             if (countdown <= 0) {
                 clearInterval(timer);
-                window.location.href = "appointment-tenant-list"; // Đường dẫn bạn muốn chuyển hướng tới
+                window.location.href = "appointment-tenant-list?appointmentId=${requestScope.id}"; // Đường dẫn bạn muốn chuyển hướng tới
             }
         }, 1000);
     </script>
@@ -359,6 +359,7 @@
         timeSlots.forEach(slot => {
             // Reset trạng thái cho từng ô
             slot.classList.remove('disabled');
+            slot.removeAttribute('title');
 
             // Lấy khoảng thời gian của ô hiện tại
             const [startTime, endTime] = slot.textContent.split(' - ');
@@ -380,7 +381,7 @@
                         (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
                         (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
                     ) {
-
+                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
                         slot.classList.add('disabled');
                         break;
                     }
@@ -398,7 +399,7 @@
                         (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
                         (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
                     ) {
-
+                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
                         slot.classList.add('disabled');
                         break;
                     }

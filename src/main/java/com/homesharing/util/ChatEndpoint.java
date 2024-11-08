@@ -182,6 +182,26 @@ public class ChatEndpoint {
                     }
                 }
             }
+        } else if (type.equals("delete")) {
+            int replyId = jsonMessage.get("replyId") != null ? jsonMessage.get("replyId").getAsInt() : -1; // Lấy receivedId
+            boolean isDeleted = replyDAO.deleteReplyById(replyId,conversationId,sentId);
+                jsonMessage.addProperty("isDeleted",  isDeleted ? "yes" : "no");
+                Session ses = onlineUsers.get(sentId);
+                if (ses != null && ses.isOpen()) {
+                    try {
+                        ses.getBasicRemote().sendText(jsonMessage.toString());
+                    } catch (IOException e) {
+                        throw new GeneralException(e.getMessage());
+                    }
+                }
+                Session ses2 = onlineUsers.get(receivedId);
+                if (ses2 != null && ses2.isOpen()) {
+                    try {
+                        ses2.getBasicRemote().sendText(jsonMessage.toString());
+                    } catch (IOException e) {
+                        throw new GeneralException(e.getMessage());
+                    }
+                }
         }
     }
 

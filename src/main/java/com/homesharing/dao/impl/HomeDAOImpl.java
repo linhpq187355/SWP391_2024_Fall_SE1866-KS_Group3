@@ -1103,6 +1103,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setArea(resultSet.getBigDecimal("area"));
                 home.setLeaseDuration(resultSet.getInt("leaseDuration"));
                 home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
+                home.setWardId(resultSet.getInt("wardsId"));
                 matchingHomes.add(home);
             }
         } catch (SQLException e) {

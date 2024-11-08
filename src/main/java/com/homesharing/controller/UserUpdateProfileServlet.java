@@ -106,19 +106,6 @@ public class UserUpdateProfileServlet extends HttpServlet {
         String gender = req.getParameter("gender");
         String dob = req.getParameter("dob"); // Optional field for date of birth
 
-        // Retrieve user preferences from request parameters
-        String r_cleanliness = req.getParameter("cleanliness");
-        String cleanlinessStatus = req.getParameter("cleanlinessStatus");
-        String r_smoking = req.getParameter("smoking");
-        String smokingStatus = req.getParameter("smokingStatus");
-        String r_drinking = req.getParameter("drinking");
-        String drinkingStatus = req.getParameter("drinkingStatus");
-        String r_interaction = req.getParameter("interaction");
-        String interactionStatus = req.getParameter("interactionStatus");
-        String r_cooking = req.getParameter("cooking");
-        String cookingStatus = req.getParameter("cookingStatus");
-        String r_pet = req.getParameter("pet");
-        String petStatus = req.getParameter("petStatus");
 
         // Handle avatar upload
         Part avatarPart = req.getPart("avatar");
@@ -148,26 +135,10 @@ public class UserUpdateProfileServlet extends HttpServlet {
                 int rowsUpdated = userService.updateUserProfile(userId, firstName, lastName, address, gender, dob, avatarFileName);
 
                 if (rowsUpdated > 0) {
-                    // If the user profile update is successful, update the user preferences
-                    try {
-                        int rowsUpdatedPref = preferenceService.updateUserPreference(
-                                r_cleanliness, cleanlinessStatus, r_smoking, smokingStatus,
-                                r_drinking, drinkingStatus, r_interaction, interactionStatus,
-                                r_cooking, cookingStatus, r_pet, petStatus, userId
-                        );
 
-                        if (rowsUpdatedPref > 0) {
                             // If preferences are updated successfully, redirect to the profile page
                             resp.sendRedirect("user-profile?message=Profile updated successfully!");
-                        } else {
-                            // If preferences update fails, display an error message
-                            LOGGER.warning("Failed to update user preferences.");
-                            req.getRequestDispatcher("user-profile?error=Unable to update preferences.").forward(req, resp);
-                        }
-                    } catch (GeneralException e) {
-                        LOGGER.log(Level.SEVERE, "Error updating user preferences.", e);
-                        req.getRequestDispatcher("user-profile?error=Unable to update preferences.").forward(req, resp);
-                    }
+
 
                 } else {
                     // If no rows are updated in the user profile, display an appropriate message

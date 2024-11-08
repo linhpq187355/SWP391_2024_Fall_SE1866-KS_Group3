@@ -61,7 +61,7 @@ public class CreateAnnouncementServlet extends HttpServlet {
                 announcement.setCreatedBy(user.getId());
                 // Attempt to save the report
                 announcementService.saveAnnouncement(announcement);
-                response.sendRedirect("/HomeSharingWebsite_war_exploded/announcement");
+                response.sendRedirect("announcement");
             }
         } catch (Exception e) {
             logger.error("An error occurred during the request: " + e.getMessage(), e);

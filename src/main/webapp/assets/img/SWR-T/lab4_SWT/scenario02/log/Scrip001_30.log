@@ -1,0 +1,11 @@
+Start auto log messages stack - Iteration 15.
+Action.c(36): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(39): web_url("ExpandedDomainsFilterGlobal.json_2") started  	[MsgId: MMSG-26355]
+Action.c(39): Resource "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" is in the cache already and will not be downloaded again  	[MsgId: MMSG-26655]
+Action.c(52): web_url("crx") started  	[MsgId: MMSG-26355]
+Action.c(52): Downloading resource "https://cdn.jsdelivr.net/npm/sweetalert2@11" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(52): web_url("crx") was successful, 19663 body bytes, 1083 header bytes  	[MsgId: MMSG-26386]
+Action.c(63): web_url("blocklist") started  	[MsgId: MMSG-26355]
+Action.c(63): Error -27760: Request "https://edge.microsoft.com/abusiveadblocking/api/v1/blocklist" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+

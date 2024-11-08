@@ -96,20 +96,20 @@
                         <div class="col-sm-3 padding-top-25">
 
                             <div class="form-group">
-                                <label>Họ <span class="required">*</span></label>
-                                <input name="firstname" type="text" class="form-control" value="${requestScope.user.firstName}">
+                                <label style="color: #FA8600">Họ <span class="required">*</span></label>
+                                <input style="border-radius: 15px;" name="firstname" type="text" class="form-control" value="${requestScope.user.firstName}">
                                 <span class="error-message" id="error-firstname"></span>
                             </div>
 
                             <div class="form-group">
-                                <label>Tên <span class="required">*</span></label>
-                                <input name="lastname" type="text" class="form-control" value="${requestScope.user.lastName}">
+                                <label style="color: #FA8600">Tên <span class="required">*</span></label>
+                                <input style="border-radius: 15px;" name="lastname" type="text" class="form-control" value="${requestScope.user.lastName}">
                                 <span class="error-message" id="error-lastname"></span>
                             </div>
 
                             <div class="form-group">
-                                <label>Địa chỉ <span class="required">*</span></label>
-                                <input name="address" type="text" class="form-control" value="${requestScope.user.address}">
+                                <label style="color: #FA8600">Địa chỉ <span class="required">*</span></label>
+                                <input style="border-radius: 15px;" name="address" type="text" class="form-control" value="${requestScope.user.address}">
                                 <span class="error-message" id="error-address"></span>
                             </div>
 
@@ -117,13 +117,13 @@
                         </div>
                         <div class="col-sm-3 padding-top-25">
                             <div class="form-group">
-                                <label>Ngày sinh <span class="required">*</span></label>
-                                <input name="dob" type="date" class="form-control" value="${requestScope.user.dob}">
+                                <label style="color: #FA8600">Ngày sinh <span class="required">*</span></label>
+                                <input style="border-radius: 15px;" name="dob" type="date" class="form-control" value="${requestScope.user.dob}">
                                 <span class="error-message" id="error-dob"></span>
                             </div>
                             <div class="form-group">
-                                <label>Giới tính <span class="required">*</span></label>
-                                <select name="gender" class="form-control">
+                                <label style="color: #FA8600">Giới tính <span class="required">*</span></label>
+                                <select style="border-radius: 15px;" name="gender" class="form-control">
                                     <option value="Nam" ${requestScope.user.gender == 'Nam' ? 'selected' : ''}>Nam</option>
                                     <option value="Nữ" ${requestScope.user.gender == 'Nữ' ? 'selected' : ''}>Nữ</option>
                                     <option value="Khác" ${requestScope.user.gender == 'Khác' ? 'selected' : ''}>Khác</option>
@@ -133,67 +133,15 @@
 
                     </div>
 
-                    <div class="clear">
-                        <br>
-                        <hr>
-                        <br>
-                        <div class="col-sm-5 col-sm-offset-1">
-                            <div class="form-group">
-                                <label>Sạch sẽ</label>
-                                <div class="slider-container" style="width: 100%;">
-                                    <input id="cleanliness-slider" name="cleanliness" type="range" min="1" max="5" step="1" value="${requestScope.preference.cleanliness != 100 ? requestScope.preference.cleanliness : ''}" class="slider" style="--value: ${requestScope.preference.cleanliness != 100 ? requestScope.preference.cleanliness : ''};">
-                                    <input type="hidden" id="cleanlinessStatus" name="cleanlinessStatus" value="${requestScope.preference.cleanliness != 100 ? 'true' : 'false'}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Hút thuốc</label>
-                                <div class="slider-container" style="width: 100%;">
-                                    <input id="smoking-slider" name="smoking" type="range" min="1" max="5" step="1" value="${requestScope.preference.smoking != 100 ? requestScope.preference.smoking : ''}" class="slider"  style="--value: ${requestScope.preference.smoking != 100 ? requestScope.preference.smoking : ''};">
-                                    <input type="hidden" id="smokingStatus" name="smokingStatus" value="${requestScope.preference.smoking != 100 ? 'true' : 'false'}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Uống rượu/bia</label>
-                                <div class="slider-container" style="width: 100%;">
-                                    <input id="drinking-slider" name="drinking" type="range" min="1" max="5" step="1" value="${requestScope.preference.drinking != 100 ? requestScope.preference.drinking : ''}" class="slider"  style="--value: ${requestScope.preference.drinking != 100 ? requestScope.preference.drinking : ''};">
-                                    <input type="hidden" id="drinkingStatus" name="drinkingStatus" value="${requestScope.preference.drinking != 100 ? 'true' : 'false'}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <div class="form-group">
-                                <label>Hướng ngoại</label>
-                                <div class="slider-container" style="width: 100%;">
-                                    <input id="interaction-slider" name="interaction" type="range" min="1" max="5" step="1" value="${requestScope.preference.interaction != 100 ? requestScope.preference.interaction : ''}" class="slider" style="--value: ${requestScope.preference.interaction != 100 ? requestScope.preference.interaction : ''};">
-                                    <input type="hidden" id="interactionStatus" name="interactionStatus" value="${requestScope.preference.interaction != 100 ? 'true' : 'false'}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Nấu ăn</label>
-                                <div class="slider-container" style="width: 100%;">
-                                    <input id="cooking-slider" name="cooking" type="range" min="1" max="5" step="1" value="${requestScope.preference.cooking != 100 ? requestScope.preference.cooking : ''}" class="slider"  style="--value: ${requestScope.preference.cooking != 100 ? requestScope.preference.cooking : ''};">
-                                    <input type="hidden" id="cookingStatus" name="cookingStatus" value="${requestScope.preference.cooking != 100 ? 'true' : 'false'}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Thú cưng</label>
-                                <div class="slider-container" style="width: 100%;">
-                                    <input id="pet-slider" name="pet" type="range" min="1" max="5" step="1" value="${requestScope.preference.pet != 100 ? requestScope.preference.pet : ''}" class="slider"  style="--value: ${requestScope.preference.pet != 100 ? requestScope.preference.pet : ''};">
-                                    <input type="hidden" id="petStatus" name="petStatus" value="${requestScope.preference.pet != 100 ? 'true' : 'false'}">
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-
-                    <div class="col-sm-5 col-sm-offset-1">
+                    <div class="col-sm-5 col-sm-offset-1" style="margin-left: 25%;margin-top: 20px;">
                         <br>
-                        <button type='submit' class='btn btn-finish btn-primary'>Cập nhật</button>
+                        <button type='submit' class='btn btn-finish btn-primary' style="border-radius: 15px">Cập nhật</button>
                     </div>
 
                     <br>
                 </form>
-                <button class='btn btn-danger' onClick="window.location.href='user-profile'">Hủy</button>
+                <button class='btn btn-danger' onClick="window.location.href='user-profile'" style="margin-top: 20px">Hủy</button>
 
             </div>
         </div><!-- end row -->

@@ -1,0 +1,21 @@
+Start auto log messages stack - Iteration 8.
+Action.c(75): web_url("-341398893248106636%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f5cbf3afb2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v5-font-face.min.css?token=f5cbf3afb2" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-font-face.min.css?token=f5cbf3afb2" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d" (specified by argument number 18)  	[MsgId: MMSG-26576]
+Action.c(75): Error -27720: Step download timeout (120 seconds) has expired when downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f5cbf3afb2". Set the "Step Timeout caused by resources is a warning" Runtime Setting to Yes/No to have this message as a warning/error, respectively  	[MsgId: MERR-27720]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 15.
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Downloading resource "https://c.bing.com/c.gif?Red3=EdgPID_pd&pid=61d5220b-5ac4-4053-902c-e2920d81faad" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(205): web_url("config.json") was successful, 143 body bytes, 1192 header bytes  	[MsgId: MMSG-26386]
+Action.c(216): web_url("-341398893248106636%7C-2257558592581803439%7C1720537294320060623") started  	[MsgId: MMSG-26355]
+Action.c(216): Error -27760: Request "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-341398893248106636%7C-2257558592581803439%7C1720537294320060623" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+

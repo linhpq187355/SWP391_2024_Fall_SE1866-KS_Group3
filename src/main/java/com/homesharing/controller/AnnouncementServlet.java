@@ -24,7 +24,7 @@ public class AnnouncementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<AnnouncementType> announcementTypes = announcementService.getAllAnnouncementTypes();
         request.setAttribute("announcementTypes", announcementTypes);
-        request.getRequestDispatcher("/create-announcement.jsp").forward(request, response);
+        request.getRequestDispatcher("create-announcement.jsp").forward(request, response);
     }
 
 }

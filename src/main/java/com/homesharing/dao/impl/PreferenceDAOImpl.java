@@ -255,13 +255,20 @@ public class PreferenceDAOImpl extends DBContext implements PreferenceDAO {
             while (resultSet.next()) {
                 Preference preference = new Preference();
                 preference.setId(resultSet.getInt("id"));
-                preference.setCleanliness(resultSet.getInt("cleanliness"));
-                preference.setSmoking(resultSet.getInt("smoking"));
-                preference.setDrinking(resultSet.getInt("drinking"));
-                preference.setInteraction(resultSet.getInt("interaction"));
-                preference.setGuest(resultSet.getInt("guests"));
-                preference.setCooking(resultSet.getInt("cooking"));
-                preference.setPet(resultSet.getInt("pet"));
+                preference.setCleanliness(resultSet.getObject("cleanliness", Integer.class) != null
+                        ? resultSet.getInt("cleanliness") : 100);
+                preference.setDrinking(resultSet.getObject("drinking", Integer.class) != null
+                        ? resultSet.getInt("drinking") : 100);
+                preference.setSmoking(resultSet.getObject("smoking", Integer.class) != null
+                        ? resultSet.getInt("smoking") : 100);
+                preference.setInteraction(resultSet.getObject("interaction", Integer.class) != null
+                        ? resultSet.getInt("interaction") : 100);
+                preference.setCooking(resultSet.getObject("cooking", Integer.class) != null
+                        ? resultSet.getInt("cooking") : 100);
+                preference.setGuest(resultSet.getObject("guests", Integer.class) != null
+                        ? resultSet.getInt("guests") : 100);
+                preference.setPet(resultSet.getObject("pet", Integer.class) != null
+                        ? resultSet.getInt("pet") : 100);
                 preference.setUserId(resultSet.getInt("usersId"));
                 list.add(preference);
             }
@@ -331,4 +338,8 @@ public class PreferenceDAOImpl extends DBContext implements PreferenceDAO {
     }
 
 
+    public static void main(String[] args) {
+        PreferenceDAO preferenceDAO = new PreferenceDAOImpl();
+        System.out.println(preferenceDAO.listMatchingPreference(23).get(3).getCleanliness());
+    }
 }

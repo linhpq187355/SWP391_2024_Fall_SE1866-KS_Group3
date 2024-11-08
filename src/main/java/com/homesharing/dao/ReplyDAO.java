@@ -80,4 +80,13 @@ public interface ReplyDAO {
      * @throws SQLException If an SQL error occurs during the operation.
      */
     void updateStatusForLatestReply(int conversationId, int userId) throws SQLException;
+
+    /**
+     * Deletes a reply from the database by its ID.
+     * @param replyId The ID of the reply to be deleted
+     * @return true if the reply was successfully deleted, false otherwise
+     * @throws SQLException if there is an error during the database operation
+     */
+    boolean deleteReplyById(int replyId, int conversationId, int sentId) throws SQLException;
+
 }

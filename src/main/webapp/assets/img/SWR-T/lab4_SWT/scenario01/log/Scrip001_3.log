@@ -1,0 +1,18 @@
+Start auto log messages stack - Iteration 6.
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v5-font-face.min.css?token=f5cbf3afb2" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-font-face.min.css?token=f5cbf3afb2" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d" (specified by argument number 18)  	[MsgId: MMSG-26576]
+Action.c(75): web_url("-341398893248106636%7C-2257558592581803439") was successful, 115349 body bytes, 4849 header bytes  	[MsgId: MMSG-26386]
+Action.c(89): web_url("shoppingsettings") started  	[MsgId: MMSG-26355]
+Action.c(89): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 9.
+Action.c(205): web_url("config.json") was successful, 143 body bytes, 1153 header bytes  	[MsgId: MMSG-26386]
+Action.c(216): web_url("-341398893248106636%7C-2257558592581803439%7C1720537294320060623") started  	[MsgId: MMSG-26355]
+Action.c(216): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-solid-900.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(216): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-regular-400.woff2" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(216): Downloading resource "https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(216): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+

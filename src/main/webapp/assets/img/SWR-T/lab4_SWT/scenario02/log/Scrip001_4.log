@@ -1,0 +1,21 @@
+Start auto log messages stack - Iteration 4.
+Action.c(279): Connection to edge.microsoft.com:443 closed after being inactive for 60 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(279): web_custom_request("cloud_config_observers.json") was successful, 43546 body bytes, 2147 header bytes  	[MsgId: MMSG-26386]
+Action.c(293): web_url("-6030100249971701251") started  	[MsgId: MMSG-26355]
+Action.c(293): Connection to www.bing.com:443 closed after being inactive for 61 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(293): Connection to cdn.jsdelivr.net:443 closed after being inactive for 60 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(293): Error -27721: Step download timeout (120 seconds) has expired when downloading resource "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-6030100249971701251"  	[MsgId: MERR-27721]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 9.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): ssl_handle_status encounter error : SSL_ERROR_SYSCALL, error id : 0  	[MsgId: MMSG-26000]
+Action.c(14): Error -27776: [GENERAL_MSG_CAT_SSL_ERROR]connect to host "edge.microsoft.com" failed: [10054] Connection reset by peer
+This is probably because the SSL protocol version is not supported. Try switching the TLS/SSL version using "web_set_sockets_option" API.  	[MsgId: MERR-27776]
+End auto log messages stack.
+

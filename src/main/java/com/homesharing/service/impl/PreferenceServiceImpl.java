@@ -170,9 +170,11 @@ public class PreferenceServiceImpl implements PreferenceService {
         if(checkNull) {
             return null;
         }
+
         Map<Integer, Integer> hostScores = new HashMap<>();
         for(int i = 0; i < listMatchingPreference.size(); i++){
             Preference hostPref = listMatchingPreference.get(i);
+            if(hostPref.getCleanliness() == 100 || hostPref.getSmoking() == 100 || hostPref.getDrinking() == 100 || hostPref.getInteraction() == 100 || hostPref.getCooking() == 100 || hostPref.getPet() == 100 || hostPref.getGuest() == 100) continue;
             int score = 0;
             if (Math.abs(pref.getCleanliness() - hostPref.getCleanliness()) <= 1) {
                 score += 30;

@@ -94,6 +94,7 @@ public class MakeAppointmentServlet extends HttpServlet {
 
             if(rowsUpdated>0){
                 req.setAttribute("message","Đặt lịch thành công!");
+                req.setAttribute("id", rowsUpdated);
                 req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
             } else {
                 LOGGER.warning("Failed to insert appointment.");

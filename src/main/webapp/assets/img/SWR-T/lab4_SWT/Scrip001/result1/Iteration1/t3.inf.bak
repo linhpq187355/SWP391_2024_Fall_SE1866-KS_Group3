@@ -1,0 +1,13 @@
+[t3]
+ContentType=DummyContentType
+StepName=Url: ExpandedDomainsFilterGlobal.json_2
+Total=1
+FileName1=t1_0_css.css
+RequestHeaderFile=t3_RequestHeader.txt
+SaveSnapshotResources=1
+ResponseHeaderFile=t3_ResponseHeader.txt
+RawStepEndTime=1730458263044
+RawStepName=ExpandedDomainsFilterGlobal.json_2
+RequestBodyFile=t3_RequestBody.txt
+RawStepStartTime=1730458263044
+URL1=http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800

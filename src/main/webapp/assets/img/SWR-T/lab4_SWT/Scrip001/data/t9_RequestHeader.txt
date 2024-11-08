@@ -1,0 +1,11 @@
+GET https://www.bing.com/api/shopping/v1/user/shoppingsettings?EnabledServiceFeaturesv2=edgeServerUX.shopping.cashbackOfferDetails,edgeServerUX.shopping.cpsPdpCommerceNotificationOkVariant,edgeServerUX.shopping.msEdgeShoppingCashbackDismissTimeout2s HTTP/1.1
+Cookie: ANON=; MUID=0FCCB47D65F0660E1085A5B8643067DB;_RwBf=ilt=12&ihpd=0&ispd=1&rc=9&rb=9&gb=0&rg=0&pc=9&mtu=0&rbb=0.0&g=0&cid=&clo=0&v=1&l=2024-10-25T07:00:00.0000000Z&lft=0001-01-01T00:00:00.0000000&aof=0&o=0&p=bingcopilotwaitlist&c=MY00IA&t=2152&s=2023-03-27T06:53:12.4705193+00:00&ts=2024-10-25T08:41:25.4110747+00:00&rwred=0&wls=2&lka=1&lkt=1&TH=&mta=0&e=n2OZgvxwMaujihK1-TjKbpY4U0woP_qjYewxt222rM6YGscc08L63c3DIIey5iL8sCai3oBrf80Fm6vBUoN7BQ&A=&mte=0&dci=2&wlb=2&aad=1&ard=0001-01-01T00:00:00.0000000&rwdbt=-62135539200&wle=2&ccp=2&rwflt=-62135539200&cpt=0&rwaul2=0;
+X-Client-Data: eyIxIjoiNiIsIjEwIjoiXCJoSGtic0NTR2crYXNkakFJN0o4SDh2Ynp1OGFtcmluSEx6dTd1QVBtQWJnPVwiIiwiMiI6IjEiLCIzIjoiMCIsIjQiOiItOTQ1MjIzMzMxNzUzNjAxODQ1IiwiNSI6IlwiRWlBaGVXbHZyY1Q2OU82cUVpcHZDcVIzY3Z5KzVrYUtDaWYwMFp0dVdVQT1cIiIsIjYiOiJzdGFibGUiLCI3IjoiMTAyNzM1NjE3NzIwMzMiLCI5IjoiZGVza3RvcCJ9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: empty
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0
+Accept-Encoding: gzip, deflate, zstd
+Accept-Language: en-US,en;q=0.9
+Host: www.bing.com
+

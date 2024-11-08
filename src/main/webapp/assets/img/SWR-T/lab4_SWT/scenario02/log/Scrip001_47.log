@@ -1,0 +1,12 @@
+Start auto log messages stack - Iteration 3.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): ssl_handle_status encounter error : SSL_ERROR_SYSCALL, error id : 0  	[MsgId: MMSG-26000]
+Action.c(14): Error -27776: [GENERAL_MSG_CAT_SSL_ERROR]connect to host "edge.microsoft.com" failed: [10054] Connection reset by peer
+This is probably because the SSL protocol version is not supported. Try switching the TLS/SSL version using "web_set_sockets_option" API.  	[MsgId: MERR-27776]
+End auto log messages stack.
+
