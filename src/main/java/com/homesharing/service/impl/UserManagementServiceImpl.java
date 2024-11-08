@@ -64,6 +64,17 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     /**
+     * Fetch permissions via email
+     *
+     * @param email
+     * @return permission list
+     */
+    @Override
+    public List<Permission> fetchPermissionsByEmail(String email) {
+        return userPermissionDAO.getPermissionByEmail(email);
+    }
+
+    /**
      * Fetch all the permission in the system
      *
      * @return the permission list

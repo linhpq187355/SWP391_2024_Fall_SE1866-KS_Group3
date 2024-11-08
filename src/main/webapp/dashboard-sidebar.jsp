@@ -1,50 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>DashBoard - Roomify</title>
-    <meta
-            content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
-            name="viewport"
-    />
-    <link
-            rel="icon"
-            href="./assets/img/logo-web.png"
-            type="image/x-icon"
-    />
-    <base href="${pageContext.request.contextPath}/">
-    <!-- Fonts and icons -->
-    <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
-    <script>
-        WebFont.load({
-            google: {families: ["Public Sans:300,400,500,600,700"]},
-            custom: {
-                families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
-                    "simple-line-icons",
-                ],
-                urls: ["./assets/css/fonts.min.css"],
-            },
-            active: function () {
-                sessionStorage.fonts = true;
-            },
-        });
-    </script>
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
-    <link rel="stylesheet" href="assets/css/dashboard.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-</head>
-<body>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    // Get the current URL
+    String currentUrl = request.getRequestURI();
+    request.setAttribute("currentUrl", currentUrl);
+%>
 <div class="sidebar" data-background-color="light">
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="light">
-            <a href="./index.html" class="logo">
+            <a href="dashboard" class="logo">
                 <img
                         src="./assets/img/logo-light.png"
                         alt="navbar brand"
@@ -53,10 +18,10 @@
                 />
             </a>
             <div class="nav-toggle">
-                <button class="btn btn-toggle toggle-sidebar">
+                <button class="btn btn-toggle toggle-sidebar" style="color: #777777 !important;">
                     <i class="gg-menu-right"></i>
                 </button>
-                <button class="btn btn-toggle sidenav-toggler">
+                <button class="btn btn-toggle sidenav-toggler" style="color: #777777 !important;">
                     <i class="gg-menu-left"></i>
                 </button>
             </div>
@@ -90,12 +55,12 @@
                     <div class="collapse" id="announces">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="announcement-manage">
+                                <a href="dashboard/announcement-list">
                                     <span class="sub-item">Danh sách thông báo</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="announcement">
+                                <a href="dashboard/create-announcement">
                                     <span class="sub-item">Đăng thông báo</span>
                                 </a>
                             </li>
@@ -111,13 +76,8 @@
                     <div class="collapse" id="home-mgt">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="home-post-manage">
+                                <a href="dashboard/home-list">
                                     <span class="sub-item">Danh sách tin đăng</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="announcement">
-                                    <span class="sub-item">Tạo tin đăng</span>
                                 </a>
                             </li>
                         </ul>
@@ -126,13 +86,13 @@
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#acc-mgt">
                         <i class="fas fa-user"></i>
-                        <p>Tài Khoản</p>
+                        <p>Phân Quyền</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="acc-mgt">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="account-manage">
+                                <a href="dashboard/account-list">
                                     <span class="sub-item">Danh sách tài khoản</span>
                                 </a>
                             </li>
@@ -148,48 +108,50 @@
                     <div class="collapse" id="report-mgt">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="report-home-manage">
+                                <a href="dashboard/report-list">
                                     <span class="sub-item">Danh sách báo cáo</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#permissons">
+                <li class="nav-item <c:if test="${currentUrl.contains('/homeSharing/permission-list.jsp')}">active submenu</c:if>">
+                    <a data-bs-toggle="collapse" href="#permissions">
                         <i class="fas fa-key"></i>
                         <p>Phân Quyền</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="permissons">
+                    <div class="collapse" id="permissions">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="../forms/forms.html">
+                                <a href="dashboard/permission-list">
                                     <span class="sub-item">Danh sách quản trị viên</span>
                                 </a>
-                                <a href="../forms/forms.html">
+                            </li>
+                            <li>
+                                <a href="dashboard/create-moderator">
                                     <span class="sub-item">Tạo quản trị viên</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item submenu">
-                    <a data-bs-toggle="collapse" href="#ticket-mgt">
-                        <i class="fas fa-ticket-alt"></i>
-                        <p>Phiếu Hỗ Trợ</p>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#blog-mgt">
+                        <i class="fa-brands fa-blogger-b"></i>
+                        <p>Blog</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="ticket-mgt">
+                    <div class="collapse" id="blog-mgt">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="../forms/forms.html">
-                                    <span class="sub-item">Danh sách phiếu</span>
+                                <a href="dashboard/blog-list">
+                                    <span class="sub-item">Danh sách blog</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="../forms/forms.html">
-                                    <span class="sub-item">Tạo phiếu</span>
+                                <a href="dashboard/create-blog">
+                                    <span class="sub-item">Tạo blog</span>
                                 </a>
                             </li>
                         </ul>
@@ -199,5 +161,3 @@
         </div>
     </div>
 </div>
-</body>
-</html>
