@@ -85,15 +85,13 @@ public class ViewBlogByUserServlet extends HttpServlet {
 
         if (postIdParam != null && !postIdParam.isEmpty() && authorIdParam != null && !authorIdParam.isEmpty()) {
             int postId = Integer.parseInt(postIdParam);
-            int authorId = Integer.parseInt(authorIdParam); // Chuyển đổi authorId sang kiểu số nguyên
+            int authorId = Integer.parseInt(authorIdParam);
 
             try {
-                if ("approve".equalsIgnoreCase(action)) {
-                    blogService.updatePostStatus(postId, "APPROVED");
-                } else if ("delete".equalsIgnoreCase(action)) {
+                if ("delete".equalsIgnoreCase(action)){
                     blogService.updatePostStatus(postId, "DELETED");
                 }
-                response.sendRedirect("user-blog?authorId=" + authorId); // Sử dụng authorId đã nhận
+                response.sendRedirect("user-blog?authorId=" + authorId);// Sử dụng authorId đã nhận
             } catch (Exception e) {
                 throw new ServletException("Error handling blog post action: " + e.getMessage(), e);
             }

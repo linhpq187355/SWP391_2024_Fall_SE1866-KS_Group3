@@ -95,7 +95,7 @@ public class WishListServlet extends HttpServlet {
             request.setAttribute("prices", prices);
 
 
-            // Forward the request to the "user-wishlist.jsp" page to display the wishlist
+            // Forward the request to the "user-wishlist2.jsp" page to display the wishlist
             request.getRequestDispatcher("user-wishlist2.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             // Handle invalid user ID format

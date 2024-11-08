@@ -101,7 +101,7 @@
                     STT
                 </th>
                 <th>
-                    ẢNH nhà
+                    Ảnh nhà
                 </th>
                 <th>
                     Tên nhà
@@ -116,7 +116,7 @@
                     Giá
                 </th>
                 <th>
-                    Xóa
+                    Thao Tác
                 </th>
             </tr>
             </thead>

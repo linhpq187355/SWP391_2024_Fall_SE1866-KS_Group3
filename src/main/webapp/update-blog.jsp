@@ -112,6 +112,32 @@
                         <label for="shortDescription">Mô tả ngắn:</label>
                         <textarea id="shortDescription" name="shortDescription" style="width: 100%; height: 200px;">${blogPost.shortDescription}</textarea>
                     </div>
+                    <div class="category">
+                        <label>
+                            <input type="checkbox" name="categoryId" value="1"/> Kinh nghiệm thuê nhà
+                        </label>
+                        <label>
+                            <input type="checkbox" name="categoryId" value="2"/> Giá thuê và So sánh
+                        </label>
+                        <label>
+                            <input type="checkbox" name="categoryId" value="3"/> Tiện nghi và Dịch vụ
+                        </label>
+                        <label>
+                            <input type="checkbox" name="categoryId" value="4"/> Thủ tục thuê nhà
+                        </label>
+                        <label>
+                            <input type="checkbox" name="categoryId" value="5"/> Cẩm nang khu vực
+                        </label>
+                        <label>
+                            <input type="checkbox" name="categoryId" value="6"/> Kinh nghiệm sống chung
+                        </label>
+                        <label>
+                            <input type="checkbox" name="categoryId" value="7"/> Phản hồi về chủ nhà
+                        </label>
+                        <label>
+                            <input type="checkbox" name="categoryId" value="8"/> Mẹo an toàn khi thuê nhà
+                        </label>
+                    </div>
                     <div class="form-group">
                         <label for="content">Bài Viết:</label>
                         <textarea id="content" name="content" style="width: 100%; height: 200px;">${blogPost.content}</textarea>

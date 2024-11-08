@@ -382,28 +382,28 @@
             <form action="view-blog" method="get">
                 <div class="category">
                     <label>
-                        <input type="checkbox" name="categoryId" value="8"/> Kinh nghiệm thuê nhà
+                        <input type="checkbox" name="categoryId" value="1"/> Kinh nghiệm thuê nhà
                     </label>
                     <label>
-                        <input type="checkbox" name="categoryId" value="9"/> Giá thuê và So sánh
+                        <input type="checkbox" name="categoryId" value="2"/> Giá thuê và So sánh
                     </label>
                     <label>
-                        <input type="checkbox" name="categoryId" value="10"/> Tiện nghi và Dịch vụ
+                        <input type="checkbox" name="categoryId" value="3"/> Tiện nghi và Dịch vụ
                     </label>
                     <label>
-                        <input type="checkbox" name="categoryId" value="11"/> Thủ tục thuê nhà
+                        <input type="checkbox" name="categoryId" value="4"/> Thủ tục thuê nhà
                     </label>
                     <label>
-                        <input type="checkbox" name="categoryId" value="12"/> Cẩm nang khu vực
+                        <input type="checkbox" name="categoryId" value="5"/> Cẩm nang khu vực
                     </label>
                     <label>
-                        <input type="checkbox" name="categoryId" value="13"/> Kinh nghiệm sống chung
+                        <input type="checkbox" name="categoryId" value="6"/> Kinh nghiệm sống chung
                     </label>
                     <label>
-                        <input type="checkbox" name="categoryId" value="14"/> Phản hồi về chủ nhà
+                        <input type="checkbox" name="categoryId" value="7"/> Phản hồi về chủ nhà
                     </label>
                     <label>
-                        <input type="checkbox" name="categoryId" value="15"/> Mẹo an toàn khi thuê nhà
+                        <input type="checkbox" name="categoryId" value="8"/> Mẹo an toàn khi thuê nhà
                     </label>
                 </div>
                 <button class="header-button" type="submit">Tìm Kiếm</button>

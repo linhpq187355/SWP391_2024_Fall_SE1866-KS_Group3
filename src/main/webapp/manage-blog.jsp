@@ -17,6 +17,10 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="./assets/css/plugins.min.css"/>
+<link rel="stylesheet" href="assets/css/dashboard.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 <!------ Include the above in your HEAD tag ---------->
 <jsp:include page="header.jsp"/>
 <style>
@@ -96,7 +100,7 @@
 
 <div class="content-container">
     <div class="content-wrapper">
-        <table>
+        <table id="basic-datatables" class="table">
             <thead>
             <tr>
                 <th>
@@ -122,6 +126,17 @@
                 </th>
             </tr>
             </thead>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </tfoot>
             <tbody>
             <c:forEach var="post" items="${posts}" varStatus="status">
                 <c:if test="${post.status != 'DELETED'}">
@@ -202,5 +217,34 @@
         span.textContent = localDateTime.toLocaleString('en-GB', options); // Định dạng theo kiểu ngày
     });
 </script>
-<jsp:include page="footer.jsp"/>
+
+<script>
+    $(document).ready(function () {
+        // Khởi tạo DataTable
+        $("#basic-datatables").DataTable({
+            pageLength: 10, // Hiển thị 10 dòng mỗi trang
+            initComplete: function () {
+                // Hàm này sẽ được gọi khi DataTable đã được khởi tạo hoàn tất
+                this.api().columns().every(function () {
+                    var column = this;
+                    var select = $('<select class="form-select"><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty()) // Thêm dropdown vào chân cột
+                        .on("change", function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            // Lọc các cột dựa trên giá trị đã chọn từ dropdown
+                            column.search(val ? "^" + val + "$" : "", true, false).draw();
+                        });
+
+                    // Thêm các giá trị vào dropdown
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + "</option>");
+                    });
+                });
+            },
+        });
+    });
+
+</script>
+    <jsp:include page="footer.jsp"/>
 
