@@ -1,6 +1,7 @@
 package com.homesharing.service;
 
 import com.homesharing.model.BlogPost;
+import com.homesharing.model.Category;
 import com.homesharing.model.Comment;
 
 import java.util.List;
@@ -47,6 +48,10 @@ public interface BlogService {
     String getAuthorNameById(int authorId);
 
     List<BlogPost> getPostsByAuthorId(int authorId);
+
+    List<Category> getCategoriesByBlogPostId(int blogPostId);
+
+    void deleteBlogPostCategories(int postId);
 
 }
 

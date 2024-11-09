@@ -62,7 +62,7 @@ public class WishListServiceImpl implements WishListService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ArrayList<>(); // Trả về danh sách rỗng nếu có ngoại lệ
+        return new ArrayList<>();
     }
 
     @Override

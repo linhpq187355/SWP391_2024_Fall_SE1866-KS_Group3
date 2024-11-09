@@ -1,13 +1,18 @@
 package com.homesharing.service.impl;
 
+import com.homesharing.dao.HomeDAO;
 import com.homesharing.dao.HomeDetailDAO;
 import com.homesharing.dao.HomeImageDAO;
 import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.impl.HomeDAOImpl;
 import com.homesharing.dao.impl.HomeDetailDAOImpl;
 import com.homesharing.dao.impl.HomeImageDAOImpl;
 import com.homesharing.dao.impl.PriceDAOImpl;
 import com.homesharing.model.*;
 import com.homesharing.service.HomeDetailService;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,12 +22,14 @@ public class HomeDetailServiceImpl implements HomeDetailService {
     private final HomeDetailDAO homeDetailDAO;
     private final PriceDAO priceDAO;
     private final HomeImageDAO homeImageDAO;
+    private final HomeDAO homeDAO;
 
     // Constructor that initializes the HomeDetailDAO implementation.
     public HomeDetailServiceImpl() {
         this.homeDetailDAO = new HomeDetailDAOImpl();
         this.priceDAO = new PriceDAOImpl();
         this.homeImageDAO = new HomeImageDAOImpl();
+        this.homeDAO = new HomeDAOImpl();
     }
 
     /**
@@ -121,18 +128,60 @@ public class HomeDetailServiceImpl implements HomeDetailService {
     }
     @Override
     public List<Home> getSimilarHomess(int homeId, int priceDifference) {
-        Set<Home> similarHomes = new HashSet<>(getHomesByWard(homeId, priceDifference));
+        Set<Integer> addedHomeIds = new HashSet<>();
+        List<Home> similarHomes = new ArrayList<>();
 
-        if (similarHomes.size() < 4) {
-            List<Home> districtHomes = getHomesByDistrict(homeId, priceDifference);
-            for (Home home : districtHomes) {
-                if (similarHomes.size() < 4 && home.getId() != homeId) {
+        List<Home> wardHomes = getHomesByWard(homeId, priceDifference);
+        for (Home home : wardHomes) {
+            if (home.getId() != homeId && !addedHomeIds.contains(home.getId())) {
+                try {
+                    // Lấy ảnh đầu tiên
+                    List<String> images = new ArrayList<>();
+                    String firstImage = homeDAO.fetchFirstImage(home.getId());
+                    if (firstImage != null) {
+                        images.add(firstImage);
+                    }
+                    home.setImages(images);
+
                     similarHomes.add(home);
+                    addedHomeIds.add(home.getId());
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }
-        return similarHomes.stream().limit(4).collect(Collectors.toList());
+
+        if (similarHomes.size() < 4) {
+            List<Home> districtHomes = getHomesByDistrict(homeId, priceDifference);
+
+            for (Home home : districtHomes) {
+                if (home.getId() != homeId && !addedHomeIds.contains(home.getId())) {
+                    try {
+                        // Lấy ảnh đầu tiên
+                        List<String> images = new ArrayList<>();
+                        String firstImage = homeDAO.fetchFirstImage(home.getId());
+                        if (firstImage != null) {
+                            images.add(firstImage);
+                        }
+                        home.setImages(images);
+
+                        similarHomes.add(home);
+                        addedHomeIds.add(home.getId());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (similarHomes.size() >= 4) {
+                    break;
+                }
+            }
+        }
+
+        return similarHomes;
     }
+
+
 
     @Override
     public List<Price> getSimilarHomePrices(List<Home> similarHomes) {

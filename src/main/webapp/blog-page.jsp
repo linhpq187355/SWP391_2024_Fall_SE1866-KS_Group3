@@ -319,10 +319,20 @@
                 <c:if test="${blogPost.status == 'approved'}">
                     <div class="post">
                         <a href="blog-detail?postId=${blogPost.id}">
-                            <img alt="Illustration of Aquarius and Virgo zodiac signs"
-                                 height="400"
-                                 src="https://xaydunganthienphat.com.vn/upload/filemanager/mau%20nha/mau%20nha%20cap%204%20mai%20thai%203%20phong%20ngu/mau-nha-cap-4-mai-thai-3-phong-ngu-1-phong-tho-mau-so-2.jpg"
-                                 width="600"/>
+                            <c:choose>
+                                <c:when test="${not empty blogPost.imagePath}">
+                                    <img alt="Illustration of Aquarius and Virgo zodiac signs"
+                                         height="400"
+                                         src="${blogPost.imagePath}"
+                                         width="600"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <img alt="Default image"
+                                         height="400"
+                                         src="https://xaydunganthienphat.com.vn/upload/filemanager/mau%20nha/mau%20nha%20cap%204%20mai%20thai%203%20phong%20ngu/mau-nha-cap-4-mai-thai-3-phong-ngu-1-phong-tho-mau-so-2.jpg"
+                                         width="600"/>
+                                </c:otherwise>
+                            </c:choose>
                         </a>
                         <h3>
                             <a href="blog-detail?postId=${blogPost.id}">

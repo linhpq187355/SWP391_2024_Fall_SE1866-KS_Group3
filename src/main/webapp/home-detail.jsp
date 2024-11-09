@@ -636,7 +636,9 @@ ${ex:convertPriceToVND(prices[0].price)} VND/tháng
                                         <li>
                                             <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
                                                 <a href="home-detail?id=${similarHome.id}">
-                                                    <img src="assets/img/demo/small-property-2.jpg" alt="${similarHome.address}"> <!-- Hình ảnh mẫu, bạn có thể thay đổi -->
+                                                    <img src="${similarHome.images != null && !similarHome.images.isEmpty() ? similarHome.images[0] : 'assets/img/demo/small-property-2.jpg'}"
+                                                         alt="${similarHome.address}"
+                                                         style="width: 250px; height: 80px; object-fit: cover; border-radius: 10px;">
                                                 </a>
                                             </div>
                                             <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">

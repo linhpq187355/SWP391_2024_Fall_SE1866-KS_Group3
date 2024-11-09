@@ -187,8 +187,7 @@
                                     </div>
                                     <div class="user-info">
                                         <p>${requestScope.user.firstName} ${requestScope.user.lastName}</p>
-                                        <p>${requestScope.user.phoneNumber}</p>
-                                        <p>${requestScope.user.gender}</p>
+                                        Giới tính: <span>${requestScope.user.gender}</span>
                                     </div>
                                 </div>
                             </div>

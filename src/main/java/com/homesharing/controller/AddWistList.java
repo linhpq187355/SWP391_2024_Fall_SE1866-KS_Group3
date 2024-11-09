@@ -35,7 +35,6 @@ public class AddWistList extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing home ID or user ID");
             return;
         }
-
         try {
             // Parse the home and user IDs as integers
             int homeId = Integer.parseInt(homeIdStr);
