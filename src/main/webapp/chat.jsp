@@ -171,6 +171,7 @@
             padding: 10px;
             border-radius: 10px;
             background-color: #ccc;
+            cursor: pointer;
         }
         /* CSS cho ảnh trong message */
         .message-image {
@@ -186,15 +187,17 @@
             font-size: 0.8em;
             color: #666;
         }
-
-        .message {
-            cursor: pointer;
-        }
         .message .details {
             font-size: 12px;
             color: gray;
+            display: none;
+            align-items: center;
         }
-
+        .messages .message:hover {
+            .details{
+                display: flex;
+            }
+        }
         .avatar {
             display: flex;
             justify-content: flex-end; /* Avatar sẽ được căn phải */
@@ -345,6 +348,113 @@
             display: flex;
             flex-direction: row;
         }
+        .delete-mess {
+            cursor: pointer;
+        }
+        .modal {
+            display: none; /* Ẩn mặc định */
+            position: fixed; /* Ở vị trí cố định */
+            z-index: 1; /* Ở trên cùng */
+            left: 0;
+            top: 0;
+            width: 100%; /* Toàn bộ màn hình */
+            height: 100%; /* Toàn bộ màn hình */
+            overflow: auto; /* Cuộn nếu cần */
+            background-color: rgb(0, 0, 0); /* Màu nền đen */
+            background-color: rgba(0, 0, 0, 0.4); /* Nền trong suốt */
+            align-items: center; /* Canh giữa theo chiều dọc */
+            justify-content: center; /* Canh giữa theo chiều ngang */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 80%; /* Chiều rộng của modal */
+            max-width: 500px; /* Giới hạn kích thước tối đa */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng để tạo hiệu ứng */
+        }
+        .hover-effect {
+            position: relative;
+        }
+
+        .hover-effect::after {
+            content: attr(data-hover-text);
+            position: absolute;
+            bottom: -30px;
+            left: 10%;
+            transform: translateX(-60%);
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .hover-effect:hover::after {
+            opacity: 1;
+        }
+        #popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .homes-container {
+            max-height: 80%; /* Giới hạn chiều cao của container */
+            overflow-y: auto; /* Thêm thanh cuộn dọc khi quá dài */
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .home-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .home-image {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .home-details {
+            flex: 2;
+        }
+
+        .home-details strong {
+            font-size: 1.2em;
+        }
+
+        .schedule-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .schedule-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -418,26 +528,31 @@
             <c:set var="blockerId" value="${fn:startsWith(conversation.status, 'block_by_') ? fn:substringAfter(conversation.status, 'block_by_') : ''}" />
             <div class="header" style="justify-content: space-between;">
                     <div style="display: flex;">
-    <img alt="User profile" height="50"
-         src="${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
-         width="50"/>
-    <div>
-        <div class="name">
+                        <img alt="User profile" height="50"
+                            src="${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
+                            width="50"/>
+                        <div>
+                            <div class="name">
             ${User.firstName} ${User.lastName}
         </div>
-        <div class="status" id="status-chat">
+                            <div class="status" id="status-chat">
             Đang offline
         </div>
-    </div>
-</div>
-                    <a href="chat-information?userId=${User.id}">
-                        <i class="fas fa-info-circle" style="font-size: xx-large;"></i>
-                    </a>
-                </div>
+                        </div>
+                    </div>
+                    <div style="display: flex;">
+                        <button id="schedule-button" style="background-color: #ccc;" data-hover-text="Đặt lịch hẹn" class="hover-effect">
+                            <i class="fa-solid fa-calendar" style="font-size: xx-large;"></i>
+                        </button>
+                        <a href="chat-information?userId=${User.id}" class="hover-effect" data-hover-text="Thông tin chat">
+                            <i class="fas fa-info-circle" style="font-size: xx-large;"></i>
+                        </a>
+                    </div>
+            </div>
             <div class="messages" id="messages">
                 <c:if test="${not empty requestScope.replies}">
                     <c:forEach items="${requestScope.replies}" var="reply">
-                        <div class="message ${reply.userId == User.id ? 'received' : 'sent'}"  onclick="toggleDetails(this)">
+                        <div class="message ${reply.userId == User.id ? 'received' : 'sent'}" id="${reply.id}">
                             <c:if test="${reply.userId == User.id}">
                                 <img alt="User profile" height="40"
                                      src="${User.avatar != null ? User.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
@@ -466,14 +581,32 @@
                                 </c:otherwise>
                             </c:choose>
                             <!-- Phần thời gian và trạng thái sẽ bị ẩn đi ban đầu -->
-                            <div class="details" style="display: none;">
+                            <div class="details">
                                 <div class="time">
                                     ${reply.time}
                                 </div>
+                                <c:if test="${reply.userId != User.id}">
+                                    <div class="delete-mess" style="font-size: 12px; margin: 10px;" data-reply-id="${reply.id}" onclick="deleteMess(this)">
+                                        Thu hồi <!-- Icon ba chấm -->
+                                    </div>
+                                </c:if>
+
                             </div>
                         </div>
                     </c:forEach>
                 </c:if>
+                <!-- Modal Xác Nhận Xóa -->
+                <div id="deleteConfirmationModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeDeleteModal()">&times;</span>
+                        <h2>Xác nhận thu hồi</h2>
+                        <p>Bạn có chắc chắn muốn thu hồi tin nhắn này không?</p>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Hủy</button>
+                            <button type="button" class="btn btn-danger" id="confirmDelete">Thu hồi</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="seen-status" id="seen-status" style="display: none;">Đã xem</div>
                 <div id="blockNoticeChanner" style="color: red; font-weight: bold; text-align: center; ${blockerId == User.id ? '' : 'display: none;'}">
                     Bạn đã bị chặn bởi ${User.firstName} ${User.lastName}.
@@ -524,6 +657,7 @@
         </div>
     </div>
 </section>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <%
     String message = (String) session.getAttribute("message");
@@ -601,6 +735,68 @@
                 blockerMessage.style.display = "none";
                 inputBar.style.display = "flex";
                 blockedMessage.style.display = "none";
+            } else if (data.type === "delete") {
+                if(data.conversationId === conversationId) {
+                    if(data.isDeleted === "yes") {
+                        let replyId = data.replyId;
+                        const messageElement = document.getElementById(replyId);
+                        if (messageElement) {
+                            // Check if the user is the sender or the receiver
+                            if (data.send === sendId || data.send === receivedId) {
+                                // Check for text, image, video, or file link elements within the message
+                                const textElement = messageElement.querySelector('.text');
+                                const imageElement = messageElement.querySelector('.message-image');
+                                const videoElement = messageElement.querySelector('video');
+                                const fileLinkElement = messageElement.querySelector('.file-link');
+                                const detailsElement = messageElement.querySelector('.details'); // Select the details section
+
+                                // Handle text content
+                                if (textElement) {
+                                    textElement.textContent = "Tin nhắn đã được thu hồi";
+                                    textElement.style.color = "#888"; // Optional: Make text appear faded
+                                }
+
+                                // Handle image content
+                                if (imageElement) {
+                                    // Replace image with a placeholder text
+                                    const placeholder = document.createElement('div');
+                                    placeholder.textContent = "Tin nhắn đã được thu hồi";
+                                    placeholder.style.color = "#888"; // Optional: Make text appear faded
+                                    imageElement.replaceWith(placeholder);
+                                }
+
+                                // Handle video content
+                                if (videoElement) {
+                                    // Replace video with a placeholder text
+                                    const placeholder = document.createElement('div');
+                                    placeholder.textContent = "Tin nhắn đã được thu hồi";
+                                    placeholder.style.color = "#888"; // Optional: Make text appear faded
+                                    videoElement.replaceWith(placeholder);
+                                }
+
+                                // Handle file link content
+                                if (fileLinkElement) {
+                                    // Replace file link with a placeholder text
+                                    const placeholder = document.createElement('div');
+                                    placeholder.textContent = "Tin nhắn đã được thu hồi";
+                                    placeholder.style.color = "#888"; // Optional: Make text appear faded
+                                    fileLinkElement.replaceWith(placeholder);
+                                }
+
+                                // Remove the details section, if present
+                                if (detailsElement) {
+                                    detailsElement.remove();
+                                }
+                            }
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Đã có lỗi xảy ra, vui lòng thử lại sau.'
+                        });
+                    }
+
+                }
             } else {
                 // Hiển thị tin nhắn nhận được hoặc gửi đi
                 if(data.conversationId === conversationId) {
@@ -608,8 +804,9 @@
                         data.replies.forEach(reply => {
                             let messages = document.createElement("div");
                             messages.classList.add("message");
+                            messages.id = reply.id;
                             messages.classList.add(data.received === receivedId ? "sent" : "received");
-                            messages.setAttribute("onclick", "toggleDetails(this)");
+
                             // Kiểm tra và xử lý avatar nếu là người nhận
                             if (data.received !== receivedId) {
                                 updateStatus("Đang hoạt động");
@@ -622,6 +819,7 @@
                                 ws.send(JSON.stringify({ received: receivedId, send: sendId, conversationId: conversationId, message: "", type: "seen" }));
                                 document.getElementById("seen-status").style.display = 'none';
                             }
+
                             // Nếu là tin nhắn văn bản
                             if (reply.text && reply.text.trim() !== "") {
                                 let textDiv = document.createElement("div");
@@ -631,12 +829,25 @@
                                 // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
                                 let detailsDiv = document.createElement("div");
                                 detailsDiv.classList.add("details");
-                                detailsDiv.style.display = "none";
 
                                 let timeDiv = document.createElement("div");
                                 timeDiv.classList.add("time");
                                 timeDiv.textContent = reply.time;
                                 detailsDiv.appendChild(timeDiv);
+
+                                // Kiểm tra nếu là tin nhắn của người khác để thêm nút xóa
+                                if (Number(reply.userId) === Number(sendId)) {
+                                    let deleteButton = document.createElement("div");
+                                    deleteButton.classList.add("delete-mess");
+                                    deleteButton.style.fontSize = "12px";
+                                    deleteButton.style.margin = "10px";
+                                    deleteButton.dataset.replyId = reply.id; // Gán data attribute để xử lý
+                                    deleteButton.onclick = function () {
+                                        deleteMess(this);
+                                    };
+                                    deleteButton.textContent = "Thu hồi";
+                                    detailsDiv.appendChild(deleteButton);
+                                }
 
                                 messages.appendChild(detailsDiv);
                                 // Thêm tin nhắn vào khung chat
@@ -649,6 +860,7 @@
                             } else if (reply.contentType && reply.contentUrl) {
                                 let fileDiv = document.createElement("div");
                                 if (reply.contentType === "image") {
+                                    fileDiv.classList.add("message-image");
                                     let img = document.createElement("img");
                                     img.src = reply.contentUrl;
                                     img.alt = "image";
@@ -662,12 +874,25 @@
                                         // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
                                         let detailsDiv = document.createElement("div");
                                         detailsDiv.classList.add("details");
-                                        detailsDiv.style.display = "none";
 
                                         let timeDiv = document.createElement("div");
                                         timeDiv.classList.add("time");
                                         timeDiv.textContent = reply.time;
                                         detailsDiv.appendChild(timeDiv);
+
+                                        // Kiểm tra nếu là tin nhắn của người khác để thêm nút xóa
+                                        if (Number(reply.userId) === Number(sendId)) {
+                                            let deleteButton = document.createElement("div");
+                                            deleteButton.classList.add("delete-mess");
+                                            deleteButton.style.fontSize = "12px";
+                                            deleteButton.style.margin = "10px";
+                                            deleteButton.dataset.replyId = reply.id; // Gán data attribute để xử lý
+                                            deleteButton.onclick = function () {
+                                                deleteMess(this);
+                                            };
+                                            deleteButton.textContent = "Thu hồi";
+                                            detailsDiv.appendChild(deleteButton);
+                                        }
 
                                         messages.appendChild(detailsDiv);
                                         if (messagesContainer) {
@@ -687,7 +912,20 @@
                                         // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
                                         let detailsDiv = document.createElement("div");
                                         detailsDiv.classList.add("details");
-                                        detailsDiv.style.display = "none";
+
+                                        // Kiểm tra nếu là tin nhắn của người khác để thêm nút xóa
+                                        if (Number(reply.userId) === Number(sendId)) {
+                                            let deleteButton = document.createElement("div");
+                                            deleteButton.classList.add("delete-mess");
+                                            deleteButton.style.fontSize = "12px";
+                                            deleteButton.style.margin = "10px";
+                                            deleteButton.dataset.replyId = reply.id; // Gán data attribute để xử lý
+                                            deleteButton.onclick = function () {
+                                                deleteMess(this);
+                                            };
+                                            deleteButton.textContent = "Thu hồi";
+                                            detailsDiv.appendChild(deleteButton);
+                                        }
 
                                         let timeDiv = document.createElement("div");
                                         timeDiv.classList.add("time");
@@ -712,12 +950,25 @@
                                     // Thêm phần thời gian và trạng thái, đặt ban đầu là ẩn
                                     let detailsDiv = document.createElement("div");
                                     detailsDiv.classList.add("details");
-                                    detailsDiv.style.display = "none";
 
                                     let timeDiv = document.createElement("div");
                                     timeDiv.classList.add("time");
                                     timeDiv.textContent = reply.time;
                                     detailsDiv.appendChild(timeDiv);
+
+                                    // Kiểm tra nếu là tin nhắn của người khác để thêm nút xóa
+                                    if (Number(reply.userId) === Number(sendId)) {
+                                        let deleteButton = document.createElement("div");
+                                        deleteButton.classList.add("delete-mess");
+                                        deleteButton.style.fontSize = "12px";
+                                        deleteButton.style.margin = "10px";
+                                        deleteButton.dataset.replyId = reply.id; // Gán data attribute để xử lý
+                                        deleteButton.onclick = function () {
+                                            deleteMess(this);
+                                        };
+                                        deleteButton.textContent = "Thu hồi";
+                                        detailsDiv.appendChild(deleteButton);
+                                    }
 
                                     messages.appendChild(detailsDiv);
                                     if (messagesContainer) {
@@ -995,13 +1246,53 @@
         }
     }
 
+    function closeDeleteModal() {
+        const modal = document.getElementById("deleteConfirmationModal");
+        modal.style.display = "none"; // Ẩn modal và lớp nền
+    }
+
+    function openDeleteModal() {
+        document.getElementById("deleteConfirmationModal").style.display = "flex";
+    }
+
+    function deleteMess(element) {
+        // Lấy ID của tin nhắn từ thuộc tính data-reply-id
+        const replyId = element.getAttribute('data-reply-id');
+
+        // Mở modal xác nhận
+        openDeleteModal();
+
+        // Thêm sự kiện click cho nút xác nhận xóa
+        const confirmButton = document.getElementById('confirmDelete');
+        confirmButton.onclick = function () {
+            // Gọi hàm xóa tin nhắn (định nghĩa logic xóa của bạn tại đây)
+            deleteMessageById(replyId);
+            // Đóng modal sau khi xóa
+            closeDeleteModal();
+        };
+    }
+
+    function deleteMessageById(replyId) {
+        // Logic xóa tin nhắn ở đây (gửi yêu cầu đến server hoặc xử lý phía client)
+        console.log(`Deleting message with ID: ` + replyId);
+        let type = "delete";
+        ws.send(JSON.stringify({
+            received: receivedId,
+            send: sendId,
+            conversationId: conversationId,
+            replyId: replyId,
+            type: type
+        }));
+        // Thực hiện xử lý khác nếu cần, ví dụ: gửi AJAX yêu cầu xóa
+    }
+
     function toggleDetails(element) {
         // Tìm phần tử chi tiết (details) bên trong thẻ div của tin nhắn
         const details = element.querySelector('.details');
 
         // Kiểm tra và thay đổi thuộc tính display
         if (details.style.display === 'none') {
-            details.style.display = 'block'; // Hiển thị phần thời gian
+            details.style.display = 'flex'; // Hiển thị phần thời gian
         } else {
             details.style.display = 'none'; // Ẩn phần thời gian
         }
@@ -1130,6 +1421,142 @@
         modal.addEventListener('click', () => {
             document.body.removeChild(modal);
         });
+    }
+
+
+    // Xử lý khi click vào button
+    document.getElementById('schedule-button').addEventListener('click', function() {
+        // Tạo yêu cầu HTTP (AJAX) bằng Fetch API
+        let receivedId = document.getElementById("userId").value;
+        let url = '${pageContext.request.contextPath}/get-list-home-for-chat?userId=' + receivedId; // Kết hợp chuỗi với userId
+        fetch(url)  // URL của server để lấy dữ liệu
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Có lỗi xảy ra khi lấy dữ liệu');
+                }
+                return response.json();  // Trả về dữ liệu dạng text
+            })
+            .then(data => {
+                // Mở popup và hiển thị dữ liệu nhận được
+                openPopup(data);
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',  // Biểu tượng lỗi
+                    title: 'Có lỗi xảy ra!',
+                    text: error.message,  // Hiển thị thông điệp lỗi
+                    confirmButtonText: 'OK'
+                });
+            });
+    });
+    function openPopup(data) {
+        // Tạo element cho modal
+        const modal = document.createElement('div');
+        modal.id = 'schedule-modal';
+        modal.style.display = 'block';
+        modal.style.position = 'fixed';
+        modal.style.zIndex = '1000';
+        modal.style.left = '0';
+        modal.style.top = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.overflow = 'auto';
+        modal.style.backgroundColor = 'rgba(0,0,0,0.4)';
+
+        const modalContent = document.createElement('div');
+        modalContent.style.backgroundColor = '#fefefe';
+        modalContent.style.margin = '15% auto';
+        modalContent.style.padding = '20px';
+        modalContent.style.border = '1px solid #888';
+        modalContent.style.width = '80%'; // Điều chỉnh kích thước modal nếu cần
+
+        // Thêm event listener cho việc click bên ngoài modal
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Hàm đóng modal (được tách ra để có thể gọi lại)
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.removeChild(modal);
+            // Xóa event listener sau khi đóng modal
+            window.removeEventListener('click', function(event){
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+
+
+        // Hiển thị dữ liệu trong modal
+        const dataContainer = document.createElement('div');
+
+        data.forEach(home => {
+            const homeDiv = document.createElement('div');
+            homeDiv.style.border = "1px solid #ccc"; // Thêm border cho mỗi căn nhà
+            homeDiv.style.marginBottom = "10px";      // Thêm margin-bottom
+            homeDiv.style.padding = "10px";           // Thêm padding
+
+            // Hiển thị hình ảnh
+            const img = document.createElement('img');
+            img.src = home.images[0];  // Lấy đường dẫn ảnh đầu tiên
+            img.style.maxWidth = "200px"; // Đặt kích thước tối đa cho ảnh
+            img.style.maxHeight = "150px";
+            img.alt = home.name;       // Thêm alt text cho ảnh
+            homeDiv.appendChild(img);
+
+
+            // Hiển thị các thông tin khác
+            const infoDiv = document.createElement('div');
+            infoDiv.style.marginLeft = "10px"; // Thêm margin-left để tách khỏi ảnh
+            // Hiển thị tên nhà
+            const nameElem = document.createElement('p');
+            nameElem.textContent = home.name;
+            infoDiv.appendChild(nameElem);
+
+            // Hiển thị tên nhà
+            const addressElem  = document.createElement('p');
+            addressElem .textContent = home.address;
+            infoDiv.appendChild(addressElem );
+
+            // Hiển thị diện tích
+            const areaElem = document.createElement('p');
+            areaElem.textContent = home.area;
+            infoDiv.appendChild(areaElem);
+
+            // Tạo nút "Make Appointment"
+            const button = document.createElement('button');
+            button.textContent = 'Đặt lịch hẹn';
+            button.style.padding = "8px 12px";
+            button.style.marginTop = "10px";
+            button.style.cursor = "pointer";
+            button.onclick = () => {
+                window.location.href = "make-appointment?hostId=" + receivedId + "&homeId= " + home.id;
+            };
+
+// Thêm button vào infoDiv
+            infoDiv.appendChild(button);
+
+            homeDiv.appendChild(infoDiv); //Thêm infoDiv vào homeDiv
+            dataContainer.appendChild(homeDiv);
+        });
+
+
+
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Đóng';
+        closeButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.removeChild(modal);
+        });
+
+        modalContent.appendChild(dataContainer);
+        modalContent.appendChild(closeButton);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+
     }
 </script>
 </body>

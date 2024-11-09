@@ -50,10 +50,17 @@
             color: #5c4033;
         }
         .contentt {
+            display: flex;
+            flex-direction: column;
             width: 80%;
             background-color: #f2f2f2;
             padding: 20px;
             position: relative;
+        }
+        .content-scrollable {
+            overflow-y: auto; /* Thêm cuộn dọc cho danh sách thông báo */
+            flex-grow: 1; /* Để chiếm tối đa chiều cao còn lại */
+            margin-bottom: 10px; /* Tạo khoảng trống giữa nội dung và footer */
         }
         .contentt .item {
             display: flex;
@@ -174,6 +181,7 @@
     <div class="contentt">
         <div class="headerr">Danh sách thông báo</div>
         <!-- Danh sách thông báo -->
+        <div class="content-scrollable">
         <c:forEach var="notification" items="${notificationListOfType}">
             <div class="item" id="notification-item-${notification.id}">
                 <div class="text notification-text" data-type="${type}" id="notification-${notification.id}" style="font-weight: ${notification.status == 'sent' ? 'bold' : 'normal'};">${notification.content}</div>
@@ -189,6 +197,7 @@
                 <div class="text">Bạn chưa có thông báo nào.</div>
             </div>
         </c:if>
+        </div>
         <div class="foot-buttons" data-type="${type}">
             <button class="mark-read">Đánh dấu đã đọc</button>
             <button class="delete-all">Xóa tất cả</button>

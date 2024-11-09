@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-@WebServlet("/admin-blog")
+@WebServlet("/dashboard/blog-list")
 public class BlogAdminServlet extends HttpServlet {
     private BlogService blogService;
     private BlogDAO blogDAO;
@@ -42,8 +42,9 @@ public class BlogAdminServlet extends HttpServlet {
             formattedDates.add(formattedDate);
         }
         request.setAttribute("formattedCreatedAt", formattedDates);
+
         request.setAttribute("posts", posts);
-        request.getRequestDispatcher("manage-blog2.jsp").forward(request, response);
+        request.getRequestDispatcher("/dashboard-blog-list.jsp").forward(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -61,7 +62,7 @@ public class BlogAdminServlet extends HttpServlet {
                 } else if ("delete".equalsIgnoreCase(action)) {
                     blogService.updatePostStatus(postId, "DELETED");
                 }
-                response.sendRedirect("admin-blog?authorId=" + authorIdParam);
+                response.sendRedirect("/dashboard/blog-list?authorId=" + authorIdParam);
             } catch (Exception e) {
                 throw new ServletException("Error handling blog post action: " + e.getMessage(), e);
             }

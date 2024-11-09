@@ -1,0 +1,10 @@
+Start auto log messages stack - Iteration 10.
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") was successful, 118340 body bytes, 1595 header bytes  	[MsgId: MMSG-26386]
+Action.c(132): web_url("selection") started  	[MsgId: MMSG-26355]
+Action.c(132): Error -27721: Step download timeout (120 seconds) has expired when downloading resource "https://arc.msn.com/v4/api/selection?placement=88000360&nct=1&fmt=json&ISU=1&AREF=0&APRIMB=0&ADEFAB=0&OPSYS=WIN10&locale=en-US&country=VN&edgeid=-945223331753601845&ACHANNEL=4&ABUILD=130.0.6723.70&poptin=1&devosver=10.0.22631.4317&clr=esdk&UITHEME=dark&EPCON=0&AMAJOR=130&AMINOR=0&ABLD=6723&APATCH=70"  	[MsgId: MERR-27721]
+End auto log messages stack.
+

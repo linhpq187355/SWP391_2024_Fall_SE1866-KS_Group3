@@ -1,0 +1,13 @@
+Start auto log messages stack - Iteration 12.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): ssl_handle_status encounter error : SSL_ERROR_SSL, error message : error:0A000119:SSL routines::decryption failed or bad record mac  	[MsgId: MMSG-26000]
+Action.c(23): Error -27774: SSL protocol error when attempting to connect with host "www.bing.com"  	[MsgId: MERR-27774]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+

@@ -1,0 +1,13 @@
+[t21]
+FileName1=t21_3517029987587817622.json
+URL1=https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/3517029987587817622
+Total=2
+ContentType=application/json
+SnapshotXmlFile=snapshot_21.xml
+RequestHeaderFile=t21_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t21_ResponseHeader.txt
+FileName2=t21_f5cbf3afb2.html
+URL2=https://kit.fontawesome.com/f5cbf3afb2.js
+[ProtocolInfo]
+ProtocolId=QTWeb

@@ -11,17 +11,11 @@ package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.UserPermissionDAO;
-import com.homesharing.model.HomeImage;
 import com.homesharing.model.Permission;
 import com.homesharing.model.UserPermission;
-import org.eclipse.jdt.internal.compiler.batch.Main;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +55,39 @@ public class UserPermDAOImpl implements UserPermissionDAO {
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new IllegalArgumentException("Error retrieving permissions for userId: " + userId, e);
+        }
+        return permList;
+    }
+
+    /**
+     * Fetch permissions via email
+     *
+     * @param email
+     * @return the permission list
+     */
+    @Override
+    public List<Permission> getPermissionByEmail(String email) {
+        List<Permission> permList = new ArrayList<>();
+
+        String sql = "SELECT p.id, p.name, p.description\n" +
+                "FROM Permissons p\n" +
+                "JOIN Users_Permissons up ON p.id = up.Permissonsid\n" +
+                "JOIN HSS_Users u ON up.[HSS Usersid] = u.id\n" +
+                "WHERE u.email = ?;";
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Permission perm = new Permission();
+                    perm.setId(resultSet.getInt("id"));
+                    perm.setName(resultSet.getString("name"));
+                    perm.setDescription(resultSet.getString("description"));
+                    permList.add(perm);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new IllegalArgumentException("Error retrieving permissions for user email: " + email, e);
         }
         return permList;
     }

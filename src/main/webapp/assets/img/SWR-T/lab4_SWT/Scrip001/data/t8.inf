@@ -1,0 +1,13 @@
+[t8]
+FileName1=t8_shoppingsettings.json
+URL1=https://www.bing.com/api/shopping/v1/user/shoppingsettings
+Total=2
+ContentType=application/json
+SnapshotXmlFile=snapshot_8.xml
+RequestHeaderFile=t8_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t8_ResponseHeader.txt
+FileName2=t8_free-v4-shims.min.css
+URL2=https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-shims.min.css?token=f5cbf3afb2
+[ProtocolInfo]
+ProtocolId=QTWeb

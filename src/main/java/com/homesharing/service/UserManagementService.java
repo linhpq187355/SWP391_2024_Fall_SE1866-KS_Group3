@@ -41,6 +41,13 @@ public interface UserManagementService {
     List<Permission> fetchUserPermissions(int userId);
 
     /**
+     * Fetch permissions via email
+     * @param email
+     * @return permission list
+     */
+    List<Permission> fetchPermissionsByEmail(String email);
+
+    /**
      * Fetch all the permission in the system
      * @return the permission list
      */

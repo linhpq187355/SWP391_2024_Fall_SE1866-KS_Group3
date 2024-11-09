@@ -95,7 +95,7 @@ public class EditAppointmentServlet extends HttpServlet {
         }
 
         try {
-            int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"hostPending", aptmId,"0");
+            int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"hostPending", aptmId,"0","a");
 
             if(rowsUpdated>0){
                 req.setAttribute("message","Sửa lịch thành công!");
@@ -103,6 +103,7 @@ public class EditAppointmentServlet extends HttpServlet {
                 req.setAttribute("appointmentYear", selectedYear);
                 req.setAttribute("appointmentDay", selectedDate);
                 req.setAttribute("appointmentTime", selectedTime);
+                req.setAttribute("id",aptmId);
                 req.getRequestDispatcher("update-appointment.jsp").forward(req, resp);
             } else {
                 LOGGER.warning("Failed to insert appointment.");

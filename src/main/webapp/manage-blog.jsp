@@ -257,9 +257,9 @@
 <script>
     document.querySelectorAll('.formatted-date').forEach(function(span) {
         const localDateTimeString = span.getAttribute('data-created-at');
-        const localDateTime = new Date(localDateTimeString);
+        const localDateTime = new Date(localDateTimeString); // Chuyển đổi chuỗi thành Date
         const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
-        span.textContent = localDateTime.toLocaleString('en-GB', options);
+        span.textContent = localDateTime.toLocaleString('en-GB', options); // Định dạng theo kiểu ngày
     });
 </script>
 

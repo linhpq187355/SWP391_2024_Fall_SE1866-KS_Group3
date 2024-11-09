@@ -1,0 +1,17 @@
+[t14]
+FileName1=t14_-341398893248106636%7C-2257558592581803439%7C1720537294320060623.json
+URL1=https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-341398893248106636%7C-2257558592581803439%7C1720537294320060623
+Total=4
+ContentType=application/json
+SnapshotXmlFile=snapshot_14.xml
+RequestHeaderFile=t14_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t14_ResponseHeader.txt
+FileName2=t14_free-fa-solid-900.html
+URL2=https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-solid-900.woff2
+FileName3=t14_free-fa-regular-400.html
+URL3=https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-regular-400.woff2
+FileName4=t14_top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.webp
+URL4=https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png
+[ProtocolInfo]
+ProtocolId=QTWeb

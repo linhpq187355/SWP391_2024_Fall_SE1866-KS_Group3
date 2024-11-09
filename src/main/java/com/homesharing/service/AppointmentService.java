@@ -36,19 +36,6 @@ public interface AppointmentService {
     int insertAppointment(String day, String month, String year, String time, String tenantId, String hostId, String note, String homeId);
 
     /**
-     * Checks for overlapping appointments for a given date and time.
-     *
-     * @param day                The day of the appointment.
-     * @param month              The month of the appointment.
-     * @param year               The year of the appointment.
-     * @param time               The time of the appointment.
-     * @param hostAppointments   The list of existing appointments for the host.
-     * @param tenantAppointments The list of existing appointments for the tenant.
-     * @return True if there is an overlap, false otherwise.
-     */
-    boolean checkOverlapping(String day, String month, String year,String time, List<Appointment> hostAppointments,List<Appointment> tenantAppointments);
-
-    /**
      * Retrieves all appointments for a given host.
      *
      * @param hostId The ID of the host.
@@ -95,7 +82,7 @@ public interface AppointmentService {
      * @param host     The ID of the host for the appointment.
      * @return The result of the update operation.
      */
-    int updateAppointment(String day, String month, String year, String time, String note,String status, String id, String host);
+    int updateAppointment(String day, String month, String year, String time, String note,String status, String id, String host,String explain);
 
     /**
      * Accepts an appointment.

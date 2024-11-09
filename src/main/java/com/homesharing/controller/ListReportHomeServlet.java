@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "ListReportHomeServlet", value = "/report-home-manage")
+@WebServlet(name = "ListReportHomeServlet", value = "/report-list")
 public class ListReportHomeServlet extends HttpServlet {
     private ReportService reportService;
     private HomePageService homePageService;

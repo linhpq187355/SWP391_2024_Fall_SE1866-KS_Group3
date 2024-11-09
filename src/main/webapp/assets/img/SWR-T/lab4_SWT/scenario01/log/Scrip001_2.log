@@ -1,0 +1,12 @@
+Start auto log messages stack - Iteration 6.
+Action.c(34): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(34): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(36): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(36): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(39): web_url("ExpandedDomainsFilterGlobal.json_2") started  	[MsgId: MMSG-26355]
+Action.c(39): Resource "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" is in the cache already and will not be downloaded again  	[MsgId: MMSG-26655]
+Action.c(52): web_url("crx") started  	[MsgId: MMSG-26355]
+Action.c(52): Downloading resource "https://cdn.jsdelivr.net/npm/sweetalert2@11" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(52): Error -27720: Step download timeout (120 seconds) has expired when downloading resource "https://cdn.jsdelivr.net/npm/sweetalert2@11". Set the "Step Timeout caused by resources is a warning" Runtime Setting to Yes/No to have this message as a warning/error, respectively  	[MsgId: MERR-27720]
+End auto log messages stack.
+

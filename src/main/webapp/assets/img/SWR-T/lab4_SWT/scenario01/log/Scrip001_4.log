@@ -1,0 +1,19 @@
+Start auto log messages stack - Iteration 4.
+Action.c(216): Downloading resource "https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(216): web_url("-341398893248106636%7C-2257558592581803439%7C1720537294320060623") was successful, 624288 body bytes, 3420 header bytes  	[MsgId: MMSG-26386]
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") started  	[MsgId: MMSG-26355]
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") was successful, 20 body bytes, 284 header bytes  	[MsgId: MMSG-26386]
+Action.c(238): web_custom_request("update") started  	[MsgId: MMSG-26355]
+Action.c(238): Error -26609: HTTP Status-Code=502 (Bad Gateway) for "https://edge.microsoft.com/componentupdater/api/v1/update?cup2key=7:s84jWFQEE9fPWZ1DwDIZvFDVQnml7dSKnMw_49UuVOU&cup2hreq=8848d591e2f2131cd94d88ea29ea914b156b027a0b8c0a661bcb6cec4a37b08d"  	[MsgId: MERR-26609]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 5.
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") was successful, 20 body bytes, 284 header bytes  	[MsgId: MMSG-26386]
+Action.c(238): web_custom_request("update") started  	[MsgId: MMSG-26355]
+Action.c(238): web_custom_request("update") was successful, 1638 body bytes, 931 header bytes  	[MsgId: MMSG-26386]
+Action.c(279): web_custom_request("cloud_config_observers.json") started  	[MsgId: MMSG-26355]
+Action.c(279): Downloading resource "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" (specified by argument number 10)  	[MsgId: MMSG-26576]
+Action.c(279): Downloading resource "https://code.jquery.com/jquery-3.5.1.min.js" (specified by argument number 13)  	[MsgId: MMSG-26576]
+Action.c(279): Error -27720: Step download timeout (120 seconds) has expired when downloading resource "https://code.jquery.com/jquery-3.5.1.min.js". Set the "Step Timeout caused by resources is a warning" Runtime Setting to Yes/No to have this message as a warning/error, respectively  	[MsgId: MERR-27720]
+End auto log messages stack.
+

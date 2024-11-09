@@ -16,7 +16,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListAnnouncementServlet", value = "/announcement-manage")
+@WebServlet(name = "ListAnnouncementServlet", value = "/announcement-list")
 public class ListAnnouncementServlet extends HttpServlet {
     private AnnouncementDAO announcementDAO;
     private AnnouncementService announcementService;

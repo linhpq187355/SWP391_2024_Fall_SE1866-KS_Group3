@@ -228,6 +228,7 @@ public class HomePageServiceImpl implements HomePageService {
         try {
             // Call the DAO method to get prices
             prices = priceDAO.getPrices(homes);
+
         } catch (Exception e) {
             logger.severe("Unexpected error occurred: " + e.getMessage());
             throw new RuntimeException("Error retrieving prices from the database: " + e.getMessage(), e);
@@ -298,8 +299,10 @@ public class HomePageServiceImpl implements HomePageService {
                     moveInCheck = true;
                 }
             }
+
             Home home = homeList.get(i);
             if(user.getPrefProv() == wardDAO.getProvinceIdByWardId(home.getWardId())) {
+
                 if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
                     if((user.getDuration().equals("short") && homeList.get(i).getLeaseDuration() <6) || (user.getDuration().equals("long") && homeList.get(i).getLeaseDuration() >=6) ){
                         if(moveInCheck){
@@ -309,6 +312,23 @@ public class HomePageServiceImpl implements HomePageService {
                 }
             }
         }
+        try{
+            for (Home h : listMatchingHomes) {
+                List<String> image = new ArrayList<>();
+                image.add(homeDAO.fetchFirstImage(h.getId()));
+                h.setImages(image);
+            }
+        } catch (GeneralException e) {
+            // Log the specific exception thrown from the DAO
+            logger.severe("Error while fetching new homes: " + e.getMessage());
+            // Optionally, you can throw a custom exception or handle it as needed
+            throw new GeneralException("Service layer: Unable to retrieve new homes", e);
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+            logger.severe("Unexpected error in service layer: " + e.getMessage());
+            throw new GeneralException("Service layer: Unexpected error", e);
+        }
+
         return listMatchingHomes;
     }
 

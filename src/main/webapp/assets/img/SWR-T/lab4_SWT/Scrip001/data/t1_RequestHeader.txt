@@ -1,0 +1,9 @@
+GET http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800 HTTP/1.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0
+Accept: text/css,*/*;q=0.1
+Referer: http://localhost:9999/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Host: fonts.googleapis.com
+Connection: Keep-Alive
+

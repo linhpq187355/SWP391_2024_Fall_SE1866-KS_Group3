@@ -170,25 +170,25 @@
     <%--        </div>--%>
 
     <%--    </div>--%>
-        <%
-            // Lấy thông báo từ session
-            String successMessage = (String) session.getAttribute("successMessage");
+    <%
+        // Lấy thông báo từ session
+        String successMessage = (String) session.getAttribute("successMessage");
 
-            // Nếu có thông báo, sử dụng JavaScript để hiển thị alert
-            if (successMessage != null) {
-        %>
-        <script>
-            // Hiển thị thông báo kiểu alert
-            alert("<%= successMessage %>");
-        </script>
-        <%
-                // Xóa thông báo khỏi session sau khi hiển thị
-                session.removeAttribute("successMessage");
-            }
-        %>
+        // Nếu có thông báo, sử dụng JavaScript để hiển thị alert
+        if (successMessage != null) {
+    %>
+    <script>
+        // Hiển thị thông báo kiểu alert
+        alert("<%= successMessage %>");
+    </script>
+    <%
+            // Xóa thông báo khỏi session sau khi hiển thị
+            session.removeAttribute("successMessage");
+        }
+    %>
 
 
-        <div class="containerp">
+    <div class="containerp">
         <div class="content">
             <div class="post-title">
                 ${blogPost.title}

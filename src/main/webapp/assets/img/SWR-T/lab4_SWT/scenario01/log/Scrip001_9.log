@@ -1,0 +1,20 @@
+Start auto log messages stack - Iteration 5.
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") was successful, 118340 body bytes, 1598 header bytes  	[MsgId: MMSG-26386]
+Action.c(132): web_url("selection") started  	[MsgId: MMSG-26355]
+Action.c(132): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 8.
+Action.c(52): Downloading resource "https://cdn.jsdelivr.net/npm/sweetalert2@11" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(52): web_url("crx") was successful, 19663 body bytes, 1083 header bytes  	[MsgId: MMSG-26386]
+Action.c(63): web_url("blocklist") started  	[MsgId: MMSG-26355]
+Action.c(63): Downloading resource "http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSCmu1aB.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(63): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(63): Warning -27792: Failed to connect to server "fonts.gstatic.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(63): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+

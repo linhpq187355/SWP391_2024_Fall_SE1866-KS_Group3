@@ -1,0 +1,16 @@
+[t2]
+SnapshotXmlFile=snapshot_3.xml
+ContentType=application/json
+StepName=Url: ExpandedDomainsFilterGlobal.json
+Total=2
+FileName1=t2.json
+FileName2=t1_0_css.css
+RequestHeaderFile=t2_RequestHeader.txt
+SaveSnapshotResources=1
+ResponseHeaderFile=t2_ResponseHeader.txt
+RawStepEndTime=1730458262984
+RawStepName=ExpandedDomainsFilterGlobal.json
+RequestBodyFile=t2_RequestBody.txt
+RawStepStartTime=1730458262679
+URL1=https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json
+URL2=http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800

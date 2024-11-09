@@ -199,19 +199,19 @@
         <div class="time-picker" style="width: 91%; margin: auto">
             <table>
                 <tr>
-                    <td class="time-slot">5:30 - 7:30</td>
-                    <td class="time-slot">6:00 - 8:00</td>
-                    <td class="time-slot">6:30 - 8:30</td>
-                    <td class="time-slot">7:00 - 9:00</td>
+                    <td class="time-slot">05:30 - 07:30</td>
+                    <td class="time-slot">06:00 - 08:00</td>
+                    <td class="time-slot">06:30 - 08:30</td>
+                    <td class="time-slot">07:00 - 09:00</td>
                 </tr>
                 <tr>
-                    <td class="time-slot">7:30 - 9:30</td>
-                    <td class="time-slot">8:00 - 10:00</td>
-                    <td class="time-slot">8:30 - 10:30</td>
-                    <td class="time-slot">9:00 - 11:00</td>
+                    <td class="time-slot">07:30 - 09:30</td>
+                    <td class="time-slot">08:00 - 10:00</td>
+                    <td class="time-slot">08:30 - 10:30</td>
+                    <td class="time-slot">09:00 - 11:00</td>
                 </tr>
                 <tr>
-                    <td class="time-slot">9:30 - 11:30</td>
+                    <td class="time-slot">09:30 - 11:30</td>
                     <td class="time-slot">10:00 - 12:00</td>
                     <td class="time-slot">10:30 - 12:30</td>
                     <td class="time-slot">11:00 - 13:00</td>
@@ -361,6 +361,7 @@
         timeSlots.forEach(slot => {
             // Reset trạng thái cho từng ô
             slot.classList.remove('disabled');
+            slot.removeAttribute('title');
 
             // Lấy khoảng thời gian của ô hiện tại
             const [startTime, endTime] = slot.textContent.split(' - ');
@@ -382,7 +383,7 @@
                         (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
                         (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
                     ) {
-
+                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
                         slot.classList.add('disabled');
                         break;
                     }
@@ -400,7 +401,7 @@
                         (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
                         (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
                     ) {
-
+                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
                         slot.classList.add('disabled');
                         break;
                     }

@@ -1,0 +1,17 @@
+[t18]
+FileName1=t18.json
+URL1=https://functional.events.data.microsoft.com/OneCollector/1.0/
+Total=4
+RequestHeaderFile=t18_RequestHeader.txt
+RequestBodyFile=t18_RequestBody.txt
+ResponseHeaderFile=t18_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_18.xml
+FileName2=t18_bootstrap.bundle.min.html
+URL2=https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js
+FileName3=t18_fa-solid-900.html
+URL3=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-solid-900.woff2
+FileName4=t18_leaflet.html
+URL4=https://unpkg.com/leaflet@1.4.0/dist/leaflet.js
+[ProtocolInfo]
+ProtocolId=QTWeb

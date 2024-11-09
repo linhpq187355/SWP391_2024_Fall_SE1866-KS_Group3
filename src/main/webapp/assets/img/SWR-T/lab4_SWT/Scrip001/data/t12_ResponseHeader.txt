@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Cache-Control: max-age=86400, private
+Content-Length: 2093
+Content-Type: application/json; charset=utf-8
+Expires: Mon, 01 Jan 0001 00:00:00 GMT
+Server: Microsoft-IIS/10.0
+ARC-RSP-DBG: [{"X-RADID":"P425775005-T700421790-C128000000003081829"},{"BATCH_REDIRECT_STORE":"B128000000003081829+P0+S0"},{"OPTOUTSTATE":"16384"},{"REGIONALPOLICY":"0"}]
+Accept-CH: UA, UA-Arch, UA-Full-Version, UA-Mobile, UA-Model, UA-Platform, UA-Platform-Version
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Date: Thu, 31 Oct 2024 17:22:41 GMT
+

@@ -66,6 +66,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
         String aptmId = null;
         Appointment appointment = null;
         String host = null;
+        String explain = null;
 
 
         try {
@@ -77,6 +78,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
             aptmId = req.getParameter("aptmId");
             note = req.getParameter("note");
             host = req.getParameter("host");
+            explain = req.getParameter("explain");
 
 
             appointment = appointmentService.getAppointmentById(aptmId);
@@ -99,7 +101,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
 
         try {
 
-            int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"tenantPending", aptmId,host);
+            int rowsUpdated = appointmentService.updateAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,note,"tenantPending", aptmId,host,explain);
 
             if(rowsUpdated>0){
                 req.setAttribute("message","Sửa lịch thành công!");
@@ -107,6 +109,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
                 req.setAttribute("appointmentYear", selectedYear);
                 req.setAttribute("appointmentDay", selectedDate);
                 req.setAttribute("appointmentTime", selectedTime);
+                req.setAttribute("id",aptmId);
                 req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
             } else {
                 LOGGER.warning("Failed to insert appointment.");
@@ -117,6 +120,7 @@ public class HostUpdateAppointmentServlet extends HttpServlet {
                 req.setAttribute("appointmentDay", selectedDate);
                 req.setAttribute("appointmentTime", selectedTime);
                 req.setAttribute("appointment", appointment);
+                req.setAttribute("explain", explain);
                 req.setAttribute("error","Sửa lịch thất bại!");
                 req.getRequestDispatcher("host-update-appointment.jsp").forward(req, resp);
             }

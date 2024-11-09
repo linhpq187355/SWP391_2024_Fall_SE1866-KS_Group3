@@ -112,12 +112,13 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Category> getCategoriesByBlogPostId(int blogPostId) {
+    public List<Category> getCategoriesByBlogPostId(int blogPostId){
         return blogDAO.getCategoriesByBlogPostId(blogPostId);
     }
     @Override
-    public void deleteBlogPostCategories(int postId) {
-        blogDAO.deleteBlogPostCategories(postId);
+    public void deleteBlogPostCategories(int postId){
+         blogDAO.deleteBlogPostCategories(postId);
     }
+
 }
 

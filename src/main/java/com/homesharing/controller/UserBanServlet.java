@@ -23,15 +23,10 @@ public class UserBanServlet extends HttpServlet {
         try {
             int uid = Integer.parseInt(userId);
             userManagementService.updateUserStatus(uid, "inactive");
-            response.sendRedirect("account-manage");
+            response.sendRedirect("account-list");
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 }

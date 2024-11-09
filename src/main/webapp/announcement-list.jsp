@@ -51,7 +51,7 @@
 <body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <jsp:include page="sidebar.jsp"/>
+    <jsp:include page="dashboard-sidebar.jsp"/>
     <!-- End Sidebar -->
 
     <div class="main-panel">

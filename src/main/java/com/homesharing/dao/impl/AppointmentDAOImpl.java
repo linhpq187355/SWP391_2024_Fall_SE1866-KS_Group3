@@ -459,6 +459,53 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return affectedRows;
     }
 
+    @Override
+    public List<Appointment> getAllAppointments() {
+        List<Appointment> list = new ArrayList<>();
+        String sql = "select *\n" +
+                "from Appointments\n";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment appointment = new Appointment();
+                appointment.setId(resultSet.getInt("id"));
+                appointment.setStartDate(resultSet.getTimestamp("startDate").toLocalDateTime());
+                appointment.setEndDate(resultSet.getTimestamp("endDate").toLocalDateTime());
+                appointment.setTenantId(resultSet.getInt("tenantId"));
+                appointment.setHostId(resultSet.getInt("hostId"));
+                appointment.setStatus(resultSet.getString("status"));
+                appointment.setNote(resultSet.getString("note"));
+                appointment.setHomeId(resultSet.getInt("homeId"));
+                appointment.setRejectReason(resultSet.getString("RejectReason"));
+                appointment.setCancelReason(resultSet.getString("cancelReason"));
+                list.add(appointment);
+            }
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            throw new GeneralException("Error: ", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return list;
+    }
+
     /**
      * Finds appointments that have expired but have not been marked as 'expired'.
      *

@@ -35,8 +35,8 @@
                 <section style="height: 100%;">
                     <div class="inner">
                         <div class="form-content" >
-                            <div class="form-header">
-                                <h3>Thông tin ghép nối</h3>
+                            <div class="form-header" >
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông Tin Ghép Nối</h3>
                             </div>
                             <c:if test="${not empty requestScope.error}">
                                 <div class="alert alert-danger" role="alert" style="width: 50%;margin: auto;">
@@ -65,14 +65,14 @@
                             </c:if>
                             <c:if test="${empty requestScope.error}">
                                 <c:if test="${empty requestScope.message}">
-                                    <p style="padding-bottom: 35px">Hãy điền những thông tin cá nhân và phòng mà bạn mong muốn tìm kiếm. Chúng tôi sẽ cho bạn những lựa chọn phù hợp</p>
+                                    <p style="padding-bottom: 35px;color: #1A1A1A;">Hãy điền những thông tin cá nhân và phòng mà bạn mong muốn tìm kiếm. Chúng tôi sẽ cho bạn những lựa chọn phù hợp</p>
                                 </c:if>
                             </c:if>
-                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 45px; margin-top: 20px">Phòng mong muốn</h4>
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 45px; margin-top: 20px;color: #1A1A1A;">Phòng mong muốn</h4>
                             <div class="form-row">
                                 <div class="form-holder">
-                                    <label>Bạn mong muốn tìm bạn cùng phòng trong bao lâu?<span style="color: red; margin-left: 10px">*</span></label>
-                                    <select class="form-control" name="howLong" required>
+                                    <label style="color: #FA8600;">Bạn mong muốn tìm bạn cùng phòng trong bao lâu?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <select class="form-control" name="howLong" required style="border-radius: 15px;">
                                         <option value="">Chọn thời gian</option>
                                         <option value="short">Ngắn (6 tháng hoặc ít hơn)</option>
                                         <option value="long">Dài (6 tháng trở lên)</option>
@@ -80,22 +80,22 @@
                                     <span class="error" id="howLongError"></span>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Thời điểm bạn mong muốn chuyển vào (sớm nhất)?<span style="color: red; margin-left: 10px">*</span></label>
-                                    <input name="emvdate" type="date" class="form-control" required>
+                                    <label style="color: #FA8600;">Thời điểm bạn mong muốn chuyển vào (sớm nhất)?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <input name="emvdate" type="date" class="form-control" required style="border-radius: 15px;">
                                     <span class="error" id="emvdateError"></span>
                                 </div>
                             </div>
                             <div class="form-row">
 
                                 <div class="form-holder">
-                                    <label>Thời điểm bạn mong muốn chuyển vào (muộn nhất)?<span style="color: red; margin-left: 10px">*</span></label>
-                                    <input name="lmvdate" type="date" class="form-control" required style="margin-top: 28px;">
+                                    <label style="color: #FA8600;">Thời điểm bạn mong muốn chuyển vào (muộn nhất)?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <input name="lmvdate" type="date" class="form-control" required style="margin-top: 28px;border-radius: 15px">
                                     <span class="error" id="lmvdateError"></span>
                                 </div>
                                 <div class="form-holder">
-                                    <label style="margin-bottom: 33px">Giá phòng bạn mong muốn (theo tháng)?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label style="margin-bottom: 33px;color: #FA8600;">Giá phòng bạn mong muốn (theo tháng)?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div style="display: flex; align-items: center">
-                                        <input name="minBudget" type="number" class="form-control" style="width: 30%; margin-right: 10px" required>  đ <label style="margin: 0 20px">đến</label><input name="maxBudget" type="number" class="form-control" style="width: 30%;margin-right: 10px" required>đ
+                                        <input name="minBudget" type="number" class="form-control" style="width: 30%; margin-right: 10px;border-radius: 15px" required>  đ <label style="margin: 0 20px; color: #FA8600;border-radius: 15px">đến</label><input name="maxBudget" type="number" class="form-control" style="width: 30%;margin-right: 10px" required>đ
 
                                     </div>
                                     <span class="error" id="budgetError"></span>
@@ -103,8 +103,8 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-holder">
-                                    <label>Khu vực bạn muốn tìm phòng?<span style="color: red; margin-left: 10px">*</span></label>
-                                    <select class="form-control" name="prefProvince" required>
+                                    <label style="color: #FA8600;">Khu vực bạn muốn tìm phòng?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <select class="form-control" name="prefProvince" required style="border-radius: 15px;">
                                         <option value="">Chọn khu vực</option>
                                         <c:forEach items="${requestScope.provinceList}" var="provinceList">
                                             <option value="${provinceList.id}">${provinceList.name}</option>
@@ -114,32 +114,15 @@
                                 </div>
 
                             </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SECTION 2 -->
-                <h2></h2>
-                <section>
-                    <div class="inner">
-                        <div class="form-content">
-                            <div class="form-header">
-                                <h3>Thông tin ghép nối</h3>
-                            </div>
-
-                            <p style="padding-bottom: 35px">Hãy điền những thông tin về bạn cùng phòng mà bạn mong muốn tìm kiếm. Chúng tôi sẽ cho bạn những lựa chọn phù hợp</p>
-
-
-                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px">Thông tin cá nhân</h4>
                             <div class="form-row" style="margin-bottom: 20px">
                                 <div class="form-holder">
-                                    <label>Ngày sinh của bạn?<span style="color: red; margin-left: 10px">*</span></label>
-                                    <input name="dob" type="date" class="form-control" required>
+                                    <label style="color: #FA8600;">Ngày sinh của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <input name="dob" type="date" class="form-control" required style="border-radius: 15px;">
                                     <span class="error" id="dobError"></span>
                                 </div>
                                 <div class="form-holder">
-                                    <label>Giới tính<span style="color: red; margin-left: 10px">*</span></label>
-                                    <select class="form-control" name="gender" required>
+                                    <label style="color: #FA8600;">Giới tính<span style="color: red; margin-left: 10px">*</span></label>
+                                    <select class="form-control" name="gender" required style="border-radius: 15px;">
                                         <option value="">Chọn giới tính</option>
                                         <option value="male">Nam</option>
                                         <option value="female">Nữ</option>
@@ -148,72 +131,196 @@
                                     <span class="error" id="genderError"></span>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-broom"></i> Mức độ sạch sẽ của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- SECTION 2 -->
+                <h2></h2>
+                <section>
+                    <div class="inner">
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 35px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px; color: #1A1A1A">Thông tin cá nhân</h4>
+
+                            <div class="form-row" style="justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;">
+                                    <img src="./assets/img/2212adb7d7b265894e6cae822ff984ef.png">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-broom"></i> Mức độ sạch sẽ của bạn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cleanlinessSlider" name="cleanliness" readonly type="range" min="1" max="5" step="1" value="" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value:''" required>
                                         <div class="ano-slider">
-                                            <span>Bẩn</span>
-                                            <span>Sạch</span>
+                                            <span>Bừa bộn</span>
+                                            <span>Bình thường</span>
+                                            <span>Sạch sẽ</span>
                                         </div>
                                         <span id="cleanlinessError" class="error"></span>
                                     </div>
                                 </div>
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-smoking"></i> Mức độ hút thuốc của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner">
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 35px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px; color: #1A1A1A">Thông tin cá nhân</h4>
+
+                            <div class="form-row" style="justify-content: center;">
+
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/e71c42f9e59e304a62278564cb4ed6df.png" style="width: 60%">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-smoking"></i> Bạn có hút thuốc không?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="smokingSlider" name="smoking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" required>
                                         <div class="ano-slider">
                                             <span>Không hút</span>
+                                            <span>Hút vừa phải</span>
                                             <span>Thường xuyên</span>
                                         </div>
                                         <span id="smokingError" class="error"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-beer-mug-empty"></i> Mức độ uống rượu/bia của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                        </div>
+                    </div>
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner">
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 35px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px; color: #1A1A1A">Thông tin cá nhân</h4>
+
+                            <div class="form-row" style="justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/bf1816d9ea29fceb6665ae79d6a30c57.png" style="width: 70%">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-beer-mug-empty"></i> "Tửu lượng" của ban thế nào?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="drinkingSlider" name="drinking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" required>
                                         <div class="ano-slider">
-                                            <span>Không uống</span>
-                                            <span>Thường xuyên</span>
+                                            <span>Thấp</span>
+                                            <span>Bình thường</span>
+                                            <span>Cao</span>
                                         </div>
                                         <span id="drinkingError" class="error"></span>
                                     </div>
                                 </div>
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-user-group"></i> Bạn sẽ hòa đồng với bạn cùng phòng?<span style="color: red; margin-left: 10px">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner">
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 35px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px; color: #1A1A1A">Thông tin cá nhân</h4>
+
+                            <div class="form-row" style="justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/c08e9fa0a60f827e6d234d237486aa68.png" style="width: 60%">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-user-group"></i> Bạn sẽ hòa đồng với bạn cùng phòng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="interactionSlider" name="interaction" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" required>
                                         <div class="ano-slider">
                                             <span>Không</span>
+                                            <span>Chưa biết</span>
                                             <span>Có</span>
                                         </div>
                                         <span id="interactionError" class="error"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-person-booth"></i> Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?<span style="color: red; margin-left: 10px">*</span></label>
+                        </div>
+                    </div>
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner">
+                        <div class="form-content">
+                            <div class="form-header" >
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 35px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px; color: #1A1A1A">Thông tin cá nhân</h4>
+
+                            <div class="form-row" style="justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/fb0922bf831a80f612fbedf57cb3ed71.png" >
+                                    <label style="color: #FA8600"><i class="fa-solid fa-person-booth"></i> Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="guestSlider" name="guest" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" required>
                                         <div class="ano-slider">
-                                            <span>Không</span>
-                                            <span>Có</span>
+                                            <span>Khó chị</span>
+                                            <span>Không quan tâm</span>
+                                            <span>Thoải mái</span>
                                         </div>
                                         <span id="guestError" class="error"></span>
                                     </div>
                                 </div>
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-fire-burner"></i> Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner">
+                        <div class="form-content">
+                            <div class="form-header" >
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 35px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px; color: #1A1A1A">Thông tin cá nhân</h4>
+
+                            <div class="form-row" style="justify-content: center;">
+
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/vector-illustration-enjoying-cook-flat-design-style_844724-3943.avif" style="width: 65%">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-fire-burner"></i> Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container" style="margin-bottom: 10px">
                                         <input id="cookingSlider" name="cooking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" required>
                                         <div class="ano-slider">
                                             <span>Không</span>
+                                            <span>Bình thường</span>
                                             <span>Có</span>
                                         </div>
 
@@ -221,14 +328,35 @@
                                     <span id="cookingError" class="error"></span>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-dog"></i> Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
+
+                        </div>
+                    </div>
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner">
+                        <div class="form-content">
+                            <div class="form-header" >
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 35px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px; margin-top: 20px; color: #1A1A1A">Thông tin cá nhân</h4>
+
+
+                            <div class="form-row" style="justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/da99d4f3de95b8fccbfcd90e60fbb04e.png">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-dog"></i> Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container" style="margin-bottom: 10px">
                                         <input id="petSlider" name="pet" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" required>
                                         <div class="ano-slider">
-                                            <span>Không</span>
-                                            <span>Có</span>
+                                            <span>Khó chịu</span>
+                                            <span>Bình thường</span>
+                                            <span>Thoải mái</span>
                                         </div>
                                     </div>
                                     <span id="petError" class="error"></span>
@@ -237,14 +365,15 @@
                         </div>
                     </div>
                 </section>
+
             </c:if>
             <c:if test="${cookie.roleId.value == 4}">
                 <h2></h2>
                 <section>
-                    <div class="inner">
+                    <div class="inner" >
                         <div class="form-content">
                             <div class="form-header">
-                                <h3>Thông tin ghép nối</h3>
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
                             </div>
                             <c:if test="${not empty requestScope.error}">
                                 <div class="alert alert-danger" role="alert" style="width: 50%;margin: auto;">
@@ -273,70 +402,164 @@
                             </c:if>
                             <c:if test="${empty requestScope.error}">
                                 <c:if test="${empty requestScope.message}">
-                                    <p style="padding-bottom: 80px">Hãy điền những thông tin về bạn cùng phòng mà bạn mong muốn tìm kiếm. Chúng tôi sẽ giúp bạn tìm kiếm nhanh hơn.</p>
+                                    <p style="padding-bottom: 80px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
                                 </c:if>
                             </c:if>
-                            <div class="form-row" style="margin-bottom: 70px">
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-broom"></i> Mức độ sạch sẽ bạn mong muốn?<span style="color: red; margin-left: 10px">*</span></label>
+                            <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/2212adb7d7b265894e6cae822ff984ef.png">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-broom"></i> Mức độ sạch sẽ của bạn?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cleanlinessSlider1" name="cleanliness" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" >
                                         <div class="ano-slider">
-                                            <span>Bẩn</span>
-                                            <span>Sạch</span>
+                                            <span>Bừa bộn</span>
+                                            <span>Bình thường</span>
+                                            <span>Sạch sẽ</span>
                                         </div>
                                         <span id="cleanlinessError1" class="error"></span>
                                     </div>
                                 </div>
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-smoking"></i> Mức độ hút thuốc của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner" >
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 80px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+                            <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/e71c42f9e59e304a62278564cb4ed6df.png" style="width: 60%">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-smoking"></i> Bạn có hút thuốc không?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="smokingSlider1" name="smoking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
                                             <span>Không hút</span>
+                                            <span>Hút vừa phải</span>
                                             <span>Thường xuyên</span>
                                         </div>
                                         <span id="smokingError1" class="error"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row" style="margin-bottom: 70px">
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-beer-mug-empty"></i> Mức độ uống rượu/bia của bạn?<span style="color: red; margin-left: 10px">*</span></label>
+                        </div>
+                    </div>
+
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner" >
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+
+                                    <p style="padding-bottom: 80px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+                            <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/bf1816d9ea29fceb6665ae79d6a30c57.png" style="width: 70%">
+                                    <label><i class="fa-solid fa-beer-mug-empty"></i> "Tửu lượng" của bạn thế nào?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="drinkingSlider1" name="drinking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" >
                                         <div class="ano-slider">
-                                            <span>Không uống</span>
-                                            <span>Thường xuyên</span>
+                                            <span>Thấp</span>
+                                            <span>Bình thường</span>
+                                            <span>Cao</span>
                                         </div>
                                         <span id="drinkingError1" class="error"></span>
                                     </div>
                                 </div>
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-user-group"></i> Bạn sẽ hòa đồng với bạn cùng phòng?<span style="color: red; margin-left: 10px">*</span></label>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner" >
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                                    <p style="padding-bottom: 80px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+                            <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/c08e9fa0a60f827e6d234d237486aa68.png" style="width: 60%">
+                                    <label style="color: #FA8600"><i class="fa-solid fa-user-group"></i> Bạn sẽ hòa đồng với bạn cùng phòng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="interactionSlider1" name="interaction" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
                                             <span>Không</span>
+                                            <span>Chưa biết</span>
                                             <span>Có</span>
                                         </div>
                                         <span id="interactionError1" class="error"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row" style="margin-bottom: 70px">
-                                <div class="form-holder">
-                                    <label><i class="fa-solid fa-person-booth"></i> Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?<span style="color: red; margin-left: 10px">*</span></label>
+                        </div>
+                    </div>
+
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner" >
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                                    <p style="padding-bottom: 80px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+                            <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/fb0922bf831a80f612fbedf57cb3ed71.png" >
+                                    <label style="color: #FA8600"><i class="fa-solid fa-person-booth"></i> Bạn có thoải mái nếu bạn cùng phòng có khách đến chơi?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="guestSlider1" name="guest" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
-                                            <span>Không</span>
-                                            <span>Có</span>
+                                            <span>Khó chị</span>
+                                            <span>Không quan tâm</span>
+                                            <span>Thoải mái</span>
                                         </div>
                                         <span id="guestError1" class="error"></span>
                                     </div>
                                 </div>
-                                <div class="form-holder">
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner" >
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                                    <p style="padding-bottom: 80px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+                            <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/vector-illustration-enjoying-cook-flat-design-style_844724-3943.avif" style="width: 65%">
                                     <label><i class="fa-solid fa-fire-burner"></i> Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cookingSlider1" name="cooking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
@@ -348,8 +571,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row" style="margin-bottom: 70px">
-                                <div class="form-holder">
+
+                        </div>
+                    </div>
+
+                </section>
+
+                <h2></h2>
+                <section>
+                    <div class="inner" >
+                        <div class="form-content">
+                            <div class="form-header">
+                                <h3 style="border: none;letter-spacing: 0;text-transform: unset;color: #1A1A1A;">Thông tin ghép nối</h3>
+                            </div>
+
+                            <p style="padding-bottom: 80px;color: #1A1A1A">Hãy điền những thông tin chi tiết về bạn. Chúng tôi sẽ cho bạn những lựa chọn bạn cùng phòng phù hợp.</p>
+
+
+                            <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
+                                <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
+                                    <img src="./assets/img/da99d4f3de95b8fccbfcd90e60fbb04e.png">
                                     <label><i class="fa-solid fa-dog"></i> Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="petSlider1" name="pet" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">

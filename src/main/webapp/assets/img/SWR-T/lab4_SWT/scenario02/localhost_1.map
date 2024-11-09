@@ -1,0 +1,12 @@
+﻿[DATA_POINT]
+1="tcp_connect"
+2="tcp_connection_count"
+3="mic_recv"
+4="HTTP_200"
+5="tcp_shutdown"
+6="ssl_session_new"
+7="HTTP_502"
+[END_TRANSACTION]
+1="vuser_init_Transaction"
+2="Action_Transaction"
+3="vuser_end_Transaction"

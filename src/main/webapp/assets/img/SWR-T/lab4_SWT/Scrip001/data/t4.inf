@@ -1,0 +1,17 @@
+[t4]
+FileName1=t4_ExpandedDomainsFilterGlobal.json
+URL1=https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json
+Total=4
+ContentType=application/json
+SnapshotXmlFile=snapshot_4.xml
+RequestHeaderFile=t4_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t4_ResponseHeader.txt
+FileName2=t4_f5cbf3afb2.html
+URL2=https://kit.fontawesome.com/f5cbf3afb2.js
+FileName3=t4_memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.html
+URL3=http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2
+FileName4=t4_memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSGmu1aB.html
+URL4=http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSGmu1aB.woff2
+[ProtocolInfo]
+ProtocolId=QTWeb

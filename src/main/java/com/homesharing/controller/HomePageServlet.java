@@ -127,12 +127,13 @@ public class HomePageServlet extends HttpServlet {
                 matchingHost = preferenceService.listMatchingPreferences(Integer.parseInt(userId));
                 if(matchingHost != null){
                     matchingHomes = homePageService.getMatchingHome(matchingHost, Integer.parseInt(userId));
+
                     matchingHomePrice = homePageService.getHomePrice(matchingHomes);
+
                 }
             }
 
         }
-
 
         // Set the home and price data as request attributes for use in the JSP
         req.setAttribute("homes", homes);

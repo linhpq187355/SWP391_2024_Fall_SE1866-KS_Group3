@@ -1,0 +1,20 @@
+Start auto log messages stack - Iteration 5.
+Action.c(34): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(34): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(36): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(36): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(39): web_url("ExpandedDomainsFilterGlobal.json_2") started  	[MsgId: MMSG-26355]
+Action.c(39): Resource "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" is in the cache already and will not be downloaded again  	[MsgId: MMSG-26655]
+Action.c(52): web_url("crx") started  	[MsgId: MMSG-26355]
+Action.c(52): Downloading resource "https://cdn.jsdelivr.net/npm/sweetalert2@11" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(52): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 8.
+Action.c(216): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-regular-400.woff2" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(216): Downloading resource "https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(216): Warning -27760: Request "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-solid-900.woff2" failed  	[MsgId: MWAR-27760]
+Action.c(216): Warning -27760: Request "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-regular-400.woff2" failed  	[MsgId: MWAR-27760]
+Action.c(216): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+

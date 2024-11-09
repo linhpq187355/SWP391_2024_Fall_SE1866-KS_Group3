@@ -1071,7 +1071,8 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
 
         StringBuilder sql = new StringBuilder("select * \n" +
                 "from Homes\n" +
-                "where createdBy in (");
+                "where status = 'active'\n"+
+                "and createdBy in (");
         for (int i = 0; i < matchingHost.length; i++) {
             sql.append("?");
             if (i < matchingHost.length - 1) {
@@ -1103,6 +1104,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setArea(resultSet.getBigDecimal("area"));
                 home.setLeaseDuration(resultSet.getInt("leaseDuration"));
                 home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
+                home.setWardId(resultSet.getInt("wardsId"));
                 matchingHomes.add(home);
             }
         } catch (SQLException e) {
@@ -1270,6 +1272,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                         GROUP BY p.Homesid
                     )
                 ) tb1 ON tb1.Homesid = h.id
+                WHERE h.status = 'active'   
                 ORDER BY h.createdDate DESC
                 """;
 
@@ -1358,5 +1361,69 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         }
         return homes;
     }
+
+    @Override
+    public List<Home> getByCreatedBy(int createdById) {
+        // SQL query to fetch homes created by a specific user along with their price
+        String sql = """
+            SELECT h.id, h.name, h.address, h.area, h.createdDate, tb1.price as price
+            FROM Homes h
+            LEFT JOIN (
+                SELECT Homesid, price, createdDate, id
+                FROM Prices
+                WHERE createdDate IN (
+                    SELECT MAX(p.createdDate)
+                    FROM Prices p
+                    GROUP BY p.Homesid
+                )
+            ) tb1 ON tb1.Homesid = h.id
+            WHERE h.status = 'active'
+            AND h.createdBy = ?  -- Filter by createdById
+            ORDER BY h.createdDate DESC
+            """;
+
+        // List to store fetched Home objects
+        List<Home> homeList = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        // Try-with-resources to automatically close resources
+        try {
+            connection = getConnection(); // Get database connection
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, createdById); // Set createdBy value to filter homes
+            resultSet = preparedStatement.executeQuery();
+
+            // Process each result row and map it to a Home object
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setAddress(resultSet.getString("address"));
+                home.setArea(resultSet.getBigDecimal("area"));
+                home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                home.setName(resultSet.getString("name"));
+                home.setPrice(resultSet.getInt("price")); // Set the price directly from the query
+
+                homeList.add(home); // Add the Home object to the list
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Log the exception and throw a custom exception
+            logger.severe("Error retrieving homes from the database: " + e.getMessage());
+            throw new GeneralException("Error retrieving homes from the database", e);
+        } finally {
+            // Ensure resources are closed in the finally block
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) closeConnection(connection); // close the connection using DBContext's method
+            } catch (SQLException e) {
+                logger.warning("Failed to close resources: " + e.getMessage());
+            }
+        }
+
+        return homeList; // Return the list of homes
+    }
+
 
 }

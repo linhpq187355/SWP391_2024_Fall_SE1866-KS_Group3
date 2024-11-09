@@ -139,7 +139,6 @@ public class ReplyDAOImpl extends DBContext implements ReplyDAO {
         }
     }
 
-
     /**
      * Adds a new reply to the database.
      *
@@ -209,7 +208,6 @@ public class ReplyDAOImpl extends DBContext implements ReplyDAO {
         }
         return replyId; // Return the generated reply ID
     }
-
 
     /**
      * Retrieves replies for a specific conversation filtered by content type.
@@ -285,7 +283,6 @@ public class ReplyDAOImpl extends DBContext implements ReplyDAO {
         return replies; // Return the list of replies retrieved from the database
     }
 
-
     /**
      * Fetches the latest reply for a specific conversation.
      *
@@ -349,7 +346,6 @@ public class ReplyDAOImpl extends DBContext implements ReplyDAO {
         }
         return null; // Return null if no replies are found
     }
-
 
     /**
      * Counts the number of new messages for a specific user.
@@ -431,5 +427,50 @@ public class ReplyDAOImpl extends DBContext implements ReplyDAO {
 
         return newMessageCount; // Return the total count of new messages
     }
+
+    /**
+     * Deletes a reply from the database by its ID.
+     * @param replyId The ID of the reply to be deleted
+     * @return true if the reply was successfully deleted, false otherwise
+     * @throws SQLException if there is an error during the database operation
+     */
+    @Override
+    public boolean deleteReplyById(int replyId, int conversationId, int sentId) throws SQLException {
+        // SQL statement to delete a reply by its ID
+        String sql = "DELETE FROM Replies WHERE id = ? AND conversationId = ? AND userId = ?";
+        Connection connection = null;  // Initialize connection
+        PreparedStatement preparedStatement = null;  // Initialize prepared statement
+
+        try {
+            // Get a connection from DBContext or other connection methods
+            connection = getConnection();
+            // Prepare the SQL statement
+            preparedStatement = connection.prepareStatement(sql);
+            // Set the parameter for the prepared statement (reply ID)
+            preparedStatement.setInt(1, replyId);
+            preparedStatement.setInt(2, conversationId);
+            preparedStatement.setInt(3, sentId);
+            // Execute the delete statement
+            int rowsAffected = preparedStatement.executeUpdate();
+            // Return true if a row was deleted, otherwise false
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            // Handle SQL-specific exceptions
+            throw new GeneralException("SQL error while deleting reply with ID " + replyId + ": " + e.getMessage(), e);
+        } catch (IOException e) {
+            // Handle I/O-specific exceptions
+            throw new GeneralException("I/O error while deleting reply with ID " + replyId + ": " + e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            // Handle class-not-found-specific exceptions
+            throw new GeneralException("Class not found error while deleting reply with ID " + replyId + ": " + e.getMessage(), e);
+        } finally {
+            // Ensure resources are closed to prevent memory leaks
+            if (preparedStatement != null) {
+                preparedStatement.close();  // Close the prepared statement
+            }
+            closeConnection(connection);  // Close the database connection
+        }
+    }
+
 
 }

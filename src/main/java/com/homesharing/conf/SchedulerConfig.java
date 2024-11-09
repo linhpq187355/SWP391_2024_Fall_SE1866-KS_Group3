@@ -11,6 +11,7 @@
 package com.homesharing.conf;
 
 
+import com.homesharing.util.AutoSendUpcomingAppointmentNoti;
 import com.homesharing.util.UpdateExpiredAppointmentsJob;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -44,6 +45,10 @@ public class SchedulerConfig {
                         .withIdentity("expiredAppointmentJob", "group1")
                         .build();
 
+                JobDetail upcomingAppointmentJob = JobBuilder.newJob(AutoSendUpcomingAppointmentNoti.class)
+                        .withIdentity("upcomingAppointmentJob", "group1")
+                        .build();
+
                 // Configure a trigger to start immediately and repeat every 30 minutes
                 Trigger trigger = TriggerBuilder.newTrigger()
                         .withIdentity("trigger1", "group1")
@@ -53,10 +58,20 @@ public class SchedulerConfig {
                                 .repeatForever())
                         .build();
 
+                Trigger upcomingTrigger = TriggerBuilder.newTrigger()
+                        .withIdentity("upcomingTrigger", "group1")
+                        .startNow()
+                        .withSchedule(SimpleScheduleBuilder.simpleSchedule()
+                                .withIntervalInHours(24)
+                                .repeatForever())
+                        .build();
+
+
                 // Initialize and start the scheduler
                 scheduler = StdSchedulerFactory.getDefaultScheduler();
                 scheduler.start();
                 scheduler.scheduleJob(job, trigger);
+                scheduler.scheduleJob(upcomingAppointmentJob, upcomingTrigger);
                 LOGGER.info("Scheduler started and job scheduled successfully.");
             }
         } catch (SchedulerException e) {

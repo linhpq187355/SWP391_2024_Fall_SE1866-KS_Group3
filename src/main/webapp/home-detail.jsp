@@ -2,7 +2,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ex" uri="http://example.com/functions" %>
-
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -41,6 +40,8 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@1.2.0/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@1.2.0/dist/css/splide.min.css">
     <style>
         .card {
             background-color: #7f7f7f;
@@ -159,24 +160,38 @@
         /*    width: 100%;*/
         /*    height: 100%;*/
         /*}*/
-        /* Định dạng ảnh */
-        /*#image-gallery img {*/
-        /*    width: 100%;               !* Chiều rộng 100% để ảnh chiếm toàn bộ chiều rộng của thẻ cha *!*/
-        /*    height: auto;              !* Giữ tỷ lệ khung hình của ảnh *!*/
-        /*    object-fit: cover;         !* Cắt ảnh để phù hợp với kích thước khung *!*/
-        /*    border-radius: 10px;       !* Bo tròn các góc của ảnh *!*/
-        /*    margin-bottom: 10px;       !* Khoảng cách giữa các ảnh *!*/
-        /*}*/
+        .thumbnail_slider {
+            max-width: 710px;
+            margin: 30px auto;
+        }
 
-        /*!* Nếu bạn muốn ảnh có chiều cao cố định, ví dụ 200px *!*/
-        /*#image-gallery img {*/
-        /*    width: 100%;*/
-        /*    height: 200px;             !* Chiều cao cố định *!*/
-        /*    object-fit: cover;         !* Cắt ảnh cho vừa khung *!*/
-        /*    border-radius: 10px;       !* Bo tròn các góc *!*/
-        /*    margin-bottom: 10px;       !* Khoảng cách giữa các ảnh *!*/
-        /*}*/
+        .splide__slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            width: 580px;
+            overflow: hidden;
+            transition: .2s;
+            border-width: 2px !important;
+            margin: 10px 4px;
+        }
 
+        .splide--nav > .splide__track > .splide__list > .splide__slide.is-active {
+            box-shadow: 2px 3px 8px #000000a3;
+        }
+
+        .splide__slide img {
+            width: auto;
+            height: auto;
+            margin: auto;
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #primary_slider .splide__slide{
+            width: 700px !important;
+        }
     </style>
 </head>
 <jsp:include page="header.jsp"/>
@@ -209,48 +224,82 @@
                 <div class="row">
                     <div class="light-slide-item">
                         <div class="clearfix">
-                            <div class="favorite-and-print">
-                                <a class="add-to-fav" href="#login-modal" data-toggle="modal">
-                                    <i class="fa fa-star-o"></i>
-                                </a>
-                                <a class="printer-icon" href="javascript:window.print()">
-                                    <i class="fa fa-print"></i>
-                                </a>
+
+
+                            <div class="thumbnail_slider" style="margin-top: 0">
+                                <!-- Primary Slider Start-->
+                                <div id="primary_slider">
+                                    <div class="splide__track">
+                                        <ul class="splide__list">
+                                            <c:forEach items="${home.images}" var="image">
+                                                <li class="splide__slide" style="border-radius: 15px;">
+                                                    <img src="${image}">
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Primary Slider End-->
+                                <!-- Thumbnal Slider Start-->
+                                <div id="thumbnail_slider">
+                                    <div class="splide__track">
+                                        <ul class="splide__list">
+                                            <c:forEach items="${home.images}" var="image">
+                                                <li class="splide__slide">
+                                                    <img src="${image}">
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Thumbnal Slider End-->
                             </div>
-                            <c:if test="${not empty home and not empty home.images}">
-                                <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-                                    <c:forEach var="imagePath" items="${home.images}">
-                                        <li data-thumb="${imagePath}">
-                                            <img src="${imagePath}" alt="Property image" />
-                                        </li>
-                                    </c:forEach>
-                                </ul>
-                            </c:if>
-<%--                            <ul id="image-gallery" class="gallery list-unstyled cS-hidden">--%>
-<%--                                <li data-thumb="assets/img/property-1/property1.jpg">--%>
-<%--                                    <img src="assets/img/property-1/property1.jpg" />--%>
-<%--                                </li>--%>
-<%--                                <li data-thumb="assets/img/property-1/property2.jpg">--%>
-<%--                                    <img src="assets/img/property-1/property3.jpg" />--%>
-<%--                                </li>--%>
-<%--                                <li data-thumb="assets/img/property-1/property3.jpg">--%>
-<%--                                    <img src="assets/img/property-1/property3.jpg" />--%>
-<%--                                </li>--%>
-<%--                                <li data-thumb="assets/img/property-1/property4.jpg">--%>
-<%--                                    <img src="assets/img/property-1/property4.jpg" />--%>
-<%--                                </li>--%>
-<%--                            </ul>--%>
+
+
+                            <script>
+                                // Primary slider.
+                                var primarySlider = new Splide('#primary_slider', {
+                                    type: 'fade',
+                                    heightRatio: 0.5,
+                                    pagination: false,
+                                    arrows: false,
+                                    cover: true,
+                                });
+
+                                // Thumbnails slider.
+                                var thumbnailSlider = new Splide('#thumbnail_slider', {
+                                    rewind: true,
+                                    fixedWidth: 100,
+                                    fixedHeight: 64,
+                                    isNavigation: true,
+                                    gap: 10,
+                                    focus: 'center',
+                                    pagination: false,
+                                    cover: true,
+                                    breakpoints: {
+                                        '600': {
+                                            fixedWidth: 66,
+                                            fixedHeight: 40,
+                                        }
+                                    }
+                                }).mount();
+
+                                // sync the thumbnails slider as a target of primary slider.
+                                primarySlider.sync(thumbnailSlider).mount();
+                            </script>
+
+
 
                         </div>
                     </div>
                 </div>
 
-                <div class="single-property-wrapper">
+                <div class="single-property-wrapper" style="margin-top: 30px">
                     <div class="single-property-header">
-                        <h1 class="property-title pull-left">${home.name}</h1>
+                        <h1 class="property-title pull-left" style="letter-spacing: 0;color: #1A1A1A;">${home.name}</h1>
                         <span class="property-price pull-right">
-    ${ex:convertPriceToVND(prices[0].price)} VND/tháng
-</span>
+${ex:convertPriceToVND(prices[0].price)} VND/tháng
+                        </span>
                     </div>
 
 
@@ -519,7 +568,7 @@
                                                     <form action="${sessionScope.isInWishlist ? 'delete-wishlist' : 'add-wishlist'}" method="POST"
                                                           onsubmit="return confirm('${sessionScope.isInWishlist ? 'Bạn có chắc chắn muốn xóa không?' : 'Bạn có chắc chắn muốn thêm vào danh sách yêu thích?'}');">
                                                         <input type="hidden" name="homeId" value="${home.id}">
-                                                        <button type="submit" class="like-button ${sessionScope.isInWishlist && sessionScope.wishlistStatus == 'active' ? 'active-wishlist' : ''}">
+                                                        <button type="submit" class="like-button">
                                                             <i class="fas fa-heart"></i> ${sessionScope.isInWishlist ? 'Đã thêm' : 'Yêu thích'}
                                                         </button>
                                                     </form>
@@ -535,8 +584,6 @@
                                             </c:if>
                                         </ul>
                                     </div>
-                                    <style>
-                                    </style>
                                     <div>
                                         <c:if test="${not empty sessionScope.message}">
                                             <div class="alert alert-info">${sessionScope.message}</div>
@@ -900,6 +947,7 @@
     function confirmAdd() {
         return confirm('Bạn có chắc chắn muốn thêm vào danh sách yêu thích?');
     }
+
 </script>
 
 </body>

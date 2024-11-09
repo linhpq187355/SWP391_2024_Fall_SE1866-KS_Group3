@@ -1,0 +1,10 @@
+Start auto log messages stack - Iteration 5.
+Action.c(216): web_url("-341398893248106636%7C-2257558592581803439%7C1720537294320060623") was successful, 624288 body bytes, 3421 header bytes  	[MsgId: MMSG-26386]
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") started  	[MsgId: MMSG-26355]
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") was successful, 20 body bytes, 284 header bytes  	[MsgId: MMSG-26386]
+Action.c(238): web_custom_request("update") started  	[MsgId: MMSG-26355]
+Action.c(238): web_custom_request("update") was successful, 1637 body bytes, 931 header bytes  	[MsgId: MMSG-26386]
+Action.c(279): web_custom_request("cloud_config_observers.json") started  	[MsgId: MMSG-26355]
+Action.c(279): Error -27721: Step download timeout (120 seconds) has expired when downloading resource "https://static.edge.microsoftapp.net/default/cloud_config_observers.json"  	[MsgId: MERR-27721]
+End auto log messages stack.
+

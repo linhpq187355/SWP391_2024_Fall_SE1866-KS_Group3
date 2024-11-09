@@ -141,82 +141,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
-     * Checks if an appointment overlaps with existing appointments for both host and tenant.
-     *
-     * @param day                the day of the appointment
-     * @param month              the month of the appointment
-     * @param year               the year of the appointment
-     * @param time               the time range for the appointment in "HH:mm - HH:mm" format
-     * @param hostAppointments   list of existing appointments for the host
-     * @param tenantAppointments list of existing appointments for the tenant
-     * @return                   true if overlapping, false otherwise
-     */
-    @Override
-    public boolean checkOverlapping(String day, String month, String year,String time, List<Appointment> hostAppointments, List<Appointment> tenantAppointments) {
-        if (tenantAppointments == null || tenantAppointments.isEmpty()) {
-            return false;
-        }
-
-        if (hostAppointments == null || hostAppointments.isEmpty()) {
-            return false;
-        }
-
-        String[] times;
-        LocalDateTime startDate = null;
-        LocalDateTime endDate = null;
-
-        try{
-            times = time.split(" - ");
-
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-            if (times[0].length() == 4) {
-                times[0] = "0".concat(times[0]);
-            }
-            if (times[1].length() == 4) {
-                times[1] = "0".concat(times[1]);
-            }
-
-            LocalTime localStartTime = LocalTime.parse(times[0], timeFormatter);
-            LocalTime localEndTime = LocalTime.parse(times[1], timeFormatter);
-
-            startDate = LocalDateTime.of(Integer.parseInt(year),
-                    Integer.parseInt(month)+1,
-                    Integer.parseInt(day),
-                    localStartTime.getHour(),
-                    localStartTime.getMinute());
-            endDate = LocalDateTime.of(
-                    Integer.parseInt(year),
-                    Integer.parseInt(month)+1,
-                    Integer.parseInt(day),
-                    localEndTime.getHour(),
-                    localEndTime.getMinute());
-
-            for(int i=0; i<hostAppointments.size(); i++){
-                LocalDateTime existingStart = hostAppointments.get(i).getStartDate();
-                LocalDateTime existingEnd = hostAppointments.get(i).getEndDate();
-
-                if (startDate.isBefore(existingEnd) && endDate.isAfter(existingStart) && hostAppointments.get(i).getStatus().equals("accepted")) {
-                    return true;
-                }
-            }
-
-            for(int i=0; i<tenantAppointments.size(); i++){
-                LocalDateTime existingStart = tenantAppointments.get(i).getStartDate();
-                LocalDateTime existingEnd = tenantAppointments.get(i).getEndDate();
-
-                if (startDate.isBefore(existingEnd) && endDate.isAfter(existingStart) && tenantAppointments.get(i).getStatus().equals("accepted")) {
-                    return true;
-                }
-            }
-        } catch(GeneralException e){
-            LOGGER.log(Level.SEVERE,"Error check overlapping", e.getMessage());
-            throw new GeneralException("Error check overlapping" + e.getMessage(), e);
-        }
-        return false;
-    }
-
-    /**
      * Retrieves a list of appointments by host ID.
      *
      * @param hostId the ID of the host
@@ -321,7 +245,7 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @throws RuntimeException         If an error occurs while updating the appointment or adding the notification.
      */
     @Override
-    public int updateAppointment(String day, String month, String year, String time, String note,String status,String id, String host) {
+    public int updateAppointment(String day, String month, String year, String time, String note,String status,String id, String host,String explain) {
         String[] times;
         LocalTime localStartTime = null;
         LocalTime localEndTime = null;
@@ -383,7 +307,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             int affectedRow = appointmentDAO.update(appointment);
             if(affectedRow>0){
                 if(host.equals("1")) {
-                    AddNotificationUtil.getInstance().addNotification(appointment1.getTenantId(),"Lịch hẹn ngày "+appointment1.getStartDate().getDayOfMonth()+"/"+appointment1.getStartDate().getMonthValue()+"/"+appointment1.getStartDate().getYear()+" đã được đổi sang "+ time+" | "+day+"/"+month+"/"+year+" bởi chủ phòng, vui lòng xem và xác nhận.", "Lịch hẹn đã được thay đổi!","Appointment", "appointment-tenant-list?appointmentId="+id);
+                    AddNotificationUtil.getInstance().addNotification(appointment1.getTenantId(),"Lịch hẹn ngày "+appointment1.getStartDate().getDayOfMonth()+"/"+appointment1.getStartDate().getMonthValue()+"/"+appointment1.getStartDate().getYear()+" đã được đổi sang "+ time+" | "+day+"/"+month+"/"+year+" bởi chủ phòng với lời nhắn: "+explain+", vui lòng xem và xác nhận.", "Lịch hẹn đã được thay đổi!","Appointment", "appointment-tenant-list?appointmentId="+id);
                 }
             }
             return affectedRow;

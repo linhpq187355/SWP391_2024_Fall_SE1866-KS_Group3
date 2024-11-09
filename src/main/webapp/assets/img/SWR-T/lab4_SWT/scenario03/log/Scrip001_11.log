@@ -1,0 +1,38 @@
+Start auto log messages stack - Iteration 6.
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-font-face.min.css?token=f5cbf3afb2" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d" (specified by argument number 18)  	[MsgId: MMSG-26576]
+Action.c(75): web_url("-341398893248106636%7C-2257558592581803439") was successful, 115349 body bytes, 4828 header bytes  	[MsgId: MMSG-26386]
+Action.c(89): web_url("shoppingsettings") started  	[MsgId: MMSG-26355]
+Action.c(89): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-shims.min.css?token=f5cbf3afb2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(89): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 7.
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") was successful, 118340 body bytes, 1585 header bytes  	[MsgId: MMSG-26386]
+Action.c(132): web_url("selection") started  	[MsgId: MMSG-26355]
+Action.c(132): Error -27792: Failed to connect to server "arc.msn.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 8.
+Action.c(75): web_url("-341398893248106636%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f5cbf3afb2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v5-font-face.min.css?token=f5cbf3afb2" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-font-face.min.css?token=f5cbf3afb2" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d" (specified by argument number 18)  	[MsgId: MMSG-26576]
+Action.c(75): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 15.
+Action.c(100): web_url("shoppingsettings_2") started  	[MsgId: MMSG-26355]
+Action.c(100): web_url("shoppingsettings_2") was successful, 407 body bytes, 605 header bytes  	[MsgId: MMSG-26386]
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+

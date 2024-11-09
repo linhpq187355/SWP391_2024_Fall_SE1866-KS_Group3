@@ -172,4 +172,6 @@ public interface HomeDAO {
      * @return the result
      */
     int changeStatus(int homeId, String status);
+
+    List<Home> getByCreatedBy(int createdById);
 }

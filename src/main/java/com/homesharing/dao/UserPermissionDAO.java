@@ -14,6 +14,13 @@ public interface UserPermissionDAO {
     List<Permission> getPermissionsByUserId(int userId);
 
     /**
+     * Fetch permissions via email
+     * @param email
+     * @return the permission list
+     */
+    List<Permission> getPermissionByEmail(String email);
+
+    /**
      * Save the user permission info
      * @param permission
      * @return operation status is successful or not

@@ -65,5 +65,5 @@ public interface BlogDAO {
 
     List<Category> getCategoriesByBlogPostId(int blogPostId);
 
-    
+
 }

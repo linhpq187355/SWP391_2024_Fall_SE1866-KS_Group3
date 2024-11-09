@@ -1,0 +1,9 @@
+-+
+-DCCI
+-D_IDA_XL
+-DWINNT
+-ID:\giao trinh fpt\1_SWR302\Scrip001
+-IC:\Program Files (x86)\OpenText\LoadRunner\include
+-ed:\giao trinh fpt\1_swr302\scrip001\\logfile.log
+d:\giao trinh fpt\1_swr302\scrip001\\combined_Scrip001.c
+d:\giao trinh fpt\1_swr302\scrip001\\pre_cci.c
