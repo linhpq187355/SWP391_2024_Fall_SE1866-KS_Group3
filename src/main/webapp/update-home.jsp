@@ -299,7 +299,7 @@
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <button class="btn btn-danger" id="searchAddress" style="width: 100%;margin-top: 35px;">
-                                                <i class="fa-solid fa-magnifying-glass" style="color: #ff0000;"></i> Search</button>
+                                                <i class="fa-solid fa-magnifying-glass" style="color: #ff0000;"></i> Tìm kiếm</button>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">

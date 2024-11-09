@@ -9,7 +9,6 @@
 
 package com.homesharing.dao.impl;
 
-
 import com.homesharing.conf.DBContext;
 import com.homesharing.dao.PageVisitDAO;
 import com.homesharing.model.PageVisit;
@@ -85,11 +84,5 @@ public class PageVisitDAOImpl extends DBContext implements PageVisitDAO {
             logger.severe(e.getMessage());
         }
         return visits;
-    }
-
-    public static void main(String[] args) {
-        PageVisitDAOImpl pgVisit = new PageVisitDAOImpl();
-        List<PageVisit> pgs = pgVisit.getPageVisits();
-        System.out.println(pgs);
     }
 }

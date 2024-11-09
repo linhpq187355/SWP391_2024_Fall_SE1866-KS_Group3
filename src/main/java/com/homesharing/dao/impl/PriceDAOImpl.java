@@ -1,13 +1,13 @@
 /*
- * Copyright(C) 2024, Homesharing Inc.
- * Homesharing:
- *  Roommate Matching and Home Sharing Service
+ * Copyright(C) 2024, Roomify Inc.
+ * Roomify: Roommate Matching and Home Sharing Service
  *
  * Record of change:
- * DATE            Version             AUTHOR           DESCRIPTION
- * 2024-10-01      1.0              Pham Quang Linh     First Implement
- * 2024-10-10      2.0              Pham Quang Linh     Second Implement
- * 2024-10-10      1.0                 ManhNC            update some method
+ * DATE             Version             AUTHOR              DESCRIPTION
+ * 2024-10-01       1.0              Pham Quang Linh        First Implement
+ * 2024-10-10       1.1              Pham Quang Linh        Second Implement
+ * 2024-10-10       1.2                 ManhNC              update some method
+ * 2024-10-10       1.3                 ThangLT             add save price
  */
 package com.homesharing.dao.impl;
 

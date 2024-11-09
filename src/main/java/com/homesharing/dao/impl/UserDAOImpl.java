@@ -9,7 +9,6 @@
  * 2024-10-01        1.0              Pham Quang Linh    First Implement
  * 2024-10-10        2.0              Pham Quang Linh    Second Implement
  * 2024-10-10        2.0                 ManhNC          Second Implement
- * 2024-10-30        2.0              Pham Quang Linh    Add functions
  */
 
 package com.homesharing.dao.impl;
@@ -27,10 +26,12 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Map;
+
 
 /**
  * Implementation of the UserDAO interface, handling database operations for the User entity.
@@ -601,7 +602,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[lastName] = ?\n" +
                 "      ,[avatar] = ?\n" +
                 "      ,[dob] = ?\n" +
-                "      ,[modifiedDate] = GETDATE()\n" +
+                "      ,[lastModified] = GETDATE()\n" +
                 " WHERE id = ?";
 
         Connection connection = null;
@@ -795,12 +796,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return rowsUpdated;
     }
 
-    /**
-     * Retrieves the total number of users with specific roles (rolesid in 3 or 4).
-     *
-     * @return The total number of users with roles 3 or 4.
-     * @throws RuntimeException If there is an error accessing the database.
-     */
     @Override
     public int getNumberUsers() {
         String sql = "select count(id) total\n" +
@@ -858,7 +853,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[minBudget] = ?" +
                 "      ,[maxBudget] = ?" +
                 "      ,[earliestMoveIn] = ?" +
-                "      ,[preferredCity] = ?" +
                 "      ,[latestMoveIn] = ?" +
                 " WHERE id = ?";
 
@@ -935,7 +929,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 } else {
                     user.setLatestMoveIn(null);
                 }
-                user.setPrefProv(resultSet.getInt("preferredCity"));
                 return user;
             }
 
@@ -959,13 +952,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return null; // Return null if no user is found
     }
 
-    /**
-     * Retrieves a list of hosts associated with the provided appointments.
-     *
-     * @param appointments List of appointments containing host IDs to fetch hosts.
-     * @return A list of User objects representing hosts or null if appointments are null/empty.
-     * @throws RuntimeException If there is an error accessing the database.
-     */
     @Override
     public List<User> getHostByAppointment(List<Appointment> appointments) {
         if(appointments == null || appointments.isEmpty()){
@@ -1032,13 +1018,6 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return hostList;
     }
 
-    /**
-     * Retrieves a list of tenants associated with the provided appointments.
-     *
-     * @param appointments List of appointments containing tenant IDs to fetch tenants.
-     * @return A list of User objects representing tenants or null if appointments are null/empty.
-     * @throws RuntimeException If there is an error accessing the database.
-     */
     @Override
     public List<User> getTenantByAppointment(List<Appointment> appointments) {
         if(appointments == null || appointments.isEmpty()){
@@ -1082,10 +1061,8 @@ public class UserDAOImpl extends DBContext implements UserDAO {
             }
         } catch (SQLException e) {
             logger.warning("SQL error occurred while retrieving home from the database: {}"+ e.getMessage());
-            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
         } catch (Exception e) {
             logger.warning("Unexpected error occurred: {}"+ e.getMessage());
-            throw new RuntimeException("Error retrieving homes from the database: " + e.getMessage(), e);
         } finally {
             // Closing resources in reverse order of opening
             try {
@@ -1105,407 +1082,122 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         return tenantList;
     }
 
+    @Override
+    public Map<String, Double> calculateAveragePreferences(String role) {
+        Map<String, Double> averages = new HashMap<>();
+        String sql = "SELECT AVG(p.cleanliness) AS avgCleanliness, " +
+                "AVG(p.workSchedule) AS avgWorkSchedule, " +
+                "AVG(p.smoking) AS avgSmoking, " +
+                "AVG(p.drinking) AS avgDrinking, " +
+                "AVG(p.interaction) AS avgInteraction, " +
+                "AVG(p.guests) AS avgGuests, " +
+                "AVG(p.cooking) AS avgCooking, " +
+                "AVG(p.pet) AS avgPet " +
+                "FROM HSS_Users u " +
+                "JOIN Roles r ON u.rolesid = r.id " +
+                "JOIN Preferences p ON u.id = p.usersId " +
+                "WHERE r.name = ?" +
+                "GROUP BY r.name;";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, role);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                averages.put("avgCleanliness", resultSet.getDouble("avgCleanliness"));
+                averages.put("avgWorkSchedule", resultSet.getDouble("avgWorkSchedule"));
+                averages.put("avgSmoking", resultSet.getDouble("avgSmoking"));
+                averages.put("avgDrinking", resultSet.getDouble("avgDrinking"));
+                averages.put("avgInteraction", resultSet.getDouble("avgInteraction"));
+                averages.put("avgGuests", resultSet.getDouble("avgGuests"));
+                averages.put("avgCooking", resultSet.getDouble("avgCooking"));
+                averages.put("avgPet", resultSet.getDouble("avgPet"));
+
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error getting user matching profile", e);
+            throw new GeneralException("Error gettinh user matching profile: " + e.getMessage(), e);
+        }
+        return averages;
+    }
 
     @Override
-    public int getMaxPet() {
-        String sql = "SELECT TOP 1 pet FROM Preferences ORDER BY pet DESC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("pet");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max pet in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMinPet() {
-        String sql = "SELECT TOP 1 pet FROM Preferences ORDER BY pet ASC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("pet");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min pet in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMaxCooking() {
-        String sql = "SELECT TOP 1 cooking FROM Preferences ORDER BY cooking DESC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("cooking");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max cooking in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMinCooking() {
-        String sql = "SELECT TOP 1 cooking FROM Preferences ORDER BY cooking ASC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("cooking");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min cooking in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMaxGuests() {
-        String sql = "SELECT TOP 1 guests FROM Preferences ORDER BY guests DESC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("guests");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max guests in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMinGuests() {
-        String sql = "SELECT TOP 1 guests FROM Preferences ORDER BY guests ASC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("guests");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min guests in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMaxInteraction() {
-        String sql = "SELECT TOP 1 interaction FROM Preferences ORDER BY interaction DESC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("interaction");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max interaction in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMinInteraction() {
-        String sql = "SELECT TOP 1 interaction FROM Preferences ORDER BY interaction ASC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("interaction");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min interaction in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMaxDrinking() {
-        String sql = "SELECT TOP 1 drinking FROM Preferences ORDER BY drinking DESC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("drinking");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max drinking in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMinDrinking() {
-        String sql = "SELECT TOP 1 drinking FROM Preferences ORDER BY drinking ASC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("drinking");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min drinking in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMaxSmoking() {
-        String sql = "SELECT TOP 1 smoking FROM Preferences ORDER BY smoking DESC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("smoking");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get max smoking in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMinSmoking() {
-        String sql = "SELECT TOP 1 smoking FROM Preferences ORDER BY smoking ASC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("smoking");
-            }
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min smoking in the database: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0;
-    }
-    @Override
-    public int getMinCleanliness() {
-        String sql = "SELECT TOP 1 cleanliness FROM Preferences ORDER BY cleanliness ASC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("cleanliness");
-            }
+    public List<User> getLatestUser() {
+        List<User> userList = new ArrayList<>();
+        String sql = "SELECT u.[id],\n" +
+                "       u.[email],\n" +
+                "       u.[hashedPassword],\n" +
+                "       u.[phoneNumber],\n" +
+                "       u.[username],\n" +
+                "       u.[firstName],\n" +
+                "       u.[lastName],\n" +
+                "       u.[avatar],\n" +
+                "       u.[dob],\n" +
+                "       u.[address],\n" +
+                "       u.[gender],\n" +
+                "       u.[citizenNumber],\n" +
+                "       u.[createdAt],\n" +
+                "       u.[status],\n" +
+                "       u.[isVerified],\n" +
+                "       u.[modifiedDate],\n" +
+                "       u.[rolesid],\n" +
+                "       r.[name] AS roleName\n" +
+                "FROM [dbo].[HSS_Users] u\n" +
+                "LEFT JOIN [dbo].[Roles] r ON u.[rolesid] = r.[id]\n"+
+                "WHERE r.[name]!= 'admin' AND r.[name]!='moderator'"+
+                "ORDER BY u.[createdAt] DESC";
 
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min cleanliness in the database: " + e.getMessage(), e);
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setEmail(resultSet.getString("email"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                user.setUserName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAvatar(resultSet.getString("avatar"));
+                user.setRoleName(resultSet.getString("roleName"));
+                if (resultSet.getDate("dob") != null) {
+                    user.setDob(resultSet.getDate("dob").toLocalDate());
+                }
+                user.setAddress(resultSet.getString("address"));
+                user.setGender(resultSet.getString("gender"));
+                user.setCitizenNumber(resultSet.getString("citizenNumber"));
+                // Check null before call toLocalDateTime()
+                Timestamp createdAtTimestamp = resultSet.getTimestamp("createdAt");
+                if (createdAtTimestamp != null) {
+                    user.setCreatedAt(createdAtTimestamp.toLocalDateTime());
+                } else {
+                    user.setCreatedAt(null);
+                }
+                user.setStatus(resultSet.getString("status"));
+                user.setVerified(resultSet.getBoolean("isVerified"));
+                // Check null before call toLocalDateTime()
+                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("modifiedDate");
+                if (lastModifiedTimestamp != null) {
+                    user.setLastModified(lastModifiedTimestamp.toLocalDateTime());
+                } else {
+                    user.setLastModified(null);
+                }
+                user.setRolesId(resultSet.getInt("rolesid"));
+
+                userList.add(user);
+            }
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            throw new GeneralException("Error: ", e);
         } finally {
             // Closing resources in reverse order of opening
             try {
@@ -1522,42 +1214,9 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
             }
         }
-        return 0; // Trả về 0 nếu không tìm thấy giá trị
+        return userList;
     }
-    @Override
-    public int getMaxCleanliness() {
-        String sql = "SELECT TOP 1 cleanliness FROM Preferences ORDER BY cleanliness DESC;";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = DBContext.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("cleanliness");
-            }
 
-        } catch (SQLException | IOException | ClassNotFoundException e) {
-            throw new GeneralException("Error get min cleanliness in the database: " + e.getMessage(), e);
-        } finally {
-            // Closing resources in reverse order of opening
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
-            }
-        }
-        return 0; // Trả về 0 nếu không tìm thấy giá trị
-    }
     @Override
     public List<User> getFilteredUsers(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException {
         StringBuilder sql = new StringBuilder("SELECT DISTINCT u.id,u.firstName,u.lastName,u.avatar,u.gender,u.rolesId, \n" +
@@ -1815,12 +1474,4 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         }
         return totalCount;
     }
-
-
-    public static void main(String[] args) {
-        UserDAOImpl userDAO = new UserDAOImpl();
-        User user = userDAO.getUser(1);
-        System.out.println(user.getFirstName());
-    }
-
 }
