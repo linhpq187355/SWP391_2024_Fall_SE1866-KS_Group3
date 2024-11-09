@@ -9,9 +9,15 @@
  */
 package com.homesharing.filter;
 
+import com.homesharing.dao.impl.PageVisitDAOImpl;
 import com.homesharing.util.CookieUtil;
 import jakarta.annotation.Priority;
-import jakarta.servlet.*;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,19 +32,24 @@ import java.util.List;
  * Authentication filter for intercepting requests and enforcing authentication.
  * This filter checks for the presence of user ID and email in cookies to determine if a user is logged in.
  * If not logged in, the user is redirected to the login page.
+ *
  * @author ManhNC
  */
 @WebFilter(urlPatterns = {"/*"})
 @Priority(1)
 public class AuthenticationFilter implements Filter {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     private static final List<String> excludedUrls = Arrays.asList(
-            "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/","/set-role","/getDistricts","/getWards",
-            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google","/500.jsp","/403.jsp", "/400.jsp",
-            "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp","/error.jsp","/home-list", "/401.jsp",
-            "/terms.jsp", "/announce.jsp", "/about-us.jsp", "/404.jsp", "/input-otp.jsp","/input-otp-2.jsp");
+            "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/", "/set-role", "/getDistricts", "/getWards",
+            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google", "/500.jsp", "/403.jsp", "/400.jsp",
+            "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp", "/error.jsp", "/home-list", "/401.jsp", "/resend-otp",
+            "/terms.jsp", "/announce.jsp", "/about-us.jsp", "/404.jsp", "/input-otp.jsp", "/input-otp-2.jsp");
+
+    private static final List<String> includedUrls = Arrays.asList(
+            "/home-page", "/home-detail", "/appointment-tenant-list", "/chat-box", "/submit-home", "/report", "/edit-appointment", "/home-list",
+            "/host-calendar", "/host-update-appointment", "/make-appointment", "/matching", "/my-home", "/tenant-calender", "/user-profile", "/user-wishlist"
+    );
 
     /**
      * Initializes the filter.  This method is called by the servlet container only once upon filter creation.
@@ -70,6 +81,9 @@ public class AuthenticationFilter implements Filter {
         String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
         LOGGER.info("Requested URL Path: " + path);
 
+        // Log the visit
+        logPageVisit(path, httpRequest);
+
         // Check if the URL should be excluded from authentication checks
         if (isUrlExcluded(path)) {
             chain.doFilter(request, response);
@@ -89,6 +103,26 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
+    private void logPageVisit(String path, HttpServletRequest request) {
+        // Create a new instance of your DAO
+        if(isUrlIncluded(path)) {
+            PageVisitDAOImpl pageVisitDao = new PageVisitDAOImpl();
+
+            // Check if the user is logged in
+            String userId = CookieUtil.getCookie(request, "id");
+
+            // Log the visit
+            if (userId != null) {
+                pageVisitDao.incrementMemberVisit(path);
+            }
+            pageVisitDao.incrementTotalVisit(path);
+        }
+    }
+
+    private boolean isUrlIncluded(String path) {
+        return includedUrls.stream().anyMatch(path::startsWith);
+    }
+
     /**
      * Called by the servlet container to indicate to a filter that it is being taken out of service.
      * This method is only called once all threads within the filter's doFilter method have exited
@@ -101,10 +135,12 @@ public class AuthenticationFilter implements Filter {
 
     /**
      * Checks if the given URL path should be excluded from authentication filtering.
+     *
      * @param path The URL path to check.
      * @return True if the URL should be excluded, false otherwise.
      */
     private boolean isUrlExcluded(String path) {
         return excludedUrls.stream().anyMatch(path::startsWith);
     }
+
 }
