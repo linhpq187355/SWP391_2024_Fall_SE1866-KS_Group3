@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.HashSet;
 
 public class HomeDetailServiceImpl implements HomeDetailService {
@@ -127,10 +126,15 @@ public class HomeDetailServiceImpl implements HomeDetailService {
         return homeDetailDAO.getHomesByDistrict(homeId, priceDifference);
     }
     @Override
+    public List<Home> getHomesByProvince(int homeId) {
+        return homeDetailDAO.getHomesByProvince(homeId);
+    }
+    @Override
     public List<Home> getSimilarHomess(int homeId, int priceDifference) {
         Set<Integer> addedHomeIds = new HashSet<>();
         List<Home> similarHomes = new ArrayList<>();
 
+        // Bước 1: Lấy nhà từ phường
         List<Home> wardHomes = getHomesByWard(homeId, priceDifference);
         for (Home home : wardHomes) {
             if (home.getId() != homeId && !addedHomeIds.contains(home.getId())) {
@@ -151,10 +155,39 @@ public class HomeDetailServiceImpl implements HomeDetailService {
             }
         }
 
+        // Bước 2: Kiểm tra xem đã đủ 4 nhà chưa, nếu chưa thì lấy thêm nhà từ quận
         if (similarHomes.size() < 4) {
             List<Home> districtHomes = getHomesByDistrict(homeId, priceDifference);
 
             for (Home home : districtHomes) {
+                if (home.getId() != homeId && !addedHomeIds.contains(home.getId())) {
+                    try {
+                        // Lấy ảnh đầu tiên
+                        List<String> images = new ArrayList<>();
+                        String firstImage = homeDAO.fetchFirstImage(home.getId());
+                        if (firstImage != null) {
+                            images.add(firstImage);
+                        }
+                        home.setImages(images);
+
+                        similarHomes.add(home);
+                        addedHomeIds.add(home.getId());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (similarHomes.size() >= 4) {
+                    break;
+                }
+            }
+        }
+
+        // Bước 3: Kiểm tra xem vẫn chưa đủ 4 nhà, nếu chưa thì lấy thêm nhà từ tỉnh
+        if (similarHomes.size() < 4) {
+            List<Home> provinceHomes = getHomesByProvince(homeId);
+
+            for (Home home : provinceHomes) {
                 if (home.getId() != homeId && !addedHomeIds.contains(home.getId())) {
                     try {
                         // Lấy ảnh đầu tiên

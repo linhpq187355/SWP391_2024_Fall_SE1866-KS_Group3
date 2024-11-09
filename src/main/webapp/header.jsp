@@ -269,7 +269,7 @@
 
 <!-- End of nav bar -->
 <script src="assets/js/modernizr-2.6.2.min.js"></script>
-<script src="assets/js/jquery-1.10.2.min.js"></script>
+<script src="assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/bootstrap-select.min.js"></script>
 <script src="assets/js/bootstrap-hover-dropdown.js"></script>

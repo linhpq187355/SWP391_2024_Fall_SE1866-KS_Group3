@@ -67,7 +67,7 @@ public class HomeDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String homeIdParam = req.getParameter("id");
         String userIdStr = CookieUtil.getCookie(req, "id");
-        int priceDifference = 1000000;
+        int priceDifference = 2000000;
 
         // Check if the home ID exists
         if (homeIdParam == null || homeIdParam.isEmpty()) {
