@@ -338,5 +338,23 @@
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<%
+    String message = (String) session.getAttribute("message");
+    String messageType = (String) session.getAttribute("messageType");
+    if (message != null && messageType != null) {
+%>
+<script type="text/javascript">
+    Swal.fire({
+        icon: '<%= messageType %>',
+        title: '<%= message %>'
+    });
+</script>
+<%
+        // Sau khi hiển thị thông báo, xóa nó khỏi session để tránh hiển thị lại khi trang được làm mới
+        session.removeAttribute("message");
+        session.removeAttribute("messageType");
+    }
+%>
 </body>
 </html>

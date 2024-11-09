@@ -86,7 +86,7 @@
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#acc-mgt">
                         <i class="fas fa-user"></i>
-                        <p>Phân Quyền</p>
+                        <p>Tài khoản</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="acc-mgt">
@@ -161,3 +161,4 @@
         </div>
     </div>
 </div>
+<!-- End Sidebar -->
