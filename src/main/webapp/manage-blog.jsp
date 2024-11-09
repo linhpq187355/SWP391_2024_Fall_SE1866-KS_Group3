@@ -14,13 +14,25 @@
 <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="./assets/css/plugins.min.css"/>
-<link rel="stylesheet" href="assets/css/dashboard.min.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+<!-- jQuery (chỉ sử dụng phiên bản này) -->
+<script src="assets/js/core/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="./assets/js/core/popper.min.js"></script>
+<script src="./assets/js/core/bootstrap.min.js"></script>
+
+<!-- jQuery Scrollbar -->
+<script src="./assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+<!-- DataTables -->
+<script src="./assets/js/plugin/datatables/datatables.min.js"></script>
+
+<!-- Kaiadmin JS -->
+<script src="./assets/js/kaiadmin.min.js"></script>
+
 <!------ Include the above in your HEAD tag ---------->
 <jsp:include page="header.jsp"/>
 <style>
@@ -28,6 +40,28 @@
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
+    }
+    /* Sắp xếp mặc định (khi chưa nhấn) */
+    table.dataTable thead .sorting:after {
+        content: "↑↓"; /* Bạn có thể thay thế mũi tên nếu cần */
+        color: #000;
+    }
+
+    /* Sắp xếp tăng dần */
+    table.dataTable thead .sorting_asc:after {
+        content: "↑"; /* Mũi tên chỉ hướng lên */
+    }
+
+    /* Sắp xếp giảm dần */
+    table.dataTable thead .sorting_desc:after {
+        content: "↓"; /* Mũi tên chỉ hướng xuống */
+    }
+
+    /* Không thể sắp xếp (disabled) */
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:after {
+        content: "→"; /* Mũi tên disabled */
+        color: #ccc;
     }
     header, footer {
         background-color: #d32f2f;
@@ -100,7 +134,7 @@
 
 <div class="content-container">
     <div class="content-wrapper">
-        <table id="basic-datatables" class="table">
+        <table id="basic-datatables">
             <thead>
             <tr>
                 <th>
@@ -169,7 +203,7 @@
                                 </button>
                             </form>
                             <a href="update-blog?postId=${post.id}" class="btn btn-primary"
-                               style="margin-left: 5px;">
+                               style="  margin-left: 5px;">
                                 <i class="fas fa-edit"></i> <!-- Biểu tượng bút chì -->
                             </a>
                         </td>
@@ -201,6 +235,7 @@
     </div>
 </div>
 </body>
+
 <script>
     function confirmDelete() {
         if (confirm('Bạn có chắc chắn muốn xóa không?')) {
@@ -208,6 +243,16 @@
             document.getElementById('delete-form').submit();
         }
     }
+</script>
+<script>
+    $(document).ready(function () {
+        $("#basic-datatables").DataTable({
+            "paging": false,  // Tắt phân trang
+            "searching": false,  // Tắt tìm kiếm
+            "ordering": true,  // Bật tính năng sắp xếp
+            "info": false  // Tắt thông tin trang
+        });
+    });
 </script>
 <script>
     document.querySelectorAll('.formatted-date').forEach(function(span) {
@@ -218,33 +263,5 @@
     });
 </script>
 
-<script>
-    $(document).ready(function () {
-        // Khởi tạo DataTable
-        $("#basic-datatables").DataTable({
-            pageLength: 10, // Hiển thị 10 dòng mỗi trang
-            initComplete: function () {
-                // Hàm này sẽ được gọi khi DataTable đã được khởi tạo hoàn tất
-                this.api().columns().every(function () {
-                    var column = this;
-                    var select = $('<select class="form-select"><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty()) // Thêm dropdown vào chân cột
-                        .on("change", function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            // Lọc các cột dựa trên giá trị đã chọn từ dropdown
-                            column.search(val ? "^" + val + "$" : "", true, false).draw();
-                        });
-
-                    // Thêm các giá trị vào dropdown
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + "</option>");
-                    });
-                });
-            },
-        });
-    });
-
-</script>
-    <jsp:include page="footer.jsp"/>
+<jsp:include page="footer.jsp"/>
 

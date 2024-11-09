@@ -100,7 +100,7 @@
                         </c:if>
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-message dropdown-toggle" style="font-size: 2em"></i>
-                        <div class="dropdown-menu navbar-nav" style="top: 4.4em; right: -3em; width: 23em">
+                        <div class="dropdown-menu navbar-nav" style="top: 4.4em; right: -3em; width: 23em; max-height: 300px; overflow-y: auto;">
                             <c:if test="${not empty requestScope.listUserConversation}">
                                 <c:forEach items="${requestScope.listUserConversation.entrySet()}" var="entry">
                                     <c:set var="user" value="${entry.key}" /> <!-- Lấy User từ entry -->
@@ -154,7 +154,7 @@
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-bell dropdown-toggle" style="font-size: 2em"></i>
                         <!-- Dropdown danh sách thông báo -->
-                        <ul class="dropdown-menu navbar-nav" style="top: 4.4em; right: -1.5em; width: 27em; padding-bottom: 1em">
+                        <ul class="dropdown-menu navbar-nav" style="top: 4.4em; right: -1.5em; width: 27em; padding-bottom: 1em; max-height: 300px; overflow-y: auto;">
                             <c:forEach var="notification" items="${notifications}">
                                 <li>
                                     <a href="notification?type=${notification.type}" class="li-no" style="<c:if test='${notification.status == "sent"}'>font-weight: bold;</c:if>">

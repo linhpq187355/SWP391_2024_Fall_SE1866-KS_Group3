@@ -92,11 +92,11 @@ public class AddBlogServlet extends HttpServlet {
                 // Kiểm tra thư mục upload
                 File uploadDir = new File(getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY);
                 if (!uploadDir.exists()) {
-                    uploadDir.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+                    uploadDir.mkdirs();
                 }
                 try {
                     filePart.write(filePath);
-                    blogPost.setImagePath(UPLOAD_DIRECTORY + File.separator + fileName); // Đặt đường dẫn hình ảnh vào blogPost
+                    blogPost.setImagePath(UPLOAD_DIRECTORY + File.separator + fileName);
                 } catch (IOException e) {
                     logger.error("Error writing file: {}", e.getMessage());
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error saving image: " + e.getMessage());
@@ -112,10 +112,10 @@ public class AddBlogServlet extends HttpServlet {
                 blogDAO.saveBlogPostCategory(postId, Integer.parseInt(categoryId));
             }
             String successMessage = blogPost.getStatus().equals("drafted")
-                    ? "Bài viết được thêm thành công!"
-                    : "Bài viết được lưu thành công!";
+                    ? "Bài viết được lưu thành công!"
+                    : "Baì viết đã được thêm vui lòng chờ admin duyệt bài!";
             request.getSession().setAttribute("successMessage", successMessage);
-            response.sendRedirect("add-blog?message=" + URLEncoder.encode(successMessage, "UTF-8"));
+            response.sendRedirect("blog-detail?postId=" + postId);
 
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID format");

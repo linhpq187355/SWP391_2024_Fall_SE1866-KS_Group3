@@ -54,7 +54,7 @@
     <div class="container">
         <div class="row">
             <div class="page-head-content">
-                <h2 class="page-title">Chi tiêt bài đăng  </h2>
+                <h2 class="page-title">Chi tiêt bài đăng </h2>
             </div>
         </div>
     </div>
@@ -170,6 +170,24 @@
     <%--        </div>--%>
 
     <%--    </div>--%>
+    <%
+        // Lấy thông báo từ session
+        String successMessage = (String) session.getAttribute("successMessage");
+
+        // Nếu có thông báo, sử dụng JavaScript để hiển thị alert
+        if (successMessage != null) {
+    %>
+    <script>
+        // Hiển thị thông báo kiểu alert
+        alert("<%= successMessage %>");
+    </script>
+    <%
+            // Xóa thông báo khỏi session sau khi hiển thị
+            session.removeAttribute("successMessage");
+        }
+    %>
+
+
     <div class="containerp">
         <div class="content">
             <div class="post-title">
@@ -182,75 +200,82 @@
                 <i class="fas fa-pencil-alt"></i>
                 Tác giả: <a href="home-by-user?id=${blogPost.authorId}">${blogPost.authorName}</a>
             </div>
+            <div>
+                <c:if test="${blogPost.status == 'pending'}">
+                    <p style="color: red; font-size: 18px; font-weight: bold; padding: 10px;">
+                        Bạn hãy chờ admin duyệt nhé.
+                    </p>
+                </c:if>
+            </div>
             <div class="post-content">
                 <p>${blogPost.content}</p>
             </div>
-            <div class="comments-section">
-                <section id="comments" class="comments wow fadeInRight animated">
-                    <h4 class="text-uppercase wow fadeInLeft animated"></h4>
+            <%--            <div class="comments-section">--%>
+            <%--                <section id="comments" class="comments wow fadeInRight animated">--%>
+            <%--                    <h4 class="text-uppercase wow fadeInLeft animated"></h4>--%>
 
-                    <c:forEach var="comment" items="${comments}">
-                        <div class="row comment">
-                            <div class="col-sm-3 col-md-2 text-center-xs">
-                                <p>
-                                    <img src="assets/img/client-face1.png" class="img-responsive img-circle" alt="">
-                                </p>
-                            </div>
-                            <div class="col-sm-9 col-md-10">
-                                <h5 class="text-uppercase">${comment.userName}</h5>
-                                <p class="posted">
-                                    <i class="fa fa-clock-o"></i>
-                                    <span class="formatted-date" data-created-at="${comment.createdAt}"></span>
-                                </p>
-                                <p>${comment.content}</p>
-                                <c:if test="${comment.userId == userId || blogPost.authorId == userId}">
-                                    <form action="delete-comment" method="post" style="display: inline;">
-                                        <input type="hidden" name="commentId" value="${comment.id}"/>
-                                        <input type="hidden" name="postId" value="${blogPost.id}"/>
-                                        <button type="submit" class="btn btn-danger" title="Xóa" style="border: none; background: none; padding: 0;">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </c:if>
+            <%--                    <c:forEach var="comment" items="${comments}">--%>
+            <%--                        <div class="row comment">--%>
+            <%--                            <div class="col-sm-3 col-md-2 text-center-xs">--%>
+            <%--                                <p>--%>
+            <%--                                    <img src="assets/img/client-face1.png" class="img-responsive img-circle" alt="">--%>
+            <%--                                </p>--%>
+            <%--                            </div>--%>
+            <%--                            <div class="col-sm-9 col-md-10">--%>
+            <%--                                <h5 class="text-uppercase">${comment.userName}</h5>--%>
+            <%--                                <p class="posted">--%>
+            <%--                                    <i class="fa fa-clock-o"></i>--%>
+            <%--                                    <span class="formatted-date" data-created-at="${comment.createdAt}"></span>--%>
+            <%--                                </p>--%>
+            <%--                                <p>${comment.content}</p>--%>
+            <%--                                <c:if test="${comment.userId == userId || blogPost.authorId == userId}">--%>
+            <%--                                    <form action="delete-comment" method="post" style="display: inline;">--%>
+            <%--                                        <input type="hidden" name="commentId" value="${comment.id}"/>--%>
+            <%--                                        <input type="hidden" name="postId" value="${blogPost.id}"/>--%>
+            <%--                                        <button type="submit" class="btn btn-danger" title="Xóa" style="border: none; background: none; padding: 0;">--%>
+            <%--                                            <i class="fa fa-trash"></i>--%>
+            <%--                                        </button>--%>
+            <%--                                    </form>--%>
+            <%--                                </c:if>--%>
 
 
-                                <div id="reply-form-${comment.id}" class="reply-form" style="display: none;">
-                                    <form action="add-comment" method="post">
-                                        <input type="hidden" name="postId" value="${param.postId}"/>
-                                        <input type="hidden" name="parentId" value="${comment.id}"/>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
+            <%--                                <div id="reply-form-${comment.id}" class="reply-form" style="display: none;">--%>
+            <%--                                    <form action="add-comment" method="post">--%>
+            <%--                                        <input type="hidden" name="postId" value="${param.postId}"/>--%>
+            <%--                                        <input type="hidden" name="parentId" value="${comment.id}"/>--%>
+            <%--                                    </form>--%>
+            <%--                                </div>--%>
+            <%--                            </div>--%>
+            <%--                        </div>--%>
+            <%--                    </c:forEach>--%>
 
-                    <c:if test="${empty comments}">
-                        <p>Hãy là người đầu tiên bình luận</p>
-                    </c:if>
-                </section>
+            <%--                    <c:if test="${empty comments}">--%>
+            <%--                        <p>Hãy là người đầu tiên bình luận</p>--%>
+            <%--                    </c:if>--%>
+            <%--                </section>--%>
 
-                <section id="comment-form" class="add-comments">
-                    <form action="add-comment" method="post">
-                        <input type="hidden" name="postId" value="${param.postId}"/>
-                        <div class="row wow fadeInLeft animated">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="comment">Bình luận ở đây<span class="required">*</span></label>
-                                    <textarea class="form-control" id="comment" name="comment" rows="4" required
-                                              placeholder="Please enter your comment here..."></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row wow fadeInLeft animated">
-                            <div class="col-sm-12 text-right">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-comment-o"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+            <%--                <section id="comment-form" class="add-comments">--%>
+            <%--                    <form action="add-comment" method="post">--%>
+            <%--                        <input type="hidden" name="postId" value="${param.postId}"/>--%>
+            <%--                        <div class="row wow fadeInLeft animated">--%>
+            <%--                            <div class="col-sm-12">--%>
+            <%--                                <div class="form-group">--%>
+            <%--                                    <label for="comment">Bình luận ở đây<span class="required">*</span></label>--%>
+            <%--                                    <textarea class="form-control" id="comment" name="comment" rows="4" required--%>
+            <%--                                              placeholder="Please enter your comment here..."></textarea>--%>
+            <%--                                </div>--%>
+            <%--                            </div>--%>
+            <%--                        </div>--%>
+            <%--                        <div class="row wow fadeInLeft animated">--%>
+            <%--                            <div class="col-sm-12 text-right">--%>
+            <%--                                <button type="submit" class="btn btn-primary"><i class="fa fa-comment-o"></i>--%>
+            <%--                                </button>--%>
+            <%--                            </div>--%>
+            <%--                        </div>--%>
+            <%--                    </form>--%>
 
-                </section>
-            </div>
+            <%--                </section>--%>
+            <%--            </div>--%>
         </div>
         <div class="sidebar">
             <div class="login">
@@ -287,7 +312,7 @@
                             <input type="checkbox" name="categoryId" value="6"/> Kinh nghiệm sống chung
                         </label>
                         <label>
-                            <input type="checkbox" name="categoryId" value="7"/> Phản hồi về chủ nhà
+                            <input type="checkbox" name="categoryId" value="7"/> Phòng cháy chữa cháy
                         </label>
                         <label>
                             <input type="checkbox" name="categoryId" value="8"/> Mẹo an toàn khi thuê nhà
@@ -300,10 +325,17 @@
     </div>
 </div>
 <script>
-    document.querySelectorAll('.formatted-date').forEach(function(span) {
+    document.querySelectorAll('.formatted-date').forEach(function (span) {
         const localDateTimeString = span.getAttribute('data-created-at');
         const localDateTime = new Date(localDateTimeString); // Chuyển đổi chuỗi thành Date
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        };
         span.textContent = localDateTime.toLocaleString('en-GB', options); // Định dạng theo kiểu ngày
     });
 </script>
@@ -313,6 +345,7 @@
         justify-content: space-between;
         padding: 20px;
     }
+
     .content {
         width: 75%;
         background-color: #fff;
@@ -320,9 +353,11 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     .sidebar {
         width: 20%;
     }
+
     .sidebar .login, .sidebar .social {
         background-color: white;
         padding: 15px;
@@ -330,10 +365,12 @@
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     .sidebar .login h3, .sidebar .social h3 {
         font-size: 18px;
         margin-bottom: 10px;
     }
+
     .sidebar .login input {
         width: 100%;
         padding: 10px;
@@ -341,6 +378,7 @@
         border: 1px solid #ddd;
         border-radius: 5px;
     }
+
     .sidebar .login button {
         width: 100%;
         padding: 10px;
@@ -351,34 +389,42 @@
         font-weight: bold;
         margin-bottom: 10px;
     }
+
     .sidebar .login .forgot-password {
         text-align: center;
         margin-top: 10px;
     }
+
     .sidebar .login .forgot-password a {
         color: red;
         text-decoration: none;
     }
+
     .sidebar .social .icons {
         display: flex;
         justify-content: space-around;
         margin-bottom: 10px;
     }
+
     .sidebar .social .icons a {
         font-size: 24px;
         color: black;
     }
+
     .sidebar .social .facebook-page {
         text-align: center;
     }
+
     .sidebar .social .facebook-page iframe {
         width: 100%;
         border: none;
     }
+
     .sidebar .social .subscribe {
         text-align: center;
         margin-top: 10px;
     }
+
     .sidebar .social .subscribe button {
         background-color: red;
         color: white;
@@ -387,12 +433,14 @@
         border-radius: 5px;
         font-weight: bold;
     }
+
     .post-title {
         text-align: center;
         font-size: 24px;
         font-weight: bold;
         color: #333;
     }
+
     .post-meta {
         display: flex;
         justify-content: space-between;
@@ -400,14 +448,17 @@
         font-weight: bold;
         margin-bottom: 20px;
     }
+
     .post-meta .date {
         font-size: 14px;
         color: #999;
     }
+
     .post-meta .author {
         font-size: 16px;
         color: #333;
     }
+
     .comments-section {
         margin-top: 20px;
         background-color: #fff;

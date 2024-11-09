@@ -94,61 +94,68 @@
 
                 </div>
 
-
-
-
-
-
             </div>
 
+
+
+
             <div class="blog-lst col-md-9">
-                <form action="update-blog" method="POST">
-                    <input type="hidden" name="postId" value="${blogPost.id}" /> <!-- Đặt postId để biết bài viết nào sẽ được cập nhật -->
+                <form id="blog-form" action="update-blog" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="postId" value="${blogPost.id}" />
+
+                    <!-- Title Field -->
                     <div class="form-group">
                         <label for="title">Tiêu đề <span class="require">*</span></label>
                         <input type="text" class="form-control" id="title" name="title" value="${blogPost.title}" required />
+                        <div id="title-error" class="text-danger" style="display:none;">Vui lòng nhập tiêu đề.</div>
                     </div>
+
+                    <!-- Image Upload Field -->
+                    <div class="form-group">
+                        <label for="images">Ảnh tiêu đề</label>
+                        <input type="file" class="form-control" id="images" name="images" accept="image/*" />
+                    </div>
+
+                    <!-- Short Description Field -->
                     <div class="form-group">
                         <label for="shortDescription">Mô tả ngắn:</label>
                         <textarea id="shortDescription" name="shortDescription" style="width: 100%; height: 200px;">${blogPost.shortDescription}</textarea>
+                        <div id="shortDescription-error" class="text-danger" style="display:none;">Vui lòng nhập mô tả ngắn.</div>
+
                     </div>
-                    <div class="category">
-                        <label>
-                            <input type="checkbox" name="categoryId" value="1"/> Kinh nghiệm thuê nhà
-                        </label>
-                        <label>
-                            <input type="checkbox" name="categoryId" value="2"/> Giá thuê và So sánh
-                        </label>
-                        <label>
-                            <input type="checkbox" name="categoryId" value="3"/> Tiện nghi và Dịch vụ
-                        </label>
-                        <label>
-                            <input type="checkbox" name="categoryId" value="4"/> Thủ tục thuê nhà
-                        </label>
-                        <label>
-                            <input type="checkbox" name="categoryId" value="5"/> Cẩm nang khu vực
-                        </label>
-                        <label>
-                            <input type="checkbox" name="categoryId" value="6"/> Kinh nghiệm sống chung
-                        </label>
-                        <label>
-                            <input type="checkbox" name="categoryId" value="7"/> Phản hồi về chủ nhà
-                        </label>
-                        <label>
-                            <input type="checkbox" name="categoryId" value="8"/> Mẹo an toàn khi thuê nhà
-                        </label>
+
+                    <!-- Category Selection -->
+                    <div class="form-group">
+                        <label style="color: #ccac00;">Chọn thể loại:</label><br>
+                        <c:forEach var="category" items="${categories}">
+                            <input type="checkbox" id="category_${category.id}" name="categoryIds" value="${category.id}"
+                                    <c:forEach var="selectedCategory" items="${selectedCategories}">
+                                        <c:if test="${category.id == selectedCategory.id}">
+                                            checked
+                                        </c:if>
+                                    </c:forEach>
+                            />
+                            <label for="category_${category.id}" style="color: goldenrod;">${category.name}</label><br />
+                        </c:forEach>
+                        <div id="category-error" class="text-danger" style="display:none;">Vui lòng chọn ít nhất một thể loại.</div>
+
                     </div>
+
+                    <!-- Content Field -->
                     <div class="form-group">
                         <label for="content">Bài Viết:</label>
                         <textarea id="content" name="content" style="width: 100%; height: 200px;">${blogPost.content}</textarea>
                     </div>
+
+                    <input type="hidden" name="status" id="status">
+
+                    <!-- Submit and Action Buttons -->
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Cập nhật</button>
-                        <button type="button" class="btn btn-default" onclick="window.history.back();">Hủy</button>
+                        <button type="button" class="btn btn-primary" onclick="confirmAction('create')">Cập nhật</button>
+                        <button type="button" class="btn btn-default" onclick="confirmAction('drafted')">Lưu</button>
                     </div>
                 </form>
             </div>
-
 
         </div>
 
@@ -158,11 +165,10 @@
 
 <jsp:include page="footer.jsp"/>
 <script>
-    // Khởi tạo CKEditor
     CKEDITOR.replace('content');
 
     // Cập nhật giá trị của textarea khi gửi biểu mẫu
-    document.querySelector('form').addEventListener('submit', function(event) {
+    document.querySelector('form').addEventListener('submit', function (event) {
         for (const instance in CKEDITOR.instances) {
             CKEDITOR.instances[instance].updateElement(); // Cập nhật nội dung CKEditor vào textarea
         }
@@ -174,8 +180,54 @@
             alert("Content is required.");
         }
     });
-    function confirmUpdate() {
-        return confirm("Bạn có chắc chắn muốn cập nhật bài viết này không?");
+</script>
+<script>
+    function confirmAction(action) {
+        // Lấy giá trị các trường input
+        let title = document.getElementById('title').value;
+        let shortDescription = document.getElementById('shortDescription').value;
+        let categoryChecked = document.querySelectorAll('input[name="categoryIds"]:checked').length;
+
+        // Ẩn thông báo lỗi trước khi kiểm tra
+        document.getElementById('title-error').style.display = 'none';
+        document.getElementById('shortDescription-error').style.display = 'none';
+        document.getElementById('category-error').style.display = 'none';
+
+        // Kiểm tra từng trường
+        if (!title) {
+            document.getElementById('title-error').style.display = 'block';
+            alert("Vui lòng nhập tiêu đề.");
+            return; // Dừng lại nếu chưa nhập tiêu đề
+        }
+
+        if (!shortDescription) {
+            document.getElementById('shortDescription-error').style.display = 'block';
+            alert("Vui lòng nhập mô tả ngắn.");
+            return; // Dừng lại nếu chưa nhập mô tả ngắn
+        }
+
+        if (categoryChecked === 0) {
+            document.getElementById('category-error').style.display = 'block';
+            alert("Vui lòng chọn ít nhất một thể loại.");
+            return; // Dừng lại nếu chưa chọn thể loại
+        }
+
+
+
+        // Nếu tất cả đều hợp lệ, tiến hành submit
+        let statusValue = action === 'create' ? 'pending' : 'drafted';
+        document.querySelector('input[name="status"]').value = statusValue;
+
+        let message;
+        if (action === 'create') {
+            message = 'Bạn có chắc chắn muốn tạo bài viết không?';
+        } else if (action === 'drafted') {
+            message = 'Bạn có chắc chắn muốn lưu lại dưới dạng nháp không?';
+        }
+
+        if (confirm(message)) {
+            document.getElementById('blog-form').submit(); // Gửi form nếu đã đủ điều kiện
+        }
     }
 </script>
 

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ex" uri="http://example.com/functions" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -39,6 +40,8 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@1.2.0/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@1.2.0/dist/css/splide.min.css">
     <style>
         .card {
             background-color: #7f7f7f;
@@ -157,6 +160,38 @@
         /*    width: 100%;*/
         /*    height: 100%;*/
         /*}*/
+        .thumbnail_slider {
+            max-width: 710px;
+            margin: 30px auto;
+        }
+
+        .splide__slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            width: 580px;
+            overflow: hidden;
+            transition: .2s;
+            border-width: 2px !important;
+            margin: 10px 4px;
+        }
+
+        .splide--nav > .splide__track > .splide__list > .splide__slide.is-active {
+            box-shadow: 2px 3px 8px #000000a3;
+        }
+
+        .splide__slide img {
+            width: auto;
+            height: auto;
+            margin: auto;
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #primary_slider .splide__slide{
+            width: 700px !important;
+        }
     </style>
 </head>
 <jsp:include page="header.jsp"/>
@@ -189,40 +224,82 @@
                 <div class="row">
                     <div class="light-slide-item">
                         <div class="clearfix">
-                            <div class="favorite-and-print">
-                                <a class="add-to-fav" href="#login-modal" data-toggle="modal">
-                                    <i class="fa fa-star-o"></i>
-                                </a>
-                                <a class="printer-icon" href="javascript:window.print()">
-                                    <i class="fa fa-print"></i>
-                                </a>
+
+
+                            <div class="thumbnail_slider" style="margin-top: 0">
+                                <!-- Primary Slider Start-->
+                                <div id="primary_slider">
+                                    <div class="splide__track">
+                                        <ul class="splide__list">
+                                            <c:forEach items="${home.images}" var="image">
+                                                <li class="splide__slide" style="border-radius: 15px;">
+                                                    <img src="${image}">
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Primary Slider End-->
+                                <!-- Thumbnal Slider Start-->
+                                <div id="thumbnail_slider">
+                                    <div class="splide__track">
+                                        <ul class="splide__list">
+                                            <c:forEach items="${home.images}" var="image">
+                                                <li class="splide__slide">
+                                                    <img src="${image}">
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Thumbnal Slider End-->
                             </div>
 
-                            <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-                                <c:choose>
-                                    <c:when test="${not empty home.images}">
-                                        <c:forEach items="${home.images}" var="image">
-                                            <li class="gallery-item" data-thumb="${image}" style="display: inline-block; margin: 5px;">
-                                                <img src="${image}" alt="Property Image"style="width: 100%; height: 650px; object-fit: cover; border-radius: 5px;" />
-                                            </li>
-                                        </c:forEach>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="gallery-item" data-thumb="assets/img/property-1/property4.jpg" style="display: inline-block; margin: 5px;">
-                                            <img src="assets/img/property-1/property4.jpg" alt="Default Property Image" />
-                                        </li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </ul>
+
+                            <script>
+                                // Primary slider.
+                                var primarySlider = new Splide('#primary_slider', {
+                                    type: 'fade',
+                                    heightRatio: 0.5,
+                                    pagination: false,
+                                    arrows: false,
+                                    cover: true,
+                                });
+
+                                // Thumbnails slider.
+                                var thumbnailSlider = new Splide('#thumbnail_slider', {
+                                    rewind: true,
+                                    fixedWidth: 100,
+                                    fixedHeight: 64,
+                                    isNavigation: true,
+                                    gap: 10,
+                                    focus: 'center',
+                                    pagination: false,
+                                    cover: true,
+                                    breakpoints: {
+                                        '600': {
+                                            fixedWidth: 66,
+                                            fixedHeight: 40,
+                                        }
+                                    }
+                                }).mount();
+
+                                // sync the thumbnails slider as a target of primary slider.
+                                primarySlider.sync(thumbnailSlider).mount();
+                            </script>
+
+
 
                         </div>
                     </div>
                 </div>
 
-                <div class="single-property-wrapper">
+                <div class="single-property-wrapper" style="margin-top: 30px">
                     <div class="single-property-header">
-                        <h1 class="property-title pull-left">${home.name}</h1>
-                        <span class="property-price pull-right"><fmt:formatNumber value="${prices[0].price}" type="number" groupingUsed="true"/> VND/tháng</span>
+                        <h1 class="property-title pull-left" style="letter-spacing: 0;color: #1A1A1A;">${home.name}</h1>
+                        <span class="property-price pull-right">
+${ex:convertPriceToVND(prices[0].price)} VND/tháng
+                        </span>
                     </div>
 
 
@@ -868,6 +945,7 @@
     function confirmAdd() {
         return confirm('Bạn có chắc chắn muốn thêm vào danh sách yêu thích?');
     }
+
 </script>
 
 </body>
