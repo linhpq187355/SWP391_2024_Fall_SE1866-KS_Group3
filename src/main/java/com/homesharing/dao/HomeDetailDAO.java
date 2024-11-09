@@ -62,5 +62,5 @@ public interface HomeDetailDAO {
 
     List<Home> getHomesByDistrict(int homeId, int priceDifference);
 
-    HomeType getHomeTypeByHomeId(int homeTypeId);
+    HomeType getHomeTypeByHomeId(int homeId);
 }

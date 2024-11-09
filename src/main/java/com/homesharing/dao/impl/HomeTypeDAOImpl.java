@@ -12,8 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
-public class HomeTypeDAOImpl implements HomeTypeDAO {
+public class HomeTypeDAOImpl extends DBContext implements HomeTypeDAO {
+    private static final Logger logger = Logger.getLogger(HomeDAOImpl.class.getName());
     @Override
     public List<HomeType> getAllHomeTypes() {
         List<HomeType> hometypes = new ArrayList<>();
@@ -29,7 +31,7 @@ public class HomeTypeDAOImpl implements HomeTypeDAO {
         ResultSet resultSet = null;
 
         try {
-            connection = DBContext.getConnection();
+            connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
 
@@ -63,5 +65,31 @@ public class HomeTypeDAOImpl implements HomeTypeDAO {
             }
         }
         return hometypes;
+    }
+
+    @Override
+    public String countPopularHomeType() {
+        String sql = "SELECT TOP 1 ht.name\n" +
+                "FROM Homes h\n" +
+                "         JOIN HomeTypes ht ON h.homeTypeId = ht.id\n" +
+                "GROUP BY ht.name\n" +
+                "ORDER BY COUNT(h.id) DESC";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()){
+                if (rs.next()) {
+                    return rs.getString(1);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            logger.severe("Error fetch home info from the database: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        HomeTypeDAOImpl dao = new HomeTypeDAOImpl();
+        System.out.println(dao.countPopularHomeType());
     }
 }
