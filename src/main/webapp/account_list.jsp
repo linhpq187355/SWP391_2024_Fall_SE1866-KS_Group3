@@ -1,18 +1,14 @@
 <%--
-  Author: ThangLT
-  Date: 01-Nov-24
-  Time: 1:58 PM
+  Created by IntelliJ IDEA.
+  User: Duy Long Laptop
+  Date: 26-Sep-24
+  Time: 9:58 PM
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%
-    // Get the current URL
-    String currentUrl = request.getRequestURI();
-    request.setAttribute("currentUrl", currentUrl);
-%>
 <!DOCTYPE html>
 <head>
-    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>DashBoard - Roomify</title>
     <meta
@@ -24,10 +20,10 @@
             href="./assets/img/logo-web.png"
             type="image/x-icon"
     />
+    <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
     <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
-    <%--    <script src="https://cdn.tailwindcss.com"></script>--%>
     <script>
         WebFont.load({
             google: {families: ["Public Sans:300,400,500,600,700"]},
@@ -51,206 +47,20 @@
     <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
     <link rel="stylesheet" href="assets/css/dashboard.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-
-    <style>
-        /* Custom animation for modal */
-        .modal.fade .modal-dialog {
-            transform: translateY(-50px);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .modal.show .modal-dialog {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .modal-header {
-            background-color: #f8f9fa; /* Light background for header */
-        }
-
-        .modal-footer {
-            background-color: #f8f9fa; /* Light background for footer */
-        }
-
-        .modal-body h6 {
-            border-bottom: 1px solid #e9ecef; /* Optional: Add a bottom border for separation */
-            padding-bottom: 10px; /* Optional: Add padding for better spacing */
-        }
-    </style>
 </head>
-<body style="color: black;">
+<body>
 <div class="wrapper">
     <!-- Sidebar -->
-    <div class="sidebar" data-background-color="light">
-        <div class="sidebar-logo">
-            <!-- Logo Header -->
-            <div class="logo-header" data-background-color="light">
-                <a href="dashboard" class="logo">
-                    <img
-                            src="./assets/img/logo-light.png"
-                            alt="navbar brand"
-                            class="navbar-brand"
-                            height="65"
-                    />
-                </a>
-                <div class="nav-toggle">
-                    <button class="btn btn-toggle toggle-sidebar" style="color: #777777 !important;">
-                        <i class="gg-menu-right"></i>
-                    </button>
-                    <button class="btn btn-toggle sidenav-toggler" style="color: #777777 !important;">
-                        <i class="gg-menu-left"></i>
-                    </button>
-                </div>
-                <button class="topbar-toggler more">
-                    <i class="gg-more-vertical-alt"></i>
-                </button>
-            </div>
-            <!-- End Logo Header -->
-        </div>
-        <div class="sidebar-wrapper scrollbar scrollbar-inner">
-            <div class="sidebar-content">
-                <ul class="nav nav-secondary">
-                    <li class="nav-item">
-                        <a href="dashboard">
-                            <i class="fas fa-home"></i>
-                            <p>Dashboard</p>
-                        </a>
-                    </li>
-                    <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                  <i class="fa fa-ellipsis-h"></i>
-                </span>
-                        <h4 class="text-section">Quản Trị</h4>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#announces">
-                            <i class="fas fa-bullhorn"></i>
-                            <p>Thông Báo</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="announces">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="dashboard/announcement-list">
-                                        <span class="sub-item">Danh sách thông báo</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="dashboard/create-announcement">
-                                        <span class="sub-item">Đăng thông báo</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#home-mgt">
-                            <i class="fas fa-newspaper"></i>
-                            <p>Tin Đăng Nhà</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="home-mgt">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="dashboard/home-list">
-                                        <span class="sub-item">Danh sách tin đăng</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item active submenu">
-                        <a data-bs-toggle="collapse" href="#acc-mgt">
-                            <i class="fas fa-user"></i>
-                            <p>Tài khoản</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="acc-mgt">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="dashboard/account-list">
-                                        <span class="sub-item">Danh sách tài khoản</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="dashboard/create-account">
-                                        <span class="sub-item">Tạo tài khoản</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#report-mgt">
-                            <i class="fas fa-flag"></i>
-                            <p>Báo Cáo</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="report-mgt">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="dashboard/report-list">
-                                        <span class="sub-item">Danh sách báo cáo</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item <c:if test="${currentUrl.contains('/homeSharing/permission-list.jsp')}">active submenu</c:if>">
-                        <a data-bs-toggle="collapse" href="#permissions">
-                            <i class="fas fa-key"></i>
-                            <p>Phân Quyền</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="permissions">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="dashboard/permission-list">
-                                        <span class="sub-item">Danh sách quản trị viên</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="dashboard/create-moderator">
-                                        <span class="sub-item">Tạo quản trị viên</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#blog-mgt">
-                            <i class="fa-brands fa-blogger-b"></i>
-                            <p>Blog</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse" id="blog-mgt">
-                            <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="dashboard/blog-list">
-                                        <span class="sub-item">Danh sách blog</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="dashboard/create-blog">
-                                        <span class="sub-item">Tạo blog</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <jsp:include page="dashboard-sidebar.jsp"/>
+    <!-- End Sidebar -->
 
     <div class="main-panel">
-        <%--        Put the header in here--%>
         <jsp:include page="dashboard-header.jsp"/>
+
         <div class="container">
             <div class="page-inner">
                 <div class="page-header">
-                    <h3 class="fw-bold mb-3">Danh sách tài khoản</h3>
+                    <h3 class="fw-bold mb-3">Tài khoản</h3>
                     <ul class="breadcrumbs mb-3">
                         <li class="nav-home" style="color: black;">
                             <a href="#">
@@ -261,7 +71,13 @@
                             <i class="icon-arrow-right"></i>
                         </li>
                         <li class="nav-item" style="color: black;">
-                            <a href="#">Danh sách tài khoản</a>
+                            <a href="#">Bảng biểu</a>
+                        </li>
+                        <li class="separator" style="color: black;">
+                            <i class="icon-arrow-right"></i>
+                        </li>
+                        <li class="nav-item" style="color: black;">
+                            <a href="#">Cơ sở dữ liệu</a>
                         </li>
                     </ul>
                 </div>
@@ -280,54 +96,52 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="basic-datatables" class="display table table-striped">
-
+                                    <table
+                                            id="basic-datatables"
+                                            class="display table table-striped table-hover"
+                                    >
                                         <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Email</th>
+                                            <th>Tạo lúc</th>
                                             <th>Vai trò</th>
                                             <th>Trạng thái</th>
-                                            <th>Thao tác</th>
+                                            <th>Quản lí</th>
                                         </tr>
                                         </thead>
-                                        <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                        </tfoot>
-
                                         <tbody>
                                         <c:forEach items="${requestScope.userList}" var="user">
                                             <tr>
                                                 <td>${user.id}</td>
                                                 <td>${user.email}</td>
-                                                <td class="text-capitalize">${user.roleName}</td>
+                                                <td>${user.createdAt}</td>
+                                                <c:forEach items="${requestScope.roleList}" var="role">
+                                                    <c:if test="${role.id == user.rolesId}">
+                                                        <td class="text-center text-capitalize">${role.name}</td>
+                                                    </c:if>
+                                                </c:forEach>
                                                 <c:if test="${user.status=='active'}">
-                                                    <td class="text-success text-capitalize">${user.status}</td>
+                                                    <td class="text-center text-success text-capitalize">${user.status}</td>
                                                 </c:if>
                                                 <c:if test="${user.status!='active'}">
-                                                    <td class="text-danger text-capitalize">Inactive</td>
+                                                    <td class="text-center text-danger text-capitalize">Inactive</td>
                                                 </c:if>
-                                                <td class="space-y-4 text-center">
-                                                    <a href="#" class="user-detail"
-                                                       data-id="${user.id}"
-                                                       data-full-name="${user.firstName} +' ' + ${user.lastName}"
-                                                       data-email="${user.email}"
-                                                       data-role="${user.roleName}"
-                                                       data-status="${user.status}"
-                                                       data-phone-num="${user.phoneNumber}"
-                                                       data-dob="${user.dob}"
-                                                       data-address="${user.address}"
-                                                    >
-                                                        <i class="fas fa-eye fa-lg" style="color: #fa8650;"></i>
+                                                <td class="d-flex gap-2">
+                                                    <a href="ban?userId=${user.id}" onclick="banAccount('${user.id}')">
+                                                        <button class="btn btn-danger d-flex align-items-center justify-content-center w-100 shadow-sm"
+                                                                style="font-weight: bold;">
+                                                            <i class="fas fa-ban me-2"></i>
+                                                            <span>Ban</span>
+                                                        </button>
                                                     </a>
-                                                    <a href="dashboard/permission-update?userId=${user.id}">
-                                                        <i class="fas fa-key fa-lg" style="color: #fa8650;"></i>
+                                                    <a href="activate?userId=${user.id}"
+                                                       onclick="activateAccount('${user.id}')">
+                                                        <button class="btn btn-success d-flex align-items-center justify-content-center w-100 shadow-sm"
+                                                                style="font-weight: bold;">
+                                                            <i class="fas fa-check me-2"></i>
+                                                            <span>Activate</span>
+                                                        </button>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -341,53 +155,11 @@
                 </div>
             </div>
         </div>
+
         <jsp:include page="dashboard-footer.jsp"/>
-
     </div>
-</div>
 
-<div class="modal fade" id="userDetailModal" tabindex="-1" aria-labelledby="userDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="userDetailModalLabel">Chi tiết tài khoản</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-hashtag"></i> <strong>UID:</strong> <span
-                                id="userId"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-envelope"></i> <strong>Email:</strong> <span
-                                id="userEmail"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-id-badge"></i> <strong>Vai trò:</strong> <span
-                                id="userRole"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-signal"></i> <strong>Trạng thái:</strong> <span
-                                id="userStatus"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-phone"></i> <strong>SĐT:</strong> <span
-                                id="userPhoneNum"></span></h6>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h6 class="text-muted"><i class="fas fa-map"></i> <strong>Địa chỉ:</strong> <span
-                                id="userAddress"></span></h6>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
 </div>
-
 <!--   Core JS Files   -->
 <script src="./assets/js/core/jquery-3.7.1.min.js"></script>
 <script src="./assets/js/core/popper.min.js"></script>
@@ -397,75 +169,42 @@
 <script src="./assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 <!-- Datatables -->
 <script src="./assets/js/plugin/datatables/datatables.min.js"></script>
+<!-- Kaiadmin JS -->
 <script src="./assets/js/kaiadmin.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<%
-    String message = (String) session.getAttribute("message");
-    String messageType = (String) session.getAttribute("messageType");
-    if (message != null && messageType != null) {
-%>
-<script type="text/javascript">
-    Swal.fire({
-        icon: '<%= messageType %>',
-        title: '<%= message %>'
-    });
-</script>
-<%
-        // Sau khi hiển thị thông báo, xóa nó khỏi session để tránh hiển thị lại khi trang được làm mới
-        session.removeAttribute("message");
-        session.removeAttribute("messageType");
-    }
-%>
 <script>
     $(document).ready(function () {
         // $("#basic-datatables").DataTable({});
-        $(document).ready(function () {
-            $("#basic-datatables").DataTable({
-                pageLength: 10,
-                initComplete: function () {
-                    this.api()
-                        .columns([2, 3])
-                        .every(function (index) {
-                            var column = this;
 
-                            // Define labels based on column index
-                            var labels = [
-                                "ID",
-                                "Email",
-                                "Vai trò",
-                                "Trạng thái",
-                                "Thao tác"
-                            ];
+        $("#basic-datatables").DataTable({
+            pageLength: 10,
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function () {
+                        var column = this;
+                        var select = $(
+                            '<select class="form-select"><option value=""></option></select>'
+                        )
+                            .appendTo($(column.footer()).empty())
+                            .on("change", function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                            // Create a container with label and select element
-                            var footerContainer = $('<div>')
-                                .append('<i class="fas fa-filter"></i>' + '<span>' + labels[index] + ": " + '</span>')
-                                .append('<select class="form-select"><option value="">' + "Tất Cả" + '</option></select>')
-                                .appendTo($(column.footer()).empty());
+                                column
+                                    .search(val ? "^" + val + "$" : "", true, false)
+                                    .draw();
+                            });
 
-                            // Populate the select element with unique column data
-                            footerContainer
-                                .find('select')
-                                .on("change", function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
-
-                            // Populate dropdown options
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d) {
-                                    footerContainer.find('select').append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
-                        });
-                },
-            });
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append(
+                                    '<option value="' + d + '">' + d + "</option>"
+                                );
+                            });
+                    });
+            },
         });
 
         // Add Row
@@ -489,37 +228,46 @@
         });
     });
 </script>
+<script type="text/javascript">
+    function activateAccount(id) {
+        if (confirm("Are you sure to activate this account?")) {
+            window.location = "activate?userId=" + id;
+            // If confirmed, announce the success
+            alert("Confirmed request");
+        } else {
+            // If not confirmed, announce failure or do nothing
+            alert("Account activation canceled.");
+        }
+    }
+
+    function banAccount(id) {
+        if (confirm("Are you sure to ban this account?")) {
+            window.location = "ban?userId=" + id;
+            // If confirmed, announce the success
+            alert("Confirmed request");
+        } else {
+            // If not confirmed, announce failure or do nothing
+            alert("Account ban canceled.");
+        }
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Attach click event to all user detail icons
-        const userDetailLinks = document.querySelectorAll('.user-detail');
-
-        userDetailLinks.forEach(link => {
-            link.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent default anchor behavior
-
-                // Get user details from data attributes
-                const userId = this.getAttribute('data-id');
-                const userEmail = this.getAttribute('data-email');
-                const userRole = this.getAttribute('data-role');
-                const userStatus = this.getAttribute('data-status');
-                const userPhoneNum = this.getAttribute('data-phone-num') || "Chưa có";
-                const userAddress = this.getAttribute('data-address') || "Chưa có";
-
-                // Populate modal with user details
-                document.getElementById('userId').textContent = userId;
-                document.getElementById('userEmail').textContent = userEmail;
-                document.getElementById('userRole').textContent = userRole;
-                document.getElementById('userStatus').textContent = userStatus;
-                document.getElementById('userPhoneNum').textContent = userPhoneNum;
-                document.getElementById('userAddress').textContent = userAddress;
-                // Show the modal
-                const userDetailModal = new bootstrap.Modal(document.getElementById('userDetailModal'));
-                userDetailModal.show();
-            });
-        });
+<%
+    String message = (String) session.getAttribute("message");
+    String messageType = (String) session.getAttribute("messageType");
+    if (message != null && messageType != null) {
+%>
+<script type="text/javascript">
+    Swal.fire({
+        icon: '<%= messageType %>',
+        title: '<%= message %>'
     });
 </script>
+<%
+        // Sau khi hiển thị thông báo, xóa nó khỏi session để tránh hiển thị lại khi trang được làm mới
+        session.removeAttribute("message");
+        session.removeAttribute("messageType");
+    }
+%>
 </body>
 </html>

@@ -11,24 +11,14 @@ import com.homesharing.service.ReportService;
 import com.homesharing.service.impl.ReportServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.CookieUtil;
-import com.homesharing.util.ImageUtil;
-import com.homesharing.util.ServletUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @WebServlet(name = "ReportServlet", value = "/report")
 public class CreateReportServlet extends HttpServlet {

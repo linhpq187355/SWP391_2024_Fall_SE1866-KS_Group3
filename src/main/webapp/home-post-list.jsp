@@ -1,11 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<!DOCTYPE>
-<html>
+<!DOCTYPE html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>DashBoard - Roomify</title>
+    <title>Dashboard - Home list</title>
     <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
             name="viewport"
@@ -15,6 +14,7 @@
             href="./assets/img/logo-web.png"
             type="image/x-icon"
     />
+    <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
     <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
@@ -57,17 +57,17 @@
     <div class="main-panel">
         <div class="main-header">
             <!-- Navbar Header -->
-            <jsp:include page="navbar-admin.jsp"/>
+            <jsp:include page="dashboard-header.jsp"/>
             <!-- End Navbar -->
         </div>
 
         <div class="container">
             <div class="page-inner">
                 <div class="page-header">
-                    <h3 class="fw-bold mb-3">Bài đăng nhà</h3>
+                    <h3 class="fw-bold mb-3">Tin đăng nhà</h3>
                     <ul class="breadcrumbs mb-3">
                         <li class="nav-home" style="color: black;">
-                            <a href="#">
+                            <a href="/dashboard">
                                 <i class="icon-home"></i>
                             </a>
                         </li>
@@ -75,13 +75,7 @@
                             <i class="icon-arrow-right"></i>
                         </li>
                         <li class="nav-item" style="color: black;">
-                            <a href="#">Bảng biểu</a>
-                        </li>
-                        <li class="separator" style="color: black;">
-                            <i class="icon-arrow-right"></i>
-                        </li>
-                        <li class="nav-item" style="color: black;">
-                            <a href="#">Cơ sở dữ liệu</a>
+                            <a href="${pageContext.request.contextPath}/dashboard/home-list">Danh sách tin đăng</a>
                         </li>
                     </ul>
                 </div>
@@ -95,29 +89,18 @@
                                 <div class="table-responsive">
                                     <table
                                             id="basic-datatables"
-                                            class="display table table-striped table-hover">
+                                            class="display table table-striped">
                                         <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Tên nhà</th>
-                                            <th>Loại nhà</th>
+                                            <th>Loại nhà ở</th>
                                             <th>Tạo lúc</th>
                                             <th>Tạo bởi</th>
                                             <th>Trạng thái</th>
-                                            <th>Quản lí</th>
+                                            <th>Thao tác</th>
                                         </tr>
                                         </thead>
-                                        <tfoot>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Tên nhà</th>
-                                            <th>Loại nhà</th>
-                                            <th>Tạo lúc</th>
-                                            <th>Tạo bởi</th>
-                                            <th>Trạng thái</th>
-                                            <th>Quản lí</th>
-                                        </tr>
-                                        </tfoot>
                                         <tbody>
                                         <c:forEach items="${requestScope.homeList}" var="home">
                                             <tr>
@@ -138,20 +121,20 @@
                                                     <td class="text-center text-success">Hoạt động</td>
                                                 </c:if>
                                                 <c:if test="${home.status=='pending'}">
-                                                    <td class="text-center" style="color: #5A6376">Đang chờ</td>
+                                                    <td class="text-center" style="color: #5A6376">Đang chờ duyệt</td>
                                                 </c:if>
                                                 <c:if test="${home.status=='inactive'}">
                                                     <td class="text-center text-danger">Vô hiệu hóa</td>
                                                 </c:if>
                                                 <td>
                                                     <span style="display: flex; align-items: center; justify-content: center; gap: 10px">
-                                                        <a href="home-post-detail?id=${home.id}" title="View detail">
-                                                            <i class="fas fa-info-circle icon-custom"></i>
+                                                        <a href="home-post-detail?id=${home.id}" title="Xem chi tiết">
+                                                            <i class="fas fa-eye icon-custom"></i>
                                                         </a>
-                                                        <a href="approve?homeId=${home.id}" title="Approve post">
+                                                        <a href="${pageContext.request.contextPath}/dashboard/approve?homeId=${home.id}" title="Duyệt bài">
                                                             <i class="fas fa-check-double icon-custom"></i>
                                                         </a>
-                                                        <a href="reject?homeId=${home.id}" title="Reject post">
+                                                        <a href="${pageContext.request.contextPath}/dashboard/reject?homeId=${home.id}" title="Từ chối">
                                                             <i class="fas fa-ban icon-custom"></i>
                                                         </a>
                                                     </span>
@@ -168,28 +151,7 @@
             </div>
         </div>
 
-        <footer class="footer">
-            <div class="container-fluid d-flex justify-content-between">
-                <nav class="pull-left">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="home-page">
-                                Trang chủ
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"> Hỗ trợ </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"> Điều khoản </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="copyright">
-                    Copyright ©2024, All Right Reserved by Roomify team
-                </div>
-            </div>
-        </footer>
+        <jsp:include page="dashboard-footer.jsp"/>
     </div>
 
 </div>
@@ -198,11 +160,8 @@
 <script src="./assets/js/core/popper.min.js"></script>
 <script src="./assets/js/core/bootstrap.min.js"></script>
 
-<!-- jQuery Scrollbar -->
 <script src="./assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-<!-- Datatables -->
 <script src="./assets/js/plugin/datatables/datatables.min.js"></script>
-<!-- Kaiadmin JS -->
 <script src="./assets/js/kaiadmin.min.js"></script>
 <script>
     $(document).ready(function () {

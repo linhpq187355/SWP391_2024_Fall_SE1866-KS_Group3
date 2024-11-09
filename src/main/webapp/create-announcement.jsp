@@ -14,6 +14,7 @@
             href="./assets/img/logo-web.png"
             type="image/x-icon"
     />
+    <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
     <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>

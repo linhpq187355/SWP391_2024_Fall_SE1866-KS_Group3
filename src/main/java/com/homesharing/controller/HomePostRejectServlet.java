@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "HomePostRejectServlet", value = "/reject")
+@WebServlet(name = "HomePostRejectServlet", value = "/dashboard/reject")
 public class HomePostRejectServlet extends HttpServlet {
     private HomeDAO homeDAO;
     private PriceDAO priceDAO;
@@ -36,7 +36,7 @@ public class HomePostRejectServlet extends HttpServlet {
         try {
             int hid = Integer.parseInt(homeId);
             homePageService.updateStatusHome(hid, "inactive");
-            response.sendRedirect("home-post-manage");
+            response.sendRedirect(request.getContextPath() + "/dashboard/home-list");
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }

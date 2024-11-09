@@ -201,6 +201,7 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
                 home.setWardId(resultSet.getInt("wardsId"));
                 home.setHomeTypeId(resultSet.getInt("homeTypeId"));
                 home.setCreatedBy(resultSet.getInt("createdBy"));
+                home.setStatus(resultSet.getString("status"));
 
                 homes.add(home);
             }

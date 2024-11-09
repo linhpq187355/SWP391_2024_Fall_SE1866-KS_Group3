@@ -1,7 +1,17 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.*;
-import com.homesharing.dao.impl.*;
+import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.ReportDAO;
+import com.homesharing.dao.ReportTypeDAO;
+import com.homesharing.dao.RoleDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.WardDAO;
+import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.PriceDAOImpl;
+import com.homesharing.dao.impl.RoleDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.dao.impl.WardDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.model.Report;
 import com.homesharing.model.ReportType;
@@ -9,20 +19,19 @@ import com.homesharing.model.User;
 import com.homesharing.service.HomePageService;
 import com.homesharing.service.ReportService;
 import com.homesharing.service.UserManagementService;
-import com.homesharing.service.UserService;
 import com.homesharing.service.impl.HomePageServiceImpl;
 import com.homesharing.service.impl.ReportServiceImpl;
 import com.homesharing.service.impl.UserManagementServiceImpl;
-import com.homesharing.service.impl.UserServiceImpl;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "ListReportHomeServlet", value = "/report-list")
+@WebServlet(name = "ListReportHomeServlet", value = "/dashboard/report-list")
 public class ListReportHomeServlet extends HttpServlet {
     private ReportService reportService;
     private HomePageService homePageService;
