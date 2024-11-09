@@ -173,7 +173,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
      */
     @Override
     public User getCreatorByHomeId(int homeId) {
-        String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
+        String sql = "SELECT u.id, u.firstName, u.avatar, u.lastName, u.email, u.phoneNumber " +
                 "FROM [HSS_Users] u " +
                 "JOIN Homes h ON u.id = h.createdBy " +
                 "WHERE h.id = ?";
@@ -195,6 +195,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 user.setFirstName(resultSet.getString("firstName"));
                 user.setLastName(resultSet.getString("lastName"));
                 user.setEmail(resultSet.getString("email"));
+                user.setAvatar(resultSet.getString("avatar"));
                 user.setPhoneNumber(resultSet.getString("phoneNumber"));
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {

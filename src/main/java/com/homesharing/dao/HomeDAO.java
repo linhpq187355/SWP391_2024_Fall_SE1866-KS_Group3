@@ -173,5 +173,42 @@ public interface HomeDAO {
      */
     int changeStatus(int homeId, String status);
 
+    /**
+     * Retrieves the total number of homes.
+     * @return The total count of homes.
+     */
+    int getTotalHome();
+
     List<Home> getByCreatedBy(int createdById);
+
+    /**
+     * Counts the number of homes with the specified status.
+     * @param status The status to filter homes by.
+     * @return The count of homes that match the specified status.
+     */
+    int countHomesByStatus(String status);
+    /**
+     * Counts the number of homes created in the current month.
+     * @return The count of homes created in the current month.
+     */
+    int countHomesInMonth();
+    /**
+     * Calculates the average lease duration of all homes.
+     * @return The average lease duration in days.
+     */
+    float avgLeaseDuration();
+    /**
+     * Counts the number of move-in dates that fall within the current month.
+     * @return The count of move-in dates in the current month.
+     */
+    int countMoveInDateInMonth();
+
+    /**
+     * Fetches the latest homes from the database.
+     * @param numberOfHomes The number of latest homes to return.
+     * @return A list of the latest homes.
+     */
+    List<Home> getLatestHomes(int numberOfHomes);
+
+
 }

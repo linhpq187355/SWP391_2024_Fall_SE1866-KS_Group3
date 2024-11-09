@@ -10,4 +10,6 @@ public interface HomeTypeDAO {
      * @return the list of home type
      */
     List<HomeType> getAllHomeTypes();
+
+    String countPopularHomeType();
 }

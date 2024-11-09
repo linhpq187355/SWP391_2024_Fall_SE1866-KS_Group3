@@ -1425,5 +1425,176 @@ public class HomeDAOImpl extends DBContext implements HomeDAO {
         return homeList; // Return the list of homes
     }
 
+    /**
+     * Retrieves the total number of homes.
+     * @return The total count of homes.
+     */
+    @Override
+    public int getTotalHome() {
+        String sql = "SELECT COUNT(*) FROM Homes";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()){
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            logger.severe("Error fetch home from the database: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    /**
+     * Counts the number of homes with the specified status.
+     * @param status The status to filter homes by.
+     * @return The count of homes that match the specified status.
+     */
+    @Override
+    public int countHomesByStatus(String status) {
+        String sql = "SELECT COUNT(*) FROM Homes WHERE status = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status);
+            try (ResultSet rs = preparedStatement.executeQuery()){
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            logger.severe("Error fetch home from the database: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    /**
+     * Counts the number of homes created in the current month.
+     * @return The count of homes created in the current month.
+     */
+    @Override
+    public int countHomesInMonth(){
+        String sql = "SELECT COUNT(*) FROM Homes WHERE MONTH(createdDate) = MONTH(GETDATE()) AND YEAR(createdDate) = YEAR(GETDATE())";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()){
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            logger.severe("Error fetch home info from the database: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    /**
+     * Calculates the average lease duration of all homes.
+     * @return The average lease duration in days.
+     */
+    @Override
+    public float avgLeaseDuration() {
+        String sql = "SELECT AVG(leaseDuration) FROM Homes";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()){
+                if (rs.next()) {
+                    return rs.getFloat(1);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            logger.severe("Error fetch home info from the database: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    /**
+     * Counts the number of move-in dates that fall within the current month.
+     * @return The count of move-in dates in the current month.
+     */
+    @Override
+    public int countMoveInDateInMonth() {
+        String sql = "SELECT COUNT(*) FROM Homes WHERE MONTH(moveInDate) = MONTH(GETDATE()) AND YEAR(moveInDate) = YEAR(GETDATE())";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()){
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Re-throw as runtime exception to be handled by the service layer
+            logger.severe("Error fetch home info from the database: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    /**
+     * Fetches the latest homes from the database.
+     * @param numberOfHomes The number of latest homes to return.
+     * @return A list of the latest homes.
+     */
+    @Override
+    public List<Home> getLatestHomes(int numberOfHomes) {
+        List<Home> homes = new ArrayList<>();
+        String sql = "SELECT TOP " + numberOfHomes + " * FROM [dbo].[Homes] ORDER BY createdDate DESC"; // Fetch the latest homes
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setName(resultSet.getString("name"));
+                home.setAddress(resultSet.getString("address"));
+                home.setLongitude(resultSet.getBigDecimal("longitude"));
+                home.setLatitude(resultSet.getBigDecimal("latitude"));
+                home.setOrientation(resultSet.getString("orientation"));
+                home.setArea(resultSet.getBigDecimal("area"));
+                home.setLeaseDuration(resultSet.getInt("leaseDuration"));
+                home.setMoveInDate(resultSet.getDate("moveInDate").toLocalDate());
+                home.setNumOfBedroom(resultSet.getInt("numOfBedroom"));
+                home.setNumOfBath(resultSet.getInt("numOfBath"));
+                home.setCreatedDate(resultSet.getTimestamp("createdDate").toLocalDateTime());
+                home.setModifiedDate(resultSet.getTimestamp("modifiedDate") != null ? resultSet.getTimestamp("modifiedDate").toLocalDateTime() : null);
+                home.setHomeDescription(resultSet.getString("homeDescription"));
+                home.setTenantDescription(resultSet.getString("tenantDescription"));
+                home.setWardId(resultSet.getInt("wardsId"));
+                home.setHomeTypeId(resultSet.getInt("homeTypeId"));
+                home.setCreatedBy(resultSet.getInt("createdBy"));
+
+                homes.add(home);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            // Throwing exception to the upper layer to handle it properly
+            throw new GeneralException("Error retrieving latest homes from the database: " + e.getMessage(), e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.severe("Error closing database resources: " + e.getMessage());
+            }
+        }
+        return homes;
+    }
 
 }

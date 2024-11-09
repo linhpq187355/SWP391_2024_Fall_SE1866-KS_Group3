@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1822,5 +1823,141 @@ public class UserDAOImpl extends DBContext implements UserDAO {
         User user = userDAO.getUser(1);
         System.out.println(user.getFirstName());
     }
+
+    @Override
+    public Map<String, Double> calculateAveragePreferences(String role) {
+        Map<String, Double> averages = new HashMap<>();
+        String sql = "SELECT AVG(p.cleanliness) AS avgCleanliness, " +
+                "AVG(p.workSchedule) AS avgWorkSchedule, " +
+                "AVG(p.smoking) AS avgSmoking, " +
+                "AVG(p.drinking) AS avgDrinking, " +
+                "AVG(p.interaction) AS avgInteraction, " +
+                "AVG(p.guests) AS avgGuests, " +
+                "AVG(p.cooking) AS avgCooking, " +
+                "AVG(p.pet) AS avgPet " +
+                "FROM HSS_Users u " +
+                "JOIN Roles r ON u.rolesid = r.id " +
+                "JOIN Preferences p ON u.id = p.usersId " +
+                "WHERE r.name = ?" +
+                "GROUP BY r.name;";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, role);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                averages.put("avgCleanliness", resultSet.getDouble("avgCleanliness"));
+                averages.put("avgWorkSchedule", resultSet.getDouble("avgWorkSchedule"));
+                averages.put("avgSmoking", resultSet.getDouble("avgSmoking"));
+                averages.put("avgDrinking", resultSet.getDouble("avgDrinking"));
+                averages.put("avgInteraction", resultSet.getDouble("avgInteraction"));
+                averages.put("avgGuests", resultSet.getDouble("avgGuests"));
+                averages.put("avgCooking", resultSet.getDouble("avgCooking"));
+                averages.put("avgPet", resultSet.getDouble("avgPet"));
+
+            }
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Error getting user matching profile", e);
+            throw new GeneralException("Error gettinh user matching profile: " + e.getMessage(), e);
+        }
+        return averages;
+    }
+
+    @Override
+    public List<User> getLatestUser() {
+        List<User> userList = new ArrayList<>();
+        String sql = "SELECT u.[id],\n" +
+                "       u.[email],\n" +
+                "       u.[hashedPassword],\n" +
+                "       u.[phoneNumber],\n" +
+                "       u.[username],\n" +
+                "       u.[firstName],\n" +
+                "       u.[lastName],\n" +
+                "       u.[avatar],\n" +
+                "       u.[dob],\n" +
+                "       u.[address],\n" +
+                "       u.[gender],\n" +
+                "       u.[citizenNumber],\n" +
+                "       u.[createdAt],\n" +
+                "       u.[status],\n" +
+                "       u.[isVerified],\n" +
+                "       u.[modifiedDate],\n" +
+                "       u.[rolesid],\n" +
+                "       r.[name] AS roleName\n" +
+                "FROM [dbo].[HSS_Users] u\n" +
+                "LEFT JOIN [dbo].[Roles] r ON u.[rolesid] = r.[id]\n"+
+                "WHERE r.[name]!= 'admin' AND r.[name]!='moderator'"+
+                "ORDER BY u.[createdAt] DESC";
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setEmail(resultSet.getString("email"));
+                user.setHashedPassword(resultSet.getString("hashedPassword"));
+                user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                user.setUserName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAvatar(resultSet.getString("avatar"));
+                user.setRoleName(resultSet.getString("roleName"));
+                if (resultSet.getDate("dob") != null) {
+                    user.setDob(resultSet.getDate("dob").toLocalDate());
+                }
+                user.setAddress(resultSet.getString("address"));
+                user.setGender(resultSet.getString("gender"));
+                user.setCitizenNumber(resultSet.getString("citizenNumber"));
+                // Check null before call toLocalDateTime()
+                Timestamp createdAtTimestamp = resultSet.getTimestamp("createdAt");
+                if (createdAtTimestamp != null) {
+                    user.setCreatedAt(createdAtTimestamp.toLocalDateTime());
+                } else {
+                    user.setCreatedAt(null);
+                }
+                user.setStatus(resultSet.getString("status"));
+                user.setVerified(resultSet.getBoolean("isVerified"));
+                // Check null before call toLocalDateTime()
+                Timestamp lastModifiedTimestamp = resultSet.getTimestamp("modifiedDate");
+                if (lastModifiedTimestamp != null) {
+                    user.setLastModified(lastModifiedTimestamp.toLocalDateTime());
+                } else {
+                    user.setLastModified(null);
+                }
+                user.setRolesId(resultSet.getInt("rolesid"));
+
+                userList.add(user);
+            }
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            throw new GeneralException("Error: ", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return userList;
+    }
+
 
 }

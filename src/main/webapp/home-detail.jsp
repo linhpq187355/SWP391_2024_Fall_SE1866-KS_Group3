@@ -536,9 +536,9 @@ ${ex:convertPriceToVND(prices[0].price)} VND/tháng
                         <div class="dealer-content">
                             <div class="inner-wrapper">
                                 <div class="clear">
-                                    <div class="col-xs-4 col-sm-4 dealer-face">
+                                    <div class="col-xs-4 col-sm-4 dealer-face" style="height: 80px">
                                         <a href="">
-                                            <img src="assets/img/client-face1.png" class="img-circle">
+                                            <img src="${creator.avatar}" class="img-circle" style="opacity: 1; height: 100%">
                                         </a>
                                     </div>
                                     <div class="col-xs-8 col-sm-8 ">

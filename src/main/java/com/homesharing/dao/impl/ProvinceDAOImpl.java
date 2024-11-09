@@ -5,6 +5,7 @@ import com.homesharing.dao.impl.DistrictDAOImpl;
 import com.homesharing.dao.ProvinceDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Province;
+import com.homesharing.model.ProvinceHomeStat;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -102,5 +103,68 @@ public class ProvinceDAOImpl implements ProvinceDAO {
             }
         }
         return null;
+    }
+
+
+    @Override
+    public List<ProvinceHomeStat> getProvincesWithHomeStats() {
+        String sql = """
+                    SELECT 
+                        p.name AS provinceName,
+                        COUNT(h.id) AS homeCount,
+                        (COUNT(h.id) * 100.0 / (SELECT COUNT(*) FROM Homes)) AS homeRatio
+                    FROM 
+                        Provinces p
+                    JOIN 
+                        Districts d ON p.id = d.provincesId
+                    JOIN 
+                        Wards w ON d.id = w.DistrictsId
+                    LEFT JOIN 
+                        Homes h ON w.id = h.wardsId
+                    GROUP BY 
+                        p.id, p.name
+                    ORDER BY 
+                        homeCount DESC
+                """;
+
+        List<ProvinceHomeStat> provinceStats = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String provinceName = resultSet.getString("provinceName");
+                int homeCount = resultSet.getInt("homeCount");
+                double homeRatio = resultSet.getDouble("homeRatio");
+
+                ProvinceHomeStat stat = new ProvinceHomeStat(provinceName, homeCount, homeRatio);
+                provinceStats.add(stat);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.severe("Error fetching province statistics: " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.severe("Error closing database resources: " + e.getMessage());
+            }
+        }
+
+        return provinceStats;
     }
 }

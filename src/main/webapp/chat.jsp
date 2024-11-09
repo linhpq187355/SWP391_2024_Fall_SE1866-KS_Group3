@@ -540,7 +540,7 @@
         </div>
                         </div>
                     </div>
-                    <div style="display: flex;">
+                    <div style="display: flex;width: 100px;justify-content: space-around;">
                         <button id="schedule-button" style="background-color: #ccc;" data-hover-text="Đặt lịch hẹn" class="hover-effect">
                             <i class="fa-solid fa-calendar" style="font-size: xx-large;"></i>
                         </button>
@@ -1497,7 +1497,10 @@
             const homeDiv = document.createElement('div');
             homeDiv.style.border = "1px solid #ccc"; // Thêm border cho mỗi căn nhà
             homeDiv.style.marginBottom = "10px";      // Thêm margin-bottom
-            homeDiv.style.padding = "10px";           // Thêm padding
+            homeDiv.style.padding = "10px";
+            homeDiv.style.display = "flex";
+            homeDiv.style.borderRadius = "15px";
+            homeDiv.style.boxShadow = "rgba(0, 0, 0, 0.16) 0px 1px 4px";
 
             // Hiển thị hình ảnh
             const img = document.createElement('img');
@@ -1510,21 +1513,56 @@
 
             // Hiển thị các thông tin khác
             const infoDiv = document.createElement('div');
-            infoDiv.style.marginLeft = "10px"; // Thêm margin-left để tách khỏi ảnh
+            infoDiv.style.margin = "0 20px";
+            infoDiv.style.display = "flex";// Thêm margin-left để tách khỏi ảnh
+            infoDiv.style.width = "100%";
+            infoDiv.style.justifyContent = "space-between";
+            infoDiv.style.alignItems = "center";
+
             // Hiển thị tên nhà
-            const nameElem = document.createElement('p');
+
+            const infoHome = document.createElement('div');
+            const nameElem = document.createElement('h4');
             nameElem.textContent = home.name;
-            infoDiv.appendChild(nameElem);
+            nameElem.style.color="#1A1A1A";
+            nameElem.style.marginTop="0";
+            infoHome.appendChild(nameElem);
 
             // Hiển thị tên nhà
             const addressElem  = document.createElement('p');
+            addressElem.style.padding="0";
+            addressElem.style.margin="10px";
+            const addressHomeDiv = document.createElement('div');
+            addressHomeDiv.style.display="flex";
+            addressHomeDiv.style.alignItems="center";
+            const addressIcon  = document.createElement('i');
+            addressIcon.className = 'fa-solid fa-location-dot'
+            addressIcon.style.color = "#FA8600";
             addressElem .textContent = home.address;
-            infoDiv.appendChild(addressElem );
+            addressHomeDiv.appendChild(addressIcon);
+            addressHomeDiv.appendChild(addressElem );
+
+            infoHome.appendChild(addressHomeDiv);
 
             // Hiển thị diện tích
             const areaElem = document.createElement('p');
+            areaElem.style.padding ="0";
+            areaElem.style.marginLeft="10px"
+            const areaHomeDiv = document.createElement('div');
+            areaHomeDiv.style.display="flex";
+            areaHomeDiv.style.alignItems="center";
+            const areaIcon  = document.createElement('i');
+            areaIcon.className = 'fa-solid fa-chart-area';
+            areaIcon.style.color = "#FA8600";
             areaElem.textContent = home.area;
-            infoDiv.appendChild(areaElem);
+            areaHomeDiv.appendChild(areaIcon);
+
+            areaHomeDiv.appendChild(areaElem);
+
+
+            infoHome.appendChild(areaHomeDiv);
+
+            infoDiv.appendChild(infoHome);
 
             // Tạo nút "Make Appointment"
             const button = document.createElement('button');
@@ -1532,8 +1570,12 @@
             button.style.padding = "8px 12px";
             button.style.marginTop = "10px";
             button.style.cursor = "pointer";
+            button.style.height = "50px";
+            button.style.backgroundColor = "#FA8600";
+            button.style.color = "#fff";
+            button.style.borderRadius = "10px";
             button.onclick = () => {
-                window.location.href = "make-appointment?hostId=" + receivedId + "&homeId= " + home.id;
+                window.location.href = "make-appointment?hostId=" + receivedId + "&homeId=" + home.id;
             };
 
 // Thêm button vào infoDiv

@@ -109,7 +109,7 @@
                                     <div class="chat-list">
                                         <figure class="chat-image-container">
                                             <a href="chat-box?userId=${user.id}" class="product-image">
-                                                <img src="${user.avatar != null ? user.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
+                                                <img style="height: 45px" src="${user.avatar != null ? user.avatar : 'https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png'}"
                                                      alt="product">
                                             </a>
                                         </figure>

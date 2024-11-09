@@ -13,7 +13,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Danh sách nhà</title>
+    <title>Danh sách chủ nhà</title>
     <meta name="description" content="GARO is a real-estate template">
     <meta name="author" content="Kimarotec">
     <meta name="keyword" content="html5, css, bootstrap, property, real-estate theme , bootstrap template">
@@ -61,7 +61,7 @@
         }
         .item-thumb {
             width: 100%;
-            height: 250px; /* Chiều cao cố định của khung chứa */
+            height: 200px; /* Chiều cao cố định của khung chứa */
             position: relative;
         }
         .property-image {
@@ -427,12 +427,12 @@
                                 <div class="col-sm-6 col-md-3 p0" style="margin-bottom: 15px; text-align: center;">
                                     <div class="item-thumb">
                                         <img class="property-image"
-                                             src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
-                                             style="width: 100%; max-width: 200px; border-radius: 50%;"> <!-- Có thể điều chỉnh kích thước và làm tròn hình ảnh -->
+                                             src="${user.avatar}"
+                                             style="width: 100%; max-width: 200px; border-radius: 50%;cursor: pointer" onclick="window.location.href='home-by-user?id=${user.id}'"> <!-- Có thể điều chỉnh kích thước và làm tròn hình ảnh -->
                                     </div>
                                     <div class="item-entry overflow">
                                         <h5 style="margin-top: 10px;">
-                                            <a href="home-by-user?id=${user.id}" class="home-name">${user.lastName} ${user.firstName}</a>
+                                            <a href="home-by-user?id=${user.id}" class="home-name">${user.firstName} ${user.lastName}</a>
                                         </h5>
                                     </div>
                                 </div>

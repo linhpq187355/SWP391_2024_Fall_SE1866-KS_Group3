@@ -158,7 +158,7 @@
     <div class="container">
         <div class="row">
             <div class="page-head-content">
-                <h1 class="page-title"></h1>
+                <h1 class="page-title">Thông tin chủ hộ</h1>
             </div>
         </div>
     </div>
@@ -292,6 +292,20 @@
                                             </c:if>
                                         </div>
                                     </div>
+                                    <div class="col-xs-12">
+                                        <label>Thoải mái với khách lạ</label>
+                                        <div class="slider-container">
+                                            <c:if test="${requestScope.preference.guest == 100}">
+                                                <p>Chưa cập nhật</p>
+                                            </c:if>
+                                            <c:if test="${requestScope.preference.guest != 100}">
+                                                <input disabled type="range" min="1" max="5" step="1"
+                                                       value="${requestScope.preference.guest}" class="slider"
+                                                       oninput="this.style.setProperty('--value', this.value)"
+                                                       style="--value: ${requestScope.preference.smoking};width: 250px;">
+                                            </c:if>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </fieldset>
@@ -304,38 +318,41 @@
             </div>
 
             <div class="col-md-9 pr0 padding-top-40 properties-page">
-                <div class="col-md-12 clear">
-                    <div class="col-xs-2 layout-switcher">
-                        <a class="layout-list" href="javascript:void(0);"> <i class="fa fa-th-list"></i> </a>
-                        <a class="layout-grid " href="javascript:void(0);"> <i class="fa fa-th"></i> </a>
-                    </div><!--/ .layout-switcher-->
-                </div>
+
 
                 <div class="col-md-12 clear">
-                    <div id="list-type" class="proerty-th">
+                    <div id="list-type" class="proerty-th-list">
                         <c:forEach items="${requestScope.homes}" var="homes">
                             <div class="col-sm-6 col-md-3 p0">
-                                <div class="box-two proerty-item">
+                                <div class="box-two proerty-item" style="display: flex;height: 232px;border-radius: 15px;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                                     <div class="item-thumb">
                                         <!-- Update the href to point to home detail page with home ID -->
                                         <a href="home-detail?id=${homes.id}">
-                                            <img class="property-image"
+                                            <img class="property-image" style="opacity: 1"
                                                  src="${homes.images != null && !homes.images.isEmpty() ? homes.images[0] : 'assets/img/demo/property-1.jpg'}">
                                         </a>
                                     </div>
-                                    <div class="item-entry overflow">
-                                        <h5><a href="home-detail?id=${homes.id}" class="home-name">${homes.name}</a>
-                                        </h5>
-                                        <div class="dot-hr"></div>
-                                        <span class="pull-left"><i class="fa-solid fa-chart-area"
-                                                                   style="color: #ffa500;"></i> ${homes.area}m²</span>
-                                        <c:forEach items="${requestScope.price}" var="price">
-                                            <c:if test="${price.homesId == homes.id }">
-                                                <span class="proerty-price pull-right" style="color: #ffa500;">${ex:convertPriceToVND(price.price)}</span>
+                                    <div style="width: 60%;margin-top: 20px">
+                                        <div class="item-entry overflow" style="width: 100%">
+                                            <h5><a href="home-detail?id=${homes.id}" class="home-name">${homes.name}</a>
+                                            </h5>
+                                            <div class="dot-hr"></div>
+                                            <span class="pull-left"><i class="fa-solid fa-chart-area"
+                                                                       style="color: #ffa500;"></i> ${homes.area}m²</span>
+                                            <c:forEach items="${requestScope.price}" var="price">
+                                                <c:if test="${price.homesId == homes.id }">
+                                                    <span class="proerty-price pull-right" style="color: #ffa500;">${ex:convertPriceToVND(price.price)}</span>
 
-                                            </c:if>
-                                        </c:forEach>
+                                                </c:if>
+                                            </c:forEach>
+                                        </div>
+                                        <div>
+                                            <p>
+                                                    ${homes.homeDescription}
+                                            </p>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </c:forEach>

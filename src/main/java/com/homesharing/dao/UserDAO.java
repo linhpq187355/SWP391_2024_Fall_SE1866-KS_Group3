@@ -204,4 +204,7 @@ public interface UserDAO {
 
     int getMinPet();
     int getMaxPet();
+
+    Map<String, Double> calculateAveragePreferences(String role);
+    List<User> getLatestUser();
 }
