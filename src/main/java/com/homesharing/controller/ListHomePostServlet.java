@@ -17,15 +17,17 @@ import com.homesharing.service.UserManagementService;
 import com.homesharing.service.impl.HomePageServiceImpl;
 import com.homesharing.service.impl.SubmissonFormServiceImpl;
 import com.homesharing.service.impl.UserManagementServiceImpl;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
-@WebServlet(name = "ListHomePostServlet", value = "/home-post-manage")
+@WebServlet(name = "ListHomePostServlet", value = "/dashboard/home-list")
 public class ListHomePostServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(HomeListServlet.class.getName());
     private HomePageService homePageService;
@@ -59,11 +61,6 @@ public class ListHomePostServlet extends HttpServlet {
         request.setAttribute("homeList", homeList);
         request.setAttribute("userList", userList);
         request.setAttribute("homeTypeList", homeTypeList);
-        request.getRequestDispatcher("home-post-list.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.getRequestDispatcher("/home-post-list.jsp").forward(request, response);
     }
 }

@@ -56,11 +56,13 @@ public interface HomeDetailDAO {
      */
     List<FireEquipment> getHomeFireEquipmentsByHomeId(int homeId);
 
+    List<Home> getHomesByProvince(int homeId);
+
     List<Home> getSimilarHomes(int homeId);
 
     List<Home> getHomesByWard(int homeId, int priceDifference);
 
     List<Home> getHomesByDistrict(int homeId, int priceDifference);
 
-    HomeType getHomeTypeByHomeId(int homeTypeId);
+    HomeType getHomeTypeByHomeId(int homeId);
 }

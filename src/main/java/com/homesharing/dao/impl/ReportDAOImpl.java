@@ -1,15 +1,12 @@
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
-import com.homesharing.exception.GeneralException;
 import com.homesharing.dao.ReportDAO;
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Report;
-import com.homesharing.model.ReportType;
 
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;

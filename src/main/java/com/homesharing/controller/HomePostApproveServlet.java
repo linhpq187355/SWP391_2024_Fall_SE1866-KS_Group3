@@ -1,12 +1,15 @@
 package com.homesharing.controller;
 
-import com.homesharing.dao.*;
-import com.homesharing.dao.impl.*;
-import com.homesharing.model.Report;
+import com.homesharing.dao.HomeDAO;
+import com.homesharing.dao.PriceDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.WardDAO;
+import com.homesharing.dao.impl.HomeDAOImpl;
+import com.homesharing.dao.impl.PriceDAOImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
+import com.homesharing.dao.impl.WardDAOImpl;
 import com.homesharing.service.HomePageService;
-import com.homesharing.service.ReportService;
 import com.homesharing.service.impl.HomePageServiceImpl;
-import com.homesharing.service.impl.ReportServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,9 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "HomePostApproveServlet", value = "/approve")
+@WebServlet(name = "HomePostApproveServlet", value = "/dashboard/approve")
 public class HomePostApproveServlet extends HttpServlet {
     private HomeDAO homeDAO;
     private PriceDAO priceDAO;
@@ -36,9 +38,10 @@ public class HomePostApproveServlet extends HttpServlet {
         try {
             int hid = Integer.parseInt(homeId);
             homePageService.updateStatusHome(hid, "active");
-            response.sendRedirect("home-post-manage");
+            response.sendRedirect(request.getContextPath() + "/dashboard/home-list");
         } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            request.setAttribute("errorMessage", "An error occurred while approving the home post.");
+            request.getRequestDispatcher("/404.jsp").forward(request, response);
         }
     }
 

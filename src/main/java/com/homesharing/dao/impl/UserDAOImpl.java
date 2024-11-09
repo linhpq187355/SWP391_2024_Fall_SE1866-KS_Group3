@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -602,7 +601,7 @@ public class UserDAOImpl extends DBContext implements UserDAO {
                 "      ,[lastName] = ?\n" +
                 "      ,[avatar] = ?\n" +
                 "      ,[dob] = ?\n" +
-                "      ,[modifiedDate] = GETDATE()\n" +
+                "      ,[lastModified] = GETDATE()\n" +
                 " WHERE id = ?";
 
         Connection connection = null;

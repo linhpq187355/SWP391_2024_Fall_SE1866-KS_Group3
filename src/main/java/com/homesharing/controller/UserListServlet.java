@@ -157,44 +157,29 @@ public class UserListServlet extends HttpServlet {
 
         List<Province> provinces0 = new ArrayList<>(submissonFormService.getProvinces());
 
+        req.setAttribute("minCleanliness", 1);
+        req.setAttribute("maxCleanliness", 5);
 
-        int minCleanliness = userDAO.getMinCleanliness();
-        int maxCleanliness = userDAO.getMaxCleanliness();
-        req.setAttribute("minCleanliness", minCleanliness);
-        req.setAttribute("maxCleanliness", maxCleanliness);
+        req.setAttribute("minSmoking", 1);
+        req.setAttribute("maxSmoking", 5);
 
-        int minSmoking = userDAO.getMinSmoking();
-        int maxSmoking = userDAO.getMaxSmoking();
-        req.setAttribute("minSmoking", minSmoking);
-        req.setAttribute("maxSmoking", maxSmoking);
+        req.setAttribute("minDrinking", 1);
+        req.setAttribute("maxDrinking", 5);
 
-        int minDrinking = userDAO.getMinDrinking();
-        int maxDrinking = userDAO.getMaxDrinking();
-        req.setAttribute("minDrinking", minDrinking);
-        req.setAttribute("maxDrinking", maxDrinking);
+        req.setAttribute("minInteraction", 1);
+        req.setAttribute("maxInteraction", 5);
 
-        int minInteraction = userDAO.getMinInteraction();
-        int maxInteraction = userDAO.getMaxInteraction();
-        req.setAttribute("minInteraction", minInteraction);
-        req.setAttribute("maxInteraction", maxInteraction);
+        req.setAttribute("minGuests", 1);
+        req.setAttribute("maxGuests", 5);
 
-        int minGuests = userDAO.getMinGuests();
-        int maxGuests = userDAO.getMaxGuests();
-        req.setAttribute("minGuests", minGuests);
-        req.setAttribute("maxGuests", maxGuests);
+        req.setAttribute("minCooking", 1);
+        req.setAttribute("maxCooking", 5);
 
-        int minCooking = userDAO.getMinCooking();
-        int maxCooking = userDAO.getMaxCooking();
-        req.setAttribute("minCooking", minCooking);
-        req.setAttribute("maxCooking", maxCooking);
-
-        int minPet = userDAO.getMinPet();
-        int maxPet = userDAO.getMaxPet();
         req.setAttribute("provinces", provinces0);
         req.setAttribute("searchParams", searchParams0);
         req.setAttribute("users", User0);
-        req.setAttribute("minPet", minPet);
-        req.setAttribute("maxPet", maxPet);
+        req.setAttribute("minPet", 1);
+        req.setAttribute("maxPet", 5);
         req.setAttribute("gender", gender0);
         req.setAttribute("cleanliness", cleanliness0);
         req.setAttribute("smoking", smoking0);

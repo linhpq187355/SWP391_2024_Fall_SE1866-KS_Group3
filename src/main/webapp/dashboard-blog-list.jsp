@@ -1,6 +1,12 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Duy Long Laptop
+  Date: 26-Sep-24
+  Time: 9:58 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE>
 <html>
 <head>
@@ -15,7 +21,6 @@
             href="./assets/img/logo-web.png"
             type="image/x-icon"
     />
-    <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
     <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
@@ -42,12 +47,6 @@
     <link rel="stylesheet" href="./assets/css/plugins.min.css"/>
     <link rel="stylesheet" href="assets/css/dashboard.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-    <style>
-        .icon-custom {
-            font-size: 24px;
-            color: #ffa500;
-        }
-    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -56,16 +55,12 @@
     <!-- End Sidebar -->
 
     <div class="main-panel">
-        <div class="main-header">
-            <!-- Navbar Header -->
-            <jsp:include page="navbar-admin.jsp"/>
-            <!-- End Navbar -->
-        </div>
+        <jsp:include page="dashboard-header.jsp"/>
 
         <div class="container">
             <div class="page-inner">
                 <div class="page-header">
-                    <h3 class="fw-bold mb-3">Danh sách thông báo</h3>
+                    <h3 class="fw-bold mb-3">Tài khoản</h3>
                     <ul class="breadcrumbs mb-3">
                         <li class="nav-home" style="color: black;">
                             <a href="#">
@@ -90,20 +85,21 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header" style="display: flex; justify-content: space-between">
-                                <h4 class="card-title">Danh sách thông báo</h4>
+                                <h4 class="card-title">Danh sách các bài blog của người dùng</h4>
+
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table
                                             id="basic-datatables"
-                                            class="display table table-striped table-hover">
+                                            class="display table table-striped table-hover"
+                                    >
                                         <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Tiêu đề</th>
-                                            <th>Thể loại</th>
+                                            <th>Tên</th>
                                             <th>Tạo lúc</th>
-                                            <th>Tạo bởi</th>
+                                            <th>Blog</th>
                                             <th>Trạng thái</th>
                                             <th>Quản lí</th>
                                         </tr>
@@ -111,53 +107,42 @@
                                         <tfoot>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Tiêu đề</th>
-                                            <th>Thể loại</th>
+                                            <th>Tên</th>
                                             <th>Tạo lúc</th>
-                                            <th>Tạo bởi</th>
+                                            <th>Blog</th>
                                             <th>Trạng thái</th>
                                             <th>Quản lí</th>
                                         </tr>
                                         </tfoot>
                                         <tbody>
-                                        <c:forEach items="${requestScope.announcements}" var="announcement">
-                                            <tr>
-                                                <td>${announcement.id}</td>
-                                                <td>${announcement.title}</td>
-                                                <c:forEach items="${requestScope.announcementTypes}" var="type">
-                                                    <c:if test="${type.id == announcement.announcementTypeId}">
-                                                        <td class="text-center">${type.typeName}</td>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <td>${announcement.createdDate}</td>
-                                                <c:forEach items="${requestScope.users}" var="user">
-                                                    <c:if test="${user.id == announcement.createdBy}">
-                                                        <td class="text-center">${user.email}</td>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <c:if test="${announcement.status=='active'}">
-                                                    <td class="text-center text-success">Hoạt động</td>
-                                                </c:if>
-                                                <c:if test="${announcement.status=='pending'}">
-                                                    <td class="text-center" style="color: #5A6376">Đang chờ</td>
-                                                </c:if>
-                                                <c:if test="${announcement.status=='inactive'}">
-                                                    <td class="text-center text-danger">Vô hiệu hóa</td>
-                                                </c:if>
-                                                <td>
-                                                    <span style="display: flex; align-items: center; justify-content: center; gap: 10px">
-                                                        <a href="home-post-detail?id=${announcement.id}" title="Update announcement">
-                                                            <i class="fas fa-pen icon-custom"></i>
-                                                        </a>
-                                                        <a href="approve?homeId=${announcement.id}" title="Approve announcement">
-                                                            <i class="fas fa-check-double icon-custom"></i>
-                                                        </a>
-                                                        <a href="reject?homeId=${announcement.id}" title="Reject announcement">
-                                                            <i class="fas fa-ban icon-custom"></i>
-                                                        </a>
-                                                    </span>
-                                                </td>
-                                            </tr>
+                                        <c:forEach var="post" items="${posts}">
+                                            <c:if test="${post.status != 'drafted'}">
+                                                <tr>
+                                                    <td>${post.id}</td>
+                                                    <td>${post.authorName}</td>
+                                                    <td>
+                                                        <c:if test="${not empty post.createdAt}">
+                                                            <span class="formatted-date" data-created-at="${post.createdAt}"></span>
+                                                        </c:if>
+                                                    </td>
+                                                    <td>
+                                                        <a href="blog-detail?postId=${post.id}">Xem Blog</a>
+                                                    </td>
+                                                    <td>${post.status}</td>
+                                                    <td>
+                                                        <form action="${pageContext.request.contextPath}/dashboard/blog-list" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn thực hiện hành động này không?');">
+                                                            <input type="hidden" name="postId" value="${post.id}"/>
+                                                            <input type="hidden" name="authorId" value="${post.authorId}"/> <!-- Nếu cần -->
+                                                            <button type="submit" name="action" value="approve" class="btn btn-icon" title="Duyệt">
+                                                                <i class="fas fa-check-double icon-custom" style="color: #fa8650;"></i>
+                                                            </button>
+                                                            <button type="submit" name="action" value="delete" class="btn btn-icon" title="Xóa">
+                                                                <i class="fas fa-ban icon-custom" style="color: #fa8650;"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
                                         </c:forEach>
                                         </tbody>
                                     </table>
@@ -168,6 +153,7 @@
                 </div>
             </div>
         </div>
+
 
         <footer class="footer">
             <div class="container-fluid d-flex justify-content-between">
@@ -303,5 +289,15 @@
         session.removeAttribute("messageType");
     }
 %>
+<script>
+    document.querySelectorAll('.formatted-date').forEach(function(span) {
+        const localDateTimeString = span.getAttribute('data-created-at');
+        const localDateTime = new Date(localDateTimeString); // Chuyển đổi chuỗi thành Date
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+        span.textContent = localDateTime.toLocaleString('en-GB', options); // Định dạng theo kiểu ngày
+    });
+</script>
 </body>
 </html>
+
+

@@ -19,10 +19,10 @@
             href="./assets/img/logo-web.png"
             type="image/x-icon"
     />
+    <script src="https://kit.fontawesome.com/f5cbf3afb2.js" crossorigin="anonymous"></script>
     <base href="${pageContext.request.contextPath}/">
     <!-- Fonts and icons -->
     <script src="./assets/js/plugin/webfont/webfont.min.js"></script>
-    <%--    <script src="https://cdn.tailwindcss.com"></script>--%>
     <script>
         WebFont.load({
             google: {families: ["Public Sans:300,400,500,600,700"]},
@@ -228,9 +228,7 @@
 <script src="./assets/js/core/popper.min.js"></script>
 <script src="./assets/js/core/bootstrap.min.js"></script>
 
-<!-- jQuery Scrollbar -->
 <script src="./assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-<!-- Datatables -->
 <script src="./assets/js/plugin/datatables/datatables.min.js"></script>
 <script src="./assets/js/kaiadmin.min.js"></script>
 <script>

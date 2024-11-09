@@ -144,10 +144,9 @@ public interface HomeDAO {
 
 
     /**
-     * Retrieves a list of homes associated with a list of appointments.
-     *
-     * @param appointments a list of Appointment objects to filter homes.
-     * @return a List of Home objects associated with the specified appointments.
+     * Fetch home via appointment list
+     * @param appointments
+     * @return
      */
     List<Home> getHomeByAppointment(List<Appointment> appointments);
 
@@ -159,17 +158,17 @@ public interface HomeDAO {
     List<Home> getHomesByUserId(int userId);
 
     /**
-     * Update the given home
-     * @param home
-     * @return number of rows affected
+     * Updates the details of a given home.
+     * @param home The home object containing updated information.
+     * @return The number of rows affected by the update operation.
      */
     int updateHome(Home home);
 
     /**
-     * Change the status of home
-     * @param homeId
-     * @param status
-     * @return the result
+     * Changes the status of a home identified by the given home ID.
+     * @param homeId The ID of the home whose status is to be changed.
+     * @param status The new status to be set for the home.
+     * @return The number of rows affected by the status change operation.
      */
     int changeStatus(int homeId, String status);
 

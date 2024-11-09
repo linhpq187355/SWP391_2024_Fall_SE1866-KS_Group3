@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ProvinceDAOImpl implements ProvinceDAO {
+public class ProvinceDAOImpl extends DBContext implements ProvinceDAO {
     public final String DB_RESOURCE = "Error closing database resources:";
     Logger logger = Logger.getLogger(DistrictDAOImpl.class.getName());
 
@@ -85,7 +85,7 @@ public class ProvinceDAOImpl implements ProvinceDAO {
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
             // Re-throw as runtime exception to be handled by the service layer
-            throw new IllegalArgumentException("Error saving to the database: " + e.getMessage(), e);
+            logger.severe("Error fetching the provinces" + e.getMessage());
         } finally {
             // Closing resources in reverse order of opening
             try {
@@ -104,7 +104,6 @@ public class ProvinceDAOImpl implements ProvinceDAO {
         }
         return null;
     }
-
 
     @Override
     public List<ProvinceHomeStat> getProvincesWithHomeStats() {
@@ -167,4 +166,5 @@ public class ProvinceDAOImpl implements ProvinceDAO {
 
         return provinceStats;
     }
+
 }

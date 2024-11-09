@@ -426,9 +426,18 @@
                             <c:if test="${user.rolesId == 4}">
                                 <div class="col-sm-6 col-md-3 p0" style="margin-bottom: 15px; text-align: center;">
                                     <div class="item-thumb">
-                                        <img class="property-image"
-                                             src="${user.avatar}"
-                                             style="width: 100%; max-width: 200px; border-radius: 50%;cursor: pointer" onclick="window.location.href='home-by-user?id=${user.id}'"> <!-- Có thể điều chỉnh kích thước và làm tròn hình ảnh -->
+                                        <c:choose>
+                                            <c:when test="${not empty user.avatar}">
+                                                <img class="property-image"
+                                                     src="${user.avatar}"
+                                                     style="width: 100%; max-width: 200px; border-radius: 50%;">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img class="property-image"
+                                                     src="assets/img/user-default-avatar.png"
+                                                     style="width: 100%; max-width: 200px; border-radius: 50%;">
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                     <div class="item-entry overflow">
                                         <h5 style="margin-top: 10px;">

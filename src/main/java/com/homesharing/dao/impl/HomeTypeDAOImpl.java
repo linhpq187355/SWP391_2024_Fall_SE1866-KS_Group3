@@ -14,10 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.homesharing.conf.DBContext.getConnection;
-
 public class HomeTypeDAOImpl extends DBContext implements HomeTypeDAO {
-    private static final Logger logger = Logger.getLogger(HomeTypeDAOImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(HomeDAOImpl.class.getName());
     @Override
     public List<HomeType> getAllHomeTypes() {
         List<HomeType> hometypes = new ArrayList<>();

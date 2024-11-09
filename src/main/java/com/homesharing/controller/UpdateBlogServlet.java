@@ -27,10 +27,11 @@ import java.util.List;
         maxFileSize = 1024 * 1024 * 10, // 10 MB
         maxRequestSize = 1024 * 1024 * 50) // 50 MB
 @WebServlet("/update-blog")
-public class UpdateBlogSeverlet extends HttpServlet {
+public class UpdateBlogServlet extends HttpServlet {
     private BlogService blogService;
     private BlogDAO blogDAO;
     private static final String UPLOAD_DIRECTORY = "assets/img/home-images";
+    private static final Logger logger = LoggerFactory.getLogger(UpdateBlogServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -102,6 +103,7 @@ public class UpdateBlogSeverlet extends HttpServlet {
                 filePart.write(filePath);
                 blogPost.setImagePath(UPLOAD_DIRECTORY + File.separator + fileName); // Set the image path in the blog post
             } catch (IOException e) {
+                logger.error("Error writing file: {}", e.getMessage());
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error saving image: " + e.getMessage());
                 return;
             }

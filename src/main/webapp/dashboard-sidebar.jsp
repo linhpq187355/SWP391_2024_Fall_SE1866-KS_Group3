@@ -60,7 +60,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="dashboard/create-announcement">
+                                <a href="create-announcement.jsp">
                                     <span class="sub-item">Đăng thông báo</span>
                                 </a>
                             </li>
@@ -68,20 +68,10 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#home-mgt">
+                    <a href="dashboard/home-list">
                         <i class="fas fa-newspaper"></i>
                         <p>Tin Đăng Nhà</p>
-                        <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="home-mgt">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="dashboard/home-list">
-                                    <span class="sub-item">Danh sách tin đăng</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#acc-mgt">
@@ -116,46 +106,16 @@
                     </div>
                 </li>
                 <li class="nav-item <c:if test="${currentUrl.contains('/homeSharing/permission-list.jsp')}">active submenu</c:if>">
-                    <a data-bs-toggle="collapse" href="#permissions">
+                    <a href="dashboard/permission-list">
                         <i class="fas fa-key"></i>
                         <p>Phân Quyền</p>
-                        <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="permissions">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="dashboard/permission-list">
-                                    <span class="sub-item">Danh sách quản trị viên</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="dashboard/create-moderator">
-                                    <span class="sub-item">Tạo quản trị viên</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#blog-mgt">
+                    <a href="dashboard/blog-list">
                         <i class="fa-brands fa-blogger-b"></i>
                         <p>Blog</p>
-                        <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="blog-mgt">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="dashboard/blog-list">
-                                    <span class="sub-item">Danh sách blog</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="dashboard/create-blog">
-                                    <span class="sub-item">Tạo blog</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
             </ul>
         </div>

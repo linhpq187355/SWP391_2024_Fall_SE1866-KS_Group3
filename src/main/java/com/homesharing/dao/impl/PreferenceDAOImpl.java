@@ -178,6 +178,9 @@ public class PreferenceDAOImpl extends DBContext implements PreferenceDAO {
             return 0;
         }
 
+        // Validate preference values
+        validatePreference(preference);
+
         int rowsUpdated = 0;
         String sql = "UPDATE [dbo].[Preferences]\n" +
                 "   SET [cleanliness] = ?\n" +
@@ -189,21 +192,20 @@ public class PreferenceDAOImpl extends DBContext implements PreferenceDAO {
                 "      ,[pet] = ?\n" +
                 " WHERE usersId = ?";
 
-        // Add the user_id at the end
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        try{
+        try {
             connection = DBContext.getConnection();
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setInt(1, preference.getCleanliness());
-            preparedStatement.setInt(2,preference.getSmoking());
-            preparedStatement.setInt(3,preference.getDrinking());
-            preparedStatement.setInt(4,preference.getInteraction());
-            preparedStatement.setInt(5,preference.getGuest());
-            preparedStatement.setInt(6,preference.getCooking());
-            preparedStatement.setInt(7,preference.getPet());
-            preparedStatement.setInt(8,preference.getUserId());
+            preparedStatement.setInt(2, preference.getSmoking());
+            preparedStatement.setInt(3, preference.getDrinking());
+            preparedStatement.setInt(4, preference.getInteraction());
+            preparedStatement.setInt(5, preference.getGuest());
+            preparedStatement.setInt(6, preference.getCooking());
+            preparedStatement.setInt(7, preference.getPet());
+            preparedStatement.setInt(8, preference.getUserId());
+
             // Execute the update and get the number of rows updated
             rowsUpdated = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -226,6 +228,18 @@ public class PreferenceDAOImpl extends DBContext implements PreferenceDAO {
             }
         }
         return rowsUpdated;
+    }
+
+    private void validatePreference(Preference preference) {
+        if (preference.getCleanliness() < 1 || preference.getCleanliness() > 5 ||
+                preference.getSmoking() < 1 || preference.getSmoking() > 5 ||
+                preference.getDrinking() < 1 || preference.getDrinking() > 5 ||
+                preference.getInteraction() < 1 || preference.getInteraction() > 5 ||
+                preference.getGuest() < 1 || preference.getGuest() > 5 ||
+                preference.getCooking() < 1 || preference.getCooking() > 5 ||
+                preference.getPet() < 1 || preference.getPet() > 5) {
+            throw new IllegalArgumentException("Invalid preference values provided.");
+        }
     }
 
     /**

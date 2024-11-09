@@ -131,7 +131,9 @@
                                         </c:forEach>
 
                                     </div>
-                                    <div style="border: 1px solid #ccc;border-radius: 5px;height: 35px;width: 35px;display: flex;justify-content: center;align-items: center;font-size: 25px;">
+                                    <div id="wishlist-icon" class="wishlist-icon"
+                                         style="border: 1px solid #ccc; border-radius: 5px; height: 35px; width: 35px; display: flex; justify-content: center; align-items: center; font-size: 25px;"
+                                         data-home-id="${homes.id}">
                                         <i class="fa-regular fa-heart"></i>
                                     </div>
                                 </div>
@@ -345,6 +347,67 @@
         document.getElementById('minPrice').value = values[0];
         document.getElementById('maxPrice').value = values[1];
     }
+
+
+
+
+</script>
+<script>
+    function getUserIdFromCookie() {
+        // Hàm giả định lấy userId từ cookie
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            if (cookie.trim().startsWith('id=')) {
+                return cookie.trim().substring(3);
+            }
+        }
+        return null;
+
+    }
+    document.querySelectorAll('.wishlist-icon').forEach(function(icon) {
+        icon.addEventListener('click', function() {
+            // Lấy homeId từ thuộc tính data-home-id
+            const homeId = this.getAttribute('data-home-id');
+            console.log('Home ID:', homeId);  // Kiểm tra xem homeId có lấy đúng không
+
+            const cookies = document.cookie.split(';');
+            let userId = null;
+            cookies.forEach(function(cookie) {
+                if (cookie.trim().startsWith('id=')) {
+                    userId = cookie.trim().substring(3);
+                }
+            });
+            console.log('User ID:', userId);  // Kiểm tra xem userId có lấy đúng không
+
+            if (!homeId || !userId) {
+                alert("Thông tin không hợp lệ");
+                return;
+            }
+
+            // Gửi yêu cầu AJAX tới Servlet
+            fetch(`/add-to-wishlist`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `homeId=${homeId}&userId=${userId}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Cập nhật biểu tượng trái tim
+                        const iconElement = this.querySelector('i');
+                        iconElement.classList.remove("fa-regular");
+                        iconElement.classList.add("fa-solid"); // Đổi thành biểu tượng trái tim đầy
+                    } else {
+                        alert(data.message); // Hiển thị thông báo nếu có lỗi
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    });
 </script>
 </body>
 </html>

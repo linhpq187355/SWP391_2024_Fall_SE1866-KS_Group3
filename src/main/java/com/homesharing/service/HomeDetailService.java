@@ -79,6 +79,9 @@ public interface HomeDetailService {
 
     List<Home> getHomesByDistrict(int homeId, int priceDifference);
 
+
+    List<Home> getHomesByProvince(int homeId);
+
     List<Home> getSimilarHomess(int homeId, int priceDifference);
 
     List<Price> getSimilarHomePrices(List<Home> similarHomes);

@@ -9,14 +9,16 @@ import com.homesharing.service.AnnouncementService;
 import com.homesharing.service.UserManagementService;
 import com.homesharing.service.impl.AnnouncementServiceImpl;
 import com.homesharing.service.impl.UserManagementServiceImpl;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListAnnouncementServlet", value = "/announcement-list")
+@WebServlet(name = "ListAnnouncementServlet", value = "/dashboard/announcement-list")
 public class ListAnnouncementServlet extends HttpServlet {
     private AnnouncementDAO announcementDAO;
     private AnnouncementService announcementService;
@@ -34,11 +36,6 @@ public class ListAnnouncementServlet extends HttpServlet {
         request.setAttribute("announcements", announcements);
         request.setAttribute("announcementTypes", announcementTypes);
         request.setAttribute("users", users);
-        request.getRequestDispatcher("announcement-list.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.getRequestDispatcher("/announcement-list.jsp").forward(request, response);
     }
 }

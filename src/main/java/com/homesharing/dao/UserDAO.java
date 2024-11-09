@@ -16,6 +16,8 @@ package com.homesharing.dao;
 import com.homesharing.model.Appointment;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.User;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.io.IOException;
@@ -180,6 +182,9 @@ public interface UserDAO {
      */
     List<User> getTenantByAppointment(List<Appointment> appointments);
 
+    Map<String, Double> calculateAveragePreferences(String role);
+
+    List<User> getLatestUser();
 
     List<User> getFilteredUsers(Map<String, Object> searchParams)  throws SQLException, IOException, ClassNotFoundException;
     int numOfUser(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException;
@@ -204,7 +209,4 @@ public interface UserDAO {
 
     int getMinPet();
     int getMaxPet();
-
-    Map<String, Double> calculateAveragePreferences(String role);
-    List<User> getLatestUser();
 }

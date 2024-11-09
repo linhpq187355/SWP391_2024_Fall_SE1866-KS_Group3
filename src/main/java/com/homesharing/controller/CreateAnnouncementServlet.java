@@ -3,27 +3,25 @@ package com.homesharing.controller;
 import com.homesharing.dao.AnnouncementDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.AnnouncementDAOImpl;
-import com.homesharing.dao.impl.ReportDAOImpl;
-import com.homesharing.dao.impl.ReportTypeDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Announcement;
-import com.homesharing.model.Report;
 import com.homesharing.model.User;
 import com.homesharing.service.AnnouncementService;
 import com.homesharing.service.impl.AnnouncementServiceImpl;
-import com.homesharing.service.impl.ReportServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.CookieUtil;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-@WebServlet(name = "CreateAnnouncementServlet", value = "/create-announcement")
+@WebServlet(name = "CreateAnnouncementServlet", value = "/dashboard/create-announcement")
 public class CreateAnnouncementServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(CreateReportServlet.class);
     private AnnouncementDAO announcementDAO;

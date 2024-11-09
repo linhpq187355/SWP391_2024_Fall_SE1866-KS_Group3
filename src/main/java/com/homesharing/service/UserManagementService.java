@@ -39,6 +39,7 @@ public interface UserManagementService {
      * @return the permission list
      */
     List<Permission> fetchUserPermissions(int userId);
+    
 
     /**
      * Fetch permissions via email
@@ -59,6 +60,7 @@ public interface UserManagementService {
      * @return the permission obj
      */
     Permission fetchPermissionByName(String permissionName);
+
 
     /**
      * Update permissions of a user given by a id
