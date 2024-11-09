@@ -60,4 +60,10 @@ public interface BlogDAO {
     List<Category> getAllCategories();
 
     int savePost(BlogPost blogPost);
+
+    void deleteBlogPostCategories(int postId);
+
+    List<Category> getCategoriesByBlogPostId(int blogPostId);
+
+    
 }

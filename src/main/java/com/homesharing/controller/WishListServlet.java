@@ -96,7 +96,7 @@ public class WishListServlet extends HttpServlet {
 
 
             // Forward the request to the "user-wishlist.jsp" page to display the wishlist
-            request.getRequestDispatcher("user-wishlist2.jsp").forward(request, response);
+            request.getRequestDispatcher("user-wishlist.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             // Handle invalid user ID format
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID format");

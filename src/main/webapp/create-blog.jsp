@@ -96,11 +96,6 @@
 
                 </div>
 
-
-
-
-
-
             </div>
 
             <div class="blog-lst col-md-9">
@@ -108,26 +103,35 @@
                     <div class="form-group">
                         <label for="title">Tiêu đề <span class="require">*</span></label>
                         <input type="text" class="form-control" id="title" name="title" />
+                        <div id="title-error" class="text-danger" style="display:none;">Vui lòng nhập tiêu đề.</div>
                     </div>
+
                     <div class="form-group">
                         <label for="images">Ảnh tiêu đề</label>
-                        <input type="file" class="form-control" id="images" name="images" accept="image/*"  />
+                        <input type="file" class="form-control" id="images" name="images" accept="image/*" />
                     </div>
+
                     <div class="form-group">
                         <label for="shortDescription">Mô tả ngắn:</label>
-                        <textarea id="shortDescription" name="shortDescription"  style="width: 100%; height: 200px;"></textarea>
+                        <textarea id="shortDescription" name="shortDescription" style="width: 100%; height: 200px;"></textarea>
+                        <div id="shortDescription-error" class="text-danger" style="display:none;">Vui lòng nhập mô tả ngắn.</div>
                     </div>
+
                     <div class="form-group">
                         <label style="color: #ccac00;">Chọn thể loại:</label><br>
-                        <c:forEach var="category" items="${categories}" >
+                        <c:forEach var="category" items="${categories}">
                             <input type="checkbox" id="category_${category.id}" name="categoryIds" value="${category.id}" />
-                            <label for="category_${category.id}" style="color: goldenrod;">${category.name} </label><br />
+                            <label for="category_${category.id}" style="color: goldenrod;">${category.name}</label><br />
                         </c:forEach>
+                        <div id="category-error" class="text-danger" style="display:none;">Vui lòng chọn ít nhất một thể loại.</div>
                     </div>
+
                     <div class="form-group">
-                        <label for="content">Bài Viêt:</label>
-                        <textarea id="content" name="content"  style="width: 100%; height: 200px;"></textarea>
+                        <label for="content">Bài Viết:</label>
+                        <textarea id="content" name="content" style="width: 100%; height: 200px;"></textarea>
                     </div>
+                    <input type="hidden" name="status" id="status">
+
                     <div class="form-group">
                         <button type="button" class="btn btn-primary" onclick="confirmAction('create')">
                             Tạo
@@ -157,7 +161,6 @@
             CKEDITOR.instances[instance].updateElement(); // Cập nhật nội dung CKEditor vào textarea
         }
 
-        // Kiểm tra giá trị của textarea
         const content = document.getElementById('content').value;
         if (!content.trim()) {
             event.preventDefault(); // Ngăn chặn gửi biểu mẫu nếu nội dung trống
@@ -167,6 +170,41 @@
 </script>
 <script>
     function confirmAction(action) {
+        // Lấy giá trị các trường input
+        let title = document.getElementById('title').value;
+        let shortDescription = document.getElementById('shortDescription').value;
+        let categoryChecked = document.querySelectorAll('input[name="categoryIds"]:checked').length;
+
+        // Ẩn thông báo lỗi trước khi kiểm tra
+        document.getElementById('title-error').style.display = 'none';
+        document.getElementById('shortDescription-error').style.display = 'none';
+        document.getElementById('category-error').style.display = 'none';
+
+        // Kiểm tra từng trường
+        if (!title) {
+            document.getElementById('title-error').style.display = 'block';
+            alert("Vui lòng nhập tiêu đề.");
+            return; // Dừng lại nếu chưa nhập tiêu đề
+        }
+
+        if (!shortDescription) {
+            document.getElementById('shortDescription-error').style.display = 'block';
+            alert("Vui lòng nhập mô tả ngắn.");
+            return; // Dừng lại nếu chưa nhập mô tả ngắn
+        }
+
+        if (categoryChecked === 0) {
+            document.getElementById('category-error').style.display = 'block';
+            alert("Vui lòng chọn ít nhất một thể loại.");
+            return; // Dừng lại nếu chưa chọn thể loại
+        }
+
+
+
+        // Nếu tất cả đều hợp lệ, tiến hành submit
+        let statusValue = action === 'create' ? 'pending' : 'drafted';
+        document.querySelector('input[name="status"]').value = statusValue;
+
         let message;
         if (action === 'create') {
             message = 'Bạn có chắc chắn muốn tạo bài viết không?';
@@ -175,7 +213,7 @@
         }
 
         if (confirm(message)) {
-            document.getElementById('blog-form').submit();
+            document.getElementById('blog-form').submit(); // Gửi form nếu đã đủ điều kiện
         }
     }
 </script>

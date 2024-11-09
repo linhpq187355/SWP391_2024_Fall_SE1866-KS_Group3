@@ -220,7 +220,7 @@ public class BlogDAOImpl implements BlogDAO {
 
     @Override
     public void updatePost(BlogPost blogPost) {
-        String sql = "UPDATE BlogPost SET title = ?, content = ?, modifiedDate = ?,short_description = ? WHERE id = ?";
+        String sql = "UPDATE BlogPost SET title = ?, content = ?, modifiedDate = ?, short_description = ?, image_path = ?, status = ? WHERE id = ?";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -231,12 +231,14 @@ public class BlogDAOImpl implements BlogDAO {
             preparedStatement.setString(2, blogPost.getContent());
             preparedStatement.setTimestamp(3, Timestamp.valueOf(blogPost.getModifiedDate()));
             preparedStatement.setString(4, blogPost.getShortDescription());
-            preparedStatement.setInt(5, blogPost.getId());
+            preparedStatement.setString(5, blogPost.getImagePath());
+            preparedStatement.setString(6, blogPost.getStatus());
+            preparedStatement.setInt(7, blogPost.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new GeneralException("Error updating post: " + e.getMessage(), e);
         } finally {
-            // Closing resources
+            // Đóng các tài nguyên
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -249,6 +251,7 @@ public class BlogDAOImpl implements BlogDAO {
             }
         }
     }
+
 
     @Override
     public void deletePost(int id) {
@@ -812,6 +815,7 @@ public class BlogDAOImpl implements BlogDAO {
         }
         return categories;
     }
+
     @Override
     public int savePost(BlogPost blogPost) {
         String sql = "INSERT INTO [dbo].[BlogPost] ([title], [author_id], [created_at], [modifiedDate], [status], [content], [image_path], [short_description]) " +
@@ -852,6 +856,48 @@ public class BlogDAOImpl implements BlogDAO {
             throw new IllegalArgumentException("Error saving blog post to the database: " + e.getMessage(), e);
         }
     }
+    @Override
+    public void deleteBlogPostCategories(int postId) {
+        String sql = "DELETE FROM BlogPostCategories WHERE Blogpost_id = ?";
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, postId); // Đặt giá trị trước khi gọi executeUpdate
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            e.printStackTrace(); // Xử lý lỗi
+        }
+    }
+    @Override
+    public List<Category> getCategoriesByBlogPostId(int blogPostId) {
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT c.id, c.name FROM Categories c " +
+                "JOIN BlogPostCategories bpc ON c.id = bpc.category_id " +
+                "WHERE bpc.blogPost_id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, blogPostId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Category category = new Category();
+                category.setId(resultSet.getInt("id"));
+                category.setName(resultSet.getString("name"));
+                categories.add(category);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return categories;
+    }
+
+
 
 
 }

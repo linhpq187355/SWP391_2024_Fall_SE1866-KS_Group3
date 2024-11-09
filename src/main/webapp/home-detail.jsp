@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ex" uri="http://example.com/functions" %>
+
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -157,6 +159,24 @@
         /*    width: 100%;*/
         /*    height: 100%;*/
         /*}*/
+        /* Định dạng ảnh */
+        /*#image-gallery img {*/
+        /*    width: 100%;               !* Chiều rộng 100% để ảnh chiếm toàn bộ chiều rộng của thẻ cha *!*/
+        /*    height: auto;              !* Giữ tỷ lệ khung hình của ảnh *!*/
+        /*    object-fit: cover;         !* Cắt ảnh để phù hợp với kích thước khung *!*/
+        /*    border-radius: 10px;       !* Bo tròn các góc của ảnh *!*/
+        /*    margin-bottom: 10px;       !* Khoảng cách giữa các ảnh *!*/
+        /*}*/
+
+        /*!* Nếu bạn muốn ảnh có chiều cao cố định, ví dụ 200px *!*/
+        /*#image-gallery img {*/
+        /*    width: 100%;*/
+        /*    height: 200px;             !* Chiều cao cố định *!*/
+        /*    object-fit: cover;         !* Cắt ảnh cho vừa khung *!*/
+        /*    border-radius: 10px;       !* Bo tròn các góc *!*/
+        /*    margin-bottom: 10px;       !* Khoảng cách giữa các ảnh *!*/
+        /*}*/
+
     </style>
 </head>
 <jsp:include page="header.jsp"/>
@@ -197,23 +217,29 @@
                                     <i class="fa fa-print"></i>
                                 </a>
                             </div>
-
-                            <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-                                <c:choose>
-                                    <c:when test="${not empty home.images}">
-                                        <c:forEach items="${home.images}" var="image">
-                                            <li class="gallery-item" data-thumb="${image}" style="display: inline-block; margin: 5px;">
-                                                <img src="${image}" alt="Property Image"style="width: 100%; height: 650px; object-fit: cover; border-radius: 5px;" />
-                                            </li>
-                                        </c:forEach>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="gallery-item" data-thumb="assets/img/property-1/property4.jpg" style="display: inline-block; margin: 5px;">
-                                            <img src="assets/img/property-1/property4.jpg" alt="Default Property Image" />
+                            <c:if test="${not empty home and not empty home.images}">
+                                <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
+                                    <c:forEach var="imagePath" items="${home.images}">
+                                        <li data-thumb="${imagePath}">
+                                            <img src="${imagePath}" alt="Property image" />
                                         </li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </ul>
+                                    </c:forEach>
+                                </ul>
+                            </c:if>
+<%--                            <ul id="image-gallery" class="gallery list-unstyled cS-hidden">--%>
+<%--                                <li data-thumb="assets/img/property-1/property1.jpg">--%>
+<%--                                    <img src="assets/img/property-1/property1.jpg" />--%>
+<%--                                </li>--%>
+<%--                                <li data-thumb="assets/img/property-1/property2.jpg">--%>
+<%--                                    <img src="assets/img/property-1/property3.jpg" />--%>
+<%--                                </li>--%>
+<%--                                <li data-thumb="assets/img/property-1/property3.jpg">--%>
+<%--                                    <img src="assets/img/property-1/property3.jpg" />--%>
+<%--                                </li>--%>
+<%--                                <li data-thumb="assets/img/property-1/property4.jpg">--%>
+<%--                                    <img src="assets/img/property-1/property4.jpg" />--%>
+<%--                                </li>--%>
+<%--                            </ul>--%>
 
                         </div>
                     </div>
@@ -222,7 +248,9 @@
                 <div class="single-property-wrapper">
                     <div class="single-property-header">
                         <h1 class="property-title pull-left">${home.name}</h1>
-                        <span class="property-price pull-right"><fmt:formatNumber value="${prices[0].price}" type="number" groupingUsed="true"/> VND/tháng</span>
+                        <span class="property-price pull-right">
+    ${ex:convertPriceToVND(prices[0].price)} VND/tháng
+</span>
                     </div>
 
 
@@ -491,7 +519,7 @@
                                                     <form action="${sessionScope.isInWishlist ? 'delete-wishlist' : 'add-wishlist'}" method="POST"
                                                           onsubmit="return confirm('${sessionScope.isInWishlist ? 'Bạn có chắc chắn muốn xóa không?' : 'Bạn có chắc chắn muốn thêm vào danh sách yêu thích?'}');">
                                                         <input type="hidden" name="homeId" value="${home.id}">
-                                                        <button type="submit" class="like-button">
+                                                        <button type="submit" class="like-button ${sessionScope.isInWishlist && sessionScope.wishlistStatus == 'active' ? 'active-wishlist' : ''}">
                                                             <i class="fas fa-heart"></i> ${sessionScope.isInWishlist ? 'Đã thêm' : 'Yêu thích'}
                                                         </button>
                                                     </form>
@@ -507,6 +535,8 @@
                                             </c:if>
                                         </ul>
                                     </div>
+                                    <style>
+                                    </style>
                                     <div>
                                         <c:if test="${not empty sessionScope.message}">
                                             <div class="alert alert-info">${sessionScope.message}</div>
@@ -559,7 +589,9 @@
                                         <li>
                                             <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
                                                 <a href="home-detail?id=${similarHome.id}">
-                                                    <img src="assets/img/demo/small-property-2.jpg" alt="${similarHome.address}"> <!-- Hình ảnh mẫu, bạn có thể thay đổi -->
+                                                    <img src="${similarHome.images != null && !similarHome.images.isEmpty() ? similarHome.images[0] : 'assets/img/demo/small-property-2.jpg'}"
+                                                         alt="${similarHome.address}"
+                                                         style="width: 250px; height: 80px; object-fit: cover; border-radius: 10px;">
                                                 </a>
                                             </div>
                                             <div class="col-md-8 col-sm-8 col-xs-8 blg-entry">

@@ -677,7 +677,9 @@
                                                 <td>${post.id}</td>
                                                 <td>${post.authorName}</td>
                                                 <td>
-                                                        ${post.createdAt}
+                                                    <c:if test="${not empty post.createdAt}">
+                                                        <span class="formatted-date" data-created-at="${post.createdAt}"></span>
+                                                    </c:if>
                                                 </td>
                                                 <td>
                                                     <a href="single.html?postId=${post.id}">Xem Blog</a>

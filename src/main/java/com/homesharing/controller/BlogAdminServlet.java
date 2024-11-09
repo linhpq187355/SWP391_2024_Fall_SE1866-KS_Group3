@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 @WebServlet("/admin-blog")
 public class BlogAdminServlet extends HttpServlet {
@@ -33,6 +35,13 @@ public class BlogAdminServlet extends HttpServlet {
             String authorName = blogService.getAuthorNameById(post.getAuthorId()); // Fetch author name by authorId
             post.setAuthorName(authorName); // Set the author name in the BlogPost object
         }
+        List<String> formattedDates = new ArrayList<>();
+        for (BlogPost post : posts) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            String formattedDate = post.getCreatedAt().format(formatter);
+            formattedDates.add(formattedDate);
+        }
+        request.setAttribute("formattedCreatedAt", formattedDates);
         request.setAttribute("posts", posts);
         request.getRequestDispatcher("manage-blog2.jsp").forward(request, response);
     }

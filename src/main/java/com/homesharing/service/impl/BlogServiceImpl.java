@@ -1,5 +1,6 @@
 package com.homesharing.service.impl;
 
+import com.homesharing.model.Category;
 import com.homesharing.service.BlogService;
 
 
@@ -110,6 +111,13 @@ public class BlogServiceImpl implements BlogService {
         blogDAO.deletePostByAdmin(postId);
     }
 
-
+    @Override
+    public List<Category> getCategoriesByBlogPostId(int blogPostId) {
+        return blogDAO.getCategoriesByBlogPostId(blogPostId);
+    }
+    @Override
+    public void deleteBlogPostCategories(int postId) {
+        blogDAO.deleteBlogPostCategories(postId);
+    }
 }
 
