@@ -96,7 +96,7 @@
 
                     <div class="dropdown ymm-sw" style="position: relative">
                         <c:if test="${requestScope.countNewMessage > 0}">
-                            <span id = "new-message-count" style="width: 15px; height: 15px; position: absolute; left: 25px; bottom: 25px; color: #ffffff; font-size: 12px; font-weight: bold; line-height: 15px; text-align: center; border-radius: 7.5px; background-color: #FDC600;">${requestScope.countNewMessage}</span>
+                            <span id = "new-message-count" style="width: 24px; height: 24px; position: absolute; left: 25px; bottom: 20px; color: #ffffff; font-size: 14px; font-weight: bold; line-height: 20px; text-align: center; border-radius: 12px; background-color: #FA8600;">${requestScope.countNewMessage}</span>
                         </c:if>
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-message dropdown-toggle" style="font-size: 2em"></i>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="dropdown ymm-sw" style="position: relative">
                         <c:if test="${unreadCount > 0}">
-                            <span id = "new-notification-count" style="width: 15px; height: 15px; position: absolute; left: 25px; bottom: 25px; color: #ffffff; font-size: 12px; font-weight: bold; line-height: 15px; text-align: center; border-radius: 7.5px; background-color: #FDC600;">${unreadCount}</span>
+                            <span id = "new-notification-count" style="width: 24px; height: 24px; position: absolute; left: 25px; bottom: 20px; color: #ffffff; font-size: 14px; font-weight: bold; line-height: 20px; text-align: center; border-radius: 12px; background-color: #FA8600;">${unreadCount}</span>
                         </c:if>
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-bell dropdown-toggle" style="font-size: 2em"></i>

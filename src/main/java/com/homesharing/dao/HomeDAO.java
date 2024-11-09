@@ -8,7 +8,6 @@
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second
  * 2024-10-10      1.0                 ManhNC            update some method
- * 2024-10-25      2.0              Pham Quang Linh     Add functions
  */
 
 package com.homesharing.dao;
@@ -142,36 +141,72 @@ public interface HomeDAO {
      */
     List<Home> getMatchingHomes(int[] matchingHost);
 
-
     /**
-     * Retrieves a list of homes associated with a list of appointments.
-     *
-     * @param appointments a list of Appointment objects to filter homes.
-     * @return a List of Home objects associated with the specified appointments.
+     * Fetch home via appointment list
+     * @param appointments
+     * @return
      */
     List<Home> getHomeByAppointment(List<Appointment> appointments);
 
     /**
-     * Fetch home list via user id
+     * Fetches the latest homes from the database.
+     * @param numberOfHomes The number of latest homes to return.
+     * @return A list of the latest homes.
+     */
+    List<Home> getLatestHomes(int numberOfHomes);
+
+    /**
+     * Fetch the homes created by the given user id
      * @param userId
      * @return the home list
      */
     List<Home> getHomesByUserId(int userId);
 
     /**
-     * Update the given home
-     * @param home
-     * @return number of rows affected
+     * Updates the details of a given home.
+     * @param home The home object containing updated information.
+     * @return The number of rows affected by the update operation.
      */
     int updateHome(Home home);
 
     /**
-     * Change the status of home
-     * @param homeId
-     * @param status
-     * @return the result
+     * Changes the status of a home identified by the given home ID.
+     * @param homeId The ID of the home whose status is to be changed.
+     * @param status The new status to be set for the home.
+     * @return The number of rows affected by the status change operation.
      */
     int changeStatus(int homeId, String status);
+
+    /**
+     * Retrieves the total number of homes.
+     * @return The total count of homes.
+     */
+    int getTotalHome();
+
+    /**
+     * Counts the number of homes with the specified status.
+     * @param status The status to filter homes by.
+     * @return The count of homes that match the specified status.
+     */
+    int countHomesByStatus(String status);
+
+    /**
+     * Counts the number of homes created in the current month.
+     * @return The count of homes created in the current month.
+     */
+    int countHomesInMonth();
+
+    /**
+     * Calculates the average lease duration of all homes.
+     * @return The average lease duration in days.
+     */
+    float avgLeaseDuration();
+
+    /**
+     * Counts the number of move-in dates that fall within the current month.
+     * @return The count of move-in dates in the current month.
+     */
+    int countMoveInDateInMonth();
 
     List<Home> getByCreatedBy(int createdById);
 }

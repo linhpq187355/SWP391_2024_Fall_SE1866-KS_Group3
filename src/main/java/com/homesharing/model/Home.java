@@ -38,6 +38,34 @@ public class Home {
     private int priceId;
     private List<String> images;
     private int price;
+
+    public Home() {
+    }
+
+    public Home(int id, String name, String address, BigDecimal longitude, BigDecimal latitude, String orientation, BigDecimal area, int leaseDuration, LocalDate moveInDate, int numOfBedroom, int numOfBath, LocalDateTime createdDate, LocalDateTime modifiedDate, String homeDescription, String tenantDescription, int wardId, int homeTypeId, int createdBy, int priceId) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.orientation = orientation;
+        this.area = area;
+        this.leaseDuration = leaseDuration;
+        this.moveInDate = moveInDate;
+        this.numOfBedroom = numOfBedroom;
+        this.numOfBath = numOfBath;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.homeDescription = homeDescription;
+        this.tenantDescription = tenantDescription;
+        this.wardId = wardId;
+        this.homeTypeId = homeTypeId;
+        this.createdBy = createdBy;
+        this.priceId = priceId;
+        this.images = images;
+        this.price = price;
+    }
+
     public int getPrice() {
         return price;
     }
