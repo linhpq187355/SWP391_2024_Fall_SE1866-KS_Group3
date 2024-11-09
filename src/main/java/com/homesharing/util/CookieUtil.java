@@ -87,6 +87,12 @@ public class CookieUtil {
         response.addCookie(cookie);
     }
 
+    /**
+     * Decodes a URL-encoded cookie value.
+     *
+     * @param encodedValue The URL-encoded cookie value to decode.
+     * @return The decoded cookie value as a String, or the original input if decoding fails.
+     */
     public static String decodeCookieValue(String encodedValue) {
         return URLDecoder.decode(encodedValue, StandardCharsets.UTF_8);
     }

@@ -1,0 +1,116 @@
+[
+    {
+        "actionName": "Action",
+        "steps": [
+            {
+                "stepId": "STEP1",
+                "stepName": "Url: v3",
+                "infFile": "t1.inf",
+                "time": 1730458262672
+            },
+            {
+                "stepId": "STEP2",
+                "stepName": "Url: ExpandedDomainsFilterGlobal.json",
+                "infFile": "t2.inf",
+                "time": 1730458262993
+            },
+            {
+                "stepId": "STEP3",
+                "stepName": "Url: crx",
+                "infFile": "t3.inf",
+                "time": 1730458263760
+            },
+            {
+                "stepId": "STEP4",
+                "stepName": "Url: blocklist",
+                "infFile": "t4.inf",
+                "time": 1730458264584
+            },
+            {
+                "stepId": "STEP5",
+                "stepName": "Url: -341398893248106636%7C-2257558592581803439",
+                "infFile": "t5.inf",
+                "time": 1730458265350
+            },
+            {
+                "stepId": "STEP6",
+                "stepName": "Url: shoppingsettings",
+                "infFile": "t6.inf",
+                "time": 1730458265619
+            },
+            {
+                "stepId": "STEP7",
+                "stepName": "Url: shoppingsettings_2",
+                "infFile": "t7.inf",
+                "time": 1730458265818
+            },
+            {
+                "stepId": "STEP8",
+                "stepName": "Custom Request: rewardsUserInfo",
+                "infFile": "t8.inf",
+                "time": 1730458266049
+            },
+            {
+                "stepId": "STEP9",
+                "stepName": "Url: -4276412816532324841%7C-2257558592581803439",
+                "infFile": "t9.inf",
+                "time": 1730458266770
+            },
+            {
+                "stepId": "STEP10",
+                "stepName": "Url: selection",
+                "infFile": "t10.inf",
+                "time": 1730458267590
+            },
+            {
+                "stepId": "STEP11",
+                "stepName": "Url: config.json",
+                "infFile": "t11.inf",
+                "time": 1730458269313
+            },
+            {
+                "stepId": "STEP12",
+                "stepName": "Url: -341398893248106636%7C-2257558592581803439%7C1720537294320060623",
+                "infFile": "t12.inf",
+                "time": 1730458273029
+            },
+            {
+                "stepId": "STEP13",
+                "stepName": "Url: -6030100249971701251%7C-7627269350225664860",
+                "infFile": "t13.inf",
+                "time": 1730458273145
+            },
+            {
+                "stepId": "STEP14",
+                "stepName": "Custom Request: update",
+                "infFile": "t14.inf",
+                "time": 1730458273352
+            },
+            {
+                "stepId": "STEP15",
+                "stepName": "Custom Request: cloud_config_observers.json",
+                "infFile": "t15.inf",
+                "time": 1730458274364
+            },
+            {
+                "stepId": "STEP16",
+                "stepName": "Url: -6030100249971701251",
+                "infFile": "t16.inf",
+                "time": 1730458274460
+            },
+            {
+                "stepId": "STEP17",
+                "stepName": "Custom Request: update_2",
+                "infFile": "t17.inf",
+                "time": 1730458274571
+            },
+            {
+                "stepId": "STEP18",
+                "stepName": "Url: 3517029987587817622",
+                "infFile": "t18.inf",
+                "time": 1730458276920
+            }
+        ],
+        "transactions": []
+    }
+]

@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Cache-Control: max-age=0, no-cache, no-store, must-revalidate
+Content-Type: application/json; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Accept-CH: Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Full-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version
+X-MSEdge-Ref: Ref A: 16EC531F9B4C48B58EDE5D0FBBCB92F9 Ref B: HKBEDGE0610 Ref C: 2024-10-31T17:22:41Z
+Date: Thu, 31 Oct 2024 17:22:41 GMT
+Connection: keep-alive,Transfer-Encoding
+Set-Cookie: _EDGE_S=SID=28F7E9965C62664B2E15FCBF5DBB6745; path=/; httponly; domain=bing.com,MUIDB=0FCCB47D65F0660E1085A5B8643067DB; path=/; httponly; expires=Tue, 25-Nov-2025 17:22:41 GMT
+Alt-Svc: h3=":443"; ma=93600
+X-CDN-TraceID: 0.5733431b.1730395361.131b679
+

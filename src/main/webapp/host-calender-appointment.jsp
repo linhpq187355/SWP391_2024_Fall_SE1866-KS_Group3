@@ -179,7 +179,26 @@
             Thông tin chi tiết lịch hẹn
         </h2>
 
-        <span class="xclose">
+        <div id="pTenantPending" style="display: none;background-color: #ccc; color: #fff;padding: 5px 10px;border-radius: 10px;margin-right: 20px;margin-left: 20px;">
+            Chờ phản hồi
+        </div>
+        <div id="pHostPending" style="display: none;background-color: #ccc; color: #fff;padding: 5px 10px;border-radius: 10px;margin-right: 20px;margin-left: 20px;">
+            Chờ xác nhận
+        </div>
+        <div id="pAccept" style="display: none;background-color: limegreen; color: #fff;padding: 5px 10px;border-radius: 10px;margin-right: 20px;margin-left: 20px;">
+            Đã chấp nhận
+        </div>
+        <div id="pReject" style="display: none;background-color: red; color: #fff;padding: 5px 10px;border-radius: 10px;margin-right: 20px;width: 109px;text-align: center;margin-left: 20px;">
+            Đã từ chối
+        </div>
+        <div id="pCancelled" style="display: none;background-color: #111111; color: #fff;padding: 5px 10px;border-radius: 10px;margin-right: 20px;width: 109px;text-align: center;margin-left: 20px;">
+            Đã hủy
+        </div>
+        <div id="pExpired" style="display: none;background-color: #111111; color: #fff;padding: 5px 10px;border-radius: 10px;margin-right: 20px;width: 109px;text-align: center;margin-left: 20px;">
+            Đã quá hạn
+        </div>
+
+        <span class="xclose" onclick="closePopup()">
               ×
              </span>
     </div>
@@ -306,7 +325,10 @@
                                     phone: tenant.phoneNumber, // SĐT
                                     email: tenant.email, // Email
                                     note: appointment.note, // Ghi chú
-                                    apmtTime: startTime.substring(11, 16) + " - " + endTime.substring(11, 16) + " | " + startTime.substring(8, 10) + " - " + startTime.substring(5, 7)+ " - " + startTime.substring(0, 4)
+                                    cancelReason: appointment.cancelReason,
+                                    rejectReason: appointment.rejectReason,
+                                    apmtTime: startTime.substring(11, 16) + " - " + endTime.substring(11, 16) + " | " + startTime.substring(8, 10) + " - " + startTime.substring(5, 7)+ " - " + startTime.substring(0, 4),
+                                    status : appointment.status
                                 }
                             };
                         });
@@ -334,6 +356,11 @@
                 var email = event.extendedProps.email;       // Email
                 var note = event.extendedProps.note;         // Ghi chú
                 var pTime = event.extendedProps.apmtTime;
+                var cancelReason = event.extendedProps.cancelReason;
+                var rejectReason = event.extendedProps.rejectReason;
+                var status = event.extendedProps.status;
+                document.getElementById('dCancelReason').style.display = "none";
+                document.getElementById('dReason').style.display = "none";
 
                 // Cập nhật nội dung thông tin chi tiết
                 document.getElementById('pHomeName').textContent = roomName || "Không có thông tin";
@@ -352,6 +379,36 @@
                     document.getElementById('dReason').style.display = "flex";
                 }
 
+                document.getElementById("pTenantPending").style.display="none";
+                document.getElementById("pHostPending").style.display="none";
+                document.getElementById("pAccept").style.display="none";
+                document.getElementById("pReject").style.display="none";
+                document.getElementById("pCancelled").style.display="none";
+                document.getElementById("pExpired").style.display="none";
+
+                if(status === "tenantPending"){
+                    document.getElementById("pTenantPending").style.display="block";
+                } else {
+                    if(status === "accepted"){
+                        document.getElementById("pAccept").style.display="block";
+                    } else {
+                        if(status === "rejected"){
+                            document.getElementById("pReject").style.display="block";
+                        } else {
+                            if(status === "cancelled"){
+                                document.getElementById("pCancelled").style.display="block";
+                            } else {
+                                if(status === "hostPending"){
+                                    document.getElementById("pHostPending").style.display="block";
+                                } else {
+                                    if(status === "expired"){
+                                        document.getElementById("pExpired").style.display="block";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // Hiển thị phần thông tin chi tiết
                 document.getElementById('overlay').style.display = 'block';

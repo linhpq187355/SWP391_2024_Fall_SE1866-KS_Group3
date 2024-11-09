@@ -8,6 +8,7 @@
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
  * 2024-10-10      1.0                 ManhNC         Implement search service
+ * 2024-10-25      2.0              Pham Quang Linh     Add functions
  */
 package com.homesharing.service;
 
@@ -86,6 +87,12 @@ public interface HomePageService {
      * @param totalHomes total homes in each searching
      */
     void updateTargetPage(Map<String, Object> searchParams, int totalHomes);
+
+    /**
+     * Retrieves the total count of homes available in the system.
+     *
+     * @return The total number of homes.
+     */
     int getHomeCount();
 
     /**
@@ -97,5 +104,15 @@ public interface HomePageService {
      */
     List<Home> getMatchingHome(int[] matchingHostsId, int userId);
 
+    List<Home> getHomesByUser(int userId);
+
+    /**
+     * Retrieves a list of homes associated with a specific list of appointments.
+     *
+     * @param appointments A list of {@link Appointment} objects to find matching homes.
+     * @return A list of {@link Home} objects associated with the provided appointments.
+     */
     List<Home> getHomesByAppoinment(List<Appointment> appointments);
+    List<Price> getHomesByUserPrices(List<Home> getHomesByUser);
+    void updateStatusHome(int homeId, String status);
 }

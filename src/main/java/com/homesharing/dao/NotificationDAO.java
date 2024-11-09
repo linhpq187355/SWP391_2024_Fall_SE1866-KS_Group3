@@ -31,7 +31,7 @@ public interface NotificationDAO {
      * @return true if the notification was added successfully, false otherwise
      * @throws SQLException if a database access error occurs
      */
-    boolean addNotification(int receiverId, String content, String type, String url) throws SQLException;
+    boolean addNotification(int receiverId, String content, String title, String type, String url) throws SQLException;
 
     /**
      * Updates an existing notification identified by its ID.

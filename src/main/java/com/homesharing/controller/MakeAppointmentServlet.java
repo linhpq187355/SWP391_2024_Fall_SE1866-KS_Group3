@@ -36,6 +36,11 @@ public class MakeAppointmentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String hostId = req.getParameter("hostId");
         String homeId = req.getParameter("homeId");
+        String tenantId = CookieUtil.getCookie(req, "id");
+        List<Appointment> hostAppointment = appointmentService.getAppointments(hostId);
+        List<Appointment> tenantAppointment = appointmentService.getAppointmentsByTenant(tenantId);
+        req.setAttribute("hostAppointment", hostAppointment);
+        req.setAttribute("tenantAppointment", tenantAppointment);
         req.setAttribute("hostId", hostId);
         req.setAttribute("homeId", homeId);
         req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
@@ -85,26 +90,17 @@ public class MakeAppointmentServlet extends HttpServlet {
         }
 
         try {
-                List<Appointment> hostAppointmentList = appointmentService.getAppointments(hostId);
-                List<Appointment> tenantAppointmentList = appointmentService.getAppointments(tenantId);
-                boolean checkOverlapping = appointmentService.checkOverlapping(selectedDate, selectedMonth, selectedYear,selectedTime,hostAppointmentList,tenantAppointmentList);
-                if(checkOverlapping){
-                    req.setAttribute("over", "Thời gian bị lặp.");
-                    req.setAttribute("hostId", hostId);
-                    req.setAttribute("homeId", homeId);
-                    req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
-                } else {
-                    int rowsUpdated = appointmentService.insertAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,tenantId , hostId, note,homeId);
+            int rowsUpdated = appointmentService.insertAppointment(selectedDate, selectedMonth, selectedYear, selectedTime,tenantId , hostId, note,homeId);
 
-                    if(rowsUpdated>0){
-                        req.setAttribute("message","Đặt lịch thành công!");
-                        req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
-                    } else {
-                        LOGGER.warning("Failed to insert appointment.");
-                        req.setAttribute("error","Đặt lịch thất bại!");
-                        req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
-                    }
-                }
+            if(rowsUpdated>0){
+                req.setAttribute("message","Đặt lịch thành công!");
+                req.setAttribute("id", rowsUpdated);
+                req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
+            } else {
+                LOGGER.warning("Failed to insert appointment.");
+                req.setAttribute("error","Đặt lịch thất bại!");
+                req.getRequestDispatcher("making-appointment.jsp").forward(req, resp);
+            }
 
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE,"Lỗi khi lưu dữ liệu hẹn: {}", e.getMessage());

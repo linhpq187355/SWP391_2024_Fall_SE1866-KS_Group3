@@ -1,0 +1,16 @@
+HTTP/2.0 200
+Status: 200
+date: Fri, 01 Nov 2024 10:51:08 GMT
+content-type: application/json
+content-length: 101
+last-modified: Tue, 24 Oct 2023 08:27:00 GMT
+etag: 0x8DBD46AFE482320
+x-ms-request-id: b13b9034-301e-0074-484c-1e8687000000
+x-ms-version: 2009-09-19
+x-ms-lease-status: unlocked
+x-ms-blob-type: BlockBlob
+x-azure-ref: 20241101T105108Z-17c8567f59ftm27j9eat0xp75n0000000c40000000006q0a
+x-fd-int-roxy-purgeid: 78437564
+x-cache: TCP_HIT
+accept-ranges: bytes
+

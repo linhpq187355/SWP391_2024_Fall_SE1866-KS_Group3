@@ -1,0 +1,14 @@
+Start auto log messages stack - Iteration 3.
+Action.c(195): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(197): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(197): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(199): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(199): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Error -27760: Request "https://edge-consumer-static.azureedge.net/mouse-gesture/config.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+

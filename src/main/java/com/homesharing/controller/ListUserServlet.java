@@ -11,7 +11,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListUserServlet", value = "/dashboard/account-manage")
+@WebServlet(name = "ListUserServlet", value = "/dashboard/account-list")
 public class ListUserServlet extends HttpServlet {
     private UserManagementService userManagementServie;
 

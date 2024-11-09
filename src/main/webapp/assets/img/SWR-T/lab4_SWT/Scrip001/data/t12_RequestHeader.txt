@@ -1,0 +1,10 @@
+GET https://arc.msn.com/v4/api/selection?placement=88000360&nct=1&fmt=json&ISU=1&AREF=0&APRIMB=0&ADEFAB=0&OPSYS=WIN10&locale=en-US&country=VN&edgeid=-945223331753601845&ACHANNEL=4&ABUILD=130.0.6723.70&poptin=1&devosver=10.0.22631.4317&clr=esdk&UITHEME=dark&EPCON=0&AMAJOR=130&AMINOR=0&ABLD=6723&APATCH=70 HTTP/1.1
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: empty
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0
+Accept-Encoding: gzip, deflate, zstd
+Accept-Language: en-US,en;q=0.9
+Host: arc.msn.com
+Connection: Keep-Alive
+

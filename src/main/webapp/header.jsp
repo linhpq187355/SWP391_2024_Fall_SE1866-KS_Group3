@@ -47,9 +47,21 @@
             white-space: nowrap; /* Không xuống dòng */
             text-overflow: ellipsis; /* Thêm dấu ... cho nội dung cắt ngắn */
         }
+        .notification-content {
+            display: block; /* Đảm bảo mỗi phần tử hiển thị trong một khối riêng */
+            max-width: 250px; /* Thay đổi giá trị này tùy thuộc vào chiều cao mong muốn */
+            overflow: hidden; /* Ẩn phần nội dung không nằm trong khối */
+            text-overflow: ellipsis; /* Thêm dấu "..." vào cuối nội dung nếu bị cắt */
+            white-space: nowrap; /* Ngăn không cho nội dung xuống dòng */
+        }
+        .notification-title {
+            font-size: 1.2em; /* Thay đổi kích thước phông chữ cho tiêu đề */
+            font-weight: bold; /* Đặt tiêu đề thành in đậm */
+        }
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-default ">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -146,7 +158,8 @@
                             <c:forEach var="notification" items="${notifications}">
                                 <li>
                                     <a href="notification?type=${notification.type}" class="li-no" style="<c:if test='${notification.status == "sent"}'>font-weight: bold;</c:if>">
-                                            ${notification.content}
+                                        <span class="notification-title">${notification.title}</span><br>
+                                        <span class="notification-content">${notification.content}</span>
                                     </a>
                                 </li>
                             </c:forEach>
@@ -173,6 +186,9 @@
                                     <a href="user-wishlist" class="li-acc-op">Quản lý yêu thích</a>
                                 </li>
                             </c:if>
+                            <li>
+                                <a href="user-blog" class="li-acc-op">Quản lí Blog</a>
+                            </li>
                             <li>
                                 <a href="user-security" class="li-acc-op">Mật khẩu và bảo mật</a>
                             </li>
@@ -203,6 +219,11 @@
                                     <a href="appointment-tenant-list" class="li-acc-op">Lịch hẹn của tôi</a>
                                 </li>
                             </c:if>
+                            <c:if test="${cookie.roleId.value ==1}">
+                                <li>
+                                    <a href="dashboard" class="li-acc-op">Dashboard</a>
+                                </li>
+                            </c:if>
 
                             <li>
                                 <a href="logout" class="li-acc-op">Đăng xuất</a>
@@ -227,10 +248,16 @@
                 <li class="dropdown ymm-sw " data-wow-delay="0.1s">
                     <a href="home-page">Trang chủ</a>
                 </li>
-
+                <c:if test="${cookie.roleId.value != 0}">
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="view-blog">Diễn Đàn</a></li>
+                </c:if>
+                <c:if test="${cookie.roleId.value ==3}">
+                    <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="user-list">Tìm bạn phù hợp</a>
+                    </li>
+                </c:if>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="home-list">Tất cả nhà</a></li>
                 <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="terms.jsp">Trợ giúp</a></li>
-                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>
+<%--                <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="about-us.jsp">Về chúng tôi</a></li>--%>
                 <c:if test="${cookie.roleId.value ==4}">
                     <li class="wow fadeInDown" data-wow-delay="0.1s"><a class="" href="submit-home">Đăng bài</a></li>
                 </c:if>

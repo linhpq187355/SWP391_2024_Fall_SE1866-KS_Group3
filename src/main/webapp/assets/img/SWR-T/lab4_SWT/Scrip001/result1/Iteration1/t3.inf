@@ -1,0 +1,18 @@
+[t3]
+FileName2=t3_2_sweetalert2@11.UNK
+RawStepEndTime=1730458263750
+RequestBodyFile=t3_RequestBody.txt
+RawStepName=crx
+ContentType=application/xml
+URL1=https://edge.microsoft.com/extensionwebstorebase/v1/crx?os=win&arch=x64&os_arch=x86_64&nacl_arch=x86-64&prod=edgecrx&prodchannel=&prodversion=130.0.2849.56&lang=en-US&acceptformat=crx3,puff&x=id=ajdpfmkffanmkhejnopjppegokpogffp&v=3.17.0&installedby=internal&uc&x=id=jmjflgjpcpepeafmmgdpfkogkghcpiha&v=1.2.1&installedby=other&uc
+URL2=https://cdn.jsdelivr.net/npm/sweetalert2@11
+URL3=http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800
+ResponseHeaderFile=t3_ResponseHeader.txt
+SnapshotXmlFile=snapshot_4.xml
+RequestHeaderFile=t3_RequestHeader.txt
+SaveSnapshotResources=1
+RawStepStartTime=1730458263059
+Total=3
+StepName=Url: crx
+FileName1=t3.xml
+FileName3=t1_0_css.css

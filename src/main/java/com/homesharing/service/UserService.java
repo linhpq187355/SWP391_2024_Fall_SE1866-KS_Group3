@@ -8,6 +8,7 @@
  * 2024-9-18      1.0                 ManhNC         First Implement
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-25      2.0              Pham Quang Linh     Add functions
  */
 
 package com.homesharing.service;
@@ -17,8 +18,11 @@ import com.homesharing.exception.GeneralException;
 import com.homesharing.model.GoogleAccount;
 import com.homesharing.model.User;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UserService interface defines methods for user registration and validation.
@@ -193,24 +197,52 @@ public interface UserService {
      */
     int resetUserPassword(int userId, String newPassword);
 
+    /**
+     * Gets the total number of registered users.
+     *
+     * @return The total number of users in the system.
+     */
     int getNumberOfUsers();
 
     /**
-     * Updates the matching profile for a user based on the provided criteria.
+     * Updates the user's matching profile based on specified criteria.
      *
-     * @param dob              The date of birth to be updated.
-     * @param gender           The gender to be updated.
-     * @param rawHowLong      The duration of how long the user has lived at their current residence.
-     * @param emvdate         The move-in date.
-     * @param lmvdate         The last move-out date.
-     * @param rawMinBudget    The minimum budget for housing.
-     * @param rawMaxBudget    The maximum budget for housing.
-     * @param userId          The ID of the user whose profile is to be updated.
+     * @param dob         The user's date of birth.
+     * @param gender      The user's gender.
+     * @param rawHowLong  The duration at the current residence.
+     * @param emvdate     The expected move-in date.
+     * @param lmvdate     The last move-out date.
+     * @param rawMinBudget The minimum budget for housing.
+     * @param rawMaxBudget The maximum budget for housing.
+     * @param prefProv    The preferred province.
+     * @param userId      The ID of the user.
      * @return An integer indicating the result of the update operation (e.g., number of rows affected).
      */
     int updateMatchingProfile(String dob, String gender, String rawHowLong, String emvdate, String lmvdate, String rawMinBudget, String rawMaxBudget,String prefProv, String userId);
 
+    /**
+     * Retrieves a list of host users based on provided appointments.
+     *
+     * @param appointments A list of appointments for which to retrieve hosts.
+     * @return A list of User objects who are hosts for the appointments.
+     */
     List<User> getHostByAppointment(List<Appointment> appointments);
 
+    /**
+     * Retrieves a list of tenant users based on provided appointments.
+     *
+     * @param appointments A list of appointments for which to retrieve tenants.
+     * @return A list of User objects who are tenants for the appointments.
+     */
     List<User> getTenantByAppointment(List<Appointment> appointments);
+
+    void addRangeToMap(Map<String, Object> map, String rangeParam, String minKey, String maxKey);
+
+    List<User> searchUserByPreference(Map<String, Object> searchParams );
+
+    int CountSearchUser(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException;
+
+    void updateTargetPage(Map<String, Object> searchParams, int totalHomes);
+
+
 }

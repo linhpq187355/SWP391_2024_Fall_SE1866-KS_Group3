@@ -1,3 +1,12 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-25      1.0              Pham Quang Linh     First Implement
+ */
 package com.homesharing.dao.impl;
 
 import com.homesharing.conf.DBContext;
@@ -13,9 +22,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class implements the AppointmentDAO interface for database operations
+ * related to appointments. It provides methods to insert a new appointment and
+ * retrieve appointments by host or tenant ID.
+ */
 public class AppointmentDAOImpl implements AppointmentDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentDAOImpl.class);
 
+    /**
+     * Inserts a new appointment record into the database.
+     *
+     * @param appointment the Appointment object to be inserted
+     * @return the generated ID of the newly created appointment
+     */
     @Override
     public int insert(Appointment appointment) {
         String sql = "INSERT INTO [dbo].[Appointments]\n" +
@@ -79,6 +99,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         }
     }
 
+    /**
+     * Retrieves a list of appointments by host ID.
+     *
+     * @param hostId the host ID for which appointments are retrieved
+     * @return a list of appointments for the specified host
+     */
     @Override
     public List<Appointment> selectByHostId(int hostId) {
         List<Appointment> list = new ArrayList<>();
@@ -128,6 +154,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return list;
     }
 
+    /**
+     * Retrieves a list of appointments by tenant ID.
+     *
+     * @param tenantId the tenant ID for which appointments are retrieved
+     * @return a list of appointments for the specified tenant
+     */
     @Override
     public List<Appointment> selectByTenantId(int tenantId) {
         List<Appointment> list = new ArrayList<>();
@@ -177,6 +209,14 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return list;
     }
 
+    /**
+     * Cancels an appointment by updating its status to "cancelled" and setting a cancellation reason.
+     *
+     * @param appointmentId The ID of the appointment to be cancelled.
+     * @param reason        The reason for cancelling the appointment.
+     * @return              The number of rows affected in the database.
+     * @throws RuntimeException If a SQL error or unexpected error occurs.
+     */
     @Override
     public int cancelAppointment(int appointmentId, String reason) {
         String sql = "update Appointments\n" +
@@ -217,6 +257,13 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return affectedRows;
     }
 
+    /**
+     * Retrieves an appointment by its ID.
+     *
+     * @param appointmentId The ID of the appointment to retrieve.
+     * @return              The appointment object containing all details, or an empty appointment if not found.
+     * @throws GeneralException If an error occurs during retrieval or closing resources.
+     */
     @Override
     public Appointment getAppointmentById(int appointmentId) {
         String sql = "select * from Appointments where id = ?";
@@ -262,6 +309,13 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return appointment;
     }
 
+    /**
+     * Updates an existing appointment in the database.
+     *
+     * @param appointment The appointment object containing updated details.
+     * @return            The number of rows affected in the database.
+     * @throws RuntimeException If a SQL error or unexpected error occurs.
+     */
     @Override
     public int update(Appointment appointment) {
         String sql = "UPDATE [dbo].[Appointments]\n" +
@@ -308,6 +362,13 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return affectedRows;
     }
 
+    /**
+     * Accepts an appointment by updating its status to 'accepted'.
+     *
+     * @param appointmentId the ID of the appointment to be accepted
+     * @return the number of rows affected by the update
+     * @throws RuntimeException if an error occurs while updating the appointment in the database
+     */
     @Override
     public int acceptAppointment(int appointmentId) {
         String sql = "UPDATE [dbo].[Appointments]\n" +
@@ -348,6 +409,14 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return affectedRows;
     }
 
+    /**
+     * Rejects an appointment by updating its status to 'rejected' and setting a reject reason.
+     *
+     * @param appointmentId the ID of the appointment to be rejected
+     * @param reason the reason for rejecting the appointment
+     * @return the number of rows affected by the update
+     * @throws RuntimeException if an error occurs while updating the appointment in the database
+     */
     @Override
     public int rejectAppointment(int appointmentId, String reason) {
         String sql = "UPDATE [dbo].[Appointments]\n" +
@@ -390,6 +459,60 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         return affectedRows;
     }
 
+    @Override
+    public List<Appointment> getAllAppointments() {
+        List<Appointment> list = new ArrayList<>();
+        String sql = "select *\n" +
+                "from Appointments\n";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment appointment = new Appointment();
+                appointment.setId(resultSet.getInt("id"));
+                appointment.setStartDate(resultSet.getTimestamp("startDate").toLocalDateTime());
+                appointment.setEndDate(resultSet.getTimestamp("endDate").toLocalDateTime());
+                appointment.setTenantId(resultSet.getInt("tenantId"));
+                appointment.setHostId(resultSet.getInt("hostId"));
+                appointment.setStatus(resultSet.getString("status"));
+                appointment.setNote(resultSet.getString("note"));
+                appointment.setHomeId(resultSet.getInt("homeId"));
+                appointment.setRejectReason(resultSet.getString("RejectReason"));
+                appointment.setCancelReason(resultSet.getString("cancelReason"));
+                list.add(appointment);
+            }
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            throw new GeneralException("Error: ", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Finds appointments that have expired but have not been marked as 'expired'.
+     *
+     * @param now the current date and time used to identify expired appointments
+     * @return a list of expired appointments
+     * @throws GeneralException if an error occurs while retrieving appointments from the database
+     */
     @Override
     public List<Appointment> findExpiredAppointments(LocalDateTime now) {
         List<Appointment> list = new ArrayList<>();
@@ -438,8 +561,5 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     }
 
 
-    public static void main(String[] args) {
-        AppointmentDAOImpl appointmentDAO = new AppointmentDAOImpl();
-        System.out.println(appointmentDAO.findExpiredAppointments(LocalDateTime.now()).get(18).getId());
-    }
+
 }

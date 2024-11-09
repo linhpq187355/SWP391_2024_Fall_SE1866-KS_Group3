@@ -18,7 +18,7 @@ import java.util.List;
  * This class is responsible for interacting with the database to retrieve
  * details related to homes, such as home information, prices, creator information, etc.
  */
-public class HomeDetailDAOImpl extends DBContext implements HomeDetailDAO {
+public class HomeDetailDAOImpl implements HomeDetailDAO {
 
     /**
      * Retrieve a Home object by its unique ID.
@@ -546,11 +546,6 @@ public class HomeDetailDAOImpl extends DBContext implements HomeDetailDAO {
         return similarHomes;
     }
 
-    /**
-     * Retrieve home type by home id
-     * @param homeId
-     * @return the home type
-     */
     public HomeType getHomeTypeByHomeId(int homeId) {
         String sql = "SELECT ht.id, ht.name, ht.description, ht.status " +
                 "FROM HomeTypes ht " +

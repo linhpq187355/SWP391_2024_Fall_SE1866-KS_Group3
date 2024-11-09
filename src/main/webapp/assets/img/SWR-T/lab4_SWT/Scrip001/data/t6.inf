@@ -1,0 +1,10 @@
+[t6]
+FileName1=t6_blocklist.json
+URL1=https://edge.microsoft.com/abusiveadblocking/api/v1/blocklist
+Total=3
+ContentType=application/json
+SnapshotXmlFile=snapshot_6.xml
+FileName2=t6_memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSCmu1aB.html
+URL2=http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSCmu1aB.woff2
+FileName3=t6_bootstrap-icons.css
+URL3=https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css

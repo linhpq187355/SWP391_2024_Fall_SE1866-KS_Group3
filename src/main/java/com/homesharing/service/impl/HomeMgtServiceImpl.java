@@ -98,4 +98,5 @@ public class HomeMgtServiceImpl implements HomeMgtService {
 
         return priceMap; // Return the map instead of the list
     }
+
 }

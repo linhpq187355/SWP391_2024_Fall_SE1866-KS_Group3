@@ -72,25 +72,35 @@
 </section>
 
 <jsp:include page="footer.jsp"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function validateForm() {
         let email = document.getElementById("email").value.trim();
         let oldEmail = document.getElementById("old-email").value.trim();
         // Check for required fields and ensure they're not just spaces
         if (email === "") {
-            alert("Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Tất cả các trường là bắt buộc và không thể để trống hoặc chỉ chứa khoảng trắng.'
+            });
             return false;
         }
         // Validate email
         let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert("Vui lòng nhập một địa chỉ email hợp lệ!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Vui lòng nhập một địa chỉ email hợp lệ!'
+            });
             return false;
         }
 
         // Check if passwords match
         if (email === oldEmail) {
-            alert("Email mới phải khác email cũ!");
+            Swal.fire({
+                icon: 'error',
+                title: 'Email mới phải khác email cũ!'
+            });
             return false;
         }
 

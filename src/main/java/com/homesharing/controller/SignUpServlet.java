@@ -47,6 +47,7 @@ import java.sql.SQLException;
  */
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
+
     private transient UserService userService;// Mark userService as transient
     private static final Logger logger = LoggerFactory.getLogger(SignUpServlet.class); // Logger instance
     private static final String ERROR_ATTRIBUTE = "error"; // Define constant for error attribute
@@ -115,7 +116,7 @@ public class SignUpServlet extends HttpServlet {
                 if (result > 0) {
                     //redirect to verify email
                     String url = Config.getBaseUrl();
-                    notificationService.addNotification(result,"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.","System",url);
+                    notificationService.addNotification(result,"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.","System",url,"Chào mừng");
                     req.getSession().setAttribute("userId", result);
                     resp.sendRedirect(req.getContextPath() + "/verify");
                 } else if (result == 0) {
@@ -130,12 +131,12 @@ public class SignUpServlet extends HttpServlet {
             } catch (RuntimeException | SQLException | IOException | ServletException e) {
                 // Handle any runtime exceptions thrown by the service
                 req.setAttribute(ERROR_ATTRIBUTE, "An error occurred during registration: " + e.getMessage());
-                ServletUtils.forwardToErrorPage(req, resp);
+                ServletUtils.handleError(req, resp, 500);
             }
         } else {
             // Set error message for invalid input
             req.setAttribute(ERROR_ATTRIBUTE, "Invalid data provided.");
-            ServletUtils.forwardToErrorPage(req, resp);
+            ServletUtils.handleError(req, resp, 500);
         }
     }
 }

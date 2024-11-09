@@ -66,8 +66,9 @@ public class Notification {
     private String status;
     private String type;
     private String url;
+    private String title;
 
-    public Notification(int id, int receiverId, String content, LocalDateTime createdDate, String status, String type, String url) {
+    public Notification(int id, int receiverId, String content, LocalDateTime createdDate, String status, String type, String url, String title) {
     this.id = id;
     this.receiverId = receiverId;
     this.content = content;
@@ -75,6 +76,14 @@ public class Notification {
     this.status = status;
     this.type = type;
     this.url = url;
+    this.title = title;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

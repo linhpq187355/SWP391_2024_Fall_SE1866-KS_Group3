@@ -1,3 +1,13 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-25      1.0              Pham Quang Linh     First Implement
+ */
+
 package com.homesharing.controller;
 
 import com.google.gson.Gson;
@@ -34,24 +44,43 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
+/**
+ * Servlet implementation for handling tenant calendar-related requests
+ * in the Homesharing application.
+ */
 @WebServlet("/tenant-calender")
 public class TenantCalenderServlet extends HttpServlet {
+    private HomePageService homePageService;   // Service for home page related operations
+    private AppointmentService appointmentService; // Service for appointment-related operations
+    private UserService userService;           // Service for user-related operations
 
-    private HomePageService homePageService;
-    private AppointmentService appointmentService;
-    private UserService userService;
-
-
+    /**
+     * Initializes the servlet and sets up the required services.
+     * This method is called once when the servlet is first loaded.
+     *
+     * @throws ServletException if an error occurs during servlet initialization
+     */
     @Override
     public void init() throws ServletException {
+        // Initialize the DAO implementations
         HomeDAO homeDAO = new HomeDAOImpl();
         AppointmentDAO appointmentDAO = new AppointmentDAOImpl();
         UserDAO userDAO = new UserDAOImpl();
-        this.homePageService = new HomePageServiceImpl(homeDAO,null,null,null);
+
+        // Set up service implementations using the DAO instances
+        this.homePageService = new HomePageServiceImpl(homeDAO, null, null, null);
         this.appointmentService = new AppointmentServiceImpl(appointmentDAO);
-        this.userService = new UserServiceImpl(userDAO, null,null,null);
+        this.userService = new UserServiceImpl(userDAO, null, null, null);
     }
 
+    /**
+     * Handles GET requests to retrieve the tenant's calendar information.
+     *
+     * @param req  the HttpServletRequest object containing the request data
+     * @param resp the HttpServletResponse object for sending a response
+     * @throws ServletException if an error occurs during request handling
+     * @throws IOException      if an input or output error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String tenantId = CookieUtil.getCookie(req, "id");

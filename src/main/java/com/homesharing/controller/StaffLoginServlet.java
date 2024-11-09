@@ -4,18 +4,22 @@
  *  Home Sharing System
  *
  * Record of change:
- * DATE            Version             AUTHOR           DESCRIPTION
- * 2024-10-02      1.0                 ManhNC         First Implement
+ * DATE             Version             AUTHOR           DESCRIPTION
+ * 2024-10-02       1.0                 ManhNC          First Implement
+ * 2024-11-06       1.1                 ThangLT         Add permission in session
  */
 package com.homesharing.controller;
 
+import com.homesharing.model.Permission;
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.dao.UserDAO;
 import com.homesharing.dao.impl.TokenDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.service.TokenService;
+import com.homesharing.service.UserManagementService;
 import com.homesharing.service.UserService;
 import com.homesharing.service.impl.TokenServiceImpl;
+import com.homesharing.service.impl.UserManagementServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.ServletUtils;
 import jakarta.servlet.ServletException;
@@ -27,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * StaffLoginServlet handles staff login requests and processes
@@ -38,6 +44,7 @@ import java.io.IOException;
 @WebServlet("/staff-login")
 public class StaffLoginServlet extends HttpServlet {
     private transient UserService userService;// Mark userService as transient
+    private transient UserManagementService userMgtService;
     private static final Logger logger = LoggerFactory.getLogger(StaffLoginServlet.class); // Logger instance
 
     /**
@@ -52,6 +59,7 @@ public class StaffLoginServlet extends HttpServlet {
         TokenService tokenService = new TokenServiceImpl(tokenDao);
         // Inject UserDao into UserServiceImpl
         userService = new UserServiceImpl(userDao, tokenDao, tokenService,null);
+        userMgtService = new UserManagementServiceImpl();
     }
 
     /**
@@ -92,10 +100,18 @@ public class StaffLoginServlet extends HttpServlet {
             String result = userService.loginStaff(email, password, resp);
 
             if (result.equals("success")) {
-                // Login successful, redirect to home page
+
+                List<String> userPermissions = userMgtService.fetchPermissionsByEmail(email)
+                        .stream()
+                        .map(Permission::getName)  // Convert to list of permission names
+                        .collect(Collectors.toList());
+
+                req.getSession().setAttribute("userPermissions", userPermissions);
+
                 req.getSession().setAttribute("message", "Đăng nhập thành công.");
                 req.getSession().setAttribute("messageType", "success");
-                resp.sendRedirect(req.getContextPath() + "/dashboard/account-manage");
+                // Login successful, redirect to home page
+                resp.sendRedirect(req.getContextPath() + "/dashboard/account-list");
             } else {
                 // Login failed, display error message
                 req.setAttribute("error", result);

@@ -32,7 +32,7 @@ public interface NotificationService {
      * @throws SQLException if there is an issue with the database operation.
      * @throws GeneralException for handling other exceptions specific to the business logic.
      */
-    boolean addNotification(int receiverId, String content, String type, String url) throws SQLException, GeneralException;
+    boolean addNotification(int receiverId, String content, String type, String url, String title) throws SQLException, GeneralException;
 
     /**
      * Retrieves a list of unread notifications for a specified receiver.

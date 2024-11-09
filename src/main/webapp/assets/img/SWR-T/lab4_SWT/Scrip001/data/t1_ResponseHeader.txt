@@ -1,0 +1,18 @@
+HTTP/1.1 200 OK
+Content-Type: text/css; charset=utf-8
+Vary: Sec-Fetch-Dest, Sec-Fetch-Mode, Sec-Fetch-Site
+Access-Control-Allow-Origin: *
+Timing-Allow-Origin: *
+Link: <http://fonts.gstatic.com>; rel=preconnect; crossorigin
+Expires: Thu, 31 Oct 2024 17:22:30 GMT
+Date: Thu, 31 Oct 2024 17:22:30 GMT
+Cache-Control: private, max-age=86400, stale-while-revalidate=604800
+Last-Modified: Thu, 31 Oct 2024 17:22:30 GMT
+Cross-Origin-Opener-Policy: same-origin-allow-popups
+Cross-Origin-Resource-Policy: cross-origin
+Content-Encoding: gzip
+Server: ESF
+X-XSS-Protection: 0
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+

@@ -1,0 +1,121 @@
+Start auto log messages stack - Iteration 7.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 6.
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") started  	[MsgId: MMSG-26355]
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") was successful, 20 body bytes, 284 header bytes  	[MsgId: MMSG-26386]
+Action.c(238): web_custom_request("update") started  	[MsgId: MMSG-26355]
+Action.c(238): web_custom_request("update") was successful, 1641 body bytes, 935 header bytes  	[MsgId: MMSG-26386]
+Action.c(279): web_custom_request("cloud_config_observers.json") started  	[MsgId: MMSG-26355]
+Action.c(279): ssl_handle_status encounter error : SSL_ERROR_SSL, error message : error:0A000126:SSL routines::unexpected eof while reading  	[MsgId: MMSG-26000]
+Action.c(279): Error -27774: SSL protocol error when attempting to connect with host "static.edge.microsoftapp.net"  	[MsgId: MERR-27774]
+Action.c(279): Error -27760: Request "https://static.edge.microsoftapp.net/default/cloud_config_observers.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 7.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): ssl_handle_status encounter error : SSL_ERROR_SYSCALL, error id : 0  	[MsgId: MMSG-26000]
+Action.c(23): Error -27776: [GENERAL_MSG_CAT_SSL_ERROR]connect to host "www.bing.com" failed: [10054] Connection reset by peer
+This is probably because the SSL protocol version is not supported. Try switching the TLS/SSL version using "web_set_sockets_option" API.  	[MsgId: MERR-27776]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 7.
+Action.c(195): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(197): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(197): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(199): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(199): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Error -27792: Failed to connect to server "edge-consumer-static.azureedge.net:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 8.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 9.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 821 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 8.
+Action.c(195): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(197): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(197): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(199): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(199): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Error -27792: Failed to connect to server "edge-consumer-static.azureedge.net:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 8.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27792: Failed to connect to server "www.bing.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 9.
+Action.c(32): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(32): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(34): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(34): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(36): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(36): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(39): web_url("ExpandedDomainsFilterGlobal.json_2") started  	[MsgId: MMSG-26355]
+Action.c(39): Resource "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" is in the cache already and will not be downloaded again  	[MsgId: MMSG-26655]
+Action.c(52): web_url("crx") started  	[MsgId: MMSG-26355]
+Action.c(52): Error -27760: Request "https://edge.microsoft.com/extensionwebstorebase/v1/crx?os=win&arch=x64&os_arch=x86_64&nacl_arch=x86-64&prod=edgecrx&prodchannel=&prodversion=130.0.2849.56&lang=en-US&acceptformat=crx3,puff&x=id%3Dajdpfmkffanmkhejnopjppegokpogffp%26v%3D3.17.0%26installedby%3Dinternal%26uc&x=id%3Djmjflgjpcpepeafmmgdpfkogkghcpiha%26v%3D1.2.1%26installedby%3Dother%26uc" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+

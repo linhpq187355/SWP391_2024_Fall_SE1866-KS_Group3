@@ -101,8 +101,7 @@ public class VerifyNewEmailServlet extends HttpServlet {
         } catch (ServletException | IOException e) {
             // Handle any runtime exceptions thrown by the service or servlet
             request.setAttribute("error", "An error occurred during registration: " + e.getMessage());
-            ServletUtils.forwardToErrorPage(request, response);
-        }
+            ServletUtils.handleError(request, response, 500);        }
     }
 
     /**

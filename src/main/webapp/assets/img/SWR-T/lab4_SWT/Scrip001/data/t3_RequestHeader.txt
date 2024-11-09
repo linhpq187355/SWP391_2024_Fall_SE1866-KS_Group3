@@ -1,0 +1,10 @@
+GET https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json HTTP/1.1
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: empty
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0
+Accept-Encoding: gzip, deflate, zstd
+Accept-Language: en-US,en;q=0.9
+Host: www.bing.com
+Connection: Keep-Alive
+

@@ -1,0 +1,13 @@
+[t13]
+FileName1=t13_config.json
+URL1=https://edge-consumer-static.azureedge.net/mouse-gesture/config.json
+Total=2
+ContentType=application/json
+SnapshotXmlFile=snapshot_13.xml
+RequestHeaderFile=t13_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t13_ResponseHeader.txt
+FileName2=t13_c.gif
+URL2=https://c.bing.com/c.gif?Red3=EdgPID_pd&pid=61d5220b-5ac4-4053-902c-e2920d81faad
+[ProtocolInfo]
+ProtocolId=QTWeb

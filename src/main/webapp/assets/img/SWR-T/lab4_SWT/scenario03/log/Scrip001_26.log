@@ -1,0 +1,24 @@
+Start auto log messages stack - Iteration 1.
+Action.c(100): web_url("shoppingsettings_2") started  	[MsgId: MMSG-26355]
+Action.c(100): web_url("shoppingsettings_2") was successful, 407 body bytes, 584 header bytes  	[MsgId: MMSG-26386]
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 11.
+Action.c(195): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(197): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(197): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(199): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(199): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Error -27760: Request "https://edge-consumer-static.azureedge.net/mouse-gesture/config.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+

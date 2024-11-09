@@ -175,6 +175,26 @@ class UserServiceImplTest {
     }
 
     @Test
+    void testLogin_NullToken() throws SQLException {
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setHashedPassword(PasswordUtil.hashPassword("Password123"));
+        user.setStatus("active");
+        user.setRolesId(3);
+        user.setEmail("user@example.com");
+
+        when(userDao.findUserByEmail("user@example.com")).thenReturn(user);
+        when(tokenDao.findToken(1)).thenReturn(null);
+
+        String result = userService.login("user@example.com", "Password123",false, response);
+
+        assertEquals("not-verify", result);
+        verify(tokenService).sendToken("user@example.com", 1); // Should send token
+    }
+
+    @Test
     void testLoginUserNotFound() throws SQLException {
         // Given
         String email = "unknown@example.com";
@@ -286,6 +306,143 @@ class UserServiceImplTest {
             userService.login(email, password, false, response);
         });
     }
+
+    @Test
+    void testLogin_EmailIsNull() throws SQLException {
+        // Given
+        String password = "password123";
+
+        // When
+        String result = userService.login(null, password, false, response);
+
+        // Then
+        assertEquals("Địa chỉ email không hợp lệ", result);
+    }
+
+    @Test
+    void testLogin_EmailIsEmpty() throws SQLException {
+        // Given
+        String email = "";
+        String password = "password123";
+
+        // When
+        String result = userService.login(email, password, false, response);
+
+        // Then
+        assertEquals("Địa chỉ email không hợp lệ", result);
+    }
+
+    @Test
+    void testLogin_InvalidEmailFormat() throws SQLException {
+        // Given
+        String email = "invalid-email";
+        String password = "password123";
+
+        // When
+        String result = userService.login(email, password, false, response);
+
+        // Then
+        assertEquals("Địa chỉ email không hợp lệ", result);
+    }
+
+    @Test
+    void testLogin_RememberMeFalse() throws SQLException {
+        // Given
+        String email = "john.doe@example.com";
+        String password = "password123";
+        boolean rememberMe = false;
+        User user = new User();
+        user.setId(1);
+        user.setEmail(email);
+        user.setRolesId(4);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setHashedPassword(PasswordUtil.hashPassword(password));
+        user.setStatus("active");
+        when(userDao.findUserByEmail(email)).thenReturn(user);
+
+        // Mock tokenDao to return a verified token
+        Token mockToken = new Token();
+        mockToken.setVerified(true);
+        when(tokenDao.findToken(1)).thenReturn(mockToken);
+
+        // When
+        String result = userService.login(email, password, rememberMe, response);
+
+        // Then
+        assertEquals("success", result);
+        verify(tokenService, never()).sendToken(any(), eq(1)); // Token should not be sent again
+
+        // Verify cookie lifespan for rememberMe == false
+        verify(response).addCookie(argThat(cookie ->
+                "id".equals(cookie.getName()) && cookie.getMaxAge() == 7 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "firstName".equals(cookie.getName()) && cookie.getMaxAge() == 7 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "lastName".equals(cookie.getName()) && cookie.getMaxAge() == 7 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "email".equals(cookie.getName()) && cookie.getMaxAge() == 7 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "roleId".equals(cookie.getName()) && cookie.getMaxAge() == 7 * 24 * 60 * 60
+        ));
+
+    }
+
+    @Test
+    void testLogin_RememberMeTrue() throws SQLException {
+        // Giả sử dữ liệu đầu vào cho hàm
+        String email = "john.doe@example.com";
+        String password = "password123";
+        boolean rememberMe = true;
+
+        // Thiết lập User giả
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail(email);
+        user.setRolesId(4);
+        user.setHashedPassword(PasswordUtil.hashPassword(password));
+        user.setStatus("active");
+
+        when(userDao.findUserByEmail(email)).thenReturn(user);
+
+        // Token đã xác thực
+        Token mockToken = new Token();
+        mockToken.setVerified(true);
+        when(tokenDao.findToken(user.getId())).thenReturn(mockToken);
+
+        // Gọi hàm login
+        String result = userService.login(email, password, rememberMe, response);
+
+        // Xác nhận kết quả
+        assertEquals("success", result);
+
+        verify(tokenService, never()).sendToken(any(), eq(1)); // Token should not be sent again
+
+        // Verify cookie lifespan for rememberMe == false
+        verify(response).addCookie(argThat(cookie ->
+                "id".equals(cookie.getName()) && cookie.getMaxAge() == 30 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "firstName".equals(cookie.getName()) && cookie.getMaxAge() == 30 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "lastName".equals(cookie.getName()) && cookie.getMaxAge() == 30 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "email".equals(cookie.getName()) && cookie.getMaxAge() == 30 * 24 * 60 * 60
+        ));
+        verify(response).addCookie(argThat(cookie ->
+                "roleId".equals(cookie.getName()) && cookie.getMaxAge() == 30 * 24 * 60 * 60
+        ));
+
+    }
+
 
     @Test
     void testLogout_Success() {

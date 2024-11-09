@@ -1,6 +1,5 @@
 package com.homesharing.service;
 
-import com.homesharing.conf.DBContext;
 import com.homesharing.dao.TokenDAO;
 import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Token;

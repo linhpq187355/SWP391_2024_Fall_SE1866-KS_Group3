@@ -631,6 +631,7 @@
         document.getElementById("dReason").style.display = "none";
         document.getElementById("dCancelReason").style.display = "none";
         document.getElementById("aptm-action").style.display = "none";
+        document.getElementById("aptm-tenantPending-action").style.display = "none";
 
         if(status === "hostPending"){
             document.getElementById("aptm-action").style.display = "flex";

@@ -114,12 +114,12 @@ public class SetRoleServlet extends HttpServlet {
             } catch (SQLException e) {
                 logger.error("SQL error during registration: {}", e.getMessage(), e);
                 request.setAttribute(ERROR_ATTRIBUTE, "Có lỗi xảy ra ở phía server.");
-                ServletUtils.forwardToErrorPage(request, response);
+                ServletUtils.handleError(request, response, 500);
             }
         }else{
             // If the Google account is not present, prompt for re-login
             request.setAttribute(ERROR_ATTRIBUTE, "Đã hết thời gian, vui lòng đăng nhập lại.");
-            ServletUtils.forwardToErrorPage(request, response);
+            ServletUtils.handleError(request, response, 500);
         }
     }
 
@@ -152,8 +152,8 @@ public class SetRoleServlet extends HttpServlet {
         if (result == 2) {
             User user = userDao.findUserByEmail(acc.getEmail());
             String url = Config.getBaseUrl();
-            AddNotificationUtil.getInstance().addNotification(user.getId(),"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.","System",url);
-            AddNotificationUtil.getInstance().addNotification(user.getId(),"Bạn chưa có mật khẩu, vui lòng click vào đường dẫn này để cài đặt mật khẩu.","System",url + "/user-update-password");
+            AddNotificationUtil.getInstance().addNotification(user.getId(),"Chào mừng bạn đến với Rommify, chúc bạn có những trải nghiệm tuyệt vời ở đây.", "Chào mừng","System",url);
+            AddNotificationUtil.getInstance().addNotification(user.getId(),"Bạn chưa có mật khẩu, vui lòng click vào đường dẫn này để cài đặt mật khẩu.", "Thiết lập bảo mật cho tài khoản.","System",url + "/user-update-password");
             request.getSession().setAttribute("message", "Đăng ký thành công.");
             request.getSession().setAttribute("messageType", "success");
             response.sendRedirect(request.getContextPath() + "/matching");

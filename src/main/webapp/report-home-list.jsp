@@ -226,7 +226,7 @@
                   </a>
                 </li>
                 <li class="active">
-                  <a href="report-home-manage">
+                  <a href="report-list">
                     <span class="sub-item">Report Home List</span>
                   </a>
                 </li>

@@ -1,0 +1,18 @@
+Start auto log messages stack - Iteration 3.
+Action.c(132): Connection to edge.microsoft.com:443 closed after being inactive for 76 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(132): Connection to www.bing.com:443 closed after being inactive for 75 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(132): Connection to cdn.jsdelivr.net:443 closed after being inactive for 73 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(132): Connection to ka-f.fontawesome.com:443 closed after being inactive for 63 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(132): Error -27792: Failed to connect to server "arc.msn.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 12.
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") was successful, 118340 body bytes, 1600 header bytes  	[MsgId: MMSG-26386]
+Action.c(132): web_url("selection") started  	[MsgId: MMSG-26355]
+Action.c(132): Error -27721: Step download timeout (120 seconds) has expired when downloading resource "https://arc.msn.com/v4/api/selection?placement=88000360&nct=1&fmt=json&ISU=1&AREF=0&APRIMB=0&ADEFAB=0&OPSYS=WIN10&locale=en-US&country=VN&edgeid=-945223331753601845&ACHANNEL=4&ABUILD=130.0.6723.70&poptin=1&devosver=10.0.22631.4317&clr=esdk&UITHEME=dark&EPCON=0&AMAJOR=130&AMINOR=0&ABLD=6723&APATCH=70"  	[MsgId: MERR-27721]
+End auto log messages stack.
+

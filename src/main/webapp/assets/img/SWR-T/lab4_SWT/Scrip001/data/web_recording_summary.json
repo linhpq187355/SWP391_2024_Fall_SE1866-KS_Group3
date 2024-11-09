@@ -1,0 +1,858 @@
+{
+  "FilterHeaders": [
+    {
+      "Header": "x-microsoft-update-updater",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "x-microsoft-update-service-cohort",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "x-microsoft-update-interactivity",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "x-microsoft-update-appid",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "x-client-data",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "user-agent",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "upload-time",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "update-interactivity",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-mesh-client-webview",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-mesh-client-os-version",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-mesh-client-os",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-mesh-client-edge-version",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-mesh-client-edge-channel",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-mesh-client-arch",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-fetch-site",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-fetch-mode",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-fetch-dest",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-ch-ua-platform",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-ch-ua-mobile",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sec-ch-ua",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "sdk-version",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "pragma",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "origin",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "ms-cv",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "if-none-match",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "if-modified-since",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "edgefeatureflags",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "content-encoding",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "client-id",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "cache-control",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "apikey",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept-language",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept-encoding",
+      "IncludeInScript": false
+    },
+    {
+      "Header": "accept",
+      "IncludeInScript": false
+    }
+  ],
+  "FilterResources": [
+    {
+      "IsNonResource": true,
+      "type": "text/xml"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text/javascript"
+    },
+    {
+      "IsNonResource": false,
+      "type": "text/css"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/webp"
+    },
+    {
+      "IsNonResource": false,
+      "type": "image/gif"
+    },
+    {
+      "IsNonResource": false,
+      "type": "font/woff2"
+    },
+    {
+      "IsNonResource": false,
+      "type": "application/octet-stream"
+    },
+    {
+      "IsNonResource": true,
+      "type": "application/json"
+    },
+    {
+      "IsNonResource": false,
+      "type": "application/javascript"
+    }
+  ],
+  "GeneralInfo": {
+    "BrowserVersion": "",
+    "IsWinInetMode": false,
+    "MaxUsedConnections": 43,
+    "RecordedBrowser": "Chrome",
+    "RecordingDate": "Oct-31-2024",
+    "RecordingDuration": 73687,
+    "RecordingMode": "N/A",
+    "RecordingTimeStamp": 1730395346,
+    "RecordingType": "Proxy",
+    "TotalBytesReceived": 2871034,
+    "TotalBytesSent": 49392,
+    "TotalRequests": 43,
+    "UserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0"
+  },
+  "HostInfo": [
+    {
+      "DomainName": "unpkg.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "104.17.246.203",
+          "IncludeInScript": true,
+          "Name": "unpkg.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/javascript",
+              "DownloadTime": 0,
+              "EventId": 2547,
+              "HttpStatus": 200,
+              "Size": 141053,
+              "URL": "https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "msn.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "20.24.121.134",
+          "IncludeInScript": true,
+          "Name": "arc.msn.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 15,
+              "EventId": 1606,
+              "HttpStatus": 200,
+              "Size": 2093,
+              "URL": "https://arc.msn.com/v4/api/selection?placement=88000360&nct=1&fmt=json&ISU=1&AREF=0&APRIMB=0&ADEFAB=0&OPSYS=WIN10&locale=en-US&country=VN&edgeid=-945223331753601845&ACHANNEL=4&ABUILD=130.0.6723.70&poptin=1&devosver=10.0.22631.4317&clr=esdk&UITHEME=dark&EPCON=0&AMAJOR=130&AMINOR=0&ABLD=6723&APATCH=70"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "2&3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "microsoftapp.net",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "13.107.246.59",
+          "IncludeInScript": true,
+          "Name": "static.edge.microsoftapp.net",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 2413,
+              "HttpStatus": 200,
+              "Size": 0,
+              "URL": "https://static.edge.microsoftapp.net/default/cloud_config_observers.json"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "2&3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "microsoft.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "20.42.65.85",
+          "IncludeInScript": true,
+          "Name": "functional.events.data.microsoft.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 16,
+              "EventId": 2489,
+              "HttpStatus": 200,
+              "Size": 9,
+              "URL": "https://functional.events.data.microsoft.com/OneCollector/1.0/"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        },
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "204.79.197.239",
+          "IncludeInScript": true,
+          "Name": "edge.microsoft.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 2744,
+              "HttpStatus": 200,
+              "Size": 20,
+              "URL": "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/3517029987587817622"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 2739,
+              "HttpStatus": 200,
+              "Size": 214,
+              "URL": "https://edge.microsoft.com/componentupdater/api/v1/update"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 2734,
+              "HttpStatus": 200,
+              "Size": 20,
+              "URL": "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-6030100249971701251"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 2407,
+              "HttpStatus": 200,
+              "Size": 4266,
+              "URL": "https://edge.microsoft.com/componentupdater/api/v1/update?cup2key=7:s84jWFQEE9fPWZ1DwDIZvFDVQnml7dSKnMw_49UuVOU&cup2hreq=8848d591e2f2131cd94d88ea29ea914b156b027a0b8c0a661bcb6cec4a37b08d"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 2402,
+              "HttpStatus": 200,
+              "Size": 20,
+              "URL": "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-6030100249971701251%7C-7627269350225664860"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 1803,
+              "HttpStatus": 200,
+              "Size": 274,
+              "URL": "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-341398893248106636%7C-2257558592581803439%7C1720537294320060623"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 15,
+              "EventId": 1581,
+              "HttpStatus": 200,
+              "Size": 268,
+              "URL": "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-4276412816532324841%7C-2257558592581803439"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 16,
+              "EventId": 1358,
+              "HttpStatus": 200,
+              "Size": 20,
+              "URL": "https://edge.microsoft.com/autofillservice/core/page/3693946771987704403/-341398893248106636%7C-2257558592581803439"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 820,
+              "HttpStatus": 304,
+              "Size": 0,
+              "URL": "https://edge.microsoft.com/abusiveadblocking/api/v1/blocklist"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "text/xml",
+              "DownloadTime": 0,
+              "EventId": 790,
+              "HttpStatus": 200,
+              "Size": 538,
+              "URL": "https://edge.microsoft.com/extensionwebstorebase/v1/crx?os=win&arch=x64&os_arch=x86_64&nacl_arch=x86-64&prod=edgecrx&prodchannel=&prodversion=130.0.2849.56&lang=en-US&acceptformat=crx3,puff&x=id%3Dajdpfmkffanmkhejnopjppegokpogffp%26v%3D3.17.0%26installedby%3Dinternal%26uc&x=id%3Djmjflgjpcpepeafmmgdpfkogkghcpiha%26v%3D1.2.1%26installedby%3Dother%26uc"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 9,
+              "HttpStatus": 200,
+              "Size": 1757,
+              "URL": "https://edge.microsoft.com/serviceexperimentation/v3/?osname=win&channel=stable&osver=10.0.22631&devicefamily=desktop&installdate=1655422490&clientversion=130.0.2849.56&experimentationmode=2&scpguard=1&scpfull=0&scpver=6"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "2&3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "jsdelivr.net",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "199.232.45.229",
+          "IncludeInScript": true,
+          "Name": "cdn.jsdelivr.net",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "font/woff2",
+              "DownloadTime": 16,
+              "EventId": 1448,
+              "HttpStatus": 200,
+              "Size": 92064,
+              "URL": "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 16,
+              "EventId": 1345,
+              "HttpStatus": 200,
+              "Size": 73271,
+              "URL": "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/javascript",
+              "DownloadTime": 0,
+              "EventId": 814,
+              "HttpStatus": 200,
+              "Size": 70856,
+              "URL": "https://cdn.jsdelivr.net/npm/sweetalert2@11"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": false
+    },
+    {
+      "DomainName": "jquery.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "151.101.2.137",
+          "IncludeInScript": true,
+          "Name": "code.jquery.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/javascript",
+              "DownloadTime": 16,
+              "EventId": 2440,
+              "HttpStatus": 200,
+              "Size": 89476,
+              "URL": "https://code.jquery.com/jquery-3.5.1.min.js"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "hstatic.net",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "104.22.78.246",
+          "IncludeInScript": true,
+          "Name": "file.hstatic.net",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "image/webp",
+              "DownloadTime": 15,
+              "EventId": 1825,
+              "HttpStatus": 200,
+              "Size": 321020,
+              "URL": "https://file.hstatic.net/200000020602/file/top-nhung-loai-hoa-dep-nhat__6__aba5ffa9c7324c1da0440565d915bb1d_grande.png"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "gstatic.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "142.250.197.35",
+          "IncludeInScript": true,
+          "Name": "fonts.gstatic.com",
+          "Port": 80,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "font/woff2",
+              "DownloadTime": 0,
+              "EventId": 824,
+              "HttpStatus": 200,
+              "Size": 16552,
+              "URL": "http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSCmu1aB.woff2"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "font/woff2",
+              "DownloadTime": 0,
+              "EventId": 635,
+              "HttpStatus": 200,
+              "Size": 35328,
+              "URL": "http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSGmu1aB.woff2"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "font/woff2",
+              "DownloadTime": 0,
+              "EventId": 623,
+              "HttpStatus": 200,
+              "Size": 48236,
+              "URL": "http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-muw.woff2"
+            }
+          ],
+          "SSLCipher": "None",
+          "SSLVersion": "None"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "googleapis.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "142.250.198.42",
+          "IncludeInScript": true,
+          "Name": "fonts.googleapis.com",
+          "Port": 80,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 15,
+              "EventId": 2,
+              "HttpStatus": 200,
+              "Size": 23136,
+              "URL": "http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800"
+            }
+          ],
+          "SSLCipher": "None",
+          "SSLVersion": "None"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "fontawesome.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "104.18.40.68",
+          "IncludeInScript": true,
+          "Name": "kit.fontawesome.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 0,
+              "EventId": 2749,
+              "HttpStatus": 200,
+              "Size": 13166,
+              "URL": "https://kit.fontawesome.com/f5cbf3afb2.js"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/javascript",
+              "DownloadTime": 16,
+              "EventId": 562,
+              "HttpStatus": 200,
+              "Size": 13166,
+              "URL": "https://kit.fontawesome.com/f5cbf3afb2.js"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        },
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "104.21.26.223",
+          "IncludeInScript": true,
+          "Name": "ka-f.fontawesome.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "font/woff2",
+              "DownloadTime": 32,
+              "EventId": 1817,
+              "HttpStatus": 200,
+              "Size": 25464,
+              "URL": "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-regular-400.woff2"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "font/woff2",
+              "DownloadTime": 0,
+              "EventId": 1808,
+              "HttpStatus": 200,
+              "Size": 157192,
+              "URL": "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-solid-900.woff2"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "font/woff2",
+              "DownloadTime": 0,
+              "EventId": 1588,
+              "HttpStatus": 200,
+              "Size": 118072,
+              "URL": "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 0,
+              "EventId": 1537,
+              "HttpStatus": 200,
+              "Size": 27592,
+              "URL": "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-shims.min.css?token=f5cbf3afb2"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 0,
+              "EventId": 1433,
+              "HttpStatus": 200,
+              "Size": 1775,
+              "URL": "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-font-face.min.css?token=f5cbf3afb2"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 16,
+              "EventId": 1409,
+              "HttpStatus": 200,
+              "Size": 823,
+              "URL": "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v5-font-face.min.css?token=f5cbf3afb2"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 0,
+              "EventId": 1390,
+              "HttpStatus": 200,
+              "Size": 96614,
+              "URL": "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f5cbf3afb2"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "cloudflare.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "104.17.24.14",
+          "IncludeInScript": true,
+          "Name": "cdnjs.cloudflare.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/octet-stream",
+              "DownloadTime": 16,
+              "EventId": 2535,
+              "HttpStatus": 200,
+              "Size": 78196,
+              "URL": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-solid-900.woff2"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "text/css",
+              "DownloadTime": 0,
+              "EventId": 2417,
+              "HttpStatus": 200,
+              "Size": 59344,
+              "URL": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "bootstrapcdn.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "104.18.10.207",
+          "IncludeInScript": true,
+          "Name": "stackpath.bootstrapcdn.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/javascript",
+              "DownloadTime": 0,
+              "EventId": 2494,
+              "HttpStatus": 200,
+              "Size": 80927,
+              "URL": "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": true
+    },
+    {
+      "DomainName": "bing.com",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "23.36.145.18",
+          "IncludeInScript": true,
+          "Name": "www.bing.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 1551,
+              "HttpStatus": 200,
+              "Size": 134,
+              "URL": "https://www.bing.com/api/shopping/v1/savings/rewards/rewardsUserInfo"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 1542,
+              "HttpStatus": 200,
+              "Size": 1127,
+              "URL": "https://www.bing.com/api/shopping/v1/user/shoppingsettings?EnabledServiceFeaturesv2=edgeServerUX.shopping.cashbackOfferDetails,edgeServerUX.shopping.cpsPdpCommerceNotificationOkVariant,edgeServerUX.shopping.msEdgeShoppingCashbackDismissTimeout2s"
+            },
+            {
+              "CompressionType": "gzip",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 1527,
+              "HttpStatus": 200,
+              "Size": 2,
+              "URL": "https://www.bing.com/api/shopping/v1/user/shoppingsettings"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 20,
+              "HttpStatus": 200,
+              "Size": 638403,
+              "URL": "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json"
+            },
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 0,
+              "EventId": 17,
+              "HttpStatus": 200,
+              "Size": 638403,
+              "URL": "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        },
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "204.79.197.237",
+          "IncludeInScript": true,
+          "Name": "c.bing.com",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "image/gif",
+              "DownloadTime": 0,
+              "EventId": 1798,
+              "HttpStatus": 200,
+              "Size": 42,
+              "URL": "https://c.bing.com/c.gif?Red3=EdgPID_pd&pid=61d5220b-5ac4-4053-902c-e2920d81faad"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": false
+    },
+    {
+      "DomainName": "azureedge.net",
+      "Domains": [
+        {
+          "HTTPVersion": "HTTP/1.1",
+          "IP": "13.107.246.59",
+          "IncludeInScript": true,
+          "Name": "edge-consumer-static.azureedge.net",
+          "Port": 443,
+          "Requests": [
+            {
+              "CompressionType": "",
+              "DataType": "application/json",
+              "DownloadTime": 16,
+              "EventId": 1793,
+              "HttpStatus": 200,
+              "Size": 101,
+              "URL": "https://edge-consumer-static.azureedge.net/mouse-gesture/config.json"
+            }
+          ],
+          "SSLCipher": "",
+          "SSLVersion": "TLS1.3"
+        }
+      ],
+      "IncludeInScript": true
+    }
+  ],
+  "WebSocket": {
+    "IncludeInScript": false,
+    "IsScriptIncludeWebSocket": false
+  },
+  "NumberOfCorrelations": 1
+}

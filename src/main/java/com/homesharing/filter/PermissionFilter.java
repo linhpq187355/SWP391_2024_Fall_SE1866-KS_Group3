@@ -42,7 +42,7 @@ public class PermissionFilter implements Filter {
         urlPermissionMap.put("/dashboard/home-status", "PERMISSION_TOGGLE_HOME_STATUS");
         urlPermissionMap.put("/dashboard/report-list", "PERMISSION_VIEW_REPORTS");
         urlPermissionMap.put("/dashboard/report-status", "PERMISSION_TOGGLE_REPORT_STATUS");
-        urlPermissionMap.put("/dashboard/announcement-manage", "PERMISSION_VIEW_ANNOUNCEMENT");
+        urlPermissionMap.put("/dashboard/announcement-list", "PERMISSION_VIEW_ANNOUNCEMENT");
         urlPermissionMap.put("/dashboard/create-announcement", "PERMISSION_SEND_ANNOUNCEMENT");
         urlPermissionMap.put("/dashboard/announce-status", "PERMISSION_TOGGLE_ANNOUNCEMENT_STATUS");
         urlPermissionMap.put("/dashboard/blog-list", "PERMISSION_VIEW_BLOG");

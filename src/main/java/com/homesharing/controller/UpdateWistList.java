@@ -44,16 +44,12 @@ public class UpdateWistList extends HttpServlet{
             int userId = Integer.parseInt(userIdStr);
             String status = "inactive"; // Set status to "inactive" for soft deletion
 
-            // Call the service to mark the wishlist item as inactive
             wishListService.removeWishList(userId, homeId, status);
             request.getSession().setAttribute("message", "Xóa thành công khỏi danh sách yêu thích");
 
             // Redirect the user to their wishlist page after successful update
-            if ("user-wishlist".equals(redirectTo)) {
-                response.sendRedirect("user-wishlist");
-            } else {
-                response.sendRedirect("home-detail?id=" + homeId);
-            }
+            response.sendRedirect("user-wishlist?page=1");
+
         } catch (NumberFormatException e) {
             // Handle case where home ID or user ID is not a valid number
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID format");

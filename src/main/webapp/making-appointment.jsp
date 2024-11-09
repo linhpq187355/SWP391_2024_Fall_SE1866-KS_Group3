@@ -196,22 +196,22 @@
             </table>
         </div>
         <h2 style="font-size: 30px;margin-bottom: 40px;color: #000;margin-left: 30px;">Chọn thời gian<span style="color: red;margin-left: 10px">*</span></h2>
-        <div class="time-picker" style="width: 85%; margin: auto">
+        <div class="time-picker" style="width: 91%; margin: auto">
             <table>
                 <tr>
-                    <td class="time-slot">5:30 - 7:30</td>
-                    <td class="time-slot">6:00 - 8:00</td>
-                    <td class="time-slot">6:30 - 8:30</td>
-                    <td class="time-slot">7:00 - 9:00</td>
+                    <td class="time-slot">05:30 - 07:30</td>
+                    <td class="time-slot">06:00 - 08:00</td>
+                    <td class="time-slot">06:30 - 08:30</td>
+                    <td class="time-slot">07:00 - 09:00</td>
                 </tr>
                 <tr>
-                    <td class="time-slot">7:30 - 9:30</td>
-                    <td class="time-slot">8:00 - 10:00</td>
-                    <td class="time-slot">8:30 - 10:30</td>
-                    <td class="time-slot">9:00 - 11:00</td>
+                    <td class="time-slot">07:30 - 09:30</td>
+                    <td class="time-slot">08:00 - 10:00</td>
+                    <td class="time-slot">08:30 - 10:30</td>
+                    <td class="time-slot">09:00 - 11:00</td>
                 </tr>
                 <tr>
-                    <td class="time-slot">9:30 - 11:30</td>
+                    <td class="time-slot">09:30 - 11:30</td>
                     <td class="time-slot">10:00 - 12:00</td>
                     <td class="time-slot">10:30 - 12:30</td>
                     <td class="time-slot">11:00 - 13:00</td>
@@ -256,7 +256,7 @@
             <input type="hidden" name="selectedTime" id="hiddenTime">
             <input type="hidden" name="hostId" value="${requestScope.hostId}">
             <input type="hidden" name="homeId" value="${requestScope.homeId}">
-            <h2 style="margin-bottom: 30px; color: #000;margin-left: 30px;">Ghi chú</h2>
+            <h2 style="margin-bottom: 30px; color: #000;margin-left: 30px;">Ghi chú<span style="color: red;margin-left: 10px">*</span></h2>
             <div class="apmt-note" style="width: 83%; margin: auto">
                 <textarea name="note" placeholder="Thêm ghi chú" style="width: 100%;padding: 10px;height: 200px;border-radius: 15px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;border: none;"></textarea>
             </div>
@@ -264,8 +264,13 @@
                 <div class="info">
                     <i class="fas fa-info-circle"></i> Thời gian tính theo giờ Việt Nam
                 </div>
-                <div>
-                    <button type="button" class="continue" onclick="saveAppointment()">Xác nhận</button>
+                <div style="display: flex;flex-direction: row-reverse;width: 20%;justify-content: space-between;">
+                    <div>
+                        <button type="button" class="continue" onclick="saveAppointment()">Xác nhận</button>
+                    </div>
+                    <div>
+                        <button style="background-color: #ff2b2b;color: #fff;" type="button" class="cancel" onclick="window.location.href='home-detail?id=${requestScope.homeId}'">Hủy</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -284,16 +289,6 @@
     <h4>Lỗi</h4>
     <p>Vui lòng chọn ngày/thời gian sau thời điểm hiện tại!</p>
     <button onclick="closePopup2()">Đóng</button>
-</div>
-
-<div class="overlay1" id="overlay" ></div>
-<div class="popup" id="popup3" style="width: 600px;">
-    <h4>Lỗi</h4>
-    <p>Thời gian bạn chọn đang bị trùng lặp, vui lòng chọn thời gian khác?</p>
-    <div style="display: flex; justify-content: space-around">
-        <button onclick="closePopup3()" style="width: 180px; background-color: #ccc">Chọn thời gian khác</button>
-        <button onclick="submitWithCheck()" style="width: 180px">Xem lịch</button>
-    </div>
 </div>
 
 
@@ -327,7 +322,7 @@
 
             if (countdown <= 0) {
                 clearInterval(timer);
-                window.location.href = "appointment-tenant-list"; // Đường dẫn bạn muốn chuyển hướng tới
+                window.location.href = "appointment-tenant-list?appointmentId=${requestScope.id}"; // Đường dẫn bạn muốn chuyển hướng tới
             }
         }, 1000);
     </script>
@@ -337,7 +332,104 @@
 <jsp:include page="footer.jsp"/>
 </body>
 <script>
+    const appointments = [
+        <c:forEach var="appointment" items="${requestScope.hostAppointment}">
+        {
+            startDate: "${appointment.startDate}",
+            endDate: "${appointment.endDate}",
+            status: "${appointment.status}"
+        },
+        </c:forEach>
+    ];
+    const appointments2 = [
+        <c:forEach var="appointment" items="${requestScope.tenantAppointment}">
+        {
+            startDate: "${appointment.startDate}",
+            endDate: "${appointment.endDate}",
+            status: "${appointment.status}"
+        },
+        </c:forEach>
+    ];
+    console.log(appointments2);
+    function parseDate(dateString) {
+        return new Date(dateString);
+    }
+    function updateTimePicker(selectedDate) {
+        const timeSlots = document.querySelectorAll('.time-picker .time-slot');
+
+
+        timeSlots.forEach(slot => {
+            // Reset trạng thái cho từng ô
+            slot.classList.remove('disabled');
+            slot.removeAttribute('title');
+
+            // Lấy khoảng thời gian của ô hiện tại
+            const [startTime, endTime] = slot.textContent.split(' - ');
+
+            const slotStart = new Date(selectedDate+"T"+startTime+":00");
+            const slotEnd = new Date(selectedDate+"T"+endTime+":00");
+
+            console.log("Slot Start:", slotStart);
+            console.log("Slot End:", slotEnd);
+
+            // Kiểm tra xem ô thời gian có trùng với appointment nào không
+            for (const appointment of appointments) {
+
+                const appointmentStart = parseDate(appointment.startDate);
+                const appointmentEnd = parseDate(appointment.endDate);
+                if(appointmentStart.getDate() === parseDate(selectedDate+"T"+"00"+":00").getDate() && appointment.status === "accepted"){
+                    if (
+                        (slotStart >= appointmentStart && slotStart < appointmentEnd) ||
+                        (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
+                        (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
+                    ) {
+                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
+                        slot.classList.add('disabled');
+                        break;
+                    }
+                }
+
+
+            }
+            for (const appointment of appointments2) {
+
+                const appointmentStart = parseDate(appointment.startDate);
+                const appointmentEnd = parseDate(appointment.endDate);
+                if(appointmentStart.getDate() === parseDate(selectedDate+"T"+"00"+":00").getDate() && appointment.status === "accepted"){
+                    if (
+                        (slotStart >= appointmentStart && slotStart < appointmentEnd) ||
+                        (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
+                        (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
+                    ) {
+                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
+                        slot.classList.add('disabled');
+                        break;
+                    }
+                }
+
+
+            }
+        });
+    }
+
+    function onDateSelected(day, month, year) {
+        const paddedMonth = String(month + 1).padStart(2, '0');
+        const paddedDay = String(day).padStart(2, '0');
+        const selectedDate = year + "-" + paddedMonth + "-" + paddedDay;
+        console.log("Selected Date:", selectedDate);
+        console.log(paddedMonth);
+        console.log(year);
+        updateTimePicker(selectedDate);
+    }
     document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        const currentDay = today.getDate();
+        const currentMonth = today.getMonth(); // Lưu ý: getMonth() trả về giá trị từ 0 (tháng 1) đến 11 (tháng 12)
+        const currentYear = today.getFullYear();
+
+        // Gọi hàm onDateSelected để thiết lập và hiển thị lịch cho ngày hôm nay
+        onDateSelected(currentDay, currentMonth, currentYear);
+
         // Thêm sự kiện click vào các ô thời gian
         const timeSlots = document.querySelectorAll('.time-picker .time-slot');
         timeSlots.forEach(slot => {
@@ -415,7 +507,6 @@
                     cell.innerHTML = '';
                 } else {
                     cell.innerHTML = date;
-
                     // Đánh dấu ngày được chọn
                     if (selectedDate && selectedDate.year === currentYear && selectedDate.month === currentMonth && selectedDate.day === date) {
                         cell.classList.add('selected');
@@ -435,6 +526,9 @@
                             month: currentMonth,
                             year: currentYear
                         };
+                        const selectedDateElement = document.querySelector('.calendar .selected');
+                        const selectedDate2 = selectedDateElement ? selectedDateElement.innerText : null;
+                        onDateSelected(selectedDate2,currentMonth,currentYear);
                     });
                     date++;
                 }
@@ -521,18 +615,6 @@
         document.getElementById('overlay').style.display = 'none';
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const error = "<c:out value='${requestScope.over}'/>";
-        if (error) {
-            document.getElementById('popup3').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
-    });
-
-    function closePopup3() {
-        document.getElementById('popup3').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
-    }
 
     function closePopup4() {
         document.getElementById('popup4').style.display = 'none';

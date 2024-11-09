@@ -44,9 +44,9 @@ public class NotificationDAOImpl extends DBContext implements NotificationDAO {
      * @throws SQLException if a database access error occurs
      */
     @Override
-    public boolean addNotification(int receiverId, String content, String type, String url) throws SQLException {
-        String sql = "INSERT INTO Notifications (recieverId, content, createdDate, status, type, url) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean addNotification(int receiverId, String content,String title, String type, String url) throws SQLException {
+        String sql = "INSERT INTO Notifications (recieverId, content, createdDate, status, type, url, title) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
         Connection connection = null;  // Initialize connection
         PreparedStatement preparedStatement = null;  // Initialize prepared statement
 
@@ -61,6 +61,7 @@ public class NotificationDAOImpl extends DBContext implements NotificationDAO {
             preparedStatement.setString(4, "sent");
             preparedStatement.setString(5, type);
             preparedStatement.setString(6, url);
+            preparedStatement.setString(7, title);
 
             // Execute the update and return true if a row was affected
             return preparedStatement.executeUpdate() > 0;
@@ -199,7 +200,8 @@ public class NotificationDAOImpl extends DBContext implements NotificationDAO {
                         resultSet.getTimestamp("createdDate").toLocalDateTime(),
                         resultSet.getString("status"),
                         resultSet.getString("type"),
-                        resultSet.getString("url")
+                        resultSet.getString("url"),
+                        resultSet.getString("title")
                 );
                 notifications.add(notification);
             }
@@ -291,7 +293,8 @@ public class NotificationDAOImpl extends DBContext implements NotificationDAO {
                         resultSet.getTimestamp("createdDate").toLocalDateTime(),
                         resultSet.getString("status"),
                         resultSet.getString("type"),
-                        resultSet.getString("url")
+                        resultSet.getString("url"),
+                        resultSet.getString("title")
                 );
                 notifications.add(notification);
             }
@@ -350,7 +353,8 @@ public class NotificationDAOImpl extends DBContext implements NotificationDAO {
                         resultSet.getTimestamp("createdDate").toLocalDateTime(),
                         resultSet.getString("status"),
                         resultSet.getString("type"),
-                        resultSet.getString("url")
+                        resultSet.getString("url"),
+                        resultSet.getString("title")
                 );
                 notifications.add(notification);
             }

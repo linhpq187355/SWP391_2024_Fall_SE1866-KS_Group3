@@ -266,7 +266,9 @@
         </div>
         <div class="actions">
             <button>
-                Xem hồ sơ
+                <a href="home-by-user?id=${User.id}">
+                    Xem hồ sơ
+                </a>
             </button>
             <button id="blockButton" style="background-color: #ce0a0a; ${conversation.status == 'active' ? '' : 'display: none;'}" onclick="showBlockModal()">
                 <i class="fas fa-ban"></i> Chặn
@@ -345,6 +347,7 @@
                             </c:if>
                         </strong>
                         <span class="messageText">${reply.text}</span>
+                        <span class="messageText" style="color: #d18e11">${reply.time}</span>
                     </p>
                 </div>
                     </c:forEach>

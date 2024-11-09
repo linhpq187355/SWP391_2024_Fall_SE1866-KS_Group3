@@ -1,3 +1,13 @@
+/*
+ * Copyright(C) 2024, Homesharing Inc.
+ * Homesharing:
+ *  Roommate Matching and Home Sharing Service
+ *
+ * Record of change:
+ * DATE            Version             AUTHOR           DESCRIPTION
+ * 2024-10-25      1.0              Pham Quang Linh     First Implement
+ */
+
 package com.homesharing.controller;
 
 import com.homesharing.dao.AppointmentDAO;
@@ -18,18 +28,41 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Servlet for handling requests to accept or reject an appointment.
+ * Provides an interface for hosts and tenants to manage their appointment status.
+ */
 @WebServlet("/accept-reject-appointment")
 public class RejectAcceptAppointmentServlet extends HttpServlet {
+
+    // Service layer for managing appointments
     private AppointmentService appointmentService;
     private NotificationDAO notificationDAO;
+
+    // Logger for logging messages
     private static final Logger LOGGER = Logger.getLogger(EditAppointmentServlet.class.getName());
 
+    /**
+     * Initializes the servlet and its dependencies.
+     * Sets up the appointment service using DAO implementations.
+     *
+     * @throws ServletException if an error occurs during initialization
+     */
     @Override
     public void init() throws ServletException {
         AppointmentDAO appointmentDAO = new AppointmentDAOImpl();
         this.appointmentService = new AppointmentServiceImpl(appointmentDAO);
     }
 
+    /**
+     * Handles GET requests to accept or reject an appointment.
+     * Redirects the user to appropriate pages with success or error messages based on the action result.
+     *
+     * @param req  the HttpServletRequest object that contains the request information
+     * @param resp the HttpServletResponse object that contains the response information
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");

@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "ListReportHomeServlet", value = "/report-home-manage")
+@WebServlet(name = "ListReportHomeServlet", value = "/report-list")
 public class ListReportHomeServlet extends HttpServlet {
     private ReportService reportService;
     private HomePageService homePageService;
@@ -58,8 +58,4 @@ public class ListReportHomeServlet extends HttpServlet {
         request.getRequestDispatcher("/report-home-list.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }

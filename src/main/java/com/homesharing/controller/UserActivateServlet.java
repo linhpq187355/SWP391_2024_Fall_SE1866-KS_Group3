@@ -8,7 +8,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "UserActivateServlet", value = "/activate")
+@WebServlet(name = "UserActivateServlet", value = "/account-status")
 public class UserActivateServlet extends HttpServlet {
     private static UserManagementService userManagementService;
 
@@ -23,7 +23,7 @@ public class UserActivateServlet extends HttpServlet {
         try {
             int uid = Integer.parseInt(userId);
             userManagementService.updateUserStatus(uid, "active");
-            response.sendRedirect("account-manage");
+            response.sendRedirect("account-list");
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }

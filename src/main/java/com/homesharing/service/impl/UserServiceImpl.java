@@ -8,6 +8,7 @@
  * 2024-9-18      1.0                 ManhNC         First Implement
  * 2024-10-01      1.0              Pham Quang Linh     First Implement
  * 2024-10-10      2.0              Pham Quang Linh     Second Implement
+ * 2024-10-25      2.0              Pham Quang Linh     Add functions
  */
 
 package com.homesharing.service.impl;
@@ -27,11 +28,12 @@ import com.homesharing.util.JwtUtil;
 import com.homesharing.util.PasswordUtil;
 import com.homesharing.util.SecureRandomCode;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
     private final TokenDAO tokenDao;
     private final TokenService tokenService;
     private final PreferenceService preferenceService;
+    private static final int DEFAULT_NUMBER_OF_USER = 10;
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
     /**
@@ -397,9 +400,6 @@ public class UserServiceImpl implements UserService {
         if (email == null || email.isEmpty() || !validateEmail(email)) {
             return "Địa chỉ email không hợp lệ"; // Invalid email address
         }
-        if (password == null || password.isEmpty()) {
-            return "Mật khẩu không được để trống"; // Password cannot be empty
-        }
 
         try{
         // Attempt to find the user by their email address
@@ -645,6 +645,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Retrieves the total number of registered users.
+     *
+     * @return The total number of users.
+     * @throws GeneralException If there is an error retrieving the user count.
+     */
     @Override
     public int getNumberOfUsers() {
         try {
@@ -690,6 +696,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Retrieves the list of hosts associated with a list of appointments.
+     *
+     * @param appointments The list of appointments to find hosts for.
+     * @return A list of User objects representing the hosts.
+     * @throws GeneralException If there is an error retrieving the hosts.
+     */
     @Override
     public List<User> getHostByAppointment(List<Appointment> appointments) {
         try{
@@ -700,6 +713,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Retrieves the list of tenants associated with a list of appointments.
+     *
+     * @param appointments The list of appointments to find tenants for.
+     * @return A list of User objects representing the tenants.
+     * @throws GeneralException If there is an error retrieving the tenants.
+     */
     @Override
     public List<User> getTenantByAppointment(List<Appointment> appointments) {
         try{
@@ -709,6 +729,86 @@ public class UserServiceImpl implements UserService {
             throw new GeneralException("Failed to retrieve total tenant appointment: ", e);
         }
     }
+    @Override
+    public int CountSearchUser(Map<String, Object> searchParams) throws SQLException, IOException, ClassNotFoundException {
+        return userDao.numOfUser(searchParams);
+    }
+    @Override
+    public void updateTargetPage(Map<String, Object> searchParams, int totalHomes){
+        String perPage = null;
+        if(searchParams.containsKey("per_page")) {
+            perPage = searchParams.get("per_page").toString();
+        }
+        String targetPage = null;
+        if(searchParams.containsKey("targetPage")) {
+            targetPage = searchParams.get("targetPage").toString();
+        }
+        int perPageValue;
+        if (perPage == null || perPage.isEmpty()) {
+            perPageValue = DEFAULT_NUMBER_OF_USER;
+        } else {
+            perPageValue = Integer.parseInt(perPage);
+        }
+        int targetPageValue;
+        if (targetPage == null || targetPage.isEmpty()) {
+            targetPageValue = 1;
+        } else {
+            targetPageValue = Integer.parseInt(targetPage);
+        }
+        int numOfPages;
+        if(totalHomes % perPageValue == 0) {
+            numOfPages = totalHomes / perPageValue;
+        } else {
+            numOfPages = totalHomes / perPageValue + 1;
+        }
+        if(targetPageValue > numOfPages) {
+            searchParams.put("targetPage", "1");
+        }
+    }
+    @Override
+    public List<User> searchUserByPreference(Map<String, Object> searchParams) {
+        try {
+            if (!searchParams.containsKey("per_page")) {
+                searchParams.put("per_page", DEFAULT_NUMBER_OF_USER);
+            }
+
+            List<User> userList = userDao.getFilteredUsers(searchParams);
+
+            return userList;
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            logger.severe("Error during home search: " + e.getMessage());
+            throw new GeneralException("Failed to search for homes.", e);
+        }
+    }
+    @Override
+    public void addRangeToMap(Map<String, Object> map, String rangeParam, String minKey, String maxKey) {
+        if (rangeParam != null && !rangeParam.isEmpty()) {
+            String[] ranges = rangeParam.replaceAll("[\\[\\]]", "").split(",");
+            if (ranges.length == 2) { // Check for exactly two values (min and max)
+                try {
+                    int minValue = Integer.parseInt(ranges[0].trim());
+                    int maxValue = Integer.parseInt(ranges[1].trim());
+                    map.put(minKey, minValue);
+                    map.put(maxKey, maxValue);
+                } catch (NumberFormatException e) {
+                    logger.warning("Invalid number format for range parameter: " + rangeParam);
+                    // Handle the exception appropriately, e.g., throw an exception or set default values.
+                    throw new NumberFormatException("Invalid number format for price range: " + rangeParam); // Re-throw for upper layers to handle.
+                }
+            } else {
+                logger.warning("Invalid range parameter format: " + rangeParam);
+                // Handle the invalid format appropriately, e.g., throw an exception, log a warning, or ignore.
+                throw new GeneralException("Invalid range parameter format: " + rangeParam);
+            }
+        }
+    }
+//    @Override
+//    public int getUserRoleId(int userId) {
+//        User user =  userDao.getUser(userId);
+//        return user != null ? user.getRolesId() : -1;
+//    }
+
 
 
 }

@@ -106,58 +106,58 @@
                             <div class="col-sm-3 padding-top-25">
 
                                 <div class="form-group">
-                                    <label>Họ và tên</label>
-                                    <p>${requestScope.user.firstName} ${requestScope.user.lastName}</p>
+                                    <label style="color: #FA8600">Họ và tên</label>
+                                    <p style="color: #1A1A1A">${requestScope.user.firstName} ${requestScope.user.lastName}</p>
                                 </div>
                                 <div class="form-group">
-                                    <label>Email</label>
-                                    <p>${requestScope.user.email}</p>
+                                    <label style="color: #FA8600">Email</label>
+                                    <p style="color: #1A1A1A">${requestScope.user.email}</p>
                                 </div>
                                 <div class="form-group">
-                                    <label>SĐT</label>
+                                    <label style="color: #FA8600">SĐT</label>
                                     <c:if test="${not empty requestScope.user.phoneNumber}">
-                                        <p>${requestScope.user.phoneNumber}</p>
+                                        <p style="color: #1A1A1A">${requestScope.user.phoneNumber}</p>
                                     </c:if>
                                     <c:if test="${empty requestScope.user.phoneNumber}">
-                                        <p>Chưa cập nhật</p>
+                                        <p style="color: #1A1A1A">Chưa cập nhật</p>
                                     </c:if>
                                 </div>
                                 <div class="form-group">
-                                    <label>Địa chỉ</label>
+                                    <label style="color: #FA8600">Địa chỉ</label>
                                     <c:if test="${not empty requestScope.user.address}">
-                                        <p>${requestScope.user.address}</p>
+                                        <p style="color: #1A1A1A">${requestScope.user.address}</p>
                                     </c:if>
                                     <c:if test="${empty requestScope.user.address}">
-                                        <p>Chưa cập nhật</p>
+                                        <p style="color: #1A1A1A">Chưa cập nhật</p>
                                     </c:if>
                                 </div>
                             </div>
                             <div class="col-sm-3 padding-top-25">
                                 <div class="form-group">
-                                    <label>Ngày sinh</label>
+                                    <label style="color: #FA8600">Ngày sinh</label>
                                     <c:if test="${not empty requestScope.user.dob}">
-                                        <p>${requestScope.user.dob}</p>
+                                        <p style="color: #1A1A1A">${requestScope.user.dob}</p>
                                     </c:if>
                                     <c:if test="${empty requestScope.user.dob}">
-                                        <p>Chưa cập nhật</p>
+                                        <p style="color: #1A1A1A">Chưa cập nhật</p>
                                     </c:if>
                                 </div>
                                 <div class="form-group">
-                                    <label>Giới tính</label>
+                                    <label style="color: #FA8600">Giới tính</label>
                                     <c:if test="${not empty requestScope.user.gender}">
-                                        <p>${requestScope.user.gender}</p>
+                                        <p style="color: #1A1A1A">${requestScope.user.gender}</p>
                                     </c:if>
                                     <c:if test="${empty requestScope.user.gender}">
-                                        <p>Chưa cập nhật</p>
+                                        <p style="color: #1A1A1A">Chưa cập nhật</p>
                                     </c:if>
                                 </div>
                                 <div class="form-group">
-                                    <label>Xác thực</label>
+                                    <label style="color: #FA8600">Xác thực</label>
                                     <c:if test="${requestScope.user.isVerified() == false}">
-                                        <p>Chưa xác thực</p>
+                                        <p style="color: #1A1A1A">Chưa xác thực</p>
                                     </c:if>
                                     <c:if test="${requestScope.user.isVerified() == true}">
-                                        <p>Đã xác thực <i class="fa-solid fa-circle-check"></i></p>
+                                        <p style="color: #1A1A1A">Đã xác thực <i class="fa-solid fa-circle-check"></i></p>
                                     </c:if>
                                 </div>
                             </div>
@@ -170,8 +170,8 @@
                             <br>
                             <div class="col-sm-5 col-sm-offset-1">
                                 <div class="form-group">
-                                    <label>Sạch sẽ</label>
-                                    <div class="slider-container">
+                                    <label style="color: #FA8600">Sạch sẽ</label>
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.cleanliness == 100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -181,8 +181,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Hút thuốc</label>
-                                    <div class="slider-container">
+                                    <label style="color: #FA8600">Hút thuốc</label>
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.smoking == 100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -192,8 +192,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Uống rượu/bia</label>
-                                    <div class="slider-container">
+                                    <label style="color: #FA8600">Uống rượu/bia</label>
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.drinking == 100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -205,8 +205,8 @@
                             </div>
                             <div class="col-sm-5">
                                 <div class="form-group">
-                                    <label>Hướng ngoại</label>
-                                    <div class="slider-container">
+                                    <label style="color: #FA8600">Hòa đồng với roommate</label>
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.interaction ==100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -216,8 +216,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Nấu ăn</label>
-                                    <div class="slider-container">
+                                    <label style="color: #FA8600">Nấu ăn</label>
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.cooking ==100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
@@ -227,13 +227,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Thú cưng</label>
-                                    <div class="slider-container">
+                                    <label style="color: #FA8600">Thú cưng</label>
+                                    <div class="slider-container" style="width: 100%;">
                                         <c:if test="${requestScope.preference.pet ==100}">
                                             <p>Chưa cập nhật</p>
                                         </c:if>
                                         <c:if test="${requestScope.preference.pet != 100}">
                                             <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.pet}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.pet};">
+                                        </c:if>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-5" style="margin: 0 30%">
+                                <div class="form-group">
+                                    <label style="color: #FA8600">Thoải mái với khách lạ</label>
+                                    <div class="slider-container" style="width: 100%;">
+                                        <c:if test="${requestScope.preference.pet != 100}">
+                                            <input disabled type="range" min="1" max="5" step="1" value="${requestScope.preference.guest}" class="slider" oninput="this.style.setProperty('--value', this.value)" style="--value: ${requestScope.preference.guest};">
                                         </c:if>
                                     </div>
                                 </div>
@@ -243,7 +254,7 @@
 
                         <div class="col-sm-5 col-sm-offset-1">
                             <br>
-                            <button onclick="window.location.href='user-update-profile'" class='btn btn-finish btn-primary'>Chỉnh sửa thông tin</button>
+                            <button style="border-radius: 15px" onclick="window.location.href='user-update-profile'" class='btn btn-finish btn-primary'>Chỉnh sửa thông tin</button>
                         </div>
                         <br>
 

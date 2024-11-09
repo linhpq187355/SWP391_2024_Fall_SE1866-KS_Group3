@@ -1,0 +1,19 @@
+GET https://edge.microsoft.com/serviceexperimentation/v3/?osname=win&channel=stable&osver=10.0.22631&devicefamily=desktop&installdate=1655422490&clientversion=130.0.2849.56&experimentationmode=2&scpguard=1&scpfull=0&scpver=6 HTTP/1.1
+Pragma: no-cache
+Cache-Control: no-cache
+Sec-Mesh-Client-Edge-Version: 130.0.2849.56
+Sec-Mesh-Client-Edge-Channel: stable
+Sec-Mesh-Client-OS: Windows
+Sec-Mesh-Client-OS-Version: 10.0.22631
+Sec-Mesh-Client-Arch: x86_64
+Sec-Mesh-Client-WebView: 0
+X-Client-Data: eyIxIjoiNiIsIjEwIjoiXCJoSGtic0NTR2crYXNkakFJN0o4SDh2Ynp1OGFtcmluSEx6dTd1QVBtQWJnPVwiIiwiMiI6IjEiLCIzIjoiMCIsIjQiOiItOTQ1MjIzMzMxNzUzNjAxODQ1IiwiNSI6IlwiRWlBaGVXbHZyY1Q2OU82cUVpcHZDcVIzY3Z5KzVrYUtDaWYwMFp0dVdVQT1cIiIsIjYiOiJzdGFibGUiLCI3IjoiMTAyNzM1NjE3NzIwMzMiLCI5IjoiZGVza3RvcCJ9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: empty
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0
+Accept-Encoding: gzip, deflate, zstd
+Accept-Language: en-US,en;q=0.9
+Host: edge.microsoft.com
+Connection: Keep-Alive
+

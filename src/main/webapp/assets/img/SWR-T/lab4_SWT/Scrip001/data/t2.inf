@@ -1,0 +1,11 @@
+[t2]
+FileName1=t2.json
+URL1=https://edge.microsoft.com/serviceexperimentation/v3/?osname=win&channel=stable&osver=10.0.22631&devicefamily=desktop&installdate=1655422490&clientversion=130.0.2849.56&experimentationmode=2&scpguard=1&scpfull=0&scpver=6
+Total=1
+ContentType=application/json
+SnapshotXmlFile=snapshot_2.xml
+RequestHeaderFile=t2_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t2_ResponseHeader.txt
+[ProtocolInfo]
+ProtocolId=QTWeb

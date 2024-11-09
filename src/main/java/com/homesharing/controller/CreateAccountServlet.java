@@ -124,7 +124,7 @@ public class CreateAccountServlet extends HttpServlet {
                 if (result > 0) {
                     req.getSession().setAttribute("message", "Tạo tài khoản thành công.");
                     req.getSession().setAttribute("messageType", "success");
-                    resp.sendRedirect(req.getContextPath() + "/dashboard/account-manage");
+                    resp.sendRedirect(req.getContextPath() + "/dashboard/account-list");
                 } else if (result == -2) {
                     req.setAttribute("error", "Email này đã được sử dụng, vui lòng nhập email khác.");
                     req.setAttribute("firstName", firstName);

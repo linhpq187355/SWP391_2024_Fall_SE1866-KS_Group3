@@ -1,0 +1,341 @@
+Start auto log messages stack - Iteration 26.
+Action.c(195): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(197): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(197): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(199): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(199): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Error -27792: Failed to connect to server "edge-consumer-static.azureedge.net:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 73.
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") was successful, 118340 body bytes, 1586 header bytes  	[MsgId: MMSG-26386]
+Action.c(132): web_url("selection") started  	[MsgId: MMSG-26355]
+Action.c(132): Error -27792: Failed to connect to server "arc.msn.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 65.
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") started  	[MsgId: MMSG-26355]
+Action.c(229): web_url("-6030100249971701251%7C-7627269350225664860") was successful, 20 body bytes, 284 header bytes  	[MsgId: MMSG-26386]
+Action.c(238): web_custom_request("update") started  	[MsgId: MMSG-26355]
+Action.c(238): web_custom_request("update") was successful, 1339 body bytes, 931 header bytes  	[MsgId: MMSG-26386]
+Action.c(279): web_custom_request("cloud_config_observers.json") started  	[MsgId: MMSG-26355]
+Action.c(279): ssl_handle_status encounter error : SSL_ERROR_SYSCALL, error id : 0  	[MsgId: MMSG-26000]
+Action.c(279): Error -27776: [GENERAL_MSG_CAT_SSL_ERROR]connect to host "static.edge.microsoftapp.net" failed: [10054] Connection reset by peer
+This is probably because the SSL protocol version is not supported. Try switching the TLS/SSL version using "web_set_sockets_option" API.  	[MsgId: MERR-27776]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 78.
+Action.c(109): web_custom_request("rewardsUserInfo") started  	[MsgId: MMSG-26355]
+Action.c(109): web_custom_request("rewardsUserInfo") was successful, 156 body bytes, 630 header bytes  	[MsgId: MMSG-26386]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(121): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/webfonts/free-fa-brands-400.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") was successful, 118340 body bytes, 1588 header bytes  	[MsgId: MMSG-26386]
+Action.c(132): web_url("selection") started  	[MsgId: MMSG-26355]
+Action.c(132): Error -27792: Failed to connect to server "arc.msn.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 67.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 89.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 84.
+Action.c(63): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(63): Warning -27792: Failed to connect to server "fonts.gstatic.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(63): web_url("blocklist") highest severity level was "warning", 43195 body bytes, 1222 header bytes  	[MsgId: MMSG-26388]
+Action.c(75): web_url("-341398893248106636%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(75): ssl_handle_status encounter error : SSL_ERROR_SYSCALL, error id : 0  	[MsgId: MMSG-26000]
+Action.c(75): Error -27776: [GENERAL_MSG_CAT_SSL_ERROR]connect to host "edge.microsoft.com" failed: [10054] Connection reset by peer
+This is probably because the SSL protocol version is not supported. Try switching the TLS/SSL version using "web_set_sockets_option" API.  	[MsgId: MERR-27776]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 64.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 66.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): ssl_handle_status encounter error : SSL_ERROR_SYSCALL, error id : 0  	[MsgId: MMSG-26000]
+Action.c(23): Error -27776: [GENERAL_MSG_CAT_SSL_ERROR]connect to host "www.bing.com" failed: [10054] Connection reset by peer
+This is probably because the SSL protocol version is not supported. Try switching the TLS/SSL version using "web_set_sockets_option" API.  	[MsgId: MERR-27776]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 68.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): ssl_handle_status encounter error : SSL_ERROR_SYSCALL, error id : 0  	[MsgId: MMSG-26000]
+Action.c(23): Error -27776: [GENERAL_MSG_CAT_SSL_ERROR]connect to host "www.bing.com" failed: [10054] Connection reset by peer
+This is probably because the SSL protocol version is not supported. Try switching the TLS/SSL version using "web_set_sockets_option" API.  	[MsgId: MERR-27776]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 65.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27792: Failed to connect to server "www.bing.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 79.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 74.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") was successful, 1819 body bytes, 670 header bytes, 17 chunking overhead bytes  	[MsgId: MMSG-26385]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): web_url("v3") was successful, 132 body bytes, 504 header bytes  	[MsgId: MMSG-26386]
+Action.c(23): web_url("ExpandedDomainsFilterGlobal.json") started  	[MsgId: MMSG-26355]
+Action.c(23): Error -27760: Request "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 67.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 69.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 66.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 80.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 77.
+Action.c(121): web_url("-4276412816532324841%7C-2257558592581803439") highest severity level was "warning", 71270 body bytes, 1584 header bytes  	[MsgId: MMSG-26388]
+Action.c(132): web_url("selection") started  	[MsgId: MMSG-26355]
+Action.c(132): Connection to edge.microsoft.com:443 closed after being inactive for 102 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(132): Connection to www.bing.com:443 closed after being inactive for 102 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(132): Connection to cdn.jsdelivr.net:443 closed after being inactive for 101 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(132): Error -27792: Failed to connect to server "arc.msn.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 75.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 68.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 70.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 67.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27792: Failed to connect to server "edge.microsoft.com:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 74.
+Action.c(52): Downloading resource "https://cdn.jsdelivr.net/npm/sweetalert2@11" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(52): web_url("crx") was successful, 19604 body bytes, 1400 header bytes  	[MsgId: MMSG-26386]
+Action.c(63): web_url("blocklist") started  	[MsgId: MMSG-26355]
+Action.c(63): Downloading resource "http://fonts.gstatic.com/s/opensans/v40/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTSCmu1aB.woff2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(63): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(63): Warning -27792: Failed to connect to server "fonts.gstatic.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(63): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 85.
+Start auto log messages stack - Iteration 76.
+Action.c(36): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Starting action Action.
+Action.c(39): web_url("ExpandedDomainsFilterGlobal.json_2") started  	[MsgId: MMSG-26355]
+Action.c(39): Resource "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" is in the cache already and will not be downloaded again  	[MsgId: MMSG-26655]
+Action.c(52): web_url("crx") started  	[MsgId: MMSG-26355]
+Start auto log messages stack - Iteration 78.
+Action.c(52): Connection to edge.microsoft.com:443 closed after being inactive for 100 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Action.c(52): Connection to www.bing.com:443 closed after being inactive for 94 seconds, exceeding the "HTTP Keep-Alive timeout" Runtime Setting (60 seconds). URL="[None]"  	[MsgId: MMSG-27647]
+Starting action Action.
+Action.c(52): Error -27721: Step download timeout (120 seconds) has expired when downloading resource "https://edge.microsoft.com/extensionwebstorebase/v1/crx?os=win&arch=x64&os_arch=x86_64&nacl_arch=x86-64&prod=edgecrx&prodchannel=&prodversion=130.0.2849.56&lang=en-US&acceptformat=crx3,puff&x=id%3Dajdpfmkffanmkhejnopjppegokpogffp%26v%3D3.17.0%26installedby%3Dinternal%26uc&x=id%3Djmjflgjpcpepeafmmgdpfkogkghcpiha%26v%3D1.2.1%26installedby%3Dother%26uc"  	[MsgId: MERR-27721]
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+End auto log messages stack.
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+
+
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(14): Error -27721: Step download timeout (120 seconds) has expired when downloading resource "https://edge.microsoft.com/serviceexperimentation/v3/?osname=win&channel=stable&osver=10.0.22631&devicefamily=desktop&installdate=1655422490&clientversion=130.0.2849.56&experimentationmode=2&scpguard=1&scpfull=0&scpver=6"  	[MsgId: MERR-27721]
+Action.c(4): Warning -27792: Failed to connect to server "fonts.googleapis.com:80": [10060] Connection timed out  	[MsgId: MWAR-27792]
+Action.c(4): web_url("css") highest severity level was "warning", 0 body bytes, 0 header bytes  	[MsgId: MMSG-26388]
+End auto log messages stack.
+Action.c(12): web_set_sockets_option started  	[MsgId: MMSG-26355]
+Action.c(12): web_set_sockets_option was successful  	[MsgId: MMSG-26392]
+Action.c(14): web_url("v3") started  	[MsgId: MMSG-26355]
+
+
+Action.c(14): Error -27721: Step download timeout (120 seconds) has expired when downloading resource "https://edge.microsoft.com/serviceexperimentation/v3/?osname=win&channel=stable&osver=10.0.22631&devicefamily=desktop&installdate=1655422490&clientversion=130.0.2849.56&experimentationmode=2&scpguard=1&scpfull=0&scpver=6"  	[MsgId: MERR-27721]
+End auto log messages stack.
+
+
+Start auto log messages stack - Iteration 71.
+Start auto log messages stack - Iteration 69.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Error -27720: Step download timeout (120 seconds) has expired when downloading resource "http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800". Set the "Step Timeout caused by resources is a warning" Runtime Setting to Yes/No to have this message as a warning/error, respectively  	[MsgId: MERR-27720]
+Action.c(4): Error -27720: Step download timeout (120 seconds) has expired when downloading resource "http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800". Set the "Step Timeout caused by resources is a warning" Runtime Setting to Yes/No to have this message as a warning/error, respectively  	[MsgId: MERR-27720]
+End auto log messages stack.
+End auto log messages stack.
+
+
+
+
+Start auto log messages stack - Iteration 68.
+Starting action Action.
+Action.c(4): web_url("css") started  	[MsgId: MMSG-26355]
+Action.c(4): Error -27720: Step download timeout (120 seconds) has expired when downloading resource "http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800". Set the "Step Timeout caused by resources is a warning" Runtime Setting to Yes/No to have this message as a warning/error, respectively  	[MsgId: MERR-27720]
+End auto log messages stack.
+
+

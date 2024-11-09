@@ -61,8 +61,8 @@ img {
 
 .wizard > .steps {
   position: absolute;
-  top: 19.44%;
-  right: 52.5%;
+  top: 16.44%;
+  right: 51.5%;
   transform: translateX(50%);
   z-index: 9; }
 
@@ -99,9 +99,9 @@ img {
     top: 5px;
     transition: all 0.6s ease; }
 .wizard > .steps li.first a {
-  background: #6d7f52; }
+  background: #1A1A1A; }
 .wizard > .steps li.checked a {
-  background: #6d7f52; }
+  background: #1A1A1A; }
   .wizard > .steps li.checked a:after {
     width: 58px; }
 .wizard > .steps li:last-child a {
@@ -246,15 +246,16 @@ textarea.form-control {
   .actions ul {
     display: flex; }
   .actions li a {
+    border-radius: 15px;
     padding: 0;
     border: none;
     display: inline-flex;
     height: 41px;
     width: 135px;
     align-items: center;
-    background: #e9e0cf;
+    background: #FA8600;
     font-family: '#9Slide03 Quicksand', serif !important;
-    color: #666;
+    color: #fff;
     cursor: pointer;
     position: relative;
     padding-left: 28px; }
@@ -290,7 +291,7 @@ textarea.form-control {
     opacity: 0;
     transition: all 1s; }
   .actions li[aria-disabled="false"] ~ li a {
-    background: #6d7f52;
+    background: #FA8600;
     color: #fff; }
     .actions li[aria-disabled="false"] ~ li a:hover {
       background: #849963; }

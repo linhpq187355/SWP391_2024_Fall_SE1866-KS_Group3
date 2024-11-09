@@ -1,0 +1,13 @@
+[t5]
+FileName1=t5_crx.xml
+URL1=https://edge.microsoft.com/extensionwebstorebase/v1/crx?os=win&arch=x64&os_arch=x86_64&nacl_arch=x86-64&prod=edgecrx&prodchannel=&prodversion=130.0.2849.56&lang=en-US&acceptformat=crx3,puff&x=id%3Dajdpfmkffanmkhejnopjppegokpogffp%26v%3D3.17.0%26installedby%3Dinternal%26uc&x=id%3Djmjflgjpcpepeafmmgdpfkogkghcpiha%26v%3D1.2.1%26installedby%3Dother%26uc
+Total=2
+ContentType=text/xml
+SnapshotXmlFile=snapshot_5.xml
+RequestHeaderFile=t5_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t5_ResponseHeader.txt
+FileName2=t5_sweetalert2@11.html
+URL2=https://cdn.jsdelivr.net/npm/sweetalert2@11
+[ProtocolInfo]
+ProtocolId=QTWeb

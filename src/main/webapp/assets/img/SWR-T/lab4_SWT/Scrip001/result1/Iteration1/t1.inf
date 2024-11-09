@@ -1,0 +1,16 @@
+[t1]
+SnapshotXmlFile=snapshot_2.xml
+ContentType=application/json
+StepName=Url: v3
+Total=2
+FileName1=t1.json
+FileName2=t1_0_css.css
+RequestHeaderFile=t1_RequestHeader.txt
+SaveSnapshotResources=1
+ResponseHeaderFile=t1_ResponseHeader.txt
+RawStepEndTime=1730458262665
+RawStepName=v3
+RequestBodyFile=t1_RequestBody.txt
+RawStepStartTime=1730458261814
+URL1=https://edge.microsoft.com/serviceexperimentation/v3/?osname=win&channel=stable&osver=10.0.22631&devicefamily=desktop&installdate=1655422490&clientversion=130.0.2849.56&experimentationmode=2&scpguard=1&scpfull=0&scpver=6
+URL2=http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800

@@ -1,0 +1,26 @@
+Start auto log messages stack - Iteration 6.
+Action.c(34): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(34): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(36): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(36): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(39): web_url("ExpandedDomainsFilterGlobal.json_2") started  	[MsgId: MMSG-26355]
+Action.c(39): Resource "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" is in the cache already and will not be downloaded again  	[MsgId: MMSG-26655]
+Action.c(52): web_url("crx") started  	[MsgId: MMSG-26355]
+Action.c(52): Downloading resource "https://cdn.jsdelivr.net/npm/sweetalert2@11" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(52): Error -27644: Step download timeout (120 seconds) has expired when only cross-step downloads (0) were active  	[MsgId: MERR-27644]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 9.
+Action.c(195): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(197): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(197): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(199): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(199): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Error -27760: Request "https://edge-consumer-static.azureedge.net/mouse-gesture/config.json" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+

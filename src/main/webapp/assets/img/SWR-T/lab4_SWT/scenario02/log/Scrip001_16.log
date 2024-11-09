@@ -1,0 +1,36 @@
+Start auto log messages stack - Iteration 2.
+Action.c(32): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(32): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(34): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(34): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(36): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(36): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(39): web_url("ExpandedDomainsFilterGlobal.json_2") started  	[MsgId: MMSG-26355]
+Action.c(39): Resource "https://www.bing.com/bloomfilterfiles/ExpandedDomainsFilterGlobal.json" is in the cache already and will not be downloaded again  	[MsgId: MMSG-26655]
+Action.c(52): web_url("crx") started  	[MsgId: MMSG-26355]
+Action.c(52): Error -27760: Request "https://edge.microsoft.com/extensionwebstorebase/v1/crx?os=win&arch=x64&os_arch=x86_64&nacl_arch=x86-64&prod=edgecrx&prodchannel=&prodversion=130.0.2849.56&lang=en-US&acceptformat=crx3,puff&x=id%3Dajdpfmkffanmkhejnopjppegokpogffp%26v%3D3.17.0%26installedby%3Dinternal%26uc&x=id%3Djmjflgjpcpepeafmmgdpfkogkghcpiha%26v%3D1.2.1%26installedby%3Dother%26uc" failed  	[MsgId: MERR-27760]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 13.
+Action.c(195): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(197): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(197): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(199): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(199): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(201): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(201): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(203): web_add_cookie started  	[MsgId: MMSG-26355]
+Action.c(203): web_add_cookie was successful  	[MsgId: MMSG-26392]
+Action.c(205): web_url("config.json") started  	[MsgId: MMSG-26355]
+Action.c(205): Error -27792: Failed to connect to server "edge-consumer-static.azureedge.net:443": [10060] Connection timed out  	[MsgId: MERR-27792]
+End auto log messages stack.
+
+Start auto log messages stack - Iteration 15.
+Action.c(75): web_url("-341398893248106636%7C-2257558592581803439") started  	[MsgId: MMSG-26355]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f5cbf3afb2" (specified by argument number 9)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v5-font-face.min.css?token=f5cbf3afb2" (specified by argument number 12)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-font-face.min.css?token=f5cbf3afb2" (specified by argument number 15)  	[MsgId: MMSG-26576]
+Action.c(75): Downloading resource "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d" (specified by argument number 18)  	[MsgId: MMSG-26576]
+Action.c(75): Error -27720: Step download timeout (120 seconds) has expired when downloading resource "https://ka-f.fontawesome.com/releases/v6.6.0/css/free-v4-font-face.min.css?token=f5cbf3afb2". Set the "Step Timeout caused by resources is a warning" Runtime Setting to Yes/No to have this message as a warning/error, respectively  	[MsgId: MERR-27720]
+End auto log messages stack.
+

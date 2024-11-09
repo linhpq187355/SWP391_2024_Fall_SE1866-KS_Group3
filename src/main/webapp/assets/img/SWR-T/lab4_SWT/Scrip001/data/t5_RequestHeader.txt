@@ -1,0 +1,12 @@
+GET https://edge.microsoft.com/extensionwebstorebase/v1/crx?os=win&arch=x64&os_arch=x86_64&nacl_arch=x86-64&prod=edgecrx&prodchannel=&prodversion=130.0.2849.56&lang=en-US&acceptformat=crx3,puff&x=id%3Dajdpfmkffanmkhejnopjppegokpogffp%26v%3D3.17.0%26installedby%3Dinternal%26uc&x=id%3Djmjflgjpcpepeafmmgdpfkogkghcpiha%26v%3D1.2.1%26installedby%3Dother%26uc HTTP/1.1
+EdgeFeatureFlags: {"ExtensionUseNewStoreKeys":true,"UseHttpsForDownload":true}
+Update-Interactivity: bg
+MS-CV: fE0giCnbQkb+93QLg/0H8N
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: empty
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0
+Accept-Encoding: gzip, deflate, zstd
+Accept-Language: en-US,en;q=0.9
+Host: edge.microsoft.com
+
