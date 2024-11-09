@@ -40,6 +40,7 @@ public class GrantPermissionServlet extends HttpServlet {
                 int userId = Integer.parseInt(userIdParam);
                 List<Permission> userPermission = userMgtService.fetchUserPermissions(userId);
                 List<Permission> permissionList = userMgtService.fetchAllPermisison();
+
                 User selectedUser = userMgtService.getUserById(userId);
                 request.setAttribute("userPermission", userPermission);
                 request.setAttribute("permissionList", permissionList);
@@ -69,6 +70,8 @@ public class GrantPermissionServlet extends HttpServlet {
                     }
                 }
                 userMgtService.updateUserPermission(allowedPermissions, userId);
+                request.setAttribute("message", "Phân quyền thành công");
+
                 request.getRequestDispatcher("/permission-list.jsp").forward(request, response);
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID format.");
