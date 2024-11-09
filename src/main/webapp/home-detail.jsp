@@ -632,6 +632,7 @@ ${ex:convertPriceToVND(prices[0].price)} VND/tháng
                             <ul>
                                 <!-- Lặp qua danh sách các nhà tương tự -->
                                 <c:forEach var="similarHome" items="${similarHomes}">
+                                    <c:if test="${similarHome.status == 'active'}">
                                     <c:if test="${similarHome.id != param.id}">
                                         <li>
                                             <div class="col-md-3 col-sm-3 col-xs-3 blg-thumb p0">
@@ -650,6 +651,7 @@ ${ex:convertPriceToVND(prices[0].price)} VND/tháng
                                                 </c:forEach>
                                             </div>
                                         </li>
+                                    </c:if>
                                     </c:if>
                                 </c:forEach>
                             </ul>

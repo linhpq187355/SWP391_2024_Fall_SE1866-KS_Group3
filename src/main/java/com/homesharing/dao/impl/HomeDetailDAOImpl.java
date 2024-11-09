@@ -382,7 +382,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
     }
     @Override
     public List<Home> getHomesByWard(int homeId, int priceDifference) {
-        String sql = "SELECT TOP 4 h.id, h.name, h.address, p.price, h.area " +
+        String sql = "SELECT TOP 4 h.id, h.name, h.address, p.price, h.area,h.status " +
                 "FROM Homes h " +
                 "JOIN Prices p ON h.id = p.Homesid " +
                 "JOIN Wards w ON h.wardsId = w.id " +
@@ -391,6 +391,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 "      (SELECT p2.price - ? FROM Prices p2 WHERE p2.Homesid = ?) " +
                 "  AND " +
                 "      (SELECT p2.price + ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "AND h.status = 'active' " +  // Chỉ lấy nhà có status là 'active'
                 "ORDER BY h.createdDate";
 
         List<Home> homes = new ArrayList<>();
@@ -415,6 +416,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 home.setName(resultSet.getString("name")); // Lấy tên nhà
                 home.setAddress(resultSet.getString("address")); // Lấy địa chỉ
                 home.setArea(resultSet.getBigDecimal("area")); // Lấy diện tích
+                home.setStatus(resultSet.getString("status")); // Lấy giá trị của status và gán vào đối tượng
                 homes.add(home);
             }
 
@@ -440,7 +442,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
     }
     @Override
     public List<Home> getHomesByDistrict(int homeId, int priceDifference) {
-        String sql = "SELECT TOP 4 h.id, h.name, h.address, p.price, h.area " +
+        String sql = "SELECT TOP 4 h.id, h.name, h.address, p.price, h.area,h.status " +
                 "FROM Homes h " +
                 "JOIN Prices p ON h.id = p.Homesid " +
                 "JOIN Wards w ON h.wardsId = w.id " +
@@ -453,6 +455,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 "      (SELECT p2.price - ? FROM Prices p2 WHERE p2.Homesid = ?) " +
                 "  AND " +
                 "      (SELECT p2.price + ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "AND h.status = 'active' " +  // Chỉ lấy nhà có status là 'active'
                 "ORDER BY h.createdDate";
 
         List<Home> homes = new ArrayList<>();
@@ -477,6 +480,7 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 home.setName(resultSet.getString("name")); // Lấy tên nhà
                 home.setAddress(resultSet.getString("address")); // Lấy địa chỉ
                 home.setArea(resultSet.getBigDecimal("area")); // Lấy diện tích
+                home.setStatus(resultSet.getString("status")); // Lấy giá trị của status và gán vào đối tượng
                 homes.add(home);
             }
 
@@ -500,6 +504,65 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
 
         return homes;
     }
+    @Override
+    public List<Home> getHomesByProvince(int homeId) {
+        // Truy vấn chỉ lấy những nhà trong cùng tỉnh của nhà có homeId
+        String sql = "SELECT TOP 4 h.id, h.name, h.address, p.price, h.area, h.status " +
+                "FROM Homes h " +
+                "JOIN Prices p ON h.id = p.Homesid " +
+                "JOIN Wards w ON h.wardsId = w.id " +
+                "JOIN Districts d ON w.Districtsid = d.id " +
+                "JOIN Provinces pr ON d.Id = pr.id " +
+                "WHERE pr.id = (SELECT pr2.id FROM Homes h2 " +
+                "               JOIN Wards w2 ON h2.wardsId = w2.id " +
+                "               JOIN Districts d2 ON w2.Districtsid = d2.id " +
+                "               JOIN Provinces pr2 ON d2.Id = pr2.id " +
+                "               WHERE h2.id = ?) " +  // Lọc theo tỉnh của nhà có homeId
+                "ORDER BY h.createdDate";  // Sắp xếp theo ngày tạo
+
+        List<Home> homes = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, homeId);  // Set homeId của nhà hiện tại
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Home home = new Home();
+                home.setId(resultSet.getInt("id"));
+                home.setName(resultSet.getString("name"));
+                home.setAddress(resultSet.getString("address"));
+                home.setArea(resultSet.getBigDecimal("area"));
+                home.setStatus(resultSet.getString("status")); // Lấy giá trị của status và gán vào đối tượng
+                homes.add(home);
+            }
+
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new GeneralException("Error retrieving homes by province from the database: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+        return homes;
+    }
+
+
     @Override
     public List<Home> getSimilarHomes(int homeId) {
         String sql = "SELECT top 4 h2.id, h2.address " +

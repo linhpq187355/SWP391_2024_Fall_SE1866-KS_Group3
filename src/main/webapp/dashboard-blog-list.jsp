@@ -85,14 +85,8 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header" style="display: flex; justify-content: space-between">
-                                <h4 class="card-title">Danh sách người dùng</h4>
-                                <button class="btn btn-secondary"
-                                        onclick="window.location.href='dashboard/create-account'">
-                        <span class="btn-label">
-                          <i class="fa fa-plus"></i>
-                        </span>
-                                    Tạo tài khoản
-                                </button>
+                                <h4 class="card-title">Danh sách các bài blog của người dùng</h4>
+
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -122,31 +116,33 @@
                                         </tfoot>
                                         <tbody>
                                         <c:forEach var="post" items="${posts}">
-                                            <tr>
-                                                <td>${post.id}</td>
-                                                <td>${post.authorName}</td>
-                                                <td>
-                                                    <c:if test="${not empty post.createdAt}">
-                                                        <span class="formatted-date" data-created-at="${post.createdAt}"></span>
-                                                    </c:if>
-                                                </td>
-                                                <td>
-                                                    <a href="single.html?postId=${post.id}">Xem Blog</a>
-                                                </td>
-                                                <td>${post.status}</td>
-                                                <td>
-                                                    <form action="${pageContext.request.contextPath}/dashboard/blog-list" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn thực hiện hành động này không?');">
-                                                        <input type="hidden" name="postId" value="${post.id}"/>
-                                                        <input type="hidden" name="authorId" value="${post.authorId}"/> <!-- Nếu cần -->
-                                                        <button type="submit" name="action" value="approve" class="btn btn-success">
-                                                            Duyệt
-                                                        </button>
-                                                        <button type="submit" name="action" value="delete" class="btn btn-danger">
-                                                            Xóa
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
+                                            <c:if test="${post.status != 'drafted'}">
+                                                <tr>
+                                                    <td>${post.id}</td>
+                                                    <td>${post.authorName}</td>
+                                                    <td>
+                                                        <c:if test="${not empty post.createdAt}">
+                                                            <span class="formatted-date" data-created-at="${post.createdAt}"></span>
+                                                        </c:if>
+                                                    </td>
+                                                    <td>
+                                                        <a href="blog-detail?postId=${post.id}">Xem Blog</a>
+                                                    </td>
+                                                    <td>${post.status}</td>
+                                                    <td>
+                                                        <form action="${pageContext.request.contextPath}/dashboard/blog-list" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn thực hiện hành động này không?');">
+                                                            <input type="hidden" name="postId" value="${post.id}"/>
+                                                            <input type="hidden" name="authorId" value="${post.authorId}"/> <!-- Nếu cần -->
+                                                            <button type="submit" name="action" value="approve" class="btn btn-icon" title="Duyệt">
+                                                                <i class="fas fa-check-double icon-custom" style="color: #fa8650;"></i>
+                                                            </button>
+                                                            <button type="submit" name="action" value="delete" class="btn btn-icon" title="Xóa">
+                                                                <i class="fas fa-ban icon-custom" style="color: #fa8650;"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
                                         </c:forEach>
                                         </tbody>
                                     </table>
@@ -157,6 +153,7 @@
                 </div>
             </div>
         </div>
+
 
         <footer class="footer">
             <div class="container-fluid d-flex justify-content-between">

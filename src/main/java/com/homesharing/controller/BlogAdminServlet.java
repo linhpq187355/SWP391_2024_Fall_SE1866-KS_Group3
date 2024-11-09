@@ -6,6 +6,7 @@ import com.homesharing.exception.GeneralException;
 import com.homesharing.model.BlogPost;
 import com.homesharing.service.BlogService;
 import com.homesharing.service.impl.BlogServiceImpl;
+import com.homesharing.util.AddNotificationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -57,12 +58,15 @@ public class BlogAdminServlet extends HttpServlet {
             int postId = Integer.parseInt(postIdParam);
 
             try {
+                BlogPost post = blogService.getPostById(postId);
                 if ("approve".equalsIgnoreCase(action)) {
                     blogService.updatePostStatus(postId, "APPROVED");
+                    AddNotificationUtil.getInstance().addNotification(Integer.parseInt(authorIdParam),"Bài viết ngày "+ post.getCreatedAt().getDayOfMonth()+"/"+post.getCreatedAt().getMonthValue()+"/"+post.getCreatedAt().getYear()+" trên diễn đàn của bạn đã được chấp nhận!", "Bài viết trên diễn đàn của bạn đã được chấp nhận!","System", "user-blog?id="+authorIdParam);
                 } else if ("delete".equalsIgnoreCase(action)) {
                     blogService.updatePostStatus(postId, "DELETED");
+                    AddNotificationUtil.getInstance().addNotification(Integer.parseInt(authorIdParam),"Bài viết ngày "+ post.getCreatedAt().getDayOfMonth()+"/"+post.getCreatedAt().getMonthValue()+"/"+post.getCreatedAt().getYear()+" trên diễn đàn của bạn đã được chấp nhận!", "Bài viết trên diễn đàn của bạn không được chấp nhận!","System", "user-blog?id="+authorIdParam);
                 }
-                response.sendRedirect("/dashboard/blog-list?authorId=" + authorIdParam);
+                response.sendRedirect("blog-list?authorId=" + authorIdParam);
             } catch (Exception e) {
                 throw new ServletException("Error handling blog post action: " + e.getMessage(), e);
             }
