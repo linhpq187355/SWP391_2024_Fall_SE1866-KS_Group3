@@ -352,6 +352,7 @@
     function parseDate(dateString) {
         return new Date(dateString);
     }
+
     function updateTimePicker(selectedDate) {
         const timeSlots = document.querySelectorAll('.time-picker .time-slot');
 
@@ -359,7 +360,6 @@
         timeSlots.forEach(slot => {
             // Reset trạng thái cho từng ô
             slot.classList.remove('disabled');
-            slot.removeAttribute('title');
 
             // Lấy khoảng thời gian của ô hiện tại
             const [startTime, endTime] = slot.textContent.split(' - ');
@@ -381,7 +381,7 @@
                         (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
                         (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
                     ) {
-                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
+
                         slot.classList.add('disabled');
                         break;
                     }
@@ -399,7 +399,7 @@
                         (slotEnd > appointmentStart && slotEnd <= appointmentEnd) ||
                         (slotStart <= appointmentStart && slotEnd >= appointmentEnd)
                     ) {
-                        slot.setAttribute('title','Đã có lịch hẹn ở thời gian này!')
+
                         slot.classList.add('disabled');
                         break;
                     }
@@ -409,7 +409,6 @@
             }
         });
     }
-
     function onDateSelected(day, month, year) {
         const paddedMonth = String(month + 1).padStart(2, '0');
         const paddedDay = String(day).padStart(2, '0');
@@ -419,19 +418,23 @@
         console.log(year);
         updateTimePicker(selectedDate);
     }
+
     document.addEventListener('DOMContentLoaded', function () {
-        const today = new Date();
-        const currentDay = today.getDate();
-        const currentMonth = today.getMonth(); // Lưu ý: getMonth() trả về giá trị từ 0 (tháng 1) đến 11 (tháng 12)
-        const currentYear = today.getFullYear();
-
-        // Gọi hàm onDateSelected để thiết lập và hiển thị lịch cho ngày hôm nay
-        onDateSelected(currentDay, currentMonth, currentYear);
-
         // Thêm sự kiện click vào các ô thời gian
         const timeSlots = document.querySelectorAll('.time-picker .time-slot');
+        const selectedTime = "${requestScope.appointmentTime}";
+
+        const currentDay = "${requestScope.appointmentDay}";
+        const currentMonth = "${requestScope.appointmentMonth}";
+        const currentYear = "${requestScope.appointmentYear}";
+        onDateSelected(currentDay, currentMonth, currentYear);
+
         timeSlots.forEach(slot => {
+            if (slot.textContent.trim() === selectedTime){
+                slot.classList.add('selected');
+            }
             slot.addEventListener('click', function () {
+
                 // Xóa lớp selected khỏi tất cả các ô thời gian
                 timeSlots.forEach(s => s.classList.remove('selected'));
 
@@ -441,11 +444,15 @@
         });
     });
 
+    const appointmentMonth = ${requestScope.appointmentMonth} - 1;
+    const appointmentYear = ${requestScope.appointmentYear};
+
     function populateMonthAndYearDropdowns() {
         const monthSelect = document.getElementById('month-select');
         const yearSelect = document.getElementById('year-select');
         const currentYear = new Date().getFullYear();
         const currentMonth = new Date().getMonth();
+
 
         // Điền dữ liệu cho tháng
         const months = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
@@ -453,7 +460,7 @@
             let option = document.createElement('option');
             option.value = index; // Tháng từ 0 đến 11
             option.text = month;
-            if (index === currentMonth) {
+            if (index === appointmentMonth) {
                 option.selected = true; // Chọn tháng hiện tại
             }
             monthSelect.appendChild(option);
@@ -464,7 +471,7 @@
             let option = document.createElement('option');
             option.value = year;
             option.text = year;
-            if (year === currentYear) {
+            if (year === appointmentYear) {
                 option.selected = true; // Chọn năm hiện tại
             }
             yearSelect.appendChild(option);
@@ -472,6 +479,8 @@
     }
 
     let selectedDate = null;
+
+
 
     function generateCalendar(selectedMonth = null, selectedYear = null) {
         const calendarBody = document.getElementById('calendar-body');
@@ -505,12 +514,9 @@
                     cell.innerHTML = '';
                 } else {
                     cell.innerHTML = date;
+
                     // Đánh dấu ngày được chọn
-                    if (selectedDate && selectedDate.year === currentYear && selectedDate.month === currentMonth && selectedDate.day === date) {
-                        cell.classList.add('selected');
-                    }
-                    // Nếu chưa có ngày nào được chọn, đánh dấu ngày hôm nay
-                    else if (!selectedDate && isCurrentMonth && date === todayDate) {
+                    if (date === ${requestScope.appointmentDay}) {
                         cell.classList.add('selected');
                     }
 
@@ -563,6 +569,7 @@
 
         if (selectedDate && selectedTime) {
 
+
             const selectedFullDate = new Date(selectedYear, selectedMonth, selectedDate);
 
             if (selectedFullDate < todayDate) {
@@ -570,13 +577,14 @@
                 return;
             }
 
-            if (selectedFullDate.getTime() === todayDate.getTime()){
+            if (selectedFullDate.getTime() === todayDate.getTime()) {
                 const selectedTimeParts = selectedTime.split(' ')[0].split(':');
                 const selectedStartHour = parseInt(selectedTimeParts[0]);
                 const selectedStartMinute = parseInt(selectedTimeParts[1] || 0);
 
+                // Kiểm tra xem thời gian chọn có sau thời gian hiện tại không
                 if (selectedStartHour < currentHour || (selectedStartHour === currentHour && selectedStartMinute <= currentMinute)) {
-                    showPopup2();
+                    showPopup2(); // Hiện popup nếu thời gian chọn không hợp lệ
                     return;
                 }
             }
@@ -595,28 +603,37 @@
 
     function showPopup() {
         document.getElementById('popup').style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('overlay1').style.display = 'block';
     }
 
     function closePopup() {
         document.getElementById('popup').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('overlay1').style.display = 'none';
     }
 
     function showPopup2() {
         document.getElementById('popup2').style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('overlay2').style.display = 'block';
     }
 
     function closePopup2() {
         document.getElementById('popup2').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('overlay2').style.display = 'none';
     }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const error = "<c:out value='${requestScope.error}'/>";
+        if (error) {
+            document.getElementById('popup4').style.display = 'block';
+            document.getElementById('overlay4').style.display = 'block';
+        }
+    });
 
 
     function closePopup4() {
         document.getElementById('popup4').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('overlay4').style.display = 'none';
     }
 
 </script>

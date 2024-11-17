@@ -303,6 +303,8 @@ public class HomePageServiceImpl implements HomePageService {
             }
 
             Home home = homeList.get(i);
+            logger.info(String.valueOf((wardDAO.getProvinceIdByWardId(home.getWardId()))));
+            logger.info(String.valueOf((user.getPrefProv())));
             if(user.getPrefProv() == wardDAO.getProvinceIdByWardId(home.getWardId())) {
                 logger.info("pretrue");
                 if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
