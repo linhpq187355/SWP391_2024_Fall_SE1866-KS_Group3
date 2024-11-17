@@ -93,6 +93,8 @@ public interface AppointmentService {
      */
     int acceptAppointment(String appointmentId, String receiver);
 
+    int countAppointments();
+
     /**
      * Rejects an appointment.
      *

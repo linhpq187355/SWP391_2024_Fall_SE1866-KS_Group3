@@ -291,22 +291,26 @@ public class HomePageServiceImpl implements HomePageService {
                 if ((moveInDate.isEqual(earliestMoveIn) || moveInDate.isAfter(earliestMoveIn))
                         && (moveInDate.isBefore(latestMoveIn) || moveInDate.isEqual(latestMoveIn))) {
                     moveInCheck = true;
+                    logger.info("true");
                 }
             }
 
             if (moveInDate != null && earliestMoveIn != null) {
                 if (earliestMoveIn.isBefore(moveInDate) && earliestMoveIn.plusDays(7).isAfter(moveInDate)) {
                     moveInCheck = true;
+                    logger.info("true");
                 }
             }
 
             Home home = homeList.get(i);
             if(user.getPrefProv() == wardDAO.getProvinceIdByWardId(home.getWardId())) {
-
+                logger.info("pretrue");
                 if(user.getMaxBudget() >= listPrice.get(i).getPrice()){
+                    logger.info("pritrue");
                     if((user.getDuration().equals("short") && homeList.get(i).getLeaseDuration() <6) || (user.getDuration().equals("long") && homeList.get(i).getLeaseDuration() >=6) ){
                         if(moveInCheck){
                             listMatchingHomes.add(home);
+                            logger.info("add");
                         }
                     }
                 }
@@ -330,6 +334,16 @@ public class HomePageServiceImpl implements HomePageService {
         }
 
         return listMatchingHomes;
+    }
+
+    @Override
+    public int countByProvinceId(int provinceId) {
+        try {
+            return homeDAO.countByProvince(provinceId);
+        } catch (GeneralException e) {
+            logger.log(Level.SEVERE, "Failed to retrieve total homes: ", e);
+            throw new GeneralException("Failed to retrieve total homes: ", e);
+        }
     }
 
     /**

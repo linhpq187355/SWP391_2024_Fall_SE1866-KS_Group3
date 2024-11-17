@@ -134,7 +134,7 @@
                                     <div class="col-7 col-stats">
                                         <div class="numbers">
                                             <p class="card-category">Tổng Số Người Dùng</p>
-                                            <h4 class="card-title">25 người</h4>
+                                            <h4 class="card-title">${requestScope.totalUser} người</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -153,7 +153,7 @@
                                     <div class="col-7 col-stats">
                                         <div class="numbers">
                                             <p class="card-category">Tổng số blog</p>
-                                            <h4 class="card-title">23 bài</h4>
+                                            <h4 class="card-title">${requestScope.totalBlog} bài</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@
                                     <div class="col-7 col-stats">
                                         <div class="numbers">
                                             <p class="card-category">Tổng số cuộc hẹn</p>
-                                            <h4 class="card-title">15 cuộc hẹn</h4>
+                                            <h4 class="card-title">${requestScope.totalApmt} cuộc hẹn</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -192,25 +192,25 @@
                                 <div class="container">
                                     <div class="row">
                                         <c:forEach items="${requestScope.latestHomes}" var="home">
-                                            <div class="col-sm-6 col-md-3">
+                                            <div class="col-sm-6 col-md-3" style="padding: 0">
                                                 <div class="box-two proerty-item"
                                                      style="box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; border-radius: 15px; margin: 15px; height: 400px;">
                                                     <div class="item-thumb">
                                                         <a href="home-detail?id=1">
                                                             <img class="property-image"
-                                                                 src="assets/img/dashboard/sample-home-img.jpg"
+                                                                 src="${home.images[0]}"
                                                                  alt="Home Image"
-                                                                 style="border-top-left-radius: 15px; border-top-right-radius: 15px; width: 100%;">
+                                                                 style="border-top-left-radius: 15px; border-top-right-radius: 15px; width: 100%;min-height: 225px;max-height: 225px;">
                                                         </a>
                                                     </div>
                                                     <div class="item-entry overflow"
                                                          style="padding-left: 5%; padding-right: 5%;">
-                                                        <h5 style="letter-spacing: 0; height: 35px; margin-top: 10px; margin-bottom: 0px;">
+                                                        <h5 style="letter-spacing: 0; margin-top: 10px; margin-bottom: 0px;">
                                                             <a href="home-detail?id=1"><b>${home.name}</b></a>
                                                         </h5>
-                                                        <p style="padding: 0; color: #777777;">${home.address}</p>
+                                                        <p style="padding: 0; color: #777777;margin: 0">${home.address}</p>
                                                         <div style="display: flex; align-items: center; border-bottom: 1px solid #484848;">
-                                                            <p style="color: #FA6C00; font-size: 20px;"><b>10 triệu</b>
+                                                            <p style="color: #FA6C00; font-size: 20px;margin: 0"><b>10 triệu</b>
                                                             </p>
                                                             / tháng
                                                         </div>
@@ -243,7 +243,7 @@
                             <div class="card-head">
                                 <div class="card-head-content">
                                     <!-- Image on the left, spanning two rows -->
-                                    <img src="assets/img/dashboard/home-request.png" alt="Request Image"
+                                    <img src="assets/img/Clutter-free-living-is-promoted-through-design-subtraction-techniques-allowing-for-a-more-streamlined-and-organized-home-environment.jpg" alt="Request Image"
                                          style="width: 100px; border-radius: 10px 0 0 10px;">
                                     <div class="card-img-overlay" style="margin-left: 8%;">
                                         <div class="card-head-row">
@@ -384,7 +384,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <div class="card card-round">
                             <div class="card-body">
                                 <div class="card-head-row card-tools-still-right">
@@ -403,9 +403,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-list py-4">
-                                    <c:forEach items="${requestScope.latestUsers}" var="user">
-                                        <div class="item-list">
+                                <div class="card-list py-4" style="    display: flex;flex-wrap: wrap;">
+                                    <c:forEach items="${requestScope.latestUsers}" var="user" begin="0" end="9">
+                                        <div class="item-list" style="width: 25%">
                                             <div class="avatar">
                                                 <img src="${user.avatar != null && !user.avatar.isEmpty() ? user.avatar : 'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg'}" alt="..."
                                                      class="avatar-img rounded-circle"/>
@@ -416,84 +416,6 @@
                                             </div>
                                         </div>
                                     </c:forEach>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="card-head-row">
-                                    <div class="card-title">Phiếu Hỗ Trợ</div>
-                                    <div class="card-tools">
-                                        <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab"
-                                            role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="pills-today" data-bs-toggle="pill"
-                                                   href="#pills-today" role="tab"
-                                                   aria-selected="true">Theo Ngày</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="pills-week" data-bs-toggle="pill"
-                                                   href="#pills-week" role="tab"
-                                                   aria-selected="false">Theo Tuần</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="pills-month" data-bs-toggle="pill"
-                                                   href="#pills-month" role="tab"
-                                                   aria-selected="false">Theo Tháng</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="avatar avatar-online">
-                                        <span class="avatar-title rounded-circle border border-white bg-info">J</span>
-                                    </div>
-                                    <div class="flex-1 ms-3 pt-1">
-                                        <h6 class="text-uppercase fw-bold mb-1">
-                                            Nguyễn Hữu Thắng
-                                            <span class="text-warning ps-3">chờ duyệt</span>
-                                        </h6>
-                                        <span class="text-muted">Bài đăng của tôi về nhà trọ ở Quận 1 đã bị từ chối mà không có lời giải thích.</span>
-                                    </div>
-                                    <div class="float-end pt-1">
-                                        <small class="text-muted">8:40 PM</small>
-                                    </div>
-                                </div>
-                                <div class="separator-dashed"></div>
-                                <div class="d-flex">
-                                    <div class="avatar avatar-offline">
-                                        <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
-                                    </div>
-                                    <div class="flex-1 ms-3 pt-1">
-                                        <h6 class="text-uppercase fw-bold mb-1">
-                                            Lung Thị Linh
-                                            <span class="text-success ps-3">đang mở</span>
-                                        </h6>
-                                        <span class="text-muted">Tôi đã liên lạc với người dùng tên Nguyễn Văn An để trao đổi về phòng trọ, nhưng người này có hành vi quấy rối và gửi nhiều tin nhắn không phù hợp.</span>
-                                    </div>
-                                    <div class="float-end pt-1">
-                                        <small class="text-muted">1 Ngày Trước</small>
-                                    </div>
-                                </div>
-                                <div class="separator-dashed"></div>
-                                <div class="d-flex">
-                                    <div class="avatar avatar-away">
-                                        <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
-                                    </div>
-                                    <div class="flex-1 ms-3 pt-1">
-                                        <h6 class="text-uppercase fw-bold mb-1">
-                                            Trần Xuân Hoàn
-                                            <span class="text-muted ps-3">đã đóng</span>
-                                        </h6>
-                                        <span class="text-muted">Tôi muốn cập nhật lại mô tả của bài đăng ID #2345 vì đã có thay đổi về giá thuê. Nhờ hỗ trợ chỉnh sửa giúp tôi.</span>
-                                    </div>
-                                    <div class="float-end pt-1">
-                                        <small class="text-muted">2 Days Ago</small>
-                                    </div>
                                 </div>
                             </div>
                         </div>

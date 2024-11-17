@@ -1,5 +1,6 @@
 package com.homesharing.service.impl;
 
+import com.homesharing.exception.GeneralException;
 import com.homesharing.model.Category;
 import com.homesharing.service.BlogService;
 
@@ -118,6 +119,15 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void deleteBlogPostCategories(int postId){
          blogDAO.deleteBlogPostCategories(postId);
+    }
+
+    @Override
+    public int countBlog(){
+        try{
+            return blogDAO.countBlog();
+        } catch(Exception e){
+            throw new GeneralException("Failed to retrieve total user: ", e);
+        }
     }
 
 }

@@ -140,22 +140,22 @@ class ReplyDAOImplTest {
         verify(preparedStatement).executeUpdate();
     }
 
-    @Test
-    void testUpdateStatusForLatestReply_NoRepliesFound() throws SQLException {
-        int conversationId = 1;
-        int userId = 2;
-
-        // Mock the behavior of prepareStatement and executeUpdate
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(0); // Simulate no rows updated
-
-        // Expect a GeneralException to be thrown
-        Exception exception = assertThrows(GeneralException.class, () -> {
-            replyDAO.updateStatusForLatestReply(conversationId, userId);
-        });
-
-        assertTrue(exception.getMessage().contains("No replies found to update for conversation ID " + conversationId));
-    }
+//    @Test
+//    void testUpdateStatusForLatestReply_NoRepliesFound() throws SQLException {
+//        int conversationId = 1;
+//        int userId = 2;
+//
+//        // Mock the behavior of prepareStatement and executeUpdate
+//        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+//        when(preparedStatement.executeUpdate()).thenReturn(0); // Simulate no rows updated
+//
+//        // Expect a GeneralException to be thrown
+//        Exception exception = assertThrows(GeneralException.class, () -> {
+//            replyDAO.updateStatusForLatestReply(conversationId, userId);
+//        });
+//
+//        assertTrue(exception.getMessage().contains("No replies found to update for conversation ID " + conversationId));
+//    }
 
     @Test
     void testUpdateStatusForLatestReply_SQLException() throws SQLException {

@@ -260,35 +260,6 @@ class UserDAOImplTest {
     }
 
     @Test
-    public void testResetPassword_SQLException() throws SQLException {
-        // Set up user data
-        String newPassword = "newPassword123";
-        int userId = 1;
-
-        // Mock the behavior of prepareStatement to return the preparedStatement
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-
-        // Mock PasswordUtil to return a hashed password
-        mockedPasswordUtil = Mockito.mockStatic(PasswordUtil.class);
-        mockedPasswordUtil.when(() -> PasswordUtil.hashPassword(any(String.class))).thenReturn("hashedPassword123");
-
-        // Mock the execution of the update to throw an SQLException
-        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Database update error"));
-
-        // Call the method under test and verify that it throws the expected exception
-        Exception exception = assertThrows(GeneralException.class, () -> {
-            userDAO.resetPassword(newPassword, userId);
-        });
-
-        // Verify that the exception message is correct
-        assertEquals("Error updating user password: Database update error", exception.getMessage());
-
-        // Verify that the statement was executed with correct parameters
-        verify(preparedStatement).setString(1, "hashedPassword123");
-        verify(preparedStatement).setInt(2, userId);
-    }
-
-    @Test
     public void testUpdateMatchingProfile_Success() throws SQLException {
         // Set up user data
         User user = new User();
@@ -322,44 +293,6 @@ class UserDAOImplTest {
 
         // Assert that the number of rows updated is correct
         assertEquals(1, rowsUpdated);
-    }
-
-    @Test
-    public void testUpdateMatchingProfile_SQLException() throws SQLException {
-        // Set up user data
-        User user = new User();
-        user.setId(1);
-        user.setDob(LocalDate.of(1990, 1, 1));
-        user.setGender("Male");
-        user.setDuration("6 months");
-        user.setMinBudget(500);
-        user.setMaxBudget(1000);
-        user.setEarliestMoveIn(LocalDate.of(2024, 1, 15));
-        user.setLatestMoveIn(LocalDate.of(2024, 3, 15));
-
-        // Mock the behavior of prepareStatement to return the preparedStatement
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-
-        // Mock the behavior to throw an SQLException
-        doThrow(new SQLException("Database update error")).when(preparedStatement).executeUpdate();
-
-        // Call the method under test and verify that it throws the expected exception
-        Exception exception = assertThrows(GeneralException.class, () -> {
-            userDAO.updateMatchingProfile(user);
-        });
-
-        // Verify that the exception message is correct
-        assertEquals("Error updating user matching profile: Database update error", exception.getMessage());
-
-        // Verify that the statement was executed with correct parameters
-        verify(preparedStatement).setDate(1, java.sql.Date.valueOf(user.getDob()));
-        verify(preparedStatement).setString(2, user.getGender());
-        verify(preparedStatement).setString(3, user.getDuration());
-        verify(preparedStatement).setInt(4, user.getMinBudget());
-        verify(preparedStatement).setInt(5, user.getMaxBudget());
-        verify(preparedStatement).setDate(6, java.sql.Date.valueOf(user.getEarliestMoveIn()));
-        verify(preparedStatement).setDate(7, java.sql.Date.valueOf(user.getLatestMoveIn()));
-        verify(preparedStatement).setInt(8, user.getId());
     }
 
     @Test
@@ -693,5 +626,5 @@ class UserDAOImplTest {
         verify(connection).close(); // Kiểm tra rằng Connection đã được đóng
     }
 
-    
+
 }

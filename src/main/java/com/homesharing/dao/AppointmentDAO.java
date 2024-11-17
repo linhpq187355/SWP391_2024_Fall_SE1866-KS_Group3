@@ -87,6 +87,8 @@ public interface AppointmentDAO {
      */
     int rejectAppointment(int appointmentId, String reason);
 
+    int countAppointments();
+
     List<Appointment> getAllAppointments();
 
     /**

@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/upload-file-chat")  // Đường dẫn bạn sẽ dùng trong hàm fetch
+@WebServlet("/upload-file-chat")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10,      // 10MB
@@ -27,11 +27,13 @@ import java.util.Map;
 public class UploadFileInChat extends HttpServlet {
     // Đường dẫn tuyệt đối để lưu file
     private static final String UPLOAD_DIR = "E:\\IntelliJ\\SWP391_2024_Fall_SE1866-KS_Group3\\src\\main\\webapp\\assets\\uploads";
-
+    private static final String UPLOAD_DIRECTORY = "assets/uploads";
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Tạo thư mục lưu file nếu chưa tồn tại
-        File uploadDir = new File(UPLOAD_DIR);
+        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+
+        File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
@@ -48,7 +50,7 @@ public class UploadFileInChat extends HttpServlet {
 
                     // Xác định loại file và lưu thông tin
                     Map<String, String> fileInfo = new HashMap<>();
-                    String filePath = UPLOAD_DIR + File.separator + fileName;
+                    String filePath = uploadPath + File.separator + fileName;
 
                     // Ghi file lên server
                     part.write(filePath);

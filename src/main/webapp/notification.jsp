@@ -88,7 +88,7 @@
             cursor: pointer;
         }
         .headerr-title {
-            background-color: #FFD700; /* Vàng đậm */
+            background-color: #fa8600; /* Vàng đậm */
             color: black;
             padding: 20px; /* Tăng chiều cao của tiêu đề */
             font-size: 24px;

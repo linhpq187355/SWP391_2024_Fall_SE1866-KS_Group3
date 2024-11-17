@@ -75,7 +75,7 @@ public class MyHomeListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> searchParams = new HashMap<>();
-        String status = "active";
+        //String status = "active";
         String orderBy = req.getParameter("orderby");
         String order = req.getParameter("order");
         String perPage = req.getParameter("per_page");
@@ -97,9 +97,9 @@ public class MyHomeListServlet extends HttpServlet {
         if(orderBy != null && !orderBy.isEmpty()) {
             searchParams.put("orderby", orderBy);
         }
-        if(status != null && !status.isEmpty()) {
+        /*if(status != null && !status.isEmpty()) {
             searchParams.put("status", status);
-        }
+        }*/
 
 
         int totalHomes = 0;

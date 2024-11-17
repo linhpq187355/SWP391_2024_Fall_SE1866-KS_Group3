@@ -353,6 +353,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    @Override
+    public int countAppointments() {
+        try{
+            return appointmentDAO.countAppointments();
+        } catch (GeneralException e){
+            throw new GeneralException("Error count appointments: " + e.getMessage(), e);
+        }
+    }
+
     /**
      * Rejects an appointment with a given reason and notifies the tenant of the rejection.
      *

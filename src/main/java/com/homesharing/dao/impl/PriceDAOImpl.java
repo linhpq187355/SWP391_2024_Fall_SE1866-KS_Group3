@@ -51,7 +51,14 @@ public class PriceDAOImpl extends DBContext implements PriceDAO {
         }
 
         // Construct SQL query with placeholders for prepared statement
-        StringBuilder sql = new StringBuilder("SELECT id, price, Homesid FROM prices WHERE Homesid IN (");
+        StringBuilder sql = new StringBuilder("SELECT p.id, p.price, p.createdDate, p.Homesid\n" +
+                "FROM prices p\n" +
+                "WHERE p.createdDate = (\n" +
+                "    SELECT MAX(createdDate)\n" +
+                "    FROM prices\n" +
+                "    WHERE Homesid = p.Homesid\n" +
+                ")\n" +
+                "  AND p.Homesid IN (");
 
         // Append placeholders for each home price ID
         for (int i = 0; i < homes.size(); i++) {

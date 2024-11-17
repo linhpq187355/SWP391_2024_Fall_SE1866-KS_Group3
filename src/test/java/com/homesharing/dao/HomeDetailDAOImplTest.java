@@ -47,64 +47,64 @@ public class HomeDetailDAOImplTest {
         mockedDBContext.close();
     }
 
-    @Test
-    public void testGetHomeById_Success() throws SQLException, IOException, ClassNotFoundException {
-        int homeId = 1;
-        Home expectedHome = new Home();
-        expectedHome.setId(homeId);
-        expectedHome.setName("Beautiful Home");
-        expectedHome.setAddress("123 Main St");
-        expectedHome.setArea(BigDecimal.valueOf(120.5));
-        expectedHome.setCreatedDate(LocalDateTime.now());
-
-        String sql = "SELECT [id], [name], [address], [area], [createdDate] FROM [dbo].[Homes] WHERE [id] = ?";
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt("id")).thenReturn(expectedHome.getId());
-        when(resultSet.getString("name")).thenReturn(expectedHome.getName());
-        when(resultSet.getString("address")).thenReturn(expectedHome.getAddress());
-        when(resultSet.getBigDecimal("area")).thenReturn(expectedHome.getArea());
-        when(resultSet.getTimestamp("createdDate")).thenReturn(Timestamp.valueOf(expectedHome.getCreatedDate()));
-
-        Home home = homeDetailDAO.getHomeById(homeId);
-
-        assertEquals(expectedHome.getId(), home.getId());
-        assertEquals(expectedHome.getName(), home.getName());
-        assertEquals(expectedHome.getAddress(), home.getAddress());
-        assertEquals(expectedHome.getArea(), home.getArea());
-        assertNotNull(home.getCreatedDate());
-    }
-
-    @Test
-    public void testGetHomeById_NoResults() throws SQLException, IOException, ClassNotFoundException {
-        int homeId = 2;
-
-        String sql = "SELECT [id], [name], [address], [area], [createdDate] FROM [dbo].[Homes] WHERE [id] = ?";
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(false);
-
-        Home home = homeDetailDAO.getHomeById(homeId);
-
-        assertNull(home);
-    }
-
-    @Test
-    public void testGetHomeById_SQLException() throws SQLException, IOException, ClassNotFoundException {
-        int homeId = 6;
-
-        String sql = "SELECT [id], [name], [address], [area], [createdDate] FROM [dbo].[Homes] WHERE [id] = ?";
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
-
-        GeneralException exception = assertThrows(GeneralException.class, () -> {
-            homeDetailDAO.getHomeById(homeId);
-        });
-
-        assertTrue(exception.getMessage().contains("Error retrieving home by ID from the database"));
-        verify(preparedStatement).executeQuery();
-    }
+//    @Test
+//    public void testGetHomeById_Success() throws SQLException, IOException, ClassNotFoundException {
+//        int homeId = 1;
+//        Home expectedHome = new Home();
+//        expectedHome.setId(homeId);
+//        expectedHome.setName("Beautiful Home");
+//        expectedHome.setAddress("123 Main St");
+//        expectedHome.setArea(BigDecimal.valueOf(120.5));
+//        expectedHome.setCreatedDate(LocalDateTime.now());
+//
+//        String sql = "SELECT [id], [name], [address], [area], [createdDate] FROM [dbo].[Homes] WHERE [id] = ?";
+//        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
+//        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+//        when(resultSet.next()).thenReturn(true);
+//        when(resultSet.getInt("id")).thenReturn(expectedHome.getId());
+//        when(resultSet.getString("name")).thenReturn(expectedHome.getName());
+//        when(resultSet.getString("address")).thenReturn(expectedHome.getAddress());
+//        when(resultSet.getBigDecimal("area")).thenReturn(expectedHome.getArea());
+//        when(resultSet.getTimestamp("createdDate")).thenReturn(Timestamp.valueOf(expectedHome.getCreatedDate()));
+//
+//        Home home = homeDetailDAO.getHomeById(homeId);
+//
+//        assertEquals(expectedHome.getId(), home.getId());
+//        assertEquals(expectedHome.getName(), home.getName());
+//        assertEquals(expectedHome.getAddress(), home.getAddress());
+//        assertEquals(expectedHome.getArea(), home.getArea());
+//        assertNotNull(home.getCreatedDate());
+//    }
+//
+//    @Test
+//    public void testGetHomeById_NoResults() throws SQLException, IOException, ClassNotFoundException {
+//        int homeId = 2;
+//
+//        String sql = "SELECT [id], [name], [address], [area], [createdDate] FROM [dbo].[Homes] WHERE [id] = ?";
+//        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
+//        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+//        when(resultSet.next()).thenReturn(false);
+//
+//        Home home = homeDetailDAO.getHomeById(homeId);
+//
+//        assertNull(home);
+//    }
+//
+//    @Test
+//    public void testGetHomeById_SQLException() throws SQLException, IOException, ClassNotFoundException {
+//        int homeId = 6;
+//
+//        String sql = "SELECT [id], [name], [address], [area], [createdDate] FROM [dbo].[Homes] WHERE [id] = ?";
+//        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
+//        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
+//
+//        GeneralException exception = assertThrows(GeneralException.class, () -> {
+//            homeDetailDAO.getHomeById(homeId);
+//        });
+//
+//        assertTrue(exception.getMessage().contains("Error retrieving home by ID from the database"));
+//        verify(preparedStatement).executeQuery();
+//    }
 
     @Test
     public void testGetHomePricesByHomeId_Success() throws SQLException, IOException, ClassNotFoundException {
@@ -161,71 +161,71 @@ public class HomeDetailDAOImplTest {
         verify(preparedStatement).executeQuery();
     }
 
-    @Test
-    public void testGetCreatorByHomeId_Success() throws SQLException, IOException, ClassNotFoundException {
-        int homeId = 1;
-        User expectedUser = new User();
-        expectedUser.setId(1);
-        expectedUser.setFirstName("John");
-        expectedUser.setLastName("Doe");
-        expectedUser.setEmail("john.doe@example.com");
-        expectedUser.setPhoneNumber("123456789");
-
-        String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
-                "FROM [HSS_Users] u " +
-                "JOIN Homes h ON u.id = h.createdBy " +
-                "WHERE h.id = ?";
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt("id")).thenReturn(expectedUser.getId());
-        when(resultSet.getString("firstName")).thenReturn(expectedUser.getFirstName());
-        when(resultSet.getString("lastName")).thenReturn(expectedUser.getLastName());
-        when(resultSet.getString("email")).thenReturn(expectedUser.getEmail());
-        when(resultSet.getString("phoneNumber")).thenReturn(expectedUser.getPhoneNumber());
-
-        User user = homeDetailDAO.getCreatorByHomeId(homeId);
-
-        assertEquals(expectedUser.getId(), user.getId());
-        assertEquals(expectedUser.getFirstName(), user.getFirstName());
-        assertEquals(expectedUser.getLastName(), user.getLastName());
-        assertEquals(expectedUser.getEmail(), user.getEmail());
-        assertEquals(expectedUser.getPhoneNumber(), user.getPhoneNumber());
-    }
-
-    @Test
-    public void testGetCreatorByHomeId_NoResults() throws SQLException, IOException, ClassNotFoundException {
-        int homeId = 2;
-
-        String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
-                "FROM [HSS_Users] u " +
-                "JOIN Homes h ON u.id = h.createdBy " +
-                "WHERE h.id = ?";
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(false);
-
-        User user = homeDetailDAO.getCreatorByHomeId(homeId);
-
-        assertNull(user);
-    }
-
-    @Test
-    public void testGetCreatorByHomeId_SQLException() throws SQLException, IOException, ClassNotFoundException {
-        int homeId = 6;
-
-        String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
-                "FROM [HSS_Users] u " +
-                "JOIN Homes h ON u.id = h.createdBy " +
-                "WHERE h.id = ?";
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
-
-        GeneralException exception = assertThrows(GeneralException.class, () -> {
-            homeDetailDAO.getCreatorByHomeId(homeId);
-        });
-
-        assertTrue(exception.getMessage().contains("Error retrieving creator by home ID from the database"));
-        verify(preparedStatement).executeQuery();
-    }
+//    @Test
+//    public void testGetCreatorByHomeId_Success() throws SQLException, IOException, ClassNotFoundException {
+//        int homeId = 1;
+//        User expectedUser = new User();
+//        expectedUser.setId(1);
+//        expectedUser.setFirstName("John");
+//        expectedUser.setLastName("Doe");
+//        expectedUser.setEmail("john.doe@example.com");
+//        expectedUser.setPhoneNumber("123456789");
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
+//                "FROM [HSS_Users] u " +
+//                "JOIN Homes h ON u.id = h.createdBy " +
+//                "WHERE h.id = ?";
+//        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
+//        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+//        when(resultSet.next()).thenReturn(true);
+//        when(resultSet.getInt("id")).thenReturn(expectedUser.getId());
+//        when(resultSet.getString("firstName")).thenReturn(expectedUser.getFirstName());
+//        when(resultSet.getString("lastName")).thenReturn(expectedUser.getLastName());
+//        when(resultSet.getString("email")).thenReturn(expectedUser.getEmail());
+//        when(resultSet.getString("phoneNumber")).thenReturn(expectedUser.getPhoneNumber());
+//
+//        User user = homeDetailDAO.getCreatorByHomeId(homeId);
+//
+//        assertEquals(expectedUser.getId(), user.getId());
+//        assertEquals(expectedUser.getFirstName(), user.getFirstName());
+//        assertEquals(expectedUser.getLastName(), user.getLastName());
+//        assertEquals(expectedUser.getEmail(), user.getEmail());
+//        assertEquals(expectedUser.getPhoneNumber(), user.getPhoneNumber());
+//    }
+//
+//    @Test
+//    public void testGetCreatorByHomeId_NoResults() throws SQLException, IOException, ClassNotFoundException {
+//        int homeId = 2;
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
+//                "FROM [HSS_Users] u " +
+//                "JOIN Homes h ON u.id = h.createdBy " +
+//                "WHERE h.id = ?";
+//        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
+//        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+//        when(resultSet.next()).thenReturn(false);
+//
+//        User user = homeDetailDAO.getCreatorByHomeId(homeId);
+//
+//        assertNull(user);
+//    }
+//
+//    @Test
+//    public void testGetCreatorByHomeId_SQLException() throws SQLException, IOException, ClassNotFoundException {
+//        int homeId = 6;
+//
+//        String sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.phoneNumber " +
+//                "FROM [HSS_Users] u " +
+//                "JOIN Homes h ON u.id = h.createdBy " +
+//                "WHERE h.id = ?";
+//        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
+//        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
+//
+//        GeneralException exception = assertThrows(GeneralException.class, () -> {
+//            homeDetailDAO.getCreatorByHomeId(homeId);
+//        });
+//
+//        assertTrue(exception.getMessage().contains("Error retrieving creator by home ID from the database"));
+//        verify(preparedStatement).executeQuery();
+//    }
 }

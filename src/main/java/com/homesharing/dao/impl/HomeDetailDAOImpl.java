@@ -389,9 +389,9 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 "JOIN Wards w ON h.wardsId = w.id " +
                 "WHERE h.wardsId = (SELECT h2.wardsId FROM Homes h2 WHERE h2.id = ?) " +
                 "AND p.price BETWEEN " +
-                "      (SELECT p2.price - ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "      (SELECT top 1 p2.price - ? FROM Prices p2 WHERE p2.Homesid = ? ORDER BY p2.createdDate desc) " +
                 "  AND " +
-                "      (SELECT p2.price + ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "      (SELECT top 1 p2.price + ? FROM Prices p2 WHERE p2.Homesid = ? ORDER BY p2.createdDate desc) " +
                 "AND h.status = 'active' " +  // Chỉ lấy nhà có status là 'active'
                 "ORDER BY h.createdDate";
 
@@ -453,9 +453,9 @@ public class HomeDetailDAOImpl implements HomeDetailDAO {
                 "               JOIN Districts d2 ON w2.Districtsid = d2.id " +
                 "               WHERE h2.id = ?) " +
                 "AND p.price BETWEEN " +
-                "      (SELECT p2.price - ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "      (SELECT top 1 p2.price - ? FROM Prices p2 WHERE p2.Homesid = ? ORDER BY p2.createdDate desc) " +
                 "  AND " +
-                "      (SELECT p2.price + ? FROM Prices p2 WHERE p2.Homesid = ?) " +
+                "      (SELECT top 1 p2.price + ? FROM Prices p2 WHERE p2.Homesid = ? ORDER BY p2.createdDate desc) " +
                 "AND h.status = 'active' " +  // Chỉ lấy nhà có status là 'active'
                 "ORDER BY h.createdDate";
 

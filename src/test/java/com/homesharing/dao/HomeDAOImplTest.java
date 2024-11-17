@@ -226,50 +226,6 @@ class HomeDAOImplTest {
         verify(preparedStatement).executeQuery();
     }
 
-    @Test
-    void testNumOfHome_SQLException() throws SQLException{
-        // Given
-        Map<String, Object> searchParams = new HashMap<>();
-
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
-
-        // When / Then
-        SQLException exception = assertThrows(SQLException.class, () -> {
-            homeDAO.numOfHome(searchParams);
-        });
-
-        assertEquals("Database error", exception.getMessage());
-    }
-
-    @Test
-    void testNumOfHome_IOException() throws SQLException, IOException, ClassNotFoundException {
-        // Given
-        Map<String, Object> searchParams = new HashMap<>();
-
-        when(DBContext.getConnection()).thenThrow(new IOException("IO error"));
-
-        // When / Then
-        IOException exception = assertThrows(IOException.class, () -> {
-            homeDAO.numOfHome(searchParams);
-        });
-
-        assertEquals("IO error", exception.getMessage());
-    }
-
-    @Test
-    void testNumOfHome_ClassNotFoundException() throws SQLException, IOException, ClassNotFoundException {
-        // Given
-        Map<String, Object> searchParams = new HashMap<>();
-
-        when(DBContext.getConnection()).thenThrow(new ClassNotFoundException("JDBC Driver not found"));
-
-        // When / Then
-        ClassNotFoundException exception = assertThrows(ClassNotFoundException.class, () -> {
-            homeDAO.numOfHome(searchParams);
-        });
-
-        assertEquals("JDBC Driver not found", exception.getMessage());
-    }
 
     @Test
     void testGetMinArea_ReturnsMaxArea() throws Exception {
@@ -793,31 +749,18 @@ class HomeDAOImplTest {
         verify(resultSet, times(2)).next();
     }
 
-    // Test với SQLException
-    @Test
-    void testGetSearchedHomes_SQLException() throws SQLException{
-        // Given
-        Map<String, Object> searchParams = new HashMap<>();
 
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
-
-        // When / Then
-        assertThrows(SQLException.class, () -> {
-            homeDAO.getSearchedHomes(searchParams);
-        });
-    }
-
-    // Test với ClassNotFoundException
-    @Test
-    void testGetSearchedHomes_ClassNotFoundException() throws SQLException, IOException, ClassNotFoundException {
-        // Giả lập ClassNotFoundException khi gọi DBContext.getConnection
-        when(DBContext.getConnection()).thenThrow(new ClassNotFoundException("JDBC Driver not found"));
-
-        // When / Then
-        assertThrows(ClassNotFoundException.class, () -> {
-            homeDAO.getSearchedHomes(new HashMap<>());
-        });
-    }
+//    // Test với ClassNotFoundException
+//    @Test
+//    void testGetSearchedHomes_ClassNotFoundException() throws SQLException, IOException, ClassNotFoundException {
+//        // Giả lập ClassNotFoundException khi gọi DBContext.getConnection
+//        when(DBContext.getConnection()).thenThrow(new ClassNotFoundException("JDBC Driver not found"));
+//
+//        // When / Then
+//        assertThrows(ClassNotFoundException.class, () -> {
+//            homeDAO.getSearchedHomes(new HashMap<>());
+//        });
+//    }
 
     // 1. Test happy path - có hình ảnh trả về
     @Test

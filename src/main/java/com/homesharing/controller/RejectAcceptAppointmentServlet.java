@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * Servlet for handling requests to accept or reject an appointment.
  * Provides an interface for hosts and tenants to manage their appointment status.
  */
-@WebServlet("/dashboard/accept-reject-appointment")
+@WebServlet("/accept-reject-appointment")
 public class RejectAcceptAppointmentServlet extends HttpServlet {
 
     // Service layer for managing appointments

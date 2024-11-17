@@ -58,6 +58,68 @@
             font-size: 1.2em; /* Thay đổi kích thước phông chữ cho tiêu đề */
             font-weight: bold; /* Đặt tiêu đề thành in đậm */
         }
+        .notification-dropdown {
+            max-width: 310px;
+            position: absolute;
+            top: 4.4em;
+            right: -3em !important;
+            width: 27em;
+            padding-bottom: 1em;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-item {
+            height: 80px !important;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s;
+        }
+
+        .notification-item:hover {
+            background-color: #fa8600;
+        }
+
+        .li-no {
+            display: block;
+            color: #333;
+            text-decoration: none;
+        }
+
+
+
+        .notification-title {
+            font-size: 1em;
+            color: #000;
+        }
+
+        .notification-content {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .empty-notification {
+            width: 310px !important;
+            text-align: center;
+            padding: 10px;
+            color: #888;
+        }
+
+        .all-notifications {
+            width: 310px !important;
+            text-align: center;
+            font-weight: normal;
+            padding: 10px;
+        }
+
+        .all-notifications a {
+            text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
@@ -154,19 +216,19 @@
                         <i data-toggle="dropdown" data-hover="dropdown" data-delay="200"
                            class="fa-regular fa-bell dropdown-toggle" style="font-size: 2em"></i>
                         <!-- Dropdown danh sách thông báo -->
-                        <ul class="dropdown-menu navbar-nav" style="top: 4.4em; right: -1.5em; width: 27em; padding-bottom: 1em; max-height: 300px; overflow-y: auto;">
+                        <ul class="dropdown-menu navbar-nav notification-dropdown">
                             <c:forEach var="notification" items="${notifications}">
-                                <li>
-                                    <a href="notification?type=${notification.type}" class="li-no" style="<c:if test='${notification.status == "sent"}'>font-weight: bold;</c:if>">
+                                <li  class="notification-item">
+                                    <a href="notification?type=${notification.type}" class="li-no">
                                         <span class="notification-title">${notification.title}</span><br>
                                         <span class="notification-content">${notification.content}</span>
                                     </a>
                                 </li>
                             </c:forEach>
                             <c:if test="${notifications.isEmpty()}">
-                                <li><a class="li-no">Không có thông báo mới</a></li>
+                                <li class="notification-item empty-notification"><a class="li-no">Không có thông báo mới</a></li>
                             </c:if>
-                            <li><a href="notification" class="li-no" style="font-weight: normal;">Tất cả thông báo</a></li>
+                            <li class="notification-item all-notifications"><a href="notification" class="li-no" >Tất cả thông báo</a></li>
                         </ul>
                     </div>
                     <div class="dropdown ymm-sw">

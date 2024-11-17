@@ -135,6 +135,13 @@ public class HomePageServlet extends HttpServlet {
 
         }
 
+        int countHN = homePageService.countByProvinceId(1);
+        int countHCM = homePageService.countByProvinceId(50);
+        int countDN = homePageService.countByProvinceId(32);
+        int countHP = homePageService.countByProvinceId(20);
+        int countCT = homePageService.countByProvinceId(59);
+
+
         // Set the home and price data as request attributes for use in the JSP
         req.setAttribute("homes", homes);
         req.setAttribute("totalUser", totalUser);
@@ -143,6 +150,11 @@ public class HomePageServlet extends HttpServlet {
         req.setAttribute("preference", preference);
         req.setAttribute("matchingHomes", matchingHomes);
         req.setAttribute("matchingHomePrice", matchingHomePrice);
+        req.setAttribute("countHN", countHN);
+        req.setAttribute("countHCM", countHCM);
+        req.setAttribute("countDN", countDN);
+        req.setAttribute("countHP", countHP);
+        req.setAttribute("countCT", countCT);
 
         // Forward the request to the JSP page for rendering
         req.getRequestDispatcher("/home.jsp").forward(req, resp);

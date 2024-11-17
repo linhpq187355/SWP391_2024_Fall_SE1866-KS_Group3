@@ -137,7 +137,7 @@
                     <div id="list-type" class="proerty-th-list">
                         <c:forEach items="${requestScope.homes}" var="homes">
                             <div class="col-md-4 p0">
-                                <div class="box-two proerty-item" style="border-radius: 15px;">
+                                <div class="box-two proerty-item" style="border-radius: 15px;display: flex;width: 1035px;">
                                     <div class="item-thumb">
                                         <!-- Update the href to point to home detail page with home ID -->
                                         <a href="home-detail?id=${homes.id}">
@@ -170,6 +170,19 @@
                                                 <a href="delete-home?id=${homes.id}" class="button delete_user_car">Xóa</a>
                                                 <a href="home-detail?id=${homes.id}" class="button">Xem</a>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center">
+                                        <div style="background-color: #FA8600;
+    color: #fff;
+    border-radius: 15px;
+    height: 40px;
+    width: 80px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;">
+                                            ${homes.status}
                                         </div>
                                     </div>
                                 </div>

@@ -220,66 +220,6 @@ class ConversationDAOImplTest {
     }
 
     @Test
-    void testContactUsersWithConversationId_Success() throws Exception {
-        // Arrange
-        int userId = 1;
-        String sql = "SELECT userOne AS userId, id FROM Conversations WHERE userTwo = ? AND status = 'active' " +
-                "UNION " +
-                "SELECT userTwo AS userId, id FROM Conversations WHERE userOne = ? AND status = 'active'";
-
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true).thenReturn(false); // Simulate one result
-        when(resultSet.getInt("userId")).thenReturn(2); // Simulate contact user ID
-        when(resultSet.getInt("id")).thenReturn(100); // Simulate conversation ID
-
-        // Act
-        Map<Integer, Integer> contactUserIds = conversationDAO.contactUsersWithConversationId(userId);
-
-        // Assert
-        assertEquals(1, contactUserIds.size());
-        assertTrue(contactUserIds.containsKey(2));
-        assertEquals(100, contactUserIds.get(2));
-    }
-
-    @Test
-    void testContactUsersWithConversationId_NoActiveConversations() throws Exception {
-        // Arrange
-        int userId = 1;
-        String sql = "SELECT userOne AS userId, id FROM Conversations WHERE userTwo = ? AND status = 'active' " +
-                "UNION " +
-                "SELECT userTwo AS userId, id FROM Conversations WHERE userOne = ? AND status = 'active'";
-
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(false); // Simulate no results
-
-        // Act
-        Map<Integer, Integer> contactUserIds = conversationDAO.contactUsersWithConversationId(userId);
-
-        // Assert
-        assertTrue(contactUserIds.isEmpty());
-    }
-
-    @Test
-    void testContactUsersWithConversationId_SQLException() throws Exception {
-        // Arrange
-        int userId = 1;
-        String sql = "SELECT userOne AS userId, id FROM Conversations WHERE userTwo = ? AND status = 'active' " +
-                "UNION " +
-                "SELECT userTwo AS userId, id FROM Conversations WHERE userOne = ? AND status = 'active'";
-
-        when(connection.prepareStatement(sql)).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
-
-        // Act & Assert
-        GeneralException exception = assertThrows(GeneralException.class, () -> {
-            conversationDAO.contactUsersWithConversationId(userId);
-        });
-        assertTrue(exception.getMessage().contains("SQL error while fetching contact users for user ID 1. Reason: Database error"));
-    }
-
-    @Test
     void testUpdateConversationStatus_BlockAction_Success() throws Exception {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);

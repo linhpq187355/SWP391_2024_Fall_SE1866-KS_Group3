@@ -316,7 +316,7 @@
                 <p>No blog posts available.</p>
             </c:if>
             <c:forEach var="blogPost" items="${blogPosts}">
-                <c:if test="${blogPost.status == 'approved'}">
+                <c:if test="${blogPost.status == 'APPROVED'}">
                     <div class="post">
                         <a href="blog-detail?postId=${blogPost.id}">
                             <c:choose>

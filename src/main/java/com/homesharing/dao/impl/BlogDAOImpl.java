@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class BlogDAOImpl implements BlogDAO {
 
@@ -739,7 +740,9 @@ public class BlogDAOImpl implements BlogDAO {
                 blogPost.setAuthorId(resultSet.getInt("author_id"));
                 blogPost.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
                 blogPost.setStatus(resultSet.getString("status"));
-                // Thêm các thuộc tính khác...
+                blogPost.setShortDescription(resultSet.getString("short_description"));
+                blogPost.setContent(resultSet.getString("content"));
+                blogPost.setImagePath(resultSet.getString("image_path"));
                 blogPosts.add(blogPost);
             }
         } catch (SQLException | IOException | ClassNotFoundException e) {
@@ -897,7 +900,44 @@ public class BlogDAOImpl implements BlogDAO {
         return categories;
     }
 
+    @Override
+    public int countBlog() {
+        String sql = "select count(id) total\n" +
+                "from BlogPost\n" +
+                "where status = 'APPROVED'";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = DBContext.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            // If a result is found, return the total number
+            if (resultSet.next()) {
+                return resultSet.getInt("total");
+            }
 
+        } catch (SQLException | IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Error retrieving total user from the database", e);
+        } finally {
+            // Closing resources in reverse order of opening
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw new GeneralException("Error closing database resources: " + e.getMessage(), e);
+            }
+        }
+
+        return 0;
+    }
 
 
 }

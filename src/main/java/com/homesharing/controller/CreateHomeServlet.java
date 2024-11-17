@@ -1,17 +1,11 @@
 package com.homesharing.controller;
 
+import com.homesharing.dao.PreferenceDAO;
 import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.PreferenceDAOImpl;
 import com.homesharing.dao.impl.UserDAOImpl;
-import com.homesharing.model.Amentity;
-import com.homesharing.model.AmentityHome;
-import com.homesharing.model.FireEquipment;
-import com.homesharing.model.FireEquipmentsHome;
-import com.homesharing.model.Home;
-import com.homesharing.model.HomeImage;
-import com.homesharing.model.HomeType;
-import com.homesharing.model.Price;
-import com.homesharing.model.Province;
-import com.homesharing.model.User;
+import com.homesharing.model.*;
+import com.homesharing.service.impl.PreferenceServiceImpl;
 import com.homesharing.service.impl.SubmissonFormServiceImpl;
 import com.homesharing.service.impl.UserServiceImpl;
 import com.homesharing.util.CookieUtil;
@@ -46,6 +40,7 @@ public class CreateHomeServlet extends HttpServlet {
     private static final String ERROR_ATTRIBUTE = "error";
     private SubmissonFormServiceImpl submissonFormService;
     private UserServiceImpl userService;
+    private PreferenceServiceImpl preferenceService;
 
     /**
      * Initializes the servlet by creating instances of the submission form service and user profile service.
@@ -55,8 +50,10 @@ public class CreateHomeServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         UserDAO userDAO = new UserDAOImpl();
+        PreferenceDAO preferenceDAO = new PreferenceDAOImpl();
         submissonFormService = new SubmissonFormServiceImpl();
         userService = new UserServiceImpl(userDAO,null,null,null);
+        preferenceService = new PreferenceServiceImpl(preferenceDAO);
     }
 
     /**
@@ -74,6 +71,7 @@ public class CreateHomeServlet extends HttpServlet {
             User user = null;
 
                 user = userService.getUser(Integer.parseInt(cookieValue));
+                Preference preference = preferenceService.getPreference(Integer.parseInt(cookieValue));
 
             if (user.getRolesId() != 2) {
                 List<HomeType> homeTypes = submissonFormService.getHomeTypes();
@@ -85,6 +83,7 @@ public class CreateHomeServlet extends HttpServlet {
                 req.setAttribute("amentities", amentities);
                 req.setAttribute("fireEquipments", fireEquipments);
                 req.setAttribute("provinces", provinces);
+                req.setAttribute("preference", preference);
                 req.getRequestDispatcher("submit-home.jsp").forward(req, resp);
             } else {
                 resp.sendRedirect(req.getContextPath() + "/home-page");

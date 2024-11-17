@@ -53,6 +53,7 @@ public interface BlogService {
 
     void deleteBlogPostCategories(int postId);
 
+    int countBlog();
 }
 
 

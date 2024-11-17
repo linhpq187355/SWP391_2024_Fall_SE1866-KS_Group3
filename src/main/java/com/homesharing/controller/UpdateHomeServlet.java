@@ -64,6 +64,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -277,6 +278,7 @@ public class UpdateHomeServlet extends HttpServlet {
 
                 for (String imageLocation : imageLocations) {
                     HomeImage homeImage = new HomeImage();
+
                     homeImage.setImgUrl(imageLocation);
                     homeImage.setHomeId(homeId);
                     submissionFormService.saveHomeImages(homeImage);

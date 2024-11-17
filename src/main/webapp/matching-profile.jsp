@@ -17,6 +17,8 @@
 
     <!-- STYLE CSS -->
     <link rel="stylesheet" href="assets/css/style1.css">
+
+
     <style>
         .error{
             color:red
@@ -469,7 +471,7 @@
                             <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
                                 <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
                                     <img src="./assets/img/bf1816d9ea29fceb6665ae79d6a30c57.png" style="width: 70%">
-                                    <label><i class="fa-solid fa-beer-mug-empty"></i> "Tửu lượng" của bạn thế nào?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label style="color: #FA8600"><i class="fa-solid fa-beer-mug-empty"></i> "Tửu lượng" của bạn thế nào?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="drinkingSlider1" name="drinking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)" >
                                         <div class="ano-slider">
@@ -560,7 +562,7 @@
                             <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
                                 <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
                                     <img src="./assets/img/vector-illustration-enjoying-cook-flat-design-style_844724-3943.avif" style="width: 65%">
-                                    <label><i class="fa-solid fa-fire-burner"></i> Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label style="color: #FA8600"><i class="fa-solid fa-fire-burner"></i> Bạn có thích nấu ăn không?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="cookingSlider1" name="cooking" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
@@ -591,7 +593,7 @@
                             <div class="form-row" style="margin-bottom: 70px;justify-content: center;">
                                 <div class="form-holder" style="display: flex;flex-direction: column;align-items: center;">
                                     <img src="./assets/img/da99d4f3de95b8fccbfcd90e60fbb04e.png">
-                                    <label><i class="fa-solid fa-dog"></i> Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
+                                    <label style="color: #FA8600"><i class="fa-solid fa-dog"></i> Bạn có thoải mái nếu trong phòng nuôi thú cưng?<span style="color: red; margin-left: 10px">*</span></label>
                                     <div class="slider-container">
                                         <input id="petSlider1" name="pet" readonly type="range" min="1" max="5" step="1" class="slider" oninput="this.style.setProperty('--value', this.value)">
                                         <div class="ano-slider">
@@ -617,6 +619,7 @@
     </form>
 </div>
 <jsp:include page="footer.jsp"/>
+
 
 
 <!-- JQUERY -->

@@ -178,6 +178,8 @@ public interface HomeDAO {
      */
     int getTotalHome();
 
+    int countByProvince(int provinceId);
+
     List<Home> getByCreatedBy(int createdById);
 
     /**
@@ -208,6 +210,7 @@ public interface HomeDAO {
      * @return A list of the latest homes.
      */
     List<Home> getLatestHomes(int numberOfHomes);
+
 
 
 }

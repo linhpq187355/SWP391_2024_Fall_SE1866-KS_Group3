@@ -41,8 +41,8 @@ public class AuthenticationFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     private static final List<String> excludedUrls = Arrays.asList(
-            "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/", "/set-role", "/getDistricts", "/getWards",
-            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google", "/500.jsp", "/403.jsp", "/400.jsp",
+            "/login.jsp", "/assets", "/bootstrap", "/register.jsp", "/css/", "/js/", "/images/", "/set-role", "/getDistricts", "/getWards","/forgot-password","/forgot-password.jsp",
+            "/home-page", "/login", "/logout", "/signup", "/staff-login", "/verify", "/sign-up-google", "/500.jsp", "/403.jsp", "/400.jsp","/reset-password.jsp","/reset-password",
             "/sign-up.jsp", "/home.jsp", "/header.jsp", "/footer.jsp", "/staff-login.jsp", "/error.jsp", "/home-list", "/401.jsp", "/resend-otp",
             "/terms.jsp", "/announce.jsp", "/about-us.jsp", "/404.jsp", "/input-otp.jsp", "/input-otp-2.jsp");
 

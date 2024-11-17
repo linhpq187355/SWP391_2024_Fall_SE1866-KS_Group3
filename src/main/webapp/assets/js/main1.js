@@ -13,6 +13,7 @@ $(function() {
     let isGuestAdjusted1 = false;
     let isCookingAdjusted1 = false;
     let isPetAdjusted1 = false;
+    let roleIdOut = parseInt(document.querySelector('input[name="roleId"]').value);
 
     $("#wizard").steps({
         headerTag: "h2",
@@ -63,75 +64,77 @@ $(function() {
         $(this).parent().prev().find('div').text(text);
     });
 
-    const cleanlinessSlider = document.getElementById('cleanlinessSlider');
-    cleanlinessSlider.addEventListener('input', function() {
-        isCleanlinessAdjusted = true;
-    });
+    if(roleIdOut ==3){
+        const cleanlinessSlider = document.getElementById('cleanlinessSlider');
+        cleanlinessSlider.addEventListener('input', function() {
+            isCleanlinessAdjusted = true;
+        });
 
-    const smokingSlider = document.getElementById('smokingSlider');
-    smokingSlider.addEventListener('input', function() {
-        isSmokingAdjusted = true;
-    });
+        const smokingSlider = document.getElementById('smokingSlider');
+        smokingSlider.addEventListener('input', function() {
+            isSmokingAdjusted = true;
+        });
 
-    const drinkingSlider = document.getElementById('drinkingSlider');
-    drinkingSlider.addEventListener('input', function() {
-        isDrinkingAdjusted = true;
-    });
+        const drinkingSlider = document.getElementById('drinkingSlider');
+        drinkingSlider.addEventListener('input', function() {
+            isDrinkingAdjusted = true;
+        });
 
-    const interactionSlider = document.getElementById('interactionSlider');
-    interactionSlider.addEventListener('input', function() {
-        isInteractionAdjusted = true;
-    });
+        const interactionSlider = document.getElementById('interactionSlider');
+        interactionSlider.addEventListener('input', function() {
+            isInteractionAdjusted = true;
+        });
 
-    const guestSlider = document.getElementById('guestSlider');
-    guestSlider.addEventListener('input', function() {
-        isGuestAdjusted = true;
-    });
+        const guestSlider = document.getElementById('guestSlider');
+        guestSlider.addEventListener('input', function() {
+            isGuestAdjusted = true;
+        });
 
-    const cookingSlider = document.getElementById('cookingSlider');
-    cookingSlider.addEventListener('input', function() {
-        isCookingAdjusted = true;
-    });
+        const cookingSlider = document.getElementById('cookingSlider');
+        cookingSlider.addEventListener('input', function() {
+            isCookingAdjusted = true;
+        });
 
-    const petSlider = document.getElementById('petSlider');
-    petSlider.addEventListener('input', function() {
-        isPetAdjusted = true;
-    });
+        const petSlider = document.getElementById('petSlider');
+        petSlider.addEventListener('input', function() {
+            isPetAdjusted = true;
+        });
+    } else {
+        const cleanlinessSlider1 = document.getElementById('cleanlinessSlider1');
+        cleanlinessSlider1.addEventListener('input', function() {
+            isCleanlinessAdjusted1 = true;
+        });
 
-    const cleanlinessSlider1 = document.getElementById('cleanlinessSlider1');
-    cleanlinessSlider1.addEventListener('input', function() {
-        isCleanlinessAdjusted1 = true;
-    });
+        const smokingSlider1 = document.getElementById('smokingSlider1');
+        smokingSlider1.addEventListener('input', function() {
+            isSmokingAdjusted1 = true;
+        });
 
-    const smokingSlider1 = document.getElementById('smokingSlider1');
-    smokingSlider1.addEventListener('input', function() {
-        isSmokingAdjusted1 = true;
-    });
+        const drinkingSlider1 = document.getElementById('drinkingSlider1');
+        drinkingSlider1.addEventListener('input', function() {
+            isDrinkingAdjusted1 = true;
+        });
 
-    const drinkingSlider1 = document.getElementById('drinkingSlider1');
-    drinkingSlider1.addEventListener('input', function() {
-        isDrinkingAdjusted1 = true;
-    });
+        const interactionSlider1 = document.getElementById('interactionSlider1');
+        interactionSlider1.addEventListener('input', function() {
+            isInteractionAdjusted1 = true;
+        });
 
-    const interactionSlider1 = document.getElementById('interactionSlider1');
-    interactionSlider1.addEventListener('input', function() {
-        isInteractionAdjusted1 = true;
-    });
+        const guestSlider1 = document.getElementById('guestSlider1');
+        guestSlider1.addEventListener('input', function() {
+            isGuestAdjusted1 = true;
+        });
 
-    const guestSlider1 = document.getElementById('guestSlider1');
-    guestSlider1.addEventListener('input', function() {
-        isGuestAdjusted1 = true;
-    });
+        const cookingSlider1 = document.getElementById('cookingSlider1');
+        cookingSlider1.addEventListener('input', function() {
+            isCookingAdjusted1 = true;
+        });
 
-    const cookingSlider1 = document.getElementById('cookingSlider1');
-    cookingSlider1.addEventListener('input', function() {
-        isCookingAdjusted1 = true;
-    });
-
-    const petSlider1 = document.getElementById('petSlider1');
-    petSlider1.addEventListener('input', function() {
-        isPetAdjusted1 = true;
-    });
+        const petSlider1 = document.getElementById('petSlider1');
+        petSlider1.addEventListener('input', function() {
+            isPetAdjusted1 = true;
+        });
+    }
 });
 
 let isCleanlinessAdjustedTenant = false;
@@ -243,12 +246,12 @@ function validateForm(isCleanlinessAdjusted,isSmokingAdjusted,isDrinkingAdjusted
         if (isNaN(dob.getTime()) || dob > today) {
             document.getElementById('dobError').textContent = 'Ngày sinh không được trong tương lai.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 0; // Chuyển đến section 2
+            if (firstErrorSection === null) firstErrorSection = 1; // Chuyển đến section 2
         }
         if (gender === '') {
             document.getElementById('genderError').textContent = 'Vui lòng chọn giới tính.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 0; // Chuyển đến section 0
+            if (firstErrorSection === null) firstErrorSection = 1; // Chuyển đến section 0
         }
         // Khi người dùng tương tác với slider, cập nhật trạng thái
 
@@ -283,32 +286,32 @@ function validateForm(isCleanlinessAdjusted,isSmokingAdjusted,isDrinkingAdjusted
         if (isSmokingAdjustedOut === false && isSmokingAdjustedTenant === false) {
             document.getElementById('smokingError').textContent = 'Vui lòng điều chỉnh mức độ hút thuốc.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 2;
+            if (firstErrorSection === null) firstErrorSection = 1;
         }
         if (isDrinkingAdjustedOut === false && isDrinkingAdjustedTenant === false) {
             document.getElementById('drinkingError').textContent = 'Vui lòng điều chỉnh mức độ uống rượu/bia.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 3;
+            if (firstErrorSection === null) firstErrorSection = 1;
         }
         if (isInteractionAdjustedOut === false && isInteractionAdjustedTenant === false) {
             document.getElementById('interactionError').textContent = 'Vui lòng điều chỉnh mức độ thân thiện.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 4;
+            if (firstErrorSection === null) firstErrorSection = 1;
         }
         if (isGuestAdjustedOut === false && isGuestAdjustedTenant === false) {
             document.getElementById('guestError').textContent = 'Vui lòng điều chỉnh mức độ.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 5;
+            if (firstErrorSection === null) firstErrorSection = 1;
         }
         if (isCookingAdjustedOut === false && isCookingAdjustedTenant === false) {
             document.getElementById('cookingError').textContent = 'Vui lòng điều chỉnh mức độ.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 6;
+            if (firstErrorSection === null) firstErrorSection = 1;
         }
         if (isPetAdjustedOut === false && isPetAdjustedTenant === false) {
             document.getElementById('petError').textContent = 'Vui lòng điều chỉnh mức độ.';
             isValid = false;
-            if (firstErrorSection === null) firstErrorSection = 7;
+            if (firstErrorSection === null) firstErrorSection = 1;
         }
 
         // Nếu có lỗi, chuyển đến section đầu tiên có lỗi
@@ -358,7 +361,7 @@ function validateForm(isCleanlinessAdjusted,isSmokingAdjusted,isDrinkingAdjusted
             if (isCleanlinessAdjustedOut1 === false && isCleanlinessAdjustedTenant1 === false) {
                 document.getElementById('cleanlinessError1').textContent = 'Vui lòng điều chỉnh mức độ sạch sẽ.';
                 isValid = false;
-                if (firstErrorSection === null) firstErrorSection = 0;
+                if (firstErrorSection === null) firstErrorSection = 1;
             }
             if (isSmokingAdjustedOut1 === false && isSmokingAdjustedTenant1 === false) {
                 document.getElementById('smokingError1').textContent = 'Vui lòng điều chỉnh mức độ hút thuốc.';
@@ -368,27 +371,27 @@ function validateForm(isCleanlinessAdjusted,isSmokingAdjusted,isDrinkingAdjusted
             if (isDrinkingAdjustedOut1 === false && isDrinkingAdjustedTenant1 === false) {
                 document.getElementById('drinkingError1').textContent = 'Vui lòng điều chỉnh mức độ uống rượu/bia.';
                 isValid = false;
-                if (firstErrorSection === null) firstErrorSection = 2;
+                if (firstErrorSection === null) firstErrorSection = 1;
             }
             if (isInteractionAdjustedOut1 === false && isInteractionAdjustedTenant1 === false) {
                 document.getElementById('interactionError1').textContent = 'Vui lòng điều chỉnh mức độ thân thiện.';
                 isValid = false;
-                if (firstErrorSection === null) firstErrorSection = 3;
+                if (firstErrorSection === null) firstErrorSection = 1;
             }
             if (isGuestAdjustedOut1 === false && isGuestAdjustedTenant1 === false) {
                 document.getElementById('guestError1').textContent = 'Vui lòng điều chỉnh mức độ.';
                 isValid = false;
-                if (firstErrorSection === null) firstErrorSection = 4;
+                if (firstErrorSection === null) firstErrorSection = 1;
             }
             if (isCookingAdjustedOut1 === false && isCookingAdjustedTenant1 === false) {
                 document.getElementById('cookingError1').textContent = 'Vui lòng điều chỉnh mức độ.';
                 isValid = false;
-                if (firstErrorSection === null) firstErrorSection = 5;
+                if (firstErrorSection === null) firstErrorSection = 1;
             }
             if (isPetAdjustedOut1 === false && isPetAdjustedTenant1 === false) {
                 document.getElementById('petError1').textContent = 'Vui lòng điều chỉnh mức độ.';
                 isValid = false;
-                if (firstErrorSection === null) firstErrorSection = 6;
+                if (firstErrorSection === null) firstErrorSection = 1;
             }
 
             // Nếu có lỗi, chuyển đến section đầu tiên có lỗi

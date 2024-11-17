@@ -249,23 +249,23 @@
     <div style="display: flex;justify-content: space-between;">
         <div style="background-image: url('./assets/img/72f647924a57b2a433dceac7400eb0a7.png');background-size: cover;height: 260px;width: 210px;background-position-x: -30px;border-radius: 15px;display: flex;flex-direction: column;justify-content: end;cursor: pointer" onclick="window.location.href='home-list?keyword=&homeType=&province=1&district=&ward=&minPrice=1000000&maxPrice=30000000&priceRange=&areaRange=&bathRange=&bedRange=&orderby=property_date&order=ASC&currentPage=1&targetPage=1&per_page=12'">
             <p style="padding-bottom: 0;margin-left: 15px;font-size: 20px;color: #fff;font-weight: 700;text-shadow: 1px 1px 1px #1a1a1a;">Hà Nội</p>
-            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">100 bài đăng</span>
+            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">${requestScope.countHN} bài đăng</span>
         </div>
         <div style="background-image: url('./assets/img/7253fec74ae3e9d6cb449afc3b5811ab.jpg');background-size: cover;height: 260px;width: 210px;background-position-x: -30px;border-radius: 15px;display: flex;flex-direction: column;justify-content: end;cursor: pointer" onclick="window.location.href='home-list?keyword=&homeType=&province=50&district=&ward=&minPrice=1000000&maxPrice=30000000&priceRange=&areaRange=&bathRange=&bedRange=&orderby=property_date&order=ASC&currentPage=1&targetPage=1&per_page=12'">
             <p style="padding-bottom: 0;margin-left: 15px;font-size: 20px;color: #fff;font-weight: 700;text-shadow: 1px 1px 1px #1a1a1a;">TP. Hồ Chí Minh</p>
-            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">100 bài đăng</span>
+            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">${requestScope.countHCM} bài đăng</span>
         </div>
         <div style="background-image: url('./assets/img/3b416726092d981e654114af20ab2c10.jpg');background-size: cover;height: 260px;width: 210px;background-position-x: -30px;border-radius: 15px;display: flex;flex-direction: column;justify-content: end;cursor: pointer" onclick="window.location.href='home-list?keyword=&homeType=&province=32&district=&ward=&minPrice=1000000&maxPrice=30000000&priceRange=&areaRange=&bathRange=&bedRange=&orderby=property_date&order=ASC&currentPage=1&targetPage=1&per_page=12'">
             <p style="padding-bottom: 0;margin-left: 15px;font-size: 20px;color: #fff;font-weight: 700;text-shadow: 1px 1px 1px #1a1a1a;">Đà Nẵng</p>
-            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">100 bài đăng</span>
+            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">${requestScope.countDN} bài đăng</span>
         </div>
         <div style="background-image: url('./assets/img/c9089ba0af703919536e111f004a7ff5.jpg');background-size: cover;height: 260px;width: 210px;background-position-x: -30px;border-radius: 15px;display: flex;flex-direction: column;justify-content: end;cursor: pointer" onclick="window.location.href='home-list?keyword=&homeType=&province=20&district=&ward=&minPrice=1000000&maxPrice=30000000&priceRange=&areaRange=&bathRange=&bedRange=&orderby=property_date&order=ASC&currentPage=1&targetPage=1&per_page=12'">
             <p style="padding-bottom: 0;margin-left: 15px;font-size: 20px;color: #fff;font-weight: 700;text-shadow: 1px 1px 1px #1a1a1a;">Hải phòng</p>
-            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">100 bài đăng</span>
+            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">${requestScope.countHP} bài đăng</span>
         </div>
         <div style="background-image: url('./assets/img/6ae770502cf7a3cb921e9931adf6504a.jpg');background-size: cover;height: 260px;width: 210px;background-position-x: -30px;border-radius: 15px;display: flex;flex-direction: column;justify-content: end;cursor: pointer" onclick="window.location.href='home-list?keyword=&homeType=&province=59&district=&ward=&minPrice=1000000&maxPrice=30000000&priceRange=&areaRange=&bathRange=&bedRange=&orderby=property_date&order=ASC&currentPage=1&targetPage=1&per_page=12'">
             <p style="padding-bottom: 0;margin-left: 15px;font-size: 20px;color: #fff;font-weight: 700;text-shadow: 1px 1px 1px #1a1a1a;">Cần Thơ</p>
-            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">100 bài đăng</span>
+            <span style="margin-bottom: 10px;margin-left: 15px;color: #fff;text-shadow: 1px 1px 1px #1a1a1a;">${requestScope.countCT} bài đăng</span>
         </div>
     </div>
 </div>

@@ -1,12 +1,21 @@
 package com.homesharing.controller;
 
+import com.homesharing.dao.AppointmentDAO;
+import com.homesharing.dao.BlogDAO;
+import com.homesharing.dao.UserDAO;
+import com.homesharing.dao.impl.AppointmentDAOImpl;
+import com.homesharing.dao.impl.BlogDAOImpl;
 import com.homesharing.dao.impl.StatisticServiceImpl;
+import com.homesharing.dao.impl.UserDAOImpl;
 import com.homesharing.model.Home;
 import com.homesharing.model.PageVisit;
 import com.homesharing.model.ProvinceHomeStat;
 import com.homesharing.model.User;
 import com.homesharing.service.HomePageService;
+import com.homesharing.service.impl.AppointmentServiceImpl;
+import com.homesharing.service.impl.BlogServiceImpl;
 import com.homesharing.service.impl.HomePageServiceImpl;
+import com.homesharing.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,6 +29,12 @@ import java.util.Map;
 @WebServlet(name = "ViewDashboardServlet", value = "/dashboard")
 public class ViewDashboardServlet extends HttpServlet {
     StatisticServiceImpl statisticService = new StatisticServiceImpl();
+    UserDAO userDAO = new UserDAOImpl();
+    BlogDAO blogDAO = new BlogDAOImpl();
+    AppointmentDAO appointmentDAO = new AppointmentDAOImpl();
+    UserServiceImpl userService = new UserServiceImpl(userDAO,null,null,null);
+    BlogServiceImpl blogService = new BlogServiceImpl(blogDAO);
+    AppointmentServiceImpl appointmentService = new AppointmentServiceImpl(appointmentDAO);
 
 
     @Override
@@ -45,11 +60,18 @@ public class ViewDashboardServlet extends HttpServlet {
         List<ProvinceHomeStat> provinceRank = statisticService.provinceRanking();
 
         List<User> latestUsers = statisticService.getLatestUsers();
+        int totalUser = userService.getNumberOfUsers();
+        int totalBlog = blogService.countBlog();
+        int totalApmt = appointmentService.countAppointments();
+
 
         request.setAttribute("hostAvg", hostAvgJson);
         request.setAttribute("tenantAvg", tenantAvgJson);
 
         request.setAttribute("totalHomes", totalHomes);
+        request.setAttribute("totalUser", totalUser);
+        request.setAttribute("totalBlog", totalBlog);
+        request.setAttribute("totalApmt", totalApmt);
         request.setAttribute("activeHome", activeHome);
         request.setAttribute("inactiveHome", inactiveHome);
         request.setAttribute("pendingHome", pendingHome);

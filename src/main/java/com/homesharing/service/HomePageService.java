@@ -104,6 +104,8 @@ public interface HomePageService {
      */
     List<Home> getMatchingHome(int[] matchingHostsId, int userId);
 
+    int countByProvinceId(int provinceId);
+
     List<Home> getHomesByUser(int userId);
 
     /**
